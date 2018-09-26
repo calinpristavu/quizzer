@@ -58,15 +58,16 @@
 
 </head>
 <body class="text-center">
-    <form action="/login_check" method="post" class="form-signin">
+    <form action="/login" method="post" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <label for="username" class="sr-only">Username</label>
         <input
                 type="text"
                 name="username"
                 id="username"
-                class="form-control"
+                class="form-control {{- if .Errors }} is-invalid{{end}}"
                 placeholder="Username"
+                {{if .PrevData.Username}}value="{{.PrevData.Username}}" {{end}}
                 required
                 autofocus>
         <label for="password" class="sr-only">Password</label>
@@ -74,15 +75,21 @@
                 type="password"
                 id="password"
                 name="password"
-                class="form-control"
+                class="form-control {{- if .Errors }} is-invalid{{end}}"
                 placeholder="Password"
                 required>
+
+        {{ range .Errors }}
+            <div class="alert alert-danger" role="alert">
+                {{.}}
+            </div>
+        {{ end }}
         <div class="checkbox mb-3">
             <label>
-                <input type="checkbox" value="remember-me"> Remember me
+                <input type="checkbox" name="remember_me" value="remember-me"> Remember me
             </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="login">Enter</button>
     </form>
 </body>
 </html>
