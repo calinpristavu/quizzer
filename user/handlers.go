@@ -22,10 +22,10 @@ func Init(db *gorm.DB, r *mux.Router) {
 	h = &handler{
 		db: db,
 	}
+
 	r.Use(AuthMiddleware)
 
 	r.HandleFunc("/", h.home)
-	r.HandleFunc("/login_check", h.loginCheck)
 	r.HandleFunc("/logout", h.logout)
 
 	h.db.AutoMigrate(&User{})
@@ -43,29 +43,6 @@ func (h *handler) home(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("could not render template: %v", err)
 	}
-}
-
-func (h *handler) loginCheck(w http.ResponseWriter, r *http.Request) {
-	uname := r.PostFormValue("username")
-	pass := r.PostFormValue("password")
-
-	u, err := FindByUsernameAndPassword(uname, pass)
-	if err != nil {
-		http.Redirect(w, r, "/login", 301)
-
-		return
-	}
-
-	LoggedIn[uname] = u
-
-	cookie := &http.Cookie{
-		Domain: "localhost",
-		Name:   "user",
-		Value:  u.Username,
-	}
-	http.SetCookie(w, cookie)
-
-	http.Redirect(w, r, "/", 301)
 }
 
 func (h *handler) logout(w http.ResponseWriter, r *http.Request) {
@@ -89,8 +66,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		cookie, err := r.Cookie("user")
 		if err != nil {
 			log.Printf("error with user cookie: %v", err)
-			// TODO: redirect when user is needed for req
-			next.ServeHTTP(w, r)
+			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 
 			return
 		}
@@ -101,7 +77,10 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		if !ok {
 			u, err = FindByUsername(username)
 			if err != nil {
-				u = nil
+				log.Printf("could not find user for username %s", username)
+				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+
+				return
 			}
 		}
 		ctx := context.WithValue(r.Context(), "user", u)

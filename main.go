@@ -23,8 +23,10 @@ func main() {
 	r := mux.NewRouter()
 
 	auth.Init(r)
-	user.Init(db, r)
-	quiz.Init(db, r)
+
+	securedRouter := r.NewRoute().Subrouter()
+	user.Init(db, securedRouter)
+	quiz.Init(db, securedRouter)
 
 	http.ListenAndServe(":3030", r)
 }

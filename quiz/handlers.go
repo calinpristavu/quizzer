@@ -20,15 +20,17 @@ func Init(db *gorm.DB, r *mux.Router) {
 	h = &handler{
 		db: db,
 	}
+
 	r.HandleFunc("/question", question)
 
 	h.db.AutoMigrate(&Quiz{}, &Question{}, &Answer{})
 }
 
 func question(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user").(*user.User)
+	u := r.Context().Value("user")
+	fmt.Printf("user %T \n", u)
 
-	q := findActiveByUser(u)
+	q := findActiveByUser(u.(*user.User))
 
 	t, err := template.ParseFiles("quiz/question.gtpl")
 	if err != nil {
