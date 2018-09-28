@@ -23,21 +23,42 @@ func Init(db *gorm.DB, r *mux.Router) {
 
 	r.HandleFunc("/question", question)
 
-	h.db.AutoMigrate(&Quiz{}, &Question{}, &Answer{})
+	h.db.AutoMigrate(&Quiz{}, &Question{}, &Answer{}, &AnsweredQuestion{})
 }
 
 func question(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user")
 	fmt.Printf("user %T \n", u)
 
-	q := findActiveByUser(u.(*user.User))
+	quiz := findActiveByUser(u.(*user.User))
 
-	t, err := template.ParseFiles("quiz/question.gtpl")
+	t, err := template.ParseFiles("quiz/question.gtpl", "header.gtpl", "footer.gtpl")
 	if err != nil {
 		fmt.Fprintf(w, "could not parse template: %v", err)
 	}
 
-	err = t.Execute(w, q)
+	question, err := quiz.getNextQuestion()
+	if err != nil {
+		fmt.Fprintf(w, "could not fetch next q: %v", err)
+
+		return
+	}
+
+	if r.FormValue("answer[]") != "" {
+		err = question.saveAnswersForQuiz(r.Form["answer[]"], quiz)
+		if err != nil {
+			fmt.Fprintf(w, "could not save answers: %v", err)
+		}
+
+		question, err = quiz.getNextQuestion()
+		if err != nil {
+			fmt.Fprintf(w, "could not fetch next q: %v", err)
+
+			return
+		}
+	}
+
+	err = t.Execute(w, question)
 	if err != nil {
 		fmt.Fprintf(w, "could not execute template: %v", err)
 	}

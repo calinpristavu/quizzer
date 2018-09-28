@@ -33,7 +33,7 @@ func Init(db *gorm.DB, r *mux.Router) {
 func (h *handler) home(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user")
 
-	t, err := template.ParseFiles("user/home.gtpl")
+	t, err := template.ParseFiles("user/home.gtpl", "header.gtpl", "footer.gtpl")
 	if err != nil {
 		log.Printf("could not parse template: %v", err)
 	}

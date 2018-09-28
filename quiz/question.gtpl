@@ -1,25 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Question</title>
-</head>
-<body>
-    <p>Quiz: {{.ID}}</p>
-    <p>Questions:</p>
-    <ul>
-        {{range .Questions}}
-            <li>{{.Text}}</li>
-            <ul>
-                {{range .Answers}}
-                    <li>{{.Text}}</li>
-                {{else}}
-                    <li>No answers.</li>
-                {{end}}
-            </ul>
+{{ template "header" }}
+
+<div class="container">
+    <p>{{.Text}}</p>
+    <form action="/question" method="POST">
+        {{range .Answers}}
+            <div class="form-group form-check">
+                <input
+                    id="answer-{{.ID}}"
+                    class="form-check-input"
+                    type="checkbox"
+                    name="answer[]"
+                    value="{{.ID}}">
+                <label
+                    for="answer-{{.ID}}"
+                    class="form-check-label">
+                    {{.Text}}
+                </label>
+            </div>
         {{else}}
-            <li>No questions.</li>
+            <p>No answers.</p>
         {{end}}
+        <button type="submit" class="btn btn-primary">Next ></button>
+    </form>
+    <ul>
     </ul>
-</body>
-</html>
+</div>
+{{ template "footer" }}
