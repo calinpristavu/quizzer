@@ -18,9 +18,8 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		username := cookie.Value
 
-		u, ok := LoggedIn[username]
-		if !ok {
-			u, err = FindByUsername(username)
+		if _, ok := LoggedIn[username]; !ok {
+			LoggedIn[username], err = FindByUsername(username)
 			if err != nil {
 				log.Printf("could not find user for username %s", username)
 				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
@@ -28,7 +27,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 				return
 			}
 		}
-		ctx := context.WithValue(r.Context(), "user", u)
+		ctx := context.WithValue(r.Context(), "user", LoggedIn[username])
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
