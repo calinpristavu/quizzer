@@ -67,7 +67,10 @@ func question(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = h.templating.question.Execute(w, question)
+	err = h.templating.question.Execute(w, struct {
+		Question Question
+		User     interface{}
+	}{Question: question, User: u})
 	if err != nil {
 		fmt.Fprintf(w, "could not execute template: %v", err)
 	}
@@ -85,7 +88,10 @@ func finished(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.templating.finished.Execute(w, quiz)
+	err := h.templating.finished.Execute(w, struct {
+		Quiz Quiz
+		User interface{}
+	}{Quiz: quiz, User: u})
 	if err != nil {
 		fmt.Fprintf(w, "could not execute template: %v", err)
 	}

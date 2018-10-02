@@ -1,7 +1,7 @@
-{{ template "header" }}
+{{ template "header" .User }}
 
 <div class="container">
-    <h1>Congratz!!! you have finished quiz: {{.ID}}</h1>
+    <h1>Congratz!!! you have finished quiz: {{.Quiz.ID}}</h1>
     <p>the questions were:</p>
     <table class="table">
         <thead>
@@ -12,7 +12,7 @@
         </thead>
 
         <tbody>
-            {{range .Answered}}
+            {{range .Quiz.Answered}}
                 <tr>
                     <td>{{.Question.Text}}</td>
                     <td>

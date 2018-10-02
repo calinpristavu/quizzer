@@ -40,9 +40,11 @@ func Init(db *gorm.DB, r *mux.Router) {
 }
 
 func (h *handler) home(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user")
+	// TODO: find out how to type assert *user.User instead of using interface{}
+	err := h.templating.home.Execute(w, struct {
+		User interface{}
+	}{User: r.Context().Value("user")})
 
-	err := h.templating.home.Execute(w, u)
 	if err != nil {
 		log.Printf("could not render template: %v", err)
 	}

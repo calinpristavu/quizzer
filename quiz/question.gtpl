@@ -1,9 +1,9 @@
-{{ template "header" }}
+{{ template "header" .User }}
 
 <div class="container">
-    <p>{{.Text}}</p>
+    <p>{{.Question.Text}}</p>
     <form action="/question" method="POST">
-        {{range .Answers}}
+        {{range .Question.Answers}}
             <div class="form-group form-check">
                 <input
                     id="answer-{{.ID}}"
