@@ -17,8 +17,11 @@ type Quiz struct {
 }
 
 type AnsweredQuestion struct {
+	gorm.Model
 	QuizID          uint
+	Quiz            Quiz
 	QuestionID      uint
+	Question        Question
 	SelectedAnswers []Answer `gorm:"many2many:question_selected_answer_mm;"`
 }
 
@@ -35,8 +38,8 @@ type Answer struct {
 	Correct    bool
 }
 
-func findActiveByUser(u *user.User) *Quiz {
-	q := &Quiz{
+func findActiveByUser(u *user.User) Quiz {
+	q := Quiz{
 		UserID: u.ID,
 		Active: true,
 	}
@@ -45,10 +48,12 @@ func findActiveByUser(u *user.User) *Quiz {
 		Preload("UnAnswered").
 		Preload("UnAnswered.Answers").
 		Preload("Answered").
+		Preload("Answered.SelectedAnswers").
+		Preload("Answered.Question").
 		Where(&q).FirstOrCreate(&q)
 
 	if q.UnAnswered == nil && len(q.Answered) == 0 {
-		populateQuizWithQuestions(q)
+		populateQuizWithQuestions(&q)
 		for _, question := range q.UnAnswered {
 			h.db.Model(&q).Association("UnAnswered").Append(question)
 		}
@@ -107,4 +112,9 @@ func (q *Quiz) getNextQuestion() (Question, error) {
 	}
 
 	return q.UnAnswered[0], nil
+}
+
+func (q *Quiz) close() {
+	q.Active = false
+	h.db.Save(&q)
 }
