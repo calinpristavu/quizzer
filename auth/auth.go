@@ -10,24 +10,22 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type Login struct {
+var templating struct {
+	login *template.Template
 }
 
-func Init(mux *mux.Router) *Login {
-	l := &Login{}
+func Init(mux *mux.Router) {
+	mux.HandleFunc("/login", page)
 
-	mux.HandleFunc("/login", l.page)
-
-	return l
-}
-
-func (l *Login) page(w http.ResponseWriter, r *http.Request) {
-	var errors []string
-
-	t, err := template.ParseFiles("auth/login.gtpl")
+	var err error
+	templating.login, err = template.ParseFiles("auth/login.gtpl")
 	if err != nil {
-		log.Printf("could not parse template: %v", err)
+		log.Fatalf("could not parse template: %v", err)
 	}
+}
+
+func page(w http.ResponseWriter, r *http.Request) {
+	var errors []string
 
 	uname := r.FormValue("username")
 
@@ -52,10 +50,14 @@ func (l *Login) page(w http.ResponseWriter, r *http.Request) {
 		errors = append(errors, "Invalid username or password.")
 	}
 
-	t.Execute(w, struct {
+	err := templating.login.Execute(w, struct {
 		Errors   []string
 		PrevData struct {
 			Username string
 		}
 	}{Errors: errors, PrevData: struct{ Username string }{Username: uname}})
+
+	if err != nil {
+		log.Fatalf("could not exec template login: %v", err)
+	}
 }

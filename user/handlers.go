@@ -12,7 +12,10 @@ import (
 )
 
 type handler struct {
-	db *gorm.DB
+	db         *gorm.DB
+	templating struct {
+		home *template.Template
+	}
 }
 
 var h *handler
@@ -28,17 +31,18 @@ func Init(db *gorm.DB, r *mux.Router) {
 	r.HandleFunc("/logout", h.logout)
 
 	h.db.AutoMigrate(&User{})
+
+	var err error
+	h.templating.home, err = template.ParseFiles("user/home.gtpl", "header.gtpl", "footer.gtpl")
+	if err != nil {
+		log.Fatalf("could not parse template: %v", err)
+	}
 }
 
 func (h *handler) home(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user")
 
-	t, err := template.ParseFiles("user/home.gtpl", "header.gtpl", "footer.gtpl")
-	if err != nil {
-		log.Printf("could not parse template: %v", err)
-	}
-
-	err = t.Execute(w, u)
+	err := h.templating.home.Execute(w, u)
 	if err != nil {
 		log.Printf("could not render template: %v", err)
 	}

@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	db := initDb().Debug()
+	db := initDb()
 
 	r := mux.NewRouter()
 
@@ -36,5 +36,5 @@ func initDb() *gorm.DB {
 	if err != nil {
 		fmt.Printf("could not connect to db: %v", err)
 	}
-	return db
+	return db.Debug()
 }

@@ -3,6 +3,7 @@ package quiz
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/calinpristavu/quizzer/user"
@@ -11,7 +12,11 @@ import (
 )
 
 type handler struct {
-	db *gorm.DB
+	db         *gorm.DB
+	templating struct {
+		question *template.Template
+		finished *template.Template
+	}
 }
 
 var h *handler
@@ -25,17 +30,23 @@ func Init(db *gorm.DB, r *mux.Router) {
 	r.HandleFunc("/finished", finished)
 
 	h.db.AutoMigrate(&Quiz{}, &Question{}, &Answer{}, &AnsweredQuestion{})
+
+	var err error
+	h.templating.question, err = template.ParseFiles("quiz/question.gtpl", "header.gtpl", "footer.gtpl")
+	if err != nil {
+		log.Fatalf("could not parse template: %v", err)
+	}
+
+	h.templating.finished, err = template.ParseFiles("quiz/finished.gtpl", "header.gtpl", "footer.gtpl")
+	if err != nil {
+		log.Fatalf("could not parse template: %v", err)
+	}
 }
 
 func question(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user")
 
 	quiz := findActiveByUser(u.(*user.User))
-
-	t, err := template.ParseFiles("quiz/question.gtpl", "header.gtpl", "footer.gtpl")
-	if err != nil {
-		fmt.Fprintf(w, "could not parse template: %v", err)
-	}
 
 	question, err := quiz.getNextQuestion()
 	if err != nil {
@@ -56,7 +67,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = t.Execute(w, question)
+	err = h.templating.question.Execute(w, question)
 	if err != nil {
 		fmt.Fprintf(w, "could not execute template: %v", err)
 	}
@@ -74,12 +85,7 @@ func finished(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t, err := template.ParseFiles("quiz/finished.gtpl", "header.gtpl", "footer.gtpl")
-	if err != nil {
-		fmt.Fprintf(w, "could not parse template: %v", err)
-	}
-
-	err = t.Execute(w, quiz)
+	err := h.templating.finished.Execute(w, quiz)
 	if err != nil {
 		fmt.Fprintf(w, "could not execute template: %v", err)
 	}
