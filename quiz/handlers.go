@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/calinpristavu/quizzer/user"
 	"github.com/gorilla/mux"
@@ -30,6 +31,7 @@ func Init(db *gorm.DB, r *mux.Router) {
 	r.HandleFunc("/question", question)
 	r.HandleFunc("/finished", finished)
 	r.HandleFunc("/quiz-history", history)
+	r.HandleFunc("/quiz-history/{id}", viewQuiz)
 
 	h.db.AutoMigrate(&Quiz{}, &Question{}, &Answer{}, &AnsweredQuestion{})
 
@@ -110,9 +112,31 @@ func history(w http.ResponseWriter, r *http.Request) {
 	qs := findAllFinishedForUser(u.(*user.User))
 
 	err := h.templating.quizHistory.Execute(w, struct {
-		Quizes []Quiz
-		User   interface{}
-	}{Quizes: qs, User: u})
+		Quizzes []Quiz
+		Current *Quiz
+		User    interface{}
+	}{Quizzes: qs, User: u, Current: nil})
+	if err != nil {
+		fmt.Fprintf(w, "could not execute template: %v", err)
+	}
+}
+
+func viewQuiz(w http.ResponseWriter, r *http.Request) {
+	u := r.Context().Value("user")
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	qs := findAllFinishedForUser(u.(*user.User))
+
+	err := h.templating.quizHistory.Execute(w, struct {
+		Quizzes []Quiz
+		Current Quiz
+		User    interface{}
+	}{
+		Quizzes: qs,
+		User:    u,
+		Current: find(id),
+	})
 	if err != nil {
 		fmt.Fprintf(w, "could not execute template: %v", err)
 	}

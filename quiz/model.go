@@ -67,9 +67,9 @@ func findAllFinishedForUser(u *user.User) []Quiz {
 
 	h.db.Model(&Quiz{}).
 		Preload("Answered").
-		Preload("Answered.Question").
-		Preload("Answered.SelectedAnswers").
-		Where("user_id = ?", u.ID).Find(&qs)
+		Where("user_id = ?", u.ID).
+		Where("active = 0").
+		Find(&qs)
 
 	return qs
 }
@@ -81,6 +81,18 @@ func populateQuizWithQuestions(q *Quiz) {
 		Order(gorm.Expr("rand()")).
 		Limit(2).
 		Find(&q.UnAnswered)
+}
+
+func find(id int) Quiz {
+	var q Quiz
+	h.db.
+		Preload("Answered").
+		Preload("Answered.Question").
+		Preload("Answered.Question.Answers").
+		Preload("Answered.SelectedAnswers").
+		First(&q, id)
+
+	return q
 }
 
 func (q *Question) filterAnswersByStringIds(ids []string) ([]Answer, error) {
