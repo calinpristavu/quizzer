@@ -44,7 +44,9 @@
             </li>
         </ul>
         <div class="my-2 my-lg-0 text-white">
-            Welcome {{.Username}} <a href="/logout"><i class="fa fa-sign-out-alt"></i></a>
+            Welcome
+            <a href="/me">{{.Username}}</a>
+            <a href="/logout"><i class="fa fa-sign-out-alt"></i></a>
         </div>
     </div>
 </nav>

@@ -42,3 +42,7 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 
 	return u, err
 }
+
+func (u *User) Save() {
+	h.db.Save(u)
+}
