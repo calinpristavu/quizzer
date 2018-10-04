@@ -1,0 +1,14 @@
+{{ define "account_nav" }}
+
+<ul class="nav nav-tabs justify-content-center">
+    <li class="nav-item">
+        <a class="nav-link {{if eq . 1}}active{{end}}" href="/me">User Info</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{if eq . 2}}active{{end}}" href="/quiz-history">Quiz History</a>
+    </li>
+</ul>
+
+<br>
+
+{{end}}

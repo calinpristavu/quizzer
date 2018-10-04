@@ -14,8 +14,9 @@ import (
 type handler struct {
 	db         *gorm.DB
 	templating struct {
-		question *template.Template
-		finished *template.Template
+		question    *template.Template
+		finished    *template.Template
+		quizHistory *template.Template
 	}
 }
 
@@ -28,6 +29,7 @@ func Init(db *gorm.DB, r *mux.Router) {
 
 	r.HandleFunc("/question", question)
 	r.HandleFunc("/finished", finished)
+	r.HandleFunc("/quiz-history", history)
 
 	h.db.AutoMigrate(&Quiz{}, &Question{}, &Answer{}, &AnsweredQuestion{})
 
@@ -38,6 +40,11 @@ func Init(db *gorm.DB, r *mux.Router) {
 	}
 
 	h.templating.finished, err = template.ParseFiles("quiz/finished.gtpl", "header.gtpl", "footer.gtpl")
+	if err != nil {
+		log.Fatalf("could not parse template: %v", err)
+	}
+
+	h.templating.quizHistory, err = template.ParseFiles("quiz/history.gtpl", "header.gtpl", "footer.gtpl", "account_nav.gtpl")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
@@ -92,6 +99,20 @@ func finished(w http.ResponseWriter, r *http.Request) {
 		Quiz Quiz
 		User interface{}
 	}{Quiz: quiz, User: u})
+	if err != nil {
+		fmt.Fprintf(w, "could not execute template: %v", err)
+	}
+}
+
+func history(w http.ResponseWriter, r *http.Request) {
+	u := r.Context().Value("user")
+
+	qs := findAllFinishedForUser(u.(*user.User))
+
+	err := h.templating.quizHistory.Execute(w, struct {
+		Quizes []Quiz
+		User   interface{}
+	}{Quizes: qs, User: u})
 	if err != nil {
 		fmt.Fprintf(w, "could not execute template: %v", err)
 	}

@@ -62,6 +62,18 @@ func findActiveByUser(u *user.User) Quiz {
 	return q
 }
 
+func findAllFinishedForUser(u *user.User) []Quiz {
+	var qs []Quiz
+
+	h.db.Model(&Quiz{}).
+		Preload("Answered").
+		Preload("Answered.Question").
+		Preload("Answered.SelectedAnswers").
+		Where("user_id = ?", u.ID).Find(&qs)
+
+	return qs
+}
+
 func populateQuizWithQuestions(q *Quiz) {
 	h.db.
 		Model(&Question{}).

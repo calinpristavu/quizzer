@@ -1,6 +1,6 @@
 {{ template "header" .User }}
 
-{{ template "account_nav" }}
+{{ template "account_nav" 1 }}
 
 <div class="container">
     <main role="main">
