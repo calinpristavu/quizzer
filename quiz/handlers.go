@@ -50,7 +50,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 	question, err := quiz.getNextQuestion()
 	if err != nil {
-		http.Redirect(w, r, "/finished", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/finished", 302)
 		return
 	}
 
@@ -62,7 +62,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 		question, err = quiz.getNextQuestion()
 		if err != nil {
-			http.Redirect(w, r, "/finished", http.StatusMovedPermanently)
+			http.Redirect(w, r, "/finished", 302)
 			return
 		}
 	}
@@ -84,7 +84,7 @@ func finished(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		quiz.close()
 
-		http.Redirect(w, r, "/", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/", 302)
 		return
 	}
 
