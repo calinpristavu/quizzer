@@ -39,7 +39,7 @@ func Init(db *gorm.DB, r *mux.Router) {
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
-	h.templating.myAccount, err = template.ParseFiles("user/myAccount.gtpl", "header.gtpl", "footer.gtpl")
+	h.templating.myAccount, err = template.ParseFiles("user/myAccount.gtpl", "header.gtpl", "footer.gtpl", "user/account_nav.gtpl")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}

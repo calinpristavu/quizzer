@@ -1,5 +1,7 @@
 {{ template "header" .User }}
 
+{{ template "account_nav" }}
+
 <div class="container">
     <main role="main">
         <form action="/me" method="POST">
