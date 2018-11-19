@@ -1,20 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
-.idea/**/gradle.xml
-.idea/**/libraries
+.idea/
 cmake-build-*/
-.idea/**/mongoSettings.xml
 *.iws
 out/
 .idea_modules/
@@ -33,3 +19,4 @@ fabric.properties
 *.test
 *.out
 Build___Run
+app

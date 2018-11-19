@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/qor/admin"
 	"net/http"
 
 	"github.com/calinpristavu/quizzer/quiz"
@@ -19,6 +20,7 @@ import (
 
 func main() {
 	db := initDb()
+	go addAdmin(db)
 
 	r := mux.NewRouter()
 
@@ -28,7 +30,10 @@ func main() {
 	user.Init(db, securedRouter)
 	quiz.Init(db, securedRouter)
 
-	http.ListenAndServe(":3030", r)
+	fmt.Println("App running on: 3030")
+	if err := http.ListenAndServe(":3030", r); err != nil {
+		panic(err)
+	}
 }
 
 func initDb() *gorm.DB {
@@ -37,4 +42,20 @@ func initDb() *gorm.DB {
 		fmt.Printf("could not connect to db: %v", err)
 	}
 	return db.Debug()
+}
+
+func addAdmin(db *gorm.DB) {
+	Admin := admin.New(&admin.AdminConfig{DB: db})
+
+	Admin.AddResource(&user.User{})
+	Admin.AddResource(&quiz.Question{})
+	Admin.AddResource(&quiz.Answer{})
+
+	m := http.NewServeMux()
+	Admin.MountTo("/", m)
+
+	fmt.Println("Admin running on: 9000")
+	if err := http.ListenAndServe(":9000", m); err != nil {
+		panic(err)
+	}
 }
