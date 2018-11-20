@@ -1,6 +1,7 @@
 package quiz
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -15,9 +16,10 @@ import (
 type handler struct {
 	db         *gorm.DB
 	templating struct {
-		question    *template.Template
-		finished    *template.Template
-		quizHistory *template.Template
+		choiceQuestion *template.Template
+		textQuestion   *template.Template
+		finished       *template.Template
+		quizHistory    *template.Template
 	}
 }
 
@@ -43,7 +45,12 @@ func Init(db *gorm.DB, r *mux.Router) {
 	)
 
 	var err error
-	h.templating.question, err = template.ParseFiles("quiz/question.gohtml", "header.gohtml", "footer.gohtml")
+	h.templating.choiceQuestion, err = template.ParseFiles("quiz/choice_question.gohtml", "header.gohtml", "footer.gohtml")
+	if err != nil {
+		log.Fatalf("could not parse template: %v", err)
+	}
+
+	h.templating.textQuestion, err = template.ParseFiles("quiz/text_question.gohtml", "header.gohtml", "footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
@@ -59,6 +66,7 @@ func Init(db *gorm.DB, r *mux.Router) {
 	}
 }
 
+// fixme: This method looks ... like .. shit.
 func question(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user")
 
@@ -72,7 +80,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.FormValue("answer[]") != "" {
-		err = question.saveAnswersForQuiz(r.Form["answer[]"], &quiz)
+		err = question.saveChoices(r.Form["answer[]"], &quiz)
 		if err != nil {
 			log.Fatalf("could not save answers: %v", err)
 		}
@@ -85,12 +93,23 @@ func question(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = h.templating.question.Execute(w, struct {
-		Question Question
-		User     interface{}
-	}{Question: *question, User: u})
+	if r.FormValue("answer") != "" {
+		err = question.saveText(r.FormValue("answer"), &quiz)
+		if err != nil {
+			log.Fatalf("could not save answer: %v", err)
+		}
+
+		question, err = quiz.getNextQuestion()
+		if err != nil {
+			log.Println("No questions left. Redirecting to /finished")
+			http.Redirect(w, r, "/finished", 302)
+			return
+		}
+	}
+
+	err = renderQuestion(question, u.(*user.User), w)
 	if err != nil {
-		log.Fatalf("could not execute template: %v", err)
+		log.Fatal(err)
 	}
 }
 
@@ -148,5 +167,22 @@ func viewQuiz(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		log.Fatalf("could not execute template: %v", err)
+	}
+}
+
+func renderQuestion(q *Question, u *user.User, w http.ResponseWriter) error {
+	switch q.Type {
+	case 1:
+		return h.templating.choiceQuestion.Execute(w, struct {
+			Question Question
+			User     interface{}
+		}{Question: *q, User: u})
+	case 2:
+		return h.templating.textQuestion.Execute(w, struct {
+			Question Question
+			User     interface{}
+		}{Question: *q, User: u})
+	default:
+		return fmt.Errorf("unhandled question type %v", q.Type)
 	}
 }

@@ -145,12 +145,20 @@ func (q *Question) markChoicesAsSelected(ids []string) error {
 	return nil
 }
 
-func (q *Question) saveAnswersForQuiz(answerIds []string, quiz *Quiz) error {
+func (q *Question) saveChoices(answerIds []string, quiz *Quiz) error {
 	err := q.markChoicesAsSelected(answerIds)
 	if err != nil {
 		return fmt.Errorf("invalid answers: %v", err)
 	}
 
+	q.IsAnswered = true
+	h.db.Save(q)
+
+	return nil
+}
+
+func (q *Question) saveText(text string, quiz *Quiz) error {
+	q.TextAnswer.Text = text
 	q.IsAnswered = true
 	h.db.Save(q)
 
