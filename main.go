@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/qor/admin"
 	"net/http"
+
+	"github.com/qor/admin"
 
 	"github.com/calinpristavu/quizzer/quiz"
 
@@ -48,8 +49,8 @@ func addAdmin(db *gorm.DB) {
 	Admin := admin.New(&admin.AdminConfig{DB: db})
 
 	Admin.AddResource(&user.User{})
-	Admin.AddResource(&quiz.Question{})
-	Admin.AddResource(&quiz.Answer{})
+	Admin.AddResource(&quiz.QuestionTemplate{})
+	Admin.AddResource(&quiz.ChoiceAnswerTemplate{})
 
 	m := http.NewServeMux()
 	Admin.MountTo("/", m)

@@ -35,11 +35,11 @@ func Init(db *gorm.DB, r *mux.Router) {
 	h.db.AutoMigrate(&User{})
 
 	var err error
-	h.templating.home, err = template.ParseFiles("user/home.gtpl", "header.gtpl", "footer.gtpl")
+	h.templating.home, err = template.ParseFiles("user/home.gohtml", "header.gohtml", "footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
-	h.templating.myAccount, err = template.ParseFiles("user/myAccount.gtpl", "header.gtpl", "footer.gtpl", "account_nav.gtpl")
+	h.templating.myAccount, err = template.ParseFiles("user/myAccount.gohtml", "header.gohtml", "footer.gohtml", "account_nav.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}

@@ -1,15 +1,15 @@
 package quiz
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"strconv"
 
-	"github.com/calinpristavu/quizzer/user"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+
+	"github.com/calinpristavu/quizzer/user"
 )
 
 type handler struct {
@@ -33,20 +33,27 @@ func Init(db *gorm.DB, r *mux.Router) {
 	r.HandleFunc("/quiz-history", history)
 	r.HandleFunc("/quiz-history/{id}", viewQuiz)
 
-	h.db.AutoMigrate(&Quiz{}, &Question{}, &Answer{}, &AnsweredQuestion{})
+	h.db.AutoMigrate(
+		&Quiz{},
+		&Question{},
+		&ChoiceAnswer{},
+		&TextAnswer{},
+		&QuestionTemplate{},
+		&ChoiceAnswerTemplate{},
+	)
 
 	var err error
-	h.templating.question, err = template.ParseFiles("quiz/question.gtpl", "header.gtpl", "footer.gtpl")
+	h.templating.question, err = template.ParseFiles("quiz/question.gohtml", "header.gohtml", "footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
 
-	h.templating.finished, err = template.ParseFiles("quiz/finished.gtpl", "header.gtpl", "footer.gtpl")
+	h.templating.finished, err = template.ParseFiles("quiz/finished.gohtml", "header.gohtml", "footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
 
-	h.templating.quizHistory, err = template.ParseFiles("quiz/history.gtpl", "header.gtpl", "footer.gtpl", "account_nav.gtpl")
+	h.templating.quizHistory, err = template.ParseFiles("quiz/history.gohtml", "header.gohtml", "footer.gohtml", "account_nav.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
@@ -59,6 +66,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 	question, err := quiz.getNextQuestion()
 	if err != nil {
+		log.Println("No questions left. Redirecting to /finished")
 		http.Redirect(w, r, "/finished", 302)
 		return
 	}
@@ -66,11 +74,12 @@ func question(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("answer[]") != "" {
 		err = question.saveAnswersForQuiz(r.Form["answer[]"], &quiz)
 		if err != nil {
-			fmt.Fprintf(w, "could not save answers: %v", err)
+			log.Fatalf("could not save answers: %v", err)
 		}
 
 		question, err = quiz.getNextQuestion()
 		if err != nil {
+			log.Println("No questions left. Redirecting to /finished")
 			http.Redirect(w, r, "/finished", 302)
 			return
 		}
@@ -79,9 +88,9 @@ func question(w http.ResponseWriter, r *http.Request) {
 	err = h.templating.question.Execute(w, struct {
 		Question Question
 		User     interface{}
-	}{Question: question, User: u})
+	}{Question: *question, User: u})
 	if err != nil {
-		fmt.Fprintf(w, "could not execute template: %v", err)
+		log.Fatalf("could not execute template: %v", err)
 	}
 }
 
@@ -102,7 +111,7 @@ func finished(w http.ResponseWriter, r *http.Request) {
 		User interface{}
 	}{Quiz: quiz, User: u})
 	if err != nil {
-		fmt.Fprintf(w, "could not execute template: %v", err)
+		log.Fatalf("could not execute template: %v", err)
 	}
 }
 
@@ -117,7 +126,7 @@ func history(w http.ResponseWriter, r *http.Request) {
 		User    interface{}
 	}{Quizzes: qs, User: u, Current: nil})
 	if err != nil {
-		fmt.Fprintf(w, "could not execute template: %v", err)
+		log.Fatalf("could not execute template: %v", err)
 	}
 }
 
@@ -138,6 +147,6 @@ func viewQuiz(w http.ResponseWriter, r *http.Request) {
 		Current: find(id),
 	})
 	if err != nil {
-		fmt.Fprintf(w, "could not execute template: %v", err)
+		log.Fatalf("could not execute template: %v", err)
 	}
 }

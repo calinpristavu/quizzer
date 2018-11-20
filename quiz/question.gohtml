@@ -1,9 +1,10 @@
 {{ template "header" .User }}
 
+<!--suppress ALL -->
 <div class="container">
     <p>{{.Question.Text}}</p>
     <form action="/question" method="POST">
-        {{range .Question.Answers}}
+        {{range .Question.ChoiceAnswers}}
             <div class="form-group form-check">
                 <input
                     id="answer-{{.ID}}"

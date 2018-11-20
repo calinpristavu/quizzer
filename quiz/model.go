@@ -4,59 +4,102 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/calinpristavu/quizzer/user"
 	"github.com/jinzhu/gorm"
+
+	"github.com/calinpristavu/quizzer/user"
 )
+
+const questionsPerQuiz = 10
 
 type Quiz struct {
 	gorm.Model
-	UserID     uint
-	Active     bool
-	UnAnswered []Question `gorm:"many2many:quiz_unanswered_mm;"`
-	Answered   []AnsweredQuestion
-}
-
-type AnsweredQuestion struct {
-	gorm.Model
-	QuizID          uint
-	Quiz            Quiz
-	QuestionID      uint
-	Question        Question
-	SelectedAnswers []Answer `gorm:"many2many:question_selected_answer_mm;"`
+	UserID    uint
+	User      user.User
+	Questions []*Question
+	Active    bool
 }
 
 type Question struct {
 	gorm.Model
-	Text    string
-	Answers []Answer
+	QuizID        uint
+	Text          string
+	Type          uint
+	IsAnswered    bool
+	ChoiceAnswers []*ChoiceAnswer
+	TextAnswer    *TextAnswer
 }
 
-type Answer struct {
+type ChoiceAnswer struct {
 	gorm.Model
 	QuestionID uint
 	Text       string
-	Correct    bool
+	IsCorrect  bool
+	IsSelected bool
 }
 
-func findActiveByUser(u *user.User) Quiz {
+type TextAnswer struct {
+	gorm.Model
+	QuestionID uint
+	Text       string
+}
+
+type QuestionTemplate struct {
+	gorm.Model
+	Text                  string
+	Type                  uint // choice / text / ...
+	ChoiceAnswerTemplates []*ChoiceAnswerTemplate
+}
+
+type ChoiceAnswerTemplate struct {
+	gorm.Model
+	QuestionTemplateID uint
+	Text               string
+	IsCorrect          bool
+}
+
+func newQuiz(u *user.User, noQ int) Quiz {
 	q := Quiz{
 		UserID: u.ID,
 		Active: true,
 	}
 
-	h.db.
-		Preload("UnAnswered").
-		Preload("UnAnswered.Answers").
-		Preload("Answered").
-		Preload("Answered.SelectedAnswers").
-		Preload("Answered.Question").
-		Where(&q).FirstOrCreate(&q)
+	var qts []QuestionTemplate
 
-	if q.UnAnswered == nil && len(q.Answered) == 0 {
-		populateQuizWithQuestions(&q)
-		for _, question := range q.UnAnswered {
-			h.db.Model(&q).Association("UnAnswered").Append(question)
-		}
+	h.db.
+		Model(&QuestionTemplate{}).
+		Preload("ChoiceAnswerTemplates").
+		Order(gorm.Expr("rand()")).
+		Limit(noQ).
+		Find(&qts)
+
+	for _, qt := range qts {
+		qt.addToQuiz(&q)
+	}
+
+	h.db.Save(&q)
+
+	return q
+}
+
+func findQuiz(u *user.User) (Quiz, error) {
+	q := Quiz{
+		UserID: u.ID,
+		Active: true,
+	}
+	result := h.db.Where(&q).
+		Preload("Questions").
+		Preload("Questions.ChoiceAnswers").
+		Preload("Questions.TextAnswer").
+		First(&q)
+
+	return q, result.Error
+}
+
+func findActiveByUser(u *user.User) Quiz {
+	q, err := findQuiz(u)
+
+	if err != nil {
+		q = newQuiz(u, questionsPerQuiz)
 	}
 
 	return q
@@ -66,7 +109,7 @@ func findAllFinishedForUser(u *user.User) []Quiz {
 	var qs []Quiz
 
 	h.db.Model(&Quiz{}).
-		Preload("Answered").
+		Preload("Questions").
 		Where("user_id = ?", u.ID).
 		Where("active = 0").
 		Find(&qs)
@@ -74,71 +117,83 @@ func findAllFinishedForUser(u *user.User) []Quiz {
 	return qs
 }
 
-func populateQuizWithQuestions(q *Quiz) {
-	h.db.
-		Model(&Question{}).
-		Preload("Answers").
-		Order(gorm.Expr("rand()")).
-		Limit(2).
-		Find(&q.UnAnswered)
-}
-
 func find(id int) Quiz {
 	var q Quiz
 	h.db.
-		Preload("Answered").
-		Preload("Answered.Question").
-		Preload("Answered.Question.Answers").
-		Preload("Answered.SelectedAnswers").
+		Preload("Questions").
+		Preload("Questions.ChoiceAnswers").
+		Preload("Questions.TextAnswer").
 		First(&q, id)
 
 	return q
 }
 
-func (q *Question) filterAnswersByStringIds(ids []string) ([]Answer, error) {
-	var choices []Answer
-
+func (q *Question) markChoicesAsSelected(ids []string) error {
 	for _, aID := range ids {
-		for _, a := range q.Answers {
+		for _, a := range q.ChoiceAnswers {
 			id, err := strconv.Atoi(aID)
 			if err != nil {
-				return nil, fmt.Errorf("invalid answer id given %v: %v", aID, err)
+				return fmt.Errorf("invalid answer id given %v: %v", aID, err)
 			}
 
 			if a.ID == uint(id) {
-				choices = append(choices, a)
+				a.IsSelected = true
 			}
 		}
 	}
 
-	return choices, nil
+	return nil
 }
 
 func (q *Question) saveAnswersForQuiz(answerIds []string, quiz *Quiz) error {
-	as, err := q.filterAnswersByStringIds(answerIds)
+	err := q.markChoicesAsSelected(answerIds)
 	if err != nil {
 		return fmt.Errorf("invalid answers: %v", err)
 	}
 
-	h.db.Model(&quiz).Association("Answered").Append(&AnsweredQuestion{
-		QuestionID:      q.ID,
-		QuizID:          quiz.ID,
-		SelectedAnswers: as,
-	})
-	h.db.Model(&quiz).Association("UnAnswered").Delete(&q)
+	q.IsAnswered = true
+	h.db.Save(q)
 
 	return nil
 }
 
-func (q *Quiz) getNextQuestion() (Question, error) {
-	if len(q.UnAnswered) == 0 {
-		return Question{}, fmt.Errorf("all questions have been answered")
+func (q *Quiz) getNextQuestion() (*Question, error) {
+
+	for _, question := range q.Questions {
+		if !question.IsAnswered {
+			return question, nil
+		}
 	}
 
-	return q.UnAnswered[0], nil
+	return nil, fmt.Errorf("all questions have been answered")
 }
 
 func (q *Quiz) close() {
 	q.Active = false
 	h.db.Save(&q)
+}
+
+func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
+	q := &Question{
+		IsAnswered: false,
+		QuizID:     quiz.ID,
+		Text:       qt.Text,
+		Type:       qt.Type,
+	}
+
+	h.db.Save(&q)
+
+	q.TextAnswer = &TextAnswer{Text: "", QuestionID: q.ID}
+	for _, cat := range qt.ChoiceAnswerTemplates {
+		ca := &ChoiceAnswer{
+			QuestionID: q.ID,
+			Text:       cat.Text,
+			IsCorrect:  cat.IsCorrect,
+			IsSelected: false,
+		}
+		h.db.Save(&ca)
+		q.ChoiceAnswers = append(q.ChoiceAnswers, ca)
+	}
+
+	quiz.Questions = append(quiz.Questions, q)
 }

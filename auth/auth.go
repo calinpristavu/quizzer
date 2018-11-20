@@ -18,7 +18,7 @@ func Init(mux *mux.Router) {
 	mux.HandleFunc("/login", page)
 
 	var err error
-	templating.login, err = template.ParseFiles("auth/login.gtpl")
+	templating.login, err = template.ParseFiles("auth/login.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}

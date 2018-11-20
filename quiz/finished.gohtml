@@ -1,5 +1,6 @@
 {{ template "header" .User }}
 
+<!--suppress HtmlUnknownTarget -->
 <div class="container">
     <h1>Congratz!!! you have finished quiz: {{.Quiz.ID}}</h1>
     <p>the questions were:</p>
@@ -12,13 +13,20 @@
         </thead>
 
         <tbody>
-            {{range .Quiz.Answered}}
+            {{range .Quiz.Questions}}
                 <tr>
-                    <td>{{.Question.Text}}</td>
+                    <td>{{.Text}}</td>
                     <td>
                         <ul>
-                            {{range .SelectedAnswers}}
-                                <li>{{.Text}}</li>
+                            {{range .ChoiceAnswers}}
+                                <li class="{{if eq .IsCorrect true}}text-success{{else}}text-danger{{end}}">
+                                    {{ if and .IsSelected }}
+                                        <i class="far fa-check-square"></i>
+                                    {{else}}
+                                        <i class="far fa-square"></i>
+                                    {{end}}
+                                    {{.Text}}
+                                </li>
                             {{end}}
                         </ul>
                     </td>
