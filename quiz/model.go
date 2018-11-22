@@ -21,12 +21,13 @@ type Quiz struct {
 
 type Question struct {
 	gorm.Model
-	QuizID        uint
-	Text          string
-	Type          uint
-	IsAnswered    bool
-	ChoiceAnswers []*ChoiceAnswer
-	TextAnswer    *TextAnswer
+	QuizID            uint
+	Text              string
+	Type              uint
+	IsAnswered        bool
+	ChoiceAnswers     []*ChoiceAnswer
+	TextAnswer        *TextAnswer
+	FlowDiagramAnswer *FlowDiagramAnswer
 }
 
 type ChoiceAnswer struct {
@@ -40,7 +41,13 @@ type ChoiceAnswer struct {
 type TextAnswer struct {
 	gorm.Model
 	QuestionID uint
-	Text       string
+	Text       string `sql:"size:999999"`
+}
+
+type FlowDiagramAnswer struct {
+	gorm.Model
+	QuestionID uint
+	Text       string `sql:"size:999999"`
 }
 
 type QuestionTemplate struct {
@@ -90,6 +97,7 @@ func findQuiz(u *user.User) (Quiz, error) {
 		Preload("Questions").
 		Preload("Questions.ChoiceAnswers").
 		Preload("Questions.TextAnswer").
+		Preload("Questions.FlowDiagramAnswer").
 		First(&q)
 
 	return q, result.Error
@@ -123,6 +131,7 @@ func find(id int) Quiz {
 		Preload("Questions").
 		Preload("Questions.ChoiceAnswers").
 		Preload("Questions.TextAnswer").
+		Preload("Questions.FlowDiagramAnswer").
 		First(&q, id)
 
 	return q
@@ -165,6 +174,14 @@ func (q *Question) saveText(text string, quiz *Quiz) error {
 	return nil
 }
 
+func (q *Question) saveFlowDiagram(text string, quiz *Quiz) error {
+	q.FlowDiagramAnswer.Text = text
+	q.IsAnswered = true
+	h.db.Save(q)
+
+	return nil
+}
+
 func (q *Quiz) getNextQuestion() (*Question, error) {
 
 	for _, question := range q.Questions {
@@ -192,6 +209,7 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
 	h.db.Save(&q)
 
 	q.TextAnswer = &TextAnswer{Text: "", QuestionID: q.ID}
+	q.FlowDiagramAnswer = &FlowDiagramAnswer{Text: "", QuestionID: q.ID}
 	for _, cat := range qt.ChoiceAnswerTemplates {
 		ca := &ChoiceAnswer{
 			QuestionID: q.ID,

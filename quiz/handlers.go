@@ -16,10 +16,11 @@ import (
 type handler struct {
 	db         *gorm.DB
 	templating struct {
-		choiceQuestion *template.Template
-		textQuestion   *template.Template
-		finished       *template.Template
-		quizHistory    *template.Template
+		choiceQuestion      *template.Template
+		textQuestion        *template.Template
+		flowDiagramQuestion *template.Template
+		finished            *template.Template
+		quizHistory         *template.Template
 	}
 }
 
@@ -40,6 +41,7 @@ func Init(db *gorm.DB, r *mux.Router) {
 		&Question{},
 		&ChoiceAnswer{},
 		&TextAnswer{},
+		&FlowDiagramAnswer{},
 		&QuestionTemplate{},
 		&ChoiceAnswerTemplate{},
 	)
@@ -51,6 +53,16 @@ func Init(db *gorm.DB, r *mux.Router) {
 	}
 
 	h.templating.textQuestion, err = template.ParseFiles("quiz/text_question.gohtml", "header.gohtml", "footer.gohtml")
+	if err != nil {
+		log.Fatalf("could not parse template: %v", err)
+	}
+
+	h.templating.flowDiagramQuestion, err = template.ParseFiles(
+		"quiz/flow_diagram_question.gohtml",
+		"quiz/flow_diagram_js.gohtml",
+		"header.gohtml",
+		"footer.gohtml",
+	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
@@ -95,6 +107,21 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 	if r.FormValue("answer") != "" {
 		err = question.saveText(r.FormValue("answer"), &quiz)
+		if err != nil {
+			log.Fatalf("could not save answer: %v", err)
+		}
+
+		question, err = quiz.getNextQuestion()
+		if err != nil {
+			log.Println("No questions left. Redirecting to /finished")
+			http.Redirect(w, r, "/finished", 302)
+			return
+		}
+	}
+
+	if r.FormValue("flow_diagram") != "" {
+		log.Println(r.FormValue("flow_diagram"))
+		err = question.saveFlowDiagram(r.FormValue("flow_diagram"), &quiz)
 		if err != nil {
 			log.Fatalf("could not save answer: %v", err)
 		}
@@ -179,6 +206,11 @@ func renderQuestion(q *Question, u *user.User, w http.ResponseWriter) error {
 		}{Question: *q, User: u})
 	case 2:
 		return h.templating.textQuestion.Execute(w, struct {
+			Question Question
+			User     interface{}
+		}{Question: *q, User: u})
+	case 3:
+		return h.templating.flowDiagramQuestion.Execute(w, struct {
 			Question Question
 			User     interface{}
 		}{Question: *q, User: u})
