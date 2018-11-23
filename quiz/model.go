@@ -118,6 +118,9 @@ func findAllFinishedForUser(u *user.User) []Quiz {
 
 	h.db.Model(&Quiz{}).
 		Preload("Questions").
+		Preload("Questions.ChoiceAnswers").
+		Preload("Questions.TextAnswer").
+		Preload("Questions.FlowDiagramAnswer").
 		Where("user_id = ?", u.ID).
 		Where("active = 0").
 		Find(&qs)

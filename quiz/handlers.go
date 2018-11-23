@@ -67,12 +67,23 @@ func Init(db *gorm.DB, r *mux.Router) {
 		log.Fatalf("could not parse template: %v", err)
 	}
 
-	h.templating.finished, err = template.ParseFiles("quiz/finished.gohtml", "header.gohtml", "footer.gohtml")
+	h.templating.finished, err = template.ParseFiles(
+		"quiz/finished.gohtml",
+		"quiz/flow_diagram_js.gohtml",
+		"header.gohtml",
+		"footer.gohtml",
+	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
 
-	h.templating.quizHistory, err = template.ParseFiles("quiz/history.gohtml", "header.gohtml", "footer.gohtml", "account_nav.gohtml")
+	h.templating.quizHistory, err = template.ParseFiles(
+		"quiz/history.gohtml",
+		"quiz/flow_diagram_js.gohtml",
+		"header.gohtml",
+		"footer.gohtml",
+		"account_nav.gohtml",
+	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
