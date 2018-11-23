@@ -19,4 +19,5 @@ fabric.properties
 *.test
 *.out
 Build___Run
+vendor/
 app

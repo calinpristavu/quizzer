@@ -31,8 +31,8 @@ func main() {
 	user.Init(db, securedRouter)
 	quiz.Init(db, securedRouter)
 
-	fmt.Println("App running on: 3030")
-	if err := http.ListenAndServe(":3030", r); err != nil {
+	fmt.Println("App running on: 8000")
+	if err := http.ListenAndServe(":8000", r); err != nil {
 		panic(err)
 	}
 }
