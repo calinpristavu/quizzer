@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/qor/admin"
 
@@ -38,11 +40,27 @@ func main() {
 }
 
 func initDb() *gorm.DB {
-	db, err := gorm.Open("mysql", "root:V0n_Kesh@/quizzer?charset=utf8&parseTime=True&loc=Local")
+	var (
+		connectionName = mustGetenv("CLOUDSQL_CONNECTION_NAME")
+		usr            = mustGetenv("CLOUDSQL_USER")
+		password       = os.Getenv("CLOUDSQL_PASSWORD") // NOTE: password may be empty
+	)
+	var err error
+	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@%s/quizzer", usr, password, connectionName))
+
 	if err != nil {
-		fmt.Printf("could not connect to db: %v", err)
+		log.Fatalf("could not connect to db: %v", err)
 	}
+
 	return db.Debug()
+}
+
+func mustGetenv(k string) string {
+	v := os.Getenv(k)
+	if v == "" {
+		log.Panicf("%s environment variable not set.", k)
+	}
+	return v
 }
 
 func addAdmin(db *gorm.DB) {
