@@ -1,7 +1,6 @@
 package webapp
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -19,7 +18,6 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/question", 302)
 }
 
-// fixme: This method looks ... like .. shit.
 func question(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*User)
 
@@ -38,7 +36,26 @@ func question(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.FormValue("answer[]") != "" {
+	switch question.Type {
+	case 1:
+		choiceQuestion(w, r, question)
+	case 2:
+		textQuestion(w, r, question)
+	case 3:
+		flowDiagramQuestion(w, r, question)
+	default:
+		log.Fatalf("unhandled question type %v", question.Type)
+	}
+}
+
+func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
+	u := r.Context().Value("user").(*User)
+
+	quiz := u.CurrentQuiz
+
+	var err error
+
+	if r.Method == http.MethodPost {
 		err = question.saveChoices(r.Form["answer[]"], quiz)
 		if err != nil {
 			log.Fatalf("could not save answers: %v", err)
@@ -51,6 +68,23 @@ func question(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
+	err = h.templating.choiceQuestion.Execute(w, struct {
+		Question Question
+		User     interface{}
+	}{Question: *question, User: u})
+
+	if err != nil {
+		log.Fatalf("could not render choice question template: %v", err)
+	}
+}
+
+func textQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
+	u := r.Context().Value("user").(*User)
+
+	quiz := u.CurrentQuiz
+
+	var err error
 
 	if r.FormValue("answer") != "" {
 		err = question.saveText(r.FormValue("answer"), quiz)
@@ -65,6 +99,23 @@ func question(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
+	err = h.templating.textQuestion.Execute(w, struct {
+		Question Question
+		User     interface{}
+	}{Question: *question, User: u})
+
+	if err != nil {
+		log.Fatalf("could not render text question template: %v", err)
+	}
+}
+
+func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
+	u := r.Context().Value("user").(*User)
+
+	quiz := u.CurrentQuiz
+
+	var err error
 
 	if r.FormValue("flow_diagram") != "" {
 		log.Println(r.FormValue("flow_diagram"))
@@ -81,9 +132,13 @@ func question(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = renderQuestion(question, u, w)
+	err = h.templating.flowDiagramQuestion.Execute(w, struct {
+		Question Question
+		User     interface{}
+	}{Question: *question, User: u})
+
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("could not render flow diagram question template: %v", err)
 	}
 }
 
@@ -142,28 +197,6 @@ func viewQuiz(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		log.Fatalf("could not execute template: %v", err)
-	}
-}
-
-func renderQuestion(q *Question, u *User, w http.ResponseWriter) error {
-	switch q.Type {
-	case 1:
-		return h.templating.choiceQuestion.Execute(w, struct {
-			Question Question
-			User     interface{}
-		}{Question: *q, User: u})
-	case 2:
-		return h.templating.textQuestion.Execute(w, struct {
-			Question Question
-			User     interface{}
-		}{Question: *q, User: u})
-	case 3:
-		return h.templating.flowDiagramQuestion.Execute(w, struct {
-			Question Question
-			User     interface{}
-		}{Question: *q, User: u})
-	default:
-		return fmt.Errorf("unhandled question type %v", q.Type)
 	}
 }
 
