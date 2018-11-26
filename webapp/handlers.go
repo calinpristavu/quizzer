@@ -61,34 +61,34 @@ func Init(db *gorm.DB, r *mux.Router) {
 	)
 
 	var err error
-	h.templating.choiceQuestion, err = template.ParseFiles("webapp/choice_question.gohtml", "header.gohtml", "footer.gohtml")
+	h.templating.choiceQuestion, err = template.ParseFiles("templates/choice_question.gohtml", "header.gohtml", "footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
 
-	h.templating.textQuestion, err = template.ParseFiles("webapp/text_question.gohtml", "header.gohtml", "footer.gohtml")
+	h.templating.textQuestion, err = template.ParseFiles("templates/text_question.gohtml", "header.gohtml", "footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
 
-	h.templating.login, err = template.ParseFiles("webapp/login.gohtml")
+	h.templating.login, err = template.ParseFiles("templates/login.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
 
-	h.templating.home, err = template.ParseFiles("webapp/home.gohtml", "header.gohtml", "footer.gohtml")
+	h.templating.home, err = template.ParseFiles("templates/home.gohtml", "header.gohtml", "footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
 
-	h.templating.myAccount, err = template.ParseFiles("webapp/myAccount.gohtml", "header.gohtml", "footer.gohtml", "account_nav.gohtml")
+	h.templating.myAccount, err = template.ParseFiles("templates/myAccount.gohtml", "header.gohtml", "footer.gohtml", "account_nav.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
 
 	h.templating.flowDiagramQuestion, err = template.ParseFiles(
-		"webapp/flow_diagram_question.gohtml",
-		"webapp/flow_diagram_js.gohtml",
+		"templates/flow_diagram_question.gohtml",
+		"templates/flow_diagram_js.gohtml",
 		"header.gohtml",
 		"footer.gohtml",
 	)
@@ -97,8 +97,8 @@ func Init(db *gorm.DB, r *mux.Router) {
 	}
 
 	h.templating.finished, err = template.ParseFiles(
-		"webapp/finished.gohtml",
-		"webapp/flow_diagram_js.gohtml",
+		"templates/finished.gohtml",
+		"templates/flow_diagram_js.gohtml",
 		"header.gohtml",
 		"footer.gohtml",
 	)
@@ -107,8 +107,8 @@ func Init(db *gorm.DB, r *mux.Router) {
 	}
 
 	h.templating.quizHistory, err = template.ParseFiles(
-		"webapp/history.gohtml",
-		"webapp/flow_diagram_js.gohtml",
+		"templates/history.gohtml",
+		"templates/flow_diagram_js.gohtml",
 		"header.gohtml",
 		"footer.gohtml",
 		"account_nav.gohtml",
