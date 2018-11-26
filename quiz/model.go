@@ -50,20 +50,6 @@ type FlowDiagramAnswer struct {
 	Text       string `sql:"size:999999"`
 }
 
-type QuestionTemplate struct {
-	gorm.Model
-	Text                  string
-	Type                  uint // choice / text / ...
-	ChoiceAnswerTemplates []*ChoiceAnswerTemplate
-}
-
-type ChoiceAnswerTemplate struct {
-	gorm.Model
-	QuestionTemplateID uint
-	Text               string
-	IsCorrect          bool
-}
-
 func newQuiz(u *user.User, noQ int) Quiz {
 	q := Quiz{
 		UserID: u.ID,

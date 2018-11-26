@@ -42,6 +42,7 @@ func Init(db *gorm.DB, r *mux.Router) {
 		&ChoiceAnswer{},
 		&TextAnswer{},
 		&FlowDiagramAnswer{},
+		&QuizTemplate{},
 		&QuestionTemplate{},
 		&ChoiceAnswerTemplate{},
 	)
