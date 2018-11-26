@@ -1,12 +1,10 @@
-package quiz
+package webapp
 
 import (
 	"fmt"
 	"strconv"
 
 	"github.com/jinzhu/gorm"
-
-	"github.com/calinpristavu/quizzer/user"
 )
 
 const questionsPerQuiz = 10
@@ -14,7 +12,7 @@ const questionsPerQuiz = 10
 type Quiz struct {
 	gorm.Model
 	UserID    uint
-	User      user.User
+	User      User
 	Questions []*Question
 	Active    bool
 }
@@ -50,7 +48,7 @@ type FlowDiagramAnswer struct {
 	Text       string `sql:"size:999999"`
 }
 
-func newQuiz(u *user.User, noQ int) Quiz {
+func newQuiz(u *User, noQ int) Quiz {
 	q := Quiz{
 		UserID: u.ID,
 		Active: true,
@@ -74,7 +72,7 @@ func newQuiz(u *user.User, noQ int) Quiz {
 	return q
 }
 
-func findQuiz(u *user.User) (Quiz, error) {
+func findQuiz(u *User) (Quiz, error) {
 	q := Quiz{
 		UserID: u.ID,
 		Active: true,
@@ -89,7 +87,7 @@ func findQuiz(u *user.User) (Quiz, error) {
 	return q, result.Error
 }
 
-func findActiveByUser(u *user.User) Quiz {
+func findActiveByUser(u *User) Quiz {
 	q, err := findQuiz(u)
 
 	if err != nil {
@@ -99,7 +97,7 @@ func findActiveByUser(u *user.User) Quiz {
 	return q
 }
 
-func findAllFinishedForUser(u *user.User) []Quiz {
+func findAllFinishedForUser(u *User) []Quiz {
 	var qs []Quiz
 
 	h.db.Model(&Quiz{}).

@@ -1,4 +1,4 @@
-package quiz
+package webapp
 
 import "github.com/jinzhu/gorm"
 

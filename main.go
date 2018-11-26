@@ -8,15 +8,11 @@ import (
 
 	"github.com/qor/admin"
 
-	"github.com/calinpristavu/quizzer/quiz"
-
-	"github.com/calinpristavu/quizzer/auth"
+	"github.com/calinpristavu/quizzer/webapp"
 
 	"github.com/gorilla/mux"
 
 	"github.com/jinzhu/gorm"
-
-	"github.com/calinpristavu/quizzer/user"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -26,11 +22,8 @@ func main() {
 
 	r := mux.NewRouter()
 
-	auth.Init(r)
-
 	securedRouter := r.NewRoute().Subrouter()
-	user.Init(db, securedRouter)
-	quiz.Init(db, securedRouter)
+	webapp.Init(db, securedRouter)
 
 	go addAdmin(db)
 
@@ -67,16 +60,16 @@ func getEnv(k string) string {
 func addAdmin(db *gorm.DB) {
 	Admin := admin.New(&admin.AdminConfig{DB: db})
 
-	Admin.AddResource(&user.User{})
-	Admin.AddResource(&quiz.QuestionTemplate{})
-	Admin.AddResource(&quiz.ChoiceAnswerTemplate{})
-	qtAdmin := Admin.AddResource(&quiz.QuizTemplate{})
+	Admin.AddResource(&webapp.User{})
+	Admin.AddResource(&webapp.QuestionTemplate{})
+	Admin.AddResource(&webapp.ChoiceAnswerTemplate{})
+	qtAdmin := Admin.AddResource(&webapp.QuizTemplate{})
 	qtAdmin.Meta(&admin.Meta{
 		Name: "Questions",
 		Config: &admin.SelectManyConfig{
 			Placeholder: "Chose a question",
 			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
-				var qts []*quiz.QuestionTemplate
+				var qts []*webapp.QuestionTemplate
 				context.GetDB().Find(&qts)
 
 				for _, qt := range qts {

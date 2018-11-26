@@ -1,4 +1,4 @@
-package user
+package webapp
 
 import (
 	"context"
@@ -11,7 +11,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		cookie, err := r.Cookie("user")
 		if err != nil {
 			log.Printf("error with user cookie: %v", err)
-			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+			http.Redirect(w, r, "/login", http.StatusUnauthorized)
 
 			return
 		}
@@ -22,7 +22,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			LoggedIn[username], err = FindByUsername(username)
 			if err != nil {
 				log.Printf("could not find user for username %s", username)
-				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+				http.Redirect(w, r, "/login", http.StatusUnauthorized)
 
 				return
 			}

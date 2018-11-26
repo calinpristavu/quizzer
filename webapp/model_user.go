@@ -1,4 +1,4 @@
-package user
+package webapp
 
 import (
 	"fmt"
@@ -8,8 +8,9 @@ import (
 
 type User struct {
 	gorm.Model
-	Username string
-	Password string
+	Username    string
+	Password    string
+	CurrentQuiz *Quiz
 }
 
 var LoggedIn map[string]*User
