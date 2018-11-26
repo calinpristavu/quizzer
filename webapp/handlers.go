@@ -42,6 +42,7 @@ func Init(db *gorm.DB, r *mux.Router) {
 	sr.HandleFunc("/finished", finished)
 	sr.HandleFunc("/quiz-history", history)
 	sr.HandleFunc("/quiz-history/{id}", viewQuiz)
+	sr.HandleFunc("/start", startQuiz)
 
 	sr.HandleFunc("/", home)
 	sr.HandleFunc("/me", myAccount)
@@ -118,14 +119,25 @@ func Init(db *gorm.DB, r *mux.Router) {
 }
 
 func startQuiz(w http.ResponseWriter, r *http.Request) {
-	// u := r.Context().Value("user")
+	u := r.Context().Value("user").(*User)
+
+	u.CurrentQuiz = newQuiz(u, questionsPerQuiz)
+	h.db.Save(&u)
+
+	http.Redirect(w, r, "/question", 302)
 }
 
 // fixme: This method looks ... like .. shit.
 func question(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user")
+	u := r.Context().Value("user").(*User)
 
-	quiz := findActiveByUser(u.(*User))
+	quiz := u.CurrentQuiz
+	if quiz == nil {
+		log.Printf("no active quiz for user %s\n", u.Username)
+		http.Redirect(w, r, "/", 302)
+
+		return
+	}
 
 	question, err := quiz.getNextQuestion()
 	if err != nil {
@@ -135,7 +147,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.FormValue("answer[]") != "" {
-		err = question.saveChoices(r.Form["answer[]"], &quiz)
+		err = question.saveChoices(r.Form["answer[]"], quiz)
 		if err != nil {
 			log.Fatalf("could not save answers: %v", err)
 		}
@@ -149,7 +161,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.FormValue("answer") != "" {
-		err = question.saveText(r.FormValue("answer"), &quiz)
+		err = question.saveText(r.FormValue("answer"), quiz)
 		if err != nil {
 			log.Fatalf("could not save answer: %v", err)
 		}
@@ -164,7 +176,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 	if r.FormValue("flow_diagram") != "" {
 		log.Println(r.FormValue("flow_diagram"))
-		err = question.saveFlowDiagram(r.FormValue("flow_diagram"), &quiz)
+		err = question.saveFlowDiagram(r.FormValue("flow_diagram"), quiz)
 		if err != nil {
 			log.Fatalf("could not save answer: %v", err)
 		}
@@ -177,19 +189,20 @@ func question(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = renderQuestion(question, u.(*User), w)
+	err = renderQuestion(question, u, w)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 func finished(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user")
+	u := r.Context().Value("user").(*User)
 
-	quiz := findActiveByUser(u.(*User))
+	quiz := u.CurrentQuiz
 
 	if r.Method == http.MethodPost {
 		quiz.close()
+		h.db.Model(&u).Association("CurrentQuiz").Clear()
 
 		http.Redirect(w, r, "/", 302)
 		return
@@ -198,7 +211,7 @@ func finished(w http.ResponseWriter, r *http.Request) {
 	err := h.templating.finished.Execute(w, struct {
 		Quiz Quiz
 		User interface{}
-	}{Quiz: quiz, User: u})
+	}{Quiz: *quiz, User: u})
 	if err != nil {
 		log.Fatalf("could not execute template: %v", err)
 	}
@@ -263,10 +276,17 @@ func renderQuestion(q *Question, u *User, w http.ResponseWriter) error {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	// TODO: find out how to type assert *user.User instead of using interface{}
+	u := r.Context().Value("user").(*User)
+
+	if u.CurrentQuiz != nil {
+		http.Redirect(w, r, "/question", 301)
+
+		return
+	}
+
 	err := h.templating.home.Execute(w, struct {
-		User interface{}
-	}{User: r.Context().Value("user")})
+		User User
+	}{User: *u})
 
 	if err != nil {
 		log.Printf("could not render template: %v", err)

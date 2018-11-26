@@ -12,7 +12,7 @@ const questionsPerQuiz = 10
 type Quiz struct {
 	gorm.Model
 	UserID    uint
-	User      User
+	User      *User
 	Questions []*Question
 	Active    bool
 }
@@ -48,8 +48,8 @@ type FlowDiagramAnswer struct {
 	Text       string `sql:"size:999999"`
 }
 
-func newQuiz(u *User, noQ int) Quiz {
-	q := Quiz{
+func newQuiz(u *User, noQ int) *Quiz {
+	q := &Quiz{
 		UserID: u.ID,
 		Active: true,
 	}
@@ -64,7 +64,7 @@ func newQuiz(u *User, noQ int) Quiz {
 		Find(&qts)
 
 	for _, qt := range qts {
-		qt.addToQuiz(&q)
+		qt.addToQuiz(q)
 	}
 
 	h.db.Save(&q)
@@ -85,16 +85,6 @@ func findQuiz(u *User) (Quiz, error) {
 		First(&q)
 
 	return q, result.Error
-}
-
-func findActiveByUser(u *User) Quiz {
-	q, err := findQuiz(u)
-
-	if err != nil {
-		q = newQuiz(u, questionsPerQuiz)
-	}
-
-	return q
 }
 
 func findAllFinishedForUser(u *User) []Quiz {
@@ -170,7 +160,6 @@ func (q *Question) saveFlowDiagram(text string, quiz *Quiz) error {
 }
 
 func (q *Quiz) getNextQuestion() (*Question, error) {
-
 	for _, question := range q.Questions {
 		if !question.IsAnswered {
 			return question, nil
