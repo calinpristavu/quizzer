@@ -53,10 +53,20 @@ func addAdmin(db *gorm.DB, r *mux.Router) {
 	Admin := admin.New(&admin.AdminConfig{DB: db})
 
 	Admin.AddResource(&webapp.User{})
-	Admin.AddResource(&webapp.QuestionTemplate{})
+	questionAdmin := Admin.AddResource(&webapp.QuestionTemplate{})
+	questionAdmin.Meta(&admin.Meta{
+		Name: "Type",
+		Config: &admin.SelectOneConfig{
+			Collection: [][]string{
+				{"1", "Checkboxes"},
+				{"2", "Free text"},
+				{"3", "Flow Diagram"},
+			},
+		},
+	})
 	Admin.AddResource(&webapp.ChoiceAnswerTemplate{})
-	qtAdmin := Admin.AddResource(&webapp.QuizTemplate{})
-	qtAdmin.Meta(&admin.Meta{
+	quizAdmin := Admin.AddResource(&webapp.QuizTemplate{})
+	quizAdmin.Meta(&admin.Meta{
 		Name: "Questions",
 		Config: &admin.SelectManyConfig{
 			Placeholder: "Chose a question",
