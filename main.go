@@ -23,10 +23,9 @@ func main() {
 
 	r := mux.NewRouter()
 
-	securedRouter := r.NewRoute().Subrouter()
-	webapp.Init(db, securedRouter)
+	webapp.Init(db, r)
 
-	go addAdmin(db)
+	addAdmin(db, r)
 
 	appPort := flag.String("appPort", "8000", "app port")
 	flag.Parse()
@@ -60,7 +59,7 @@ func getEnv(k string) string {
 	return v
 }
 
-func addAdmin(db *gorm.DB) {
+func addAdmin(db *gorm.DB, r *mux.Router) {
 	Admin := admin.New(&admin.AdminConfig{DB: db})
 
 	Admin.AddResource(&webapp.User{})
@@ -87,10 +86,6 @@ func addAdmin(db *gorm.DB) {
 	})
 
 	m := http.NewServeMux()
-	Admin.MountTo("/", m)
-
-	fmt.Println("Admin running on: 9000")
-	if err := http.ListenAndServe(":9000", m); err != nil {
-		panic(err)
-	}
+	Admin.MountTo("/admin", m)
+	r.PathPrefix("/admin").Handler(m)
 }
