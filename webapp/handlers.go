@@ -278,9 +278,8 @@ func page(w http.ResponseWriter, r *http.Request) {
 			LoggedIn[uname] = u
 
 			cookie := &http.Cookie{
-				Domain: "localhost",
-				Name:   "user",
-				Value:  u.Username,
+				Name:  "user",
+				Value: u.Username,
 			}
 			http.SetCookie(w, cookie)
 
