@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -27,8 +28,10 @@ func main() {
 
 	go addAdmin(db)
 
-	fmt.Println("App running on: 8000")
-	if err := http.ListenAndServe(":8000", r); err != nil {
+	appPort := flag.String("appPort", "8000", "app port")
+	flag.Parse()
+	fmt.Printf("App running on: %s\n", *appPort)
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", *appPort), r); err != nil {
 		panic(err)
 	}
 }
