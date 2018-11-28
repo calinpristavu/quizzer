@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/qor/admin"
 
@@ -19,44 +18,35 @@ import (
 )
 
 func main() {
-	db := initDb()
+
+	appPort := flag.String("appPort", "8000", "app port")
+	dbHost := flag.String("dbHost", "127.0.0.1", "db host")
+	dbUser := flag.String("dbUser", "root", "db user")
+	dbPass := flag.String("dbPass", "", "db password")
+	flag.Parse()
+
+	db := initDb(*dbHost, *dbUser, *dbPass)
 
 	r := mux.NewRouter()
 
 	webapp.Init(db, r)
 
 	addAdmin(db, r)
-
-	appPort := flag.String("appPort", "8000", "app port")
-	flag.Parse()
 	fmt.Printf("App running on: %s\n", *appPort)
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", *appPort), r); err != nil {
 		panic(err)
 	}
 }
 
-func initDb() *gorm.DB {
-	var (
-		connectionName = getEnv("CLOUDSQL_CONNECTION_NAME")
-		usr            = getEnv("CLOUDSQL_USER")
-		password       = os.Getenv("CLOUDSQL_PASSWORD") // NOTE: password may be empty
-	)
+func initDb(host, user, pass string) *gorm.DB {
 	var err error
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@%s/quizzer?charset=utf8&parseTime=True", usr, password, connectionName))
+	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:3306)/quizzer?charset=utf8&parseTime=True", user, pass, host))
 
 	if err != nil {
 		log.Fatalf("could not connect to db: %v", err)
 	}
 
 	return db.Debug()
-}
-
-func getEnv(k string) string {
-	v := os.Getenv(k)
-	if v == "" {
-		log.Panicf("%s environment variable not set.", k)
-	}
-	return v
 }
 
 func addAdmin(db *gorm.DB, r *mux.Router) {
