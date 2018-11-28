@@ -4,8 +4,15 @@
 <div class="container">
     <main role="main">
         <div>
-            <h1>Start quiz thigy button.</h1>
+            <h2>Start a random quiz</h2>
             <a href="/start" class="btn btn-success">Start</a>
+
+            <h2>Or try a prebuilt one</h2>
+            <ul>
+                {{range .Quizzes}}
+                    <li><a href="/start/{{.ID}}">{{.Name}}</a></li>
+                {{end}}
+            </ul>
         </div>
     </main>
 </div>

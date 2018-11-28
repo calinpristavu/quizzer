@@ -12,13 +12,22 @@ import (
 func startQuiz(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*User)
 
-	u.CurrentQuiz = newQuiz(u, questionsPerQuiz)
+	if id, ok := mux.Vars(r)["foo"]; ok {
+		intId, err := strconv.Atoi(id)
+		if err != nil {
+			log.Fatalf("cannot interpret %s as int: %v", id, err)
+		}
+		u.CurrentQuiz = find(intId)
+	} else {
+		u.CurrentQuiz = newQuiz(u, questionsPerQuiz)
+	}
+
 	h.db.Save(&u)
 
 	http.Redirect(w, r, "/question", 302)
 }
 
-func question(w http.ResponseWriter, r *http.Request) {
+func getQuestion(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*User)
 
 	quiz := u.CurrentQuiz
@@ -31,7 +40,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 	question, err := quiz.getNextQuestion()
 	if err != nil {
-		log.Println("No questions left. Redirecting to /finished")
+		log.Printf("No questions left. Redirecting to /finished: %v \n", err)
 		http.Redirect(w, r, "/finished", 302)
 		return
 	}
@@ -39,12 +48,16 @@ func question(w http.ResponseWriter, r *http.Request) {
 	switch question.Type {
 	case 1:
 		choiceQuestion(w, r, question)
+		break
 	case 2:
 		textQuestion(w, r, question)
+		break
 	case 3:
 		flowDiagramQuestion(w, r, question)
+		break
 	default:
 		log.Fatalf("unhandled question type %v", question.Type)
+		break
 	}
 }
 
@@ -61,12 +74,10 @@ func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question) 
 			log.Fatalf("could not save answers: %v", err)
 		}
 
-		question, err = quiz.getNextQuestion()
-		if err != nil {
-			log.Println("No questions left. Redirecting to /finished")
-			http.Redirect(w, r, "/finished", 302)
-			return
-		}
+		r.Method = http.MethodGet
+		getQuestion(w, r)
+
+		return
 	}
 
 	err = h.templating.choiceQuestion.Execute(w, struct {
@@ -86,18 +97,16 @@ func textQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
 
 	var err error
 
-	if r.FormValue("answer") != "" {
+	if r.Method == http.MethodPost {
 		err = question.saveText(r.FormValue("answer"), quiz)
 		if err != nil {
 			log.Fatalf("could not save answer: %v", err)
 		}
 
-		question, err = quiz.getNextQuestion()
-		if err != nil {
-			log.Println("No questions left. Redirecting to /finished")
-			http.Redirect(w, r, "/finished", 302)
-			return
-		}
+		r.Method = http.MethodGet
+		getQuestion(w, r)
+
+		return
 	}
 
 	err = h.templating.textQuestion.Execute(w, struct {
@@ -117,19 +126,17 @@ func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Quest
 
 	var err error
 
-	if r.FormValue("flow_diagram") != "" {
+	if r.Method == http.MethodPost {
 		log.Println(r.FormValue("flow_diagram"))
 		err = question.saveFlowDiagram(r.FormValue("flow_diagram"), quiz)
 		if err != nil {
 			log.Fatalf("could not save answer: %v", err)
 		}
 
-		question, err = quiz.getNextQuestion()
-		if err != nil {
-			log.Println("No questions left. Redirecting to /finished")
-			http.Redirect(w, r, "/finished", 302)
-			return
-		}
+		r.Method = http.MethodGet
+		getQuestion(w, r)
+
+		return
 	}
 
 	err = h.templating.flowDiagramQuestion.Execute(w, struct {
@@ -193,7 +200,7 @@ func viewQuiz(w http.ResponseWriter, r *http.Request) {
 	}{
 		Quizzes: qs,
 		User:    u,
-		Current: find(id),
+		Current: *find(id),
 	})
 	if err != nil {
 		log.Fatalf("could not execute template: %v", err)
@@ -209,9 +216,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var qts []QuizTemplate
+	h.db.Find(&qts)
+
 	err := h.templating.home.Execute(w, struct {
-		User User
-	}{User: *u})
+		User    User
+		Quizzes []QuizTemplate
+	}{User: *u, Quizzes: qts})
 
 	if err != nil {
 		log.Printf("could not render template: %v", err)

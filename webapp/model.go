@@ -72,21 +72,6 @@ func newQuiz(u *User, noQ int) *Quiz {
 	return q
 }
 
-func findQuiz(u *User) (Quiz, error) {
-	q := Quiz{
-		UserID: u.ID,
-		Active: true,
-	}
-	result := h.db.Where(&q).
-		Preload("Questions").
-		Preload("Questions.ChoiceAnswers").
-		Preload("Questions.TextAnswer").
-		Preload("Questions.FlowDiagramAnswer").
-		First(&q)
-
-	return q, result.Error
-}
-
 func findAllFinishedForUser(u *User) []Quiz {
 	var qs []Quiz
 
@@ -102,8 +87,8 @@ func findAllFinishedForUser(u *User) []Quiz {
 	return qs
 }
 
-func find(id int) Quiz {
-	var q Quiz
+func find(id int) *Quiz {
+	var q *Quiz
 	h.db.
 		Preload("Questions").
 		Preload("Questions.ChoiceAnswers").
