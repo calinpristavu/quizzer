@@ -20,4 +20,3 @@ fabric.properties
 *.out
 Build___Run
 vendor/
-app
