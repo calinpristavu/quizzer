@@ -40,7 +40,7 @@ func main() {
 
 func initDb(host, user, pass string) *gorm.DB {
 	var err error
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:3306)/quizzer?charset=utf8&parseTime=True", user, pass, host))
+	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/quizzer?charset=utf8&parseTime=True", user, pass, host))
 
 	if err != nil {
 		log.Fatalf("could not connect to db: %v", err)
