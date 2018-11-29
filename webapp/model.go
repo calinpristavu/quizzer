@@ -54,6 +54,8 @@ func newQuiz(u *User, noQ int) *Quiz {
 		Active: true,
 	}
 
+	h.db.Save(&q)
+
 	var qts []QuestionTemplate
 
 	h.db.
@@ -66,8 +68,6 @@ func newQuiz(u *User, noQ int) *Quiz {
 	for _, qt := range qts {
 		qt.addToQuiz(q)
 	}
-
-	h.db.Save(&q)
 
 	return q
 }
@@ -87,9 +87,10 @@ func findAllFinishedForUser(u *User) []Quiz {
 	return qs
 }
 
-func find(id int) *Quiz {
-	var q *Quiz
+func find(id int) Quiz {
+	var q Quiz
 	h.db.
+		Model(Quiz{}).
 		Preload("Questions").
 		Preload("Questions.ChoiceAnswers").
 		Preload("Questions.TextAnswer").
@@ -154,9 +155,13 @@ func (q *Quiz) getNextQuestion() (*Question, error) {
 	return nil, fmt.Errorf("all questions have been answered")
 }
 
-func (q *Quiz) close() {
-	q.Active = false
-	h.db.Save(&q)
+func (u *User) finishQuiz() {
+	u.CurrentQuiz.Active = false
+	h.db.Save(&u.CurrentQuiz)
+
+	u.CurrentQuiz = nil
+	u.CurrentQuizID = nil
+	h.db.Save(&u)
 }
 
 func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {

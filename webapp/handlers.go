@@ -17,11 +17,13 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatalf("cannot interpret %s as int: %v", id, err)
 		}
-		u.CurrentQuiz = find(intId)
+		q := find(intId)
+		u.CurrentQuiz = &q
 	} else {
 		u.CurrentQuiz = newQuiz(u, questionsPerQuiz)
 	}
 
+	u.CurrentQuizID = &u.CurrentQuiz.ID
 	h.db.Save(&u)
 
 	http.Redirect(w, r, "/question", 302)
@@ -155,8 +157,7 @@ func finished(w http.ResponseWriter, r *http.Request) {
 	quiz := u.CurrentQuiz
 
 	if r.Method == http.MethodPost {
-		quiz.close()
-		h.db.Model(&u).Association("CurrentQuiz").Clear()
+		u.finishQuiz()
 
 		http.Redirect(w, r, "/", 302)
 		return
@@ -187,20 +188,21 @@ func history(w http.ResponseWriter, r *http.Request) {
 }
 
 func viewQuiz(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user")
+	u := r.Context().Value("user").(*User)
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 
-	qs := findAllFinishedForUser(u.(*User))
+	qs := findAllFinishedForUser(u)
 
+	current := find(id)
 	err := h.templating.quizHistory.Execute(w, struct {
 		Quizzes []Quiz
-		Current Quiz
-		User    interface{}
+		Current *Quiz
+		User    User
 	}{
 		Quizzes: qs,
-		User:    u,
-		Current: *find(id),
+		Current: &current,
+		User:    *u,
 	})
 	if err != nil {
 		log.Fatalf("could not execute template: %v", err)

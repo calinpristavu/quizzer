@@ -10,7 +10,7 @@ type User struct {
 	gorm.Model
 	Username      string
 	Password      string
-	CurrentQuizID uint8
+	CurrentQuizID *uint
 	CurrentQuiz   *Quiz
 }
 
