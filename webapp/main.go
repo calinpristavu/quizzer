@@ -36,11 +36,11 @@ func Init(db *gorm.DB, r *mux.Router) {
 
 func registerTemplates() {
 	var err error
-	h.templating.choiceQuestion, err = template.ParseFiles("templates/choice_question.gohtml", "header.gohtml", "footer.gohtml")
+	h.templating.choiceQuestion, err = template.ParseFiles("templates/choice_question.gohtml", "templates/header.gohtml", "templates/footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
-	h.templating.textQuestion, err = template.ParseFiles("templates/text_question.gohtml", "header.gohtml", "footer.gohtml")
+	h.templating.textQuestion, err = template.ParseFiles("templates/text_question.gohtml", "templates/header.gohtml", "templates/footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
@@ -48,19 +48,19 @@ func registerTemplates() {
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
-	h.templating.home, err = template.ParseFiles("templates/home.gohtml", "header.gohtml", "footer.gohtml")
+	h.templating.home, err = template.ParseFiles("templates/home.gohtml", "templates/header.gohtml", "templates/footer.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
-	h.templating.myAccount, err = template.ParseFiles("templates/myAccount.gohtml", "header.gohtml", "footer.gohtml", "account_nav.gohtml")
+	h.templating.myAccount, err = template.ParseFiles("templates/myAccount.gohtml", "templates/header.gohtml", "templates/footer.gohtml", "templates/account_nav.gohtml")
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
 	h.templating.flowDiagramQuestion, err = template.ParseFiles(
 		"templates/flow_diagram_question.gohtml",
 		"templates/flow_diagram_js.gohtml",
-		"header.gohtml",
-		"footer.gohtml",
+		"templates/header.gohtml",
+		"templates/footer.gohtml",
 	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
@@ -68,8 +68,8 @@ func registerTemplates() {
 	h.templating.finished, err = template.ParseFiles(
 		"templates/finished.gohtml",
 		"templates/flow_diagram_js.gohtml",
-		"header.gohtml",
-		"footer.gohtml",
+		"templates/header.gohtml",
+		"templates/footer.gohtml",
 	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
@@ -77,9 +77,9 @@ func registerTemplates() {
 	h.templating.quizHistory, err = template.ParseFiles(
 		"templates/history.gohtml",
 		"templates/flow_diagram_js.gohtml",
-		"header.gohtml",
-		"footer.gohtml",
-		"account_nav.gohtml",
+		"templates/header.gohtml",
+		"templates/footer.gohtml",
+		"templates/account_nav.gohtml",
 	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
