@@ -5,10 +5,15 @@ import {
   Card,
   CardHeader,
   CardBody,
+  CardFooter,
   Table,
   FormGroup,
   Label,
-  Input
+  Input,
+  Button,
+  Pagination,
+  PaginationItem,
+  PaginationLink
 } from 'reactstrap'
 
 const views = {
@@ -70,6 +75,8 @@ class QuestionTemplates extends Component{
 }
 
 class QuestionsList extends Component {
+  perPage = 10;
+
   render() {
     return (
 
@@ -97,12 +104,26 @@ class QuestionsList extends Component {
               <tr key={k} onClick={() => {this.props.openEditView(q)}}>
                 <td>{q.Text}</td>
                 <td>{q.Type}</td>
-                <td></td>
+                <td />
               </tr>
             )}
             </tbody>
           </Table>
         </CardBody>
+        <CardFooter>
+          {this.props.questions.length > this.perPage &&
+            <Pagination>
+              <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
+              <PaginationItem active>
+                <PaginationLink tag="button">1</PaginationLink>
+              </PaginationItem>
+              <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
+              <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
+              <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
+              <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
+            </Pagination>
+          }
+        </CardFooter>
       </Card>
     );
   }
@@ -147,6 +168,9 @@ class CreateQuestion extends Component {
             </Col>
           </FormGroup>
         </CardBody>
+        <CardFooter>
+          <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o" /> Submit</Button>
+        </CardFooter>
       </Card>
     );
   }
