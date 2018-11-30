@@ -2,6 +2,7 @@ import React from 'react';
 import DefaultLayout from './containers/DefaultLayout';
 
 const Breadcrumbs = React.lazy(() => import('./views/Base/Breadcrumbs'));
+const QuestionTemplates = React.lazy(() => import('./views/Quiz/QuestionTemplates/QuestionTemplates'));
 const Cards = React.lazy(() => import('./views/Base/Cards'));
 const Carousels = React.lazy(() => import('./views/Base/Carousels'));
 const Collapses = React.lazy(() => import('./views/Base/Collapses'));
@@ -40,6 +41,11 @@ const User = React.lazy(() => import('./views/Users/User'));
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
+  { path: '/quiz/question-templates', name: 'Question Templates', component: QuestionTemplates },
+
+
+
+
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },
