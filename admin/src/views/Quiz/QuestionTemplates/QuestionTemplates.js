@@ -36,6 +36,17 @@ class QuestionTemplates extends Component{
     ]
   };
 
+  componentDidMount = () => {
+    fetch("http://localhost:8001/api/question_templates.json")
+      .catch()
+      .then((response) => response.json())
+      .then((response) => {
+        this.setState({
+          questions: response
+        })
+      })
+  };
+
   openCreateView = () => {
     this.setState({
       openedView: views.create

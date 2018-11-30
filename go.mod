@@ -3,6 +3,7 @@ module github.com/calinpristavu/quizzer
 require (
 	github.com/asaskevich/govalidator v0.0.0-20180720115003-f9ffefc3facf // indirect
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
+	github.com/gorilla/handlers v1.4.0
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.3 // indirect
 	github.com/gosimple/slug v1.3.0 // indirect
@@ -13,7 +14,7 @@ require (
 	github.com/qor/admin v0.0.0-20181026061101-0ef7c2aa0f33
 	github.com/qor/assetfs v0.0.0-20170713023933-ff57fdc13a14 // indirect
 	github.com/qor/middlewares v0.0.0-20170822143614-781378b69454 // indirect
-	github.com/qor/qor v0.0.0-20180607095400-a9b667cbbf18 // indirect
+	github.com/qor/qor v0.0.0-20180607095400-a9b667cbbf18
 	github.com/qor/responder v0.0.0-20171031032654-b6def473574f // indirect
 	github.com/qor/roles v0.0.0-20171127035124-d6375609fe3e // indirect
 	github.com/qor/session v0.0.0-20170907035918-8206b0adab70 // indirect

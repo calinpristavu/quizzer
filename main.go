@@ -7,9 +7,11 @@ import (
 	"net/http"
 
 	"github.com/qor/admin"
+	"github.com/qor/qor"
 
 	"github.com/calinpristavu/quizzer/webapp"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 
 	"github.com/jinzhu/gorm"
@@ -18,6 +20,10 @@ import (
 )
 
 func main() {
+	// TODO: ADD PROPPER CORS HANDLING!!!!!
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 
 	appPort := flag.String("appPort", "8000", "app port")
 	dbHost := flag.String("dbHost", "127.0.0.1", "db host")
@@ -31,9 +37,12 @@ func main() {
 
 	webapp.Init(db, r)
 
-	addAdmin(db, r)
+	// addAdmin(db, r)
+	addAPI(db, r)
+
 	fmt.Printf("App running on: %s\n", *appPort)
-	if err := http.ListenAndServe(fmt.Sprintf(":%s", *appPort), r); err != nil {
+	err := http.ListenAndServe(fmt.Sprintf(":%s", *appPort), handlers.CORS(originsOk, headersOk, methodsOk)(r))
+	if err != nil {
 		panic(err)
 	}
 }
@@ -88,4 +97,17 @@ func addAdmin(db *gorm.DB, r *mux.Router) {
 	m := http.NewServeMux()
 	Admin.MountTo("/admin", m)
 	r.PathPrefix("/admin").Handler(m)
+}
+
+func addAPI(db *gorm.DB, r *mux.Router) {
+	API := admin.New(&qor.Config{DB: db})
+	API.AddResource(&webapp.User{})
+	API.AddResource(&webapp.QuizTemplate{})
+	API.AddResource(&webapp.QuestionTemplate{})
+	API.AddResource(&webapp.ChoiceAnswerTemplate{})
+
+	m := http.NewServeMux()
+	API.MountTo("/api", m)
+
+	r.PathPrefix("/api").Handler(m)
 }
