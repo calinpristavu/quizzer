@@ -32,7 +32,7 @@ class QuestionTemplates extends Component{
         ID: 1,
         Text: "Quesiton 1",
         Type: 1,
-        AnswerTemplates: ["Checkbox 1"]
+        ChoiceAnswerTemplates: ["Checkbox 1"]
       }
     ]
   };
@@ -100,7 +100,6 @@ class QuestionsList extends Component {
 
   render() {
     return (
-
       <Card>
         <CardHeader>
           <i className="fa fa-align-justify" /> Question Templates
@@ -118,6 +117,7 @@ class QuestionsList extends Component {
               <th>Text</th>
               <th>Type</th>
               <th>Answer Template</th>
+              <th>?</th>
             </tr>
             </thead>
             <tbody>
@@ -125,6 +125,7 @@ class QuestionsList extends Component {
               <tr key={k} onClick={() => {this.props.openEditView(q)}}>
                 <td>{q.Text}</td>
                 <td>{q.Type}</td>
+                <td>{q.ChoiceAnswerTemplates.map((a) => a.Text)}</td>
                 <td />
               </tr>
             )}
@@ -154,10 +155,7 @@ class CreateQuestion extends Component {
   state = {
     Text: "Sample text...",
     Type: null,
-    ChoiceTemplates: [
-      {Text: "A1", IsCorrect: true},
-      {Text: "A2", IsCorrect: true},
-    ],
+    ChoiceAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null
   };
 
@@ -175,19 +173,19 @@ class CreateQuestion extends Component {
 
   removeChoice = (choiceIndex) => {
     this.setState((oldState) => {
-      const choices = oldState.ChoiceTemplates;
+      const choices = oldState.ChoiceAnswerTemplates;
       delete choices[choiceIndex];
 
-      return {ChoiceAnswers: choices}
+      return {ChoiceAnswerTemplates: choices}
     })
   };
 
   addChoice = (choice) => {
     this.setState((oldState) => {
-      const choices = oldState.ChoiceTemplates;
+      const choices = oldState.ChoiceAnswerTemplates;
       choices.push(choice);
 
-      return {ChoiceAnswers: choices}
+      return {ChoiceAnswerTemplates: choices}
     })
   };
 
@@ -251,10 +249,10 @@ class CreateQuestion extends Component {
               </Col>
             </FormGroup>
             {this.state.Type === 1 &&
-            <ChoiceAnswers
+            <ChoiceAnswerTemplates
               removeChoice={this.removeChoice}
               addChoice={this.addChoice}
-              answers={this.state.ChoiceTemplates}/>
+              answers={this.state.ChoiceAnswerTemplates}/>
             }
             {this.state.Type === 3 &&
             <FlowDiagramAnswer />
@@ -275,7 +273,7 @@ class CreateQuestion extends Component {
   }
 }
 
-class ChoiceAnswers extends Component {
+class ChoiceAnswerTemplates extends Component {
   state = {
     Text: '',
     IsCorrect: false
@@ -350,6 +348,17 @@ class FlowDiagramAnswer extends Component {
 }
 
 class EditQuestion extends Component {
+  state = {
+    Text: "Sample text...",
+    Type: null,
+    ChoiceAnswerTemplates: [],
+    FlowDiagramAnswerTemplate: null
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    this.setState(nextProps.question)
+  };
+
   render() {
     return (
       <Card>
@@ -368,7 +377,7 @@ class EditQuestion extends Component {
                   id="question-text"
                   placeholder="Type in the question text"
                   required
-                  defaultValue={this.props.question.Text}/>
+                  value={this.state.Text}/>
               </FormGroup>
             </Col>
           </Row>
@@ -378,19 +387,46 @@ class EditQuestion extends Component {
             </Col>
             <Col md="12">
               <FormGroup check inline>
-                <Input className="form-check-input" defaultChecked={this.props.question.Type === 1} type="radio" id="question-type-1" name="type" value="1" />
+                <Input
+                  className="form-check-input"
+                  type="radio"
+                  onChange={() => this.setState({Type: 1})}
+                  id="question-type-1"
+                  checked={this.state.Type === 1}
+                  name="Type"/>
                 <Label className="form-check-label" check htmlFor="question-type-1">Checkboxes</Label>
               </FormGroup>
               <FormGroup check inline>
-                <Input className="form-check-input" defaultChecked={this.props.question.Type === 2} type="radio" id="question-type-2" name="type" value="2" />
+                <Input
+                  className="form-check-input"
+                  type="radio"
+                  onChange={() => this.setState({Type: 2})}
+                  id="question-type-2"
+                  checked={this.state.Type === 2}
+                  name="Type" />
                 <Label className="form-check-label" check htmlFor="question-type-2">Free text</Label>
               </FormGroup>
               <FormGroup check inline>
-                <Input className="form-check-input" defaultChecked={this.props.question.Type === 3} type="radio" id="question-type-3" name="type" value="3" />
+                <Input
+                  className="form-check-input"
+                  type="radio"
+                  onChange={() => this.setState({Type: 3})}
+                  id="question-type-3"
+                  checked={this.state.Type === 3}
+                  name="Type" />
                 <Label className="form-check-label" check htmlFor="question-type-3">Flow Diagram</Label>
               </FormGroup>
             </Col>
           </FormGroup>
+          {this.state.Type === 1 &&
+            <ChoiceAnswerTemplates
+              removeChoice={this.removeChoice}
+              addChoice={this.addChoice}
+              answers={this.state.ChoiceAnswerTemplates}/>
+          }
+          {this.state.Type === 3 &&
+            <FlowDiagramAnswer />
+          }
         </CardBody>
       </Card>
     );
