@@ -105,11 +105,11 @@ class QuestionsList extends Component {
         <CardHeader>
           <i className="fa fa-align-justify" /> Question Templates
           <span className="float-right">
-                  <i
-                    onClick={this.props.openCreateView}
-                    className="fa fa-plus-circle text-success"
-                    style={{cursor: "pointer"}}/>
-                </span>
+            <i
+              onClick={this.props.openCreateView}
+              className="fa fa-plus-circle text-success"
+              style={{cursor: "pointer"}}/>
+          </span>
         </CardHeader>
         <CardBody>
           <Table responsive>
@@ -154,7 +154,10 @@ class CreateQuestion extends Component {
   state = {
     Text: "Sample text...",
     Type: null,
-    ChoiceTemplates: [],
+    ChoiceTemplates: [
+      {Text: "A1", IsCorrect: true},
+      {Text: "A2", IsCorrect: true},
+    ],
     FlowDiagramAnswerTemplate: null
   };
 
@@ -168,6 +171,24 @@ class CreateQuestion extends Component {
       .then(() => {
         this.props.appendQuestion(this.state)
       });
+  };
+
+  removeChoice = (choiceIndex) => {
+    this.setState((oldState) => {
+      const choices = oldState.ChoiceTemplates;
+      delete choices[choiceIndex];
+
+      return {ChoiceAnswers: choices}
+    })
+  };
+
+  addChoice = (choice) => {
+    this.setState((oldState) => {
+      const choices = oldState.ChoiceTemplates;
+      choices.push(choice);
+
+      return {ChoiceAnswers: choices}
+    })
   };
 
   render() {
@@ -229,6 +250,15 @@ class CreateQuestion extends Component {
                 </FormGroup>
               </Col>
             </FormGroup>
+            {this.state.Type === 1 &&
+            <ChoiceAnswers
+              removeChoice={this.removeChoice}
+              addChoice={this.addChoice}
+              answers={this.state.ChoiceTemplates}/>
+            }
+            {this.state.Type === 3 &&
+            <FlowDiagramAnswer />
+            }
           </CardBody>
           <CardFooter>
             <Button
@@ -241,6 +271,80 @@ class CreateQuestion extends Component {
           </CardFooter>
         </Form>
       </Card>
+    );
+  }
+}
+
+class ChoiceAnswers extends Component {
+  state = {
+    Text: '',
+    IsCorrect: false
+  };
+
+  render() {
+    return (
+      <div>
+        <Table responsive>
+          <thead>
+            <tr>
+              <th>Text</th>
+              <th>Is Correct?</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {this.props.answers.map((answer, k) =>
+              <tr key={k}>
+                <td>{answer.Text}</td>
+                <td>{answer.IsCorrect ? 'true' : 'false'}</td>
+                <td>
+                  <i className="fa fa-minus-circle text-danger" onClick={() => this.props.removeChoice(k)}/>
+                </td>
+              </tr>
+            )}
+            <tr>
+              <td>
+                <FormGroup>
+                  <Label htmlFor="question-text">
+                    <Input
+                      name="Text"
+                      type="text"
+                      id="question-text"
+                      value={this.state.Text}
+                      onChange={(e) => this.setState({Text: e.target.value})}
+                      placeholder="Type in the question text"
+                      required />
+                  </Label>
+                </FormGroup>
+              </td>
+              <td>
+                <FormGroup check inline>
+                  <Label className="form-check-label" check>
+                    <Input
+                      className="form-check-input"
+                      type="checkbox"
+                      onChange={(e) => this.setState({IsCorrect: e.target.checked})}
+                      name="Type" />
+                  </Label>
+                </FormGroup>
+              </td>
+              <td>
+                <i className="fa fa-plus-circle text-success" onClick={() => this.props.addChoice(this.state)} />
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+    );
+  }
+}
+
+class FlowDiagramAnswer extends Component {
+  render() {
+    return (
+      <div>
+        add diagram answer here
+      </div>
     );
   }
 }
