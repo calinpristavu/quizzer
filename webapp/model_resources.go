@@ -10,9 +10,10 @@ type QuizTemplate struct {
 
 type QuestionTemplate struct {
 	gorm.Model
-	Text                  string
-	Type                  uint // choice / text / ...
-	ChoiceAnswerTemplates []*ChoiceAnswerTemplate
+	Text                      string
+	Type                      uint // choice / text / ...
+	ChoiceAnswerTemplates     []*ChoiceAnswerTemplate
+	FlowDiagramAnswerTemplate *FlowDiagramAnswerTemplate
 }
 
 type ChoiceAnswerTemplate struct {
@@ -20,4 +21,10 @@ type ChoiceAnswerTemplate struct {
 	QuestionTemplateID uint
 	Text               string
 	IsCorrect          bool
+}
+
+type FlowDiagramAnswerTemplate struct {
+	gorm.Model
+	QuestionTemplateID uint
+	Text               string
 }

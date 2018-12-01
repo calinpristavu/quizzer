@@ -10,6 +10,7 @@ import {
   FormGroup,
   Label,
   Input,
+  Form,
   Button,
   Pagination,
   PaginationItem,
@@ -47,6 +48,15 @@ class QuestionTemplates extends Component{
       })
   };
 
+  appendQuestion = (question) => {
+    this.setState((oldState) => {
+      const newQuestions = oldState.questions;
+      newQuestions.push(question);
+
+      return {questions: newQuestions}
+    })
+  };
+
   openCreateView = () => {
     this.setState({
       openedView: views.create
@@ -73,7 +83,7 @@ class QuestionTemplates extends Component{
 
           <Col xs="12" lg="6">
             {this.state.openedView === views.create ?
-              <CreateQuestion/> : null
+              <CreateQuestion appendQuestion={this.appendQuestion}/> : null
             }
             {this.state.openedView === views.edit ?
               <EditQuestion question={this.state.editItem}/> : null
@@ -141,47 +151,95 @@ class QuestionsList extends Component {
 }
 
 class CreateQuestion extends Component {
+  state = {
+    Text: "Sample text...",
+    Type: null,
+    ChoiceTemplates: [],
+    FlowDiagramAnswerTemplate: null
+  };
+
+  create = () => {
+    // TODO: extract backend domain name to global var.
+    fetch("http://localhost:8001/api/question_templates.json", {
+      method: "POST",
+      body: JSON.stringify(this.state)
+    })
+      .catch()
+      .then(() => {
+        this.props.appendQuestion(this.state)
+      });
+  };
+
   render() {
     return (
-
       <Card>
-        <CardHeader>
-          <i className="fa fa-plus-circle text-success" />
-          <strong>Create Question</strong>
-          <small> Form</small>
-        </CardHeader>
-        <CardBody>
-          <Row>
-            <Col xs="12">
-              <FormGroup>
-                <Label htmlFor="question-text">Text</Label>
-                <Input type="text" id="question-text" placeholder="Type in the question text" required />
-              </FormGroup>
-            </Col>
-          </Row>
-          <FormGroup row>
-            <Col md="12">
-              <Label>Type</Label>
-            </Col>
-            <Col md="12">
-              <FormGroup check inline>
-                <Input className="form-check-input" type="radio" id="question-type-1" name="type" value="1" />
-                <Label className="form-check-label" check htmlFor="question-type-1">Checkboxes</Label>
-              </FormGroup>
-              <FormGroup check inline>
-                <Input className="form-check-input" type="radio" id="question-type-2" name="type" value="2" />
-                <Label className="form-check-label" check htmlFor="question-type-2">Free text</Label>
-              </FormGroup>
-              <FormGroup check inline>
-                <Input className="form-check-input" type="radio" id="question-type-3" name="type" value="3" />
-                <Label className="form-check-label" check htmlFor="question-type-3">Flow Diagram</Label>
-              </FormGroup>
-            </Col>
-          </FormGroup>
-        </CardBody>
-        <CardFooter>
-          <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o" /> Submit</Button>
-        </CardFooter>
+        <Form name="create-question">
+          <CardHeader>
+            <i className="fa fa-plus-circle text-success" />
+            <strong>Create Question</strong>
+            <small> Form</small>
+          </CardHeader>
+          <CardBody>
+            <Row>
+              <Col xs="12">
+                <FormGroup>
+                  <Label htmlFor="question-text">Text</Label>
+                  <Input
+                    name="Text"
+                    type="text"
+                    id="question-text"
+                    value={this.state.Text}
+                    onChange={(e) => this.setState({Text: e.target.value})}
+                    placeholder="Type in the question text"
+                    required />
+                </FormGroup>
+              </Col>
+            </Row>
+            <FormGroup row>
+              <Col md="12">
+                <Label>Type</Label>
+              </Col>
+              <Col md="12">
+                <FormGroup check inline>
+                  <Input
+                    className="form-check-input"
+                    type="radio"
+                    onChange={() => this.setState({Type: 1})}
+                    id="question-type-1"
+                    name="Type"/>
+                  <Label className="form-check-label" check htmlFor="question-type-1">Checkboxes</Label>
+                </FormGroup>
+                <FormGroup check inline>
+                  <Input
+                    className="form-check-input"
+                    type="radio"
+                    onChange={() => this.setState({Type: 2})}
+                    id="question-type-2"
+                    name="Type" />
+                  <Label className="form-check-label" check htmlFor="question-type-2">Free text</Label>
+                </FormGroup>
+                <FormGroup check inline>
+                  <Input
+                    className="form-check-input"
+                    type="radio"
+                    onChange={() => this.setState({Type: 3})}
+                    id="question-type-3"
+                    name="Type" />
+                  <Label className="form-check-label" check htmlFor="question-type-3">Flow Diagram</Label>
+                </FormGroup>
+              </Col>
+            </FormGroup>
+          </CardBody>
+          <CardFooter>
+            <Button
+              onClick={this.create}
+              type="button"
+              size="sm"
+              color="primary">
+              <i className="fa fa-dot-circle-o" /> Submit
+            </Button>
+          </CardFooter>
+        </Form>
       </Card>
     );
   }

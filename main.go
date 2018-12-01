@@ -21,7 +21,7 @@ import (
 
 func main() {
 	// TODO: ADD PROPPER CORS HANDLING!!!!!
-	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", ""})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 
@@ -103,8 +103,8 @@ func addAPI(db *gorm.DB, r *mux.Router) {
 	API := admin.New(&qor.Config{DB: db})
 	API.AddResource(&webapp.User{})
 	API.AddResource(&webapp.QuizTemplate{})
-	API.AddResource(&webapp.QuestionTemplate{})
-	API.AddResource(&webapp.ChoiceAnswerTemplate{})
+	question := API.AddResource(&webapp.QuestionTemplate{})
+	_, _ = question.AddSubResource("ChoiceAnswerTemplates")
 
 	m := http.NewServeMux()
 	API.MountTo("/api", m)
