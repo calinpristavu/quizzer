@@ -1,18 +1,26 @@
 {{ template "header" .User }}
-
+<style>
+    .form-check-label {
+        width: 100%;
+    }
+</style>
 <!--suppress ALL -->
 <div class="container">
-    <p>{{.Question.Text}}</p>
-    <form action="/question" method="POST">
-        <div class="form-group form-check">
-            <label for="answer" class="form-check-label">
-                <textarea id="answer" class="form-input" name="answer"></textarea>
-            </label>
+    <div class="section col-md-8 offset-md-2 text-center">
+        <div class="section-content">
+            <h2>{{.Question.Text}}</h2>
+            <form action="/question" method="POST">
+                <div class="form-group">
+                    <label for="answer" class="form-check-label">
+                        <textarea id="answer" class="form-input" name="answer"></textarea>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Next ></button>
+            </form>
+            <ul>
+            </ul>
         </div>
-        <button type="submit" class="btn btn-primary">Next ></button>
-    </form>
-    <ul>
-    </ul>
+    </div>
 </div>
 
 {{ template "footer" }}

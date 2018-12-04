@@ -2,19 +2,23 @@
 
 <!--suppress ALL -->
 <div class="container">
-    <p>{{.Question.Text}}</p>
+    <div class="section col-md-8 offset-md-2 text-center">
+        <div class="section-content">
+            <h2>{{.Question.Text}}</h2>
 
-    <div style="width: 100%; display: flex; justify-content: space-between">
-        <div id="palette" style="width: 100px; margin-right: 2px; background-color: whitesmoke; border: solid 1px black"></div>
-        <div id="diagram" style="flex-grow: 1; height: 750px; border: solid 1px black"></div>
+            <div style="width: 100%; display: flex; justify-content: space-between">
+                <div id="palette" style="width: 100px; margin-right: 2px; background-color: whitesmoke; border: solid 1px black"></div>
+                <div id="diagram" style="flex-grow: 1; height: 750px; border: solid 1px black"></div>
+            </div>
+
+            <form name="flow_diagram_question" action="/question" method="POST" onsubmit="return save(this);">
+                <input type="hidden" id="diagram-json" name="flow_diagram">
+                <button type="submit" id="save-button" class="btn btn-primary" disabled>Next ></button>
+            </form>
+            <ul>
+            </ul>
+        </div>
     </div>
-
-    <form name="flow_diagram_question" action="/question" method="POST" onsubmit="return save(this);">
-        <input type="hidden" id="diagram-json" name="flow_diagram">
-        <button type="submit" id="save-button" class="btn btn-primary" disabled>Next ></button>
-    </form>
-    <ul>
-    </ul>
 </div>
 
 {{ template "flow_diagram_js" }}

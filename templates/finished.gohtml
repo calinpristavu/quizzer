@@ -1,49 +1,65 @@
 {{ template "header" .User }}
 
+<style>
+    ul {
+        list-style: none;
+        display: inline-block;
+        padding-left: 0;
+    }
+
+    .table td {
+        padding-top: 20px;
+    }
+</style>
+
 <!--suppress HtmlUnknownTarget, JSUnresolvedVariable, JSUnresolvedFunction -->
 <div class="container">
-    <h1>Congratz!!! you have finished quiz: {{.Quiz.ID}}</h1>
-    <p>the questions were:</p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Quesiton</th>
-                <th>Answers</th>
-            </tr>
-        </thead>
+    <div class="section col-md-8 offset-md-2 text-center">
+        <div class="section-content">
+            <h1>Congratz!!! you have finished quiz: {{.Quiz.ID}}</h1>
+            <p>the questions were:</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Answers</th>
+                    </tr>
+                </thead>
 
-        <tbody>
-            {{range .Quiz.Questions}}
-                <tr>
-                    <td>{{.Text}}</td>
-                    <td>
-                        {{if eq .Type 1}}
-                            <ul>
-                                {{range .ChoiceAnswers}}
-                                    <li class="{{if eq .IsCorrect true}}text-success{{else}}text-danger{{end}}">
-                                        {{ if and .IsSelected }}
-                                            <i class="far fa-check-square"></i>
-                                        {{else}}
-                                            <i class="far fa-square"></i>
+                <tbody>
+                    {{range .Quiz.Questions}}
+                        <tr>
+                            <td>{{.Text}}</td>
+                            <td class="text-left">
+                                {{if eq .Type 1}}
+                                    <ul>
+                                        {{range .ChoiceAnswers}}
+                                            <li class="text-left {{if eq .IsCorrect true}}text-success{{else}}text-danger{{end}}">
+                                                {{ if and .IsSelected }}
+                                                    <i class="far fa-check-square"></i>
+                                                {{else}}
+                                                    <i class="far fa-square"></i>
+                                                {{end}}
+                                                {{.Text}}
+                                            </li>
                                         {{end}}
-                                        {{.Text}}
-                                    </li>
+                                    </ul>
+                                {{else if eq .Type 2}}
+                                    <p>{{.TextAnswer.Text}}</p>
+                                {{else if eq .Type 3}}
+                                    <div class="flow-diagram" data-json="{{.FlowDiagramAnswer.Text}}"></div>
                                 {{end}}
-                            </ul>
-                        {{else if eq .Type 2}}
-                            <p>{{.TextAnswer.Text}}</p>
-                        {{else if eq .Type 3}}
-                            <div class="flow-diagram" data-json="{{.FlowDiagramAnswer.Text}}"></div>
-                        {{end}}
-                    </td>
-                </tr>
-            {{end}}
-        </tbody>
-    </table>
-    <div class="text-center">
+                            </td>
+                        </tr>
+                    {{end}}
+                </tbody>
+            </table>
+            <div class="text-center">
         <form action="/finished" method="POST">
             <button type="submit" class="btn btn-success">Back home</button>
         </form>
+    </div>
+        </div>
     </div>
 </div>
 
