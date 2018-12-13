@@ -2,12 +2,11 @@
 
 <!--suppress HtmlUnknownTarget -->
 <div class="container">
-    <main role="main">
-        <div>
+    <main role="main" class="section col-md-8 offset-md-2 text-center">
+        <div class="section-content">
             <h2>Start a random quiz</h2>
+            <p>Or try a prebuilt one</p>
             <a href="/start" class="btn btn-success">Start</a>
-
-            <h2>Or try a prebuilt one</h2>
             <ul>
                 {{range .Quizzes}}
                     <li><a href="/start/{{.ID}}">{{.Name}}</a></li>
