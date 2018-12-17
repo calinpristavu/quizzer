@@ -6,17 +6,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/qor/admin"
 	"github.com/qor/qor"
 
 	"github.com/calinpristavu/quizzer/webapp"
-
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-
-	"github.com/jinzhu/gorm"
-
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func main() {
@@ -105,9 +102,20 @@ func addAPI(db *gorm.DB, r *mux.Router) {
 	API.AddResource(&webapp.QuizTemplate{})
 	question := API.AddResource(&webapp.QuestionTemplate{})
 	_, _ = question.AddSubResource("ChoiceAnswerTemplates")
+	_, _ = question.AddSubResource("FlowDiagramAnswerTemplates")
 
 	m := http.NewServeMux()
+
 	API.MountTo("/api", m)
+
+	// FIXME: THESE LINES DISABLE CSRF PROTECTION!!!! this is bad in prod.
+	API.
+		GetRouter().
+		GetMiddleware("csrf_check").
+		Handler = func(context *admin.Context, middleware *admin.Middleware) {
+
+		middleware.Next(context)
+	}
 
 	r.PathPrefix("/api").Handler(m)
 }

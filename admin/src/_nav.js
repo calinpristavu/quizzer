@@ -24,7 +24,7 @@ export default {
       },
       {
           name: 'Quiz templates',
-          url: '/theme/colors',
+          url: '/quiz/quiz-templates',
           icon: 'icon-calculator',
       },
       {

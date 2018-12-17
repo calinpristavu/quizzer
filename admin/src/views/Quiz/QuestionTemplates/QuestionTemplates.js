@@ -16,6 +16,10 @@ import {
   PaginationItem,
   PaginationLink
 } from 'reactstrap'
+import {
+  ChoiceAnswerTemplates,
+  FlowDiagramAnswer
+} from "./AnswerTemplates";
 
 const views = {
   create: 1,
@@ -39,7 +43,6 @@ class QuestionTemplates extends Component{
 
   componentDidMount = () => {
     fetch("http://localhost:8001/api/question_templates.json")
-      .catch()
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -57,19 +60,6 @@ class QuestionTemplates extends Component{
     })
   };
 
-  openCreateView = () => {
-    this.setState({
-      openedView: views.create
-    })
-  };
-
-  openEditView = (item) => {
-    this.setState({
-      openedView: views.edit,
-      editItem: item
-    })
-  };
-
   render() {
     return (
       <div className="animated fadeIn">
@@ -77,8 +67,11 @@ class QuestionTemplates extends Component{
           <Col xs="12" lg="6">
             <QuestionsList
               questions={this.state.questions}
-              openCreateView={this.openCreateView}
-              openEditView={this.openEditView}/>
+              openCreateView={() => this.setState({openedView: views.create})}
+              openEditView={(item) => this.setState({
+                openedView: views.edit,
+                editItem: item
+              })}/>
           </Col>
 
           <Col xs="12" lg="6">
@@ -95,7 +88,7 @@ class QuestionTemplates extends Component{
   }
 }
 
-class QuestionsList extends Component {
+export class QuestionsList extends Component {
   perPage = 10;
 
   render() {
@@ -105,7 +98,7 @@ class QuestionsList extends Component {
           <i className="fa fa-align-justify" /> Question Templates
           <span className="float-right">
             <i
-              onClick={this.props.openCreateView}
+              onClick={() => this.setState({openedView: views.create})}
               className="fa fa-plus-circle text-success"
               style={{cursor: "pointer"}}/>
           </span>
@@ -153,7 +146,7 @@ class QuestionsList extends Component {
 
 class CreateQuestion extends Component {
   state = {
-    Text: "Sample text...",
+    Text: '',
     Type: null,
     ChoiceAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null
@@ -163,12 +156,15 @@ class CreateQuestion extends Component {
     // TODO: extract backend domain name to global var.
     fetch("http://localhost:8001/api/question_templates.json", {
       method: "POST",
-      body: JSON.stringify(this.state)
+      body: JSON.stringify(this.state),
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json"
+      }
     })
-      .catch()
       .then(() => {
-        this.props.appendQuestion(this.state)
-      });
+        return this.props.appendQuestion(this.state);
+      })
   };
 
   removeChoice = (choiceIndex) => {
@@ -273,80 +269,6 @@ class CreateQuestion extends Component {
   }
 }
 
-class ChoiceAnswerTemplates extends Component {
-  state = {
-    Text: '',
-    IsCorrect: false
-  };
-
-  render() {
-    return (
-      <div>
-        <Table responsive>
-          <thead>
-            <tr>
-              <th>Text</th>
-              <th>Is Correct?</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {this.props.answers.map((answer, k) =>
-              <tr key={k}>
-                <td>{answer.Text}</td>
-                <td>{answer.IsCorrect ? 'true' : 'false'}</td>
-                <td>
-                  <i className="fa fa-minus-circle text-danger" onClick={() => this.props.removeChoice(k)}/>
-                </td>
-              </tr>
-            )}
-            <tr>
-              <td>
-                <FormGroup>
-                  <Label htmlFor="question-text">
-                    <Input
-                      name="Text"
-                      type="text"
-                      id="question-text"
-                      value={this.state.Text}
-                      onChange={(e) => this.setState({Text: e.target.value})}
-                      placeholder="Type in the question text"
-                      required />
-                  </Label>
-                </FormGroup>
-              </td>
-              <td>
-                <FormGroup check inline>
-                  <Label className="form-check-label" check>
-                    <Input
-                      className="form-check-input"
-                      type="checkbox"
-                      onChange={(e) => this.setState({IsCorrect: e.target.checked})}
-                      name="Type" />
-                  </Label>
-                </FormGroup>
-              </td>
-              <td>
-                <i className="fa fa-plus-circle text-success" onClick={() => this.props.addChoice(this.state)} />
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-      </div>
-    );
-  }
-}
-
-class FlowDiagramAnswer extends Component {
-  render() {
-    return (
-      <div>
-        add diagram answer here
-      </div>
-    );
-  }
-}
-
 class EditQuestion extends Component {
   state = {
     Text: "Sample text...",
@@ -377,6 +299,7 @@ class EditQuestion extends Component {
                   id="question-text"
                   placeholder="Type in the question text"
                   required
+                  onChange={(e) => this.setState({Text: e.target.value})}
                   value={this.state.Text}/>
               </FormGroup>
             </Col>
@@ -433,4 +356,4 @@ class EditQuestion extends Component {
   }
 }
 
-export default QuestionTemplates
+export default QuestionTemplates;

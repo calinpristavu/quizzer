@@ -3,6 +3,7 @@ import DefaultLayout from './containers/DefaultLayout';
 
 const Breadcrumbs = React.lazy(() => import('./views/Base/Breadcrumbs'));
 const QuestionTemplates = React.lazy(() => import('./views/Quiz/QuestionTemplates/QuestionTemplates'));
+const QuizTemplates = React.lazy(() => import('./views/Quiz/QuizTemplates/QuizTemplates'));
 const Cards = React.lazy(() => import('./views/Base/Cards'));
 const Carousels = React.lazy(() => import('./views/Base/Carousels'));
 const Collapses = React.lazy(() => import('./views/Base/Collapses'));
@@ -42,6 +43,7 @@ const User = React.lazy(() => import('./views/Users/User'));
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/quiz/question-templates', name: 'Question Templates', component: QuestionTemplates },
+  { path: '/quiz/quiz-templates', name: 'Quiz Templates', component: QuizTemplates },
 
 
 

@@ -20,6 +20,7 @@ require (
 	github.com/qor/session v0.0.0-20170907035918-8206b0adab70 // indirect
 	github.com/qor/validations v0.0.0-20171228122639-f364bca61b46 // indirect
 	github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be // indirect
+	github.com/rs/cors v1.6.0 // indirect
 	github.com/theplant/cldr v0.0.0-20170713054817-b97a4c2a76cf // indirect
 	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
 	google.golang.org/appengine v1.3.0 // indirect

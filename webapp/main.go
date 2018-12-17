@@ -97,6 +97,7 @@ func migrateDb() *gorm.DB {
 		&QuizTemplate{},
 		&QuestionTemplate{},
 		&ChoiceAnswerTemplate{},
+		&FlowDiagramAnswerTemplate{},
 	)
 }
 

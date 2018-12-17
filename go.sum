@@ -42,6 +42,8 @@ github.com/qor/validations v0.0.0-20171228122639-f364bca61b46 h1:dRlsVUhwD1pwras
 github.com/qor/validations v0.0.0-20171228122639-f364bca61b46/go.mod h1:UJsA0AuvrKNaWtrb1UzKai10mN3ZBbQkPjUHpxwahTc=
 github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be h1:ta7tUOvsPHVHGom5hKW5VXNc2xZIkfCKP8iaqOyYtUQ=
 github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be/go.mod h1:MIDFMn7db1kT65GmV94GzpX9Qdi7N/pQlwb+AN8wh+Q=
+github.com/rs/cors v1.6.0 h1:G9tHG9lebljV9mfp9SNPDL36nCDxmo3zTlAf1YgvzmI=
+github.com/rs/cors v1.6.0/go.mod h1:gFx+x8UowdsKA9AchylcLynDq+nNFfI8FkUZdN/jGCU=
 github.com/theplant/cldr v0.0.0-20170713054817-b97a4c2a76cf h1:PWVHh9ds9pRGV30lnA08uTG2dOLC9wGAG+qg75P6d7Q=
 github.com/theplant/cldr v0.0.0-20170713054817-b97a4c2a76cf/go.mod h1:MIL7SmF8wRAYDn+JexczVRUiJXTCi4VbQavsCKWKwXI=
 golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
