@@ -54,7 +54,7 @@ class QuestionTemplates extends Component{
   appendQuestion = (question) => {
     this.setState((oldState) => {
       const newQuestions = oldState.questions;
-      newQuestions.push(question);
+      newQuestions.unshift(question);
 
       return {questions: newQuestions}
     })
