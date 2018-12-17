@@ -6,21 +6,25 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/qor/admin"
 	"github.com/qor/qor"
+	"github.com/rs/cors"
 
 	"github.com/calinpristavu/quizzer/webapp"
 )
 
 func main() {
 	// TODO: ADD PROPPER CORS HANDLING!!!!!
-	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", ""})
-	originsOk := handlers.AllowedOrigins([]string{"*"})
-	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowCredentials: true,
+		// Enable Debugging for testing, consider disabling in production
+		Debug: true,
+	})
 
 	appPort := flag.String("appPort", "8000", "app port")
 	dbHost := flag.String("dbHost", "127.0.0.1", "db host")
@@ -38,7 +42,10 @@ func main() {
 	addAPI(db, r)
 
 	fmt.Printf("App running on: %s\n", *appPort)
-	err := http.ListenAndServe(fmt.Sprintf(":%s", *appPort), handlers.CORS(originsOk, headersOk, methodsOk)(r))
+	err := http.ListenAndServe(
+		fmt.Sprintf(":%s", *appPort),
+		c.Handler(r),
+	)
 	if err != nil {
 		panic(err)
 	}

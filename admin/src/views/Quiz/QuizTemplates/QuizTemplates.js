@@ -14,7 +14,6 @@ import {
   FormGroup,
   Input
 } from "reactstrap";
-import {QuestionsList} from "../QuestionTemplates/QuestionTemplates";
 
 const views = {
   create: 1,

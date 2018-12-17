@@ -42,7 +42,7 @@ class QuestionTemplates extends Component{
   };
 
   componentDidMount = () => {
-    fetch("http://localhost:8001/api/question_templates.json")
+    fetch("http://localhost:8001/api/question_templates.json?order_by=id_desc")
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -157,7 +157,6 @@ class CreateQuestion extends Component {
     fetch("http://localhost:8001/api/question_templates.json", {
       method: "POST",
       body: JSON.stringify(this.state),
-      mode: "no-cors",
       headers: {
         "Content-Type": "application/json"
       }
