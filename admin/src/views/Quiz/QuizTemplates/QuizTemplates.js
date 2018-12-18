@@ -41,7 +41,7 @@ class QuizTemplates extends Component {
   };
 
   deleteQuiz = (qId) => {
-    fetch("http://localhost:8001/api/quiz_templates/" + qId + ".json", {
+    fetch("http://localhost:8001/new-api/quiz-templates/" + qId, {
       method: "DELETE"
     })
       .then(() => {
@@ -54,7 +54,7 @@ class QuizTemplates extends Component {
   };
 
   componentDidMount = () => {
-    fetch("http://localhost:8001/api/quiz_templates.json")
+    fetch("http://localhost:8001/new-api/quiz-templates")
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -212,16 +212,15 @@ class CreateQuiz extends Component {
 
   stop = (qIds) => {
     const quiz = this.state.quiz;
-    quiz.Questions = qIds;
+    quiz.Questions = qIds.map(id => ({"ID": id}));
 
-    fetch("http://localhost:8001/api/quiz_templates.json", {
+    fetch("http://localhost:8001/new-api/quiz-templates", {
       method: "POST",
-      body: JSON.stringify(quiz),
-      headers: {
-        "Content-Type": "application/json"
-      }
+      body: JSON.stringify(quiz)
     })
-      .then((r) => r.json())
+      .then((r) => {
+        return r.json()
+      })
       .then((q) => {
         this.setState(this.defaultState);
         this.props.appendQuiz(q);
@@ -292,7 +291,7 @@ class CreateStep2 extends Component {
   };
 
   componentDidMount = () => {
-    fetch("http://localhost:8001/api/question_templates.json?order_by=id_desc")
+    fetch("http://localhost:8001/new-api/question-templates")
       .then((response) => response.json())
       .then((response) => {
         this.setState({

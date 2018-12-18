@@ -103,6 +103,7 @@ func migrateDb() *gorm.DB {
 
 func registerRoutes(r *mux.Router) {
 	r.HandleFunc("/login", page)
+
 	sr := r.NewRoute().Subrouter()
 	sr.Use(AuthMiddleware)
 	sr.HandleFunc("/question", getQuestion)

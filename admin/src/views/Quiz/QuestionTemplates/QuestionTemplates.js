@@ -42,7 +42,7 @@ class QuestionTemplates extends Component{
   };
 
   componentDidMount = () => {
-    fetch("http://localhost:8001/api/question_templates.json?order_by=id_desc")
+    fetch("http://localhost:8001/new-api/question-templates")
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -198,7 +198,7 @@ class CreateQuestion extends Component {
 
   create = () => {
     // TODO: extract backend domain name to global var.
-    fetch("http://localhost:8001/api/question_templates.json", {
+    fetch("http://localhost:8001/new-api/question-templates", {
       method: "POST",
       body: JSON.stringify(this.state),
       headers: {

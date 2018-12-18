@@ -11,7 +11,10 @@ import (
 
 func getQuizTemplates(w http.ResponseWriter, _ *http.Request) {
 	var qts []QuizTemplate
-	h.db.Preload("Questions").Find(&qts)
+	h.db.
+		Preload("Questions").
+		Order("id desc").
+		Find(&qts)
 
 	jsonResponse(w, qts, http.StatusOK)
 }
@@ -101,7 +104,11 @@ func deleteQuizTemplate(w http.ResponseWriter, r *http.Request) {
 
 func getQuestionTemplates(w http.ResponseWriter, _ *http.Request) {
 	var qts []QuestionTemplate
-	h.db.Preload("ChoiceAnswerTemplates").Preload("FlowDiagramAnswerTemplate").Find(&qts)
+	h.db.
+		Preload("ChoiceAnswerTemplates").
+		Preload("FlowDiagramAnswerTemplate").
+		Order("id desc").
+		Find(&qts)
 
 	jsonResponse(w, qts, http.StatusOK)
 }
