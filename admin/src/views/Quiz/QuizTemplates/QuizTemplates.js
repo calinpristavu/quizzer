@@ -133,7 +133,7 @@ class QuizList extends Component {
             {this.state.visibleItems.map((q, k) =>
               <tr key={k} onClick={() => this.props.openEdit(q)}>
                 <td>{q.Name}</td>
-                <td>{q.Questions.length}</td>
+                <td>{q.Questions !== null ? q.Questions.length : 0}</td>
                 <td />
               </tr>
             )}
