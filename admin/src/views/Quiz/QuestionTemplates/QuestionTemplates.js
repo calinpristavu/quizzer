@@ -156,7 +156,7 @@ export class QuestionsList extends Component {
           </Table>
         </CardBody>
         <CardFooter>
-          {this.props.questions.length > this.perPage &&
+          {this.state.noPages > 1 &&
             <Pagination>
               {this.state.currentPage !== 0 ? (
                 <PaginationItem

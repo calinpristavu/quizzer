@@ -30,7 +30,6 @@ class QuizTemplates extends Component {
 
   componentDidMount = () => {
     fetch("http://localhost:8001/api/quiz_templates.json")
-      .catch()
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -65,6 +64,38 @@ class QuizTemplates extends Component {
 }
 
 class QuizList extends Component {
+  perPage = 5;
+
+  state = {
+    currentPage: 1,
+    noPages: 1,
+    visibleItems: [],
+    allItems: []
+  };
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.setState({
+      noPages: Math.ceil(nextProps.quizzes.length / this.perPage),
+      allItems: nextProps.quizzes
+    });
+
+    this.toPage(0);
+  }
+
+  toPage = (pageNo) => {
+    this.setState((oldState) => {
+      const firstPosition = this.perPage * pageNo;
+
+      return {
+        currentPage: pageNo,
+        visibleItems: oldState.allItems.slice(
+          firstPosition,
+          firstPosition + this.perPage
+        )
+      }
+    })
+  };
+
   render() {
     return (
       <Card>
@@ -87,7 +118,7 @@ class QuizList extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.props.quizzes.map((q, k) =>
+            {this.state.visibleItems.map((q, k) =>
               <tr key={k} onClick={() => this.props.openEdit(q)}>
                 <td>{q.Name}</td>
                 <td>Quesitons here ...</td>
@@ -98,16 +129,30 @@ class QuizList extends Component {
           </Table>
         </CardBody>
         <CardFooter>
-          {this.props.quizzes.length > this.perPage &&
+          {this.state.noPages > 1 &&
           <Pagination>
-            <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-            <PaginationItem active>
-              <PaginationLink tag="button">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-            <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-            <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-            <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
+            {this.state.currentPage !== 0 ? (
+              <PaginationItem
+                onClick={() => this.toPage(this.state.currentPage - 1)}>
+                <PaginationLink previous tag="button">Prev</PaginationLink>
+              </PaginationItem>
+            ): null}
+
+            {[...Array(this.state.noPages).keys()].map((i) => (
+              <PaginationItem
+                onClick={() => this.toPage(i)}
+                key={i}
+                active={i === this.state.currentPage}>
+                <PaginationLink tag="button">{i + 1}</PaginationLink>
+              </PaginationItem>
+            ))}
+
+            {this.state.currentPage !== this.state.noPages - 1 ? (
+              <PaginationItem
+                onClick={() => this.toPage(this.state.currentPage + 1)}>
+                <PaginationLink next tag="button">Next</PaginationLink>
+              </PaginationItem>
+            ): null}
           </Pagination>
           }
         </CardFooter>
