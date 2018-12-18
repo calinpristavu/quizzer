@@ -40,6 +40,19 @@ class QuizTemplates extends Component {
     })
   };
 
+  deleteQuiz = (qId) => {
+    fetch("http://localhost:8001/api/quiz_templates/" + qId + ".json", {
+      method: "DELETE"
+    })
+      .then(() => {
+        this.setState((oldState) => {
+          return {
+            quizzes: oldState.quizzes.filter(q => q.ID !== qId)
+          }
+        })
+      });
+  };
+
   componentDidMount = () => {
     fetch("http://localhost:8001/api/quiz_templates.json")
       .then((response) => response.json())
@@ -58,6 +71,7 @@ class QuizTemplates extends Component {
               openEdit={(q) => this.setState({openedView: views.edit, editItem: q})}
               openCreate={() => this.setState({openedView: views.create})}
               quizzes={this.state.quizzes}
+              delete={this.deleteQuiz}
               />
           </Col>
 
@@ -134,7 +148,9 @@ class QuizList extends Component {
               <tr key={k} onClick={() => this.props.openEdit(q)}>
                 <td>{q.Name}</td>
                 <td>{q.Questions !== null ? q.Questions.length : 0}</td>
-                <td />
+                <td>
+                  <i onClick={() => this.props.delete(q.ID)} className="fa fa-minus-circle"/>
+                </td>
               </tr>
             )}
             </tbody>
