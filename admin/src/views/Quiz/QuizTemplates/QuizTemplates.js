@@ -14,6 +14,7 @@ import {
   FormGroup,
   Input
 } from "reactstrap";
+import Select from "react-select";
 
 const views = {
   create: 1,
@@ -26,6 +27,17 @@ class QuizTemplates extends Component {
     openedView: views.create,
     editItem: null,
     quizzes: []
+  };
+
+  appendQuiz = (q) => {
+    this.setState((oldState) => {
+      const qs = oldState.quizzes;
+      qs.unshift(q);
+
+      return {
+        quizzes: qs
+      }
+    })
   };
 
   componentDidMount = () => {
@@ -51,7 +63,7 @@ class QuizTemplates extends Component {
 
           <Col xs="12" lg="6">
             {this.state.openedView === views.create ?
-              <CreateQuiz /> : null
+              <CreateQuiz appendQuiz={this.appendQuiz}/> : null
             }
             {this.state.openedView === views.edit ?
               <EditQuiz quiz={this.state.editItem}/> : null
@@ -113,7 +125,7 @@ class QuizList extends Component {
             <thead>
             <tr>
               <th>Name</th>
-              <th>Questions</th>
+              <th>#noQuestions</th>
               <th>?</th>
             </tr>
             </thead>
@@ -121,7 +133,7 @@ class QuizList extends Component {
             {this.state.visibleItems.map((q, k) =>
               <tr key={k} onClick={() => this.props.openEdit(q)}>
                 <td>{q.Name}</td>
-                <td>Quesitons here ...</td>
+                <td>{q.Questions.length}</td>
                 <td />
               </tr>
             )}
@@ -162,33 +174,42 @@ class QuizList extends Component {
 }
 
 class CreateQuiz extends Component {
-  availableEvents = {
-    added: 1,
-    modified: 2,
-    removed: 3
-  };
-
-  state = {
+  defaultState = {
     step: 1,
     quiz: {
-      Text: '',
+      Name: '',
       Questions: []
-    },
-    step2events: [] // we are experimenting with event sourcing here ... brace yourselves!
+    }
   };
+
+  state = this.defaultState;
 
   advanceToStep2 = (text) => {
     this.setState({
       step: 2,
       quiz: {
-        Text: text,
+        Name: text,
         Questions: []
       }
     })
   };
 
-  stop = () => {
-    //save quiz here.
+  stop = (qIds) => {
+    const quiz = this.state.quiz;
+    quiz.Questions = qIds;
+
+    fetch("http://localhost:8001/api/quiz_templates.json", {
+      method: "POST",
+      body: JSON.stringify(quiz),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((r) => r.json())
+      .then((q) => {
+        this.setState(this.defaultState);
+        this.props.appendQuiz(q);
+      })
   };
 
   render() {
@@ -201,13 +222,12 @@ class CreateQuiz extends Component {
         </CardHeader>
         {this.state.step === 1 &&
           <CreateStep1
-            advance={() => this.setState({step: 2})}/>
+            advance={this.advanceToStep2}/>
         }
         {this.state.step === 2 &&
           <CreateStep2
-            questions={[]}
             back={() => this.setState({step: 1})}
-            stop={this.stop}/>
+            advance={this.stop}/>
         }
       </Card>
     );
@@ -242,7 +262,7 @@ class CreateStep1 extends Component {
           </FormGroup>
         </CardBody>
         <CardFooter>
-          <button onClick={() => this.props.advance(this.state)}>Next ></button>
+          <button onClick={() => this.props.advance(this.state.Name)}>Next ></button>
         </CardFooter>
       </div>
     );
@@ -250,43 +270,41 @@ class CreateStep1 extends Component {
 }
 
 class CreateStep2 extends Component {
+  state = {
+    options: [],
+    selected: []
+  };
+
+  componentDidMount = () => {
+    fetch("http://localhost:8001/api/question_templates.json?order_by=id_desc")
+      .then((response) => response.json())
+      .then((response) => {
+        this.setState({
+          options: response.map((q) => ({
+            value: q.ID,
+            label: q.Text
+          }))
+        })
+      })
+  };
+
+  setSelected = (opt) => {
+    this.setState({
+      selected: opt.map((e) => e.value)
+    })
+  };
 
   render() {
     return (
       <div>
         <CardBody>
-          <Table responsive>
-            <thead>
-            <tr>
-              <th>#</th>
-              <th>Text</th>
-              <th>Type</th>
-              <th>?</th>
-            </tr>
-            </thead>
-            <tbody>
-            {this.props.questions.map((q, k) =>
-              <tr key={k}>
-                <td>{q.ID}</td>
-                <td>{q.Text}</td>
-                <td>{q.Type}</td>
-                <td />
-              </tr>
-            )}
-            <tr>
-              <td colSpan={3}>
-                <select>
-                  <option value="1">Question 1 (not from the db)</option>
-                  <option value="2">Question 2 (not from the db)</option>
-                </select>
-              </td>
-              <td>+</td>
-            </tr>
-            </tbody>
-          </Table>
+          <Select
+            isMulti
+            onChange={this.setSelected}
+            options={this.state.options}/>
         </CardBody>
         <CardFooter>
-          <button onClick={() => this.props.advance(this.state)}>Next ></button>
+          <button onClick={() => this.props.advance(this.state.selected)}>Save</button>
         </CardFooter>
       </div>
     );
