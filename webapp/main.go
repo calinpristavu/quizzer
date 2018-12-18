@@ -120,4 +120,10 @@ func registerRoutes(r *mux.Router) {
 	r.Path("/new-api/quiz-templates/{id}").Methods("GET").HandlerFunc(getQuizTemplate)
 	r.Path("/new-api/quiz-templates/{id}").Methods("PUT").HandlerFunc(putQuizTemplate)
 	r.Path("/new-api/quiz-templates/{id}").Methods("DELETE").HandlerFunc(deleteQuizTemplate)
+
+	r.Path("/new-api/question-templates").Methods("GET").HandlerFunc(getQuestionTemplates)
+	r.Path("/new-api/question-templates").Methods("POST").HandlerFunc(postQuestionTemplates)
+	r.Path("/new-api/question-templates/{id}").Methods("GET").HandlerFunc(getQuestionTemplate)
+	r.Path("/new-api/question-templates/{id}").Methods("PUT").HandlerFunc(putQuestionTemplate)
+	r.Path("/new-api/question-templates/{id}").Methods("DELETE").HandlerFunc(deleteQuestionTemplate)
 }
