@@ -46,17 +46,17 @@ class QuestionTemplates extends Component{
       .then((response) => response.json())
       .then((response) => {
         this.setState({
-          options: response
+          questions: response
         })
       })
   };
 
   appendQuestion = (question) => {
     this.setState((oldState) => {
-      const newQuestions = oldState.options;
+      const newQuestions = oldState.questions;
       newQuestions.unshift(question);
 
-      return {options: newQuestions}
+      return {questions: newQuestions}
     })
   };
 
@@ -100,8 +100,8 @@ export class QuestionsList extends Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     this.setState({
-      noPages: Math.ceil(nextProps.options.length / this.perPage),
-      allItems: nextProps.options
+      noPages: Math.ceil(nextProps.questions.length / this.perPage),
+      allItems: nextProps.questions
     });
 
     this.toPage(0);
