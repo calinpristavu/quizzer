@@ -89,7 +89,37 @@ class QuestionTemplates extends Component{
 }
 
 export class QuestionsList extends Component {
-  perPage = 10;
+  perPage = 5;
+
+  state = {
+    currentPage: 1,
+    noPages: 1,
+    visibleItems: [],
+    allItems: []
+  };
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.setState({
+      noPages: Math.ceil(nextProps.questions.length / this.perPage),
+      allItems: nextProps.questions
+    });
+
+    this.toPage(0);
+  }
+
+  toPage = (pageNo) => {
+    this.setState((oldState) => {
+      const firstPosition = this.perPage * pageNo;
+
+      return {
+        currentPage: pageNo,
+        visibleItems: oldState.allItems.slice(
+          firstPosition,
+          firstPosition + this.perPage
+        )
+      }
+    })
+  };
 
   render() {
     return (
@@ -98,7 +128,7 @@ export class QuestionsList extends Component {
           <i className="fa fa-align-justify" /> Question Templates
           <span className="float-right">
             <i
-              onClick={() => this.setState({openedView: views.create})}
+              onClick={this.props.openCreateView}
               className="fa fa-plus-circle text-success"
               style={{cursor: "pointer"}}/>
           </span>
@@ -114,7 +144,7 @@ export class QuestionsList extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.props.questions.map((q, k) =>
+            {this.state.visibleItems.map((q, k) =>
               <tr key={k} onClick={() => {this.props.openEditView(q)}}>
                 <td>{q.Text}</td>
                 <td>{q.Type}</td>
@@ -128,14 +158,28 @@ export class QuestionsList extends Component {
         <CardFooter>
           {this.props.questions.length > this.perPage &&
             <Pagination>
-              <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-              <PaginationItem active>
-                <PaginationLink tag="button">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-              <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-              <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-              <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
+              {this.state.currentPage !== 0 ? (
+                <PaginationItem
+                  onClick={() => this.toPage(this.state.currentPage - 1)}>
+                  <PaginationLink previous tag="button">Prev</PaginationLink>
+                </PaginationItem>
+              ): null}
+
+              {[...Array(this.state.noPages).keys()].map((i) => (
+                <PaginationItem
+                  onClick={() => this.toPage(i)}
+                  key={i}
+                  active={i === this.state.currentPage}>
+                  <PaginationLink tag="button">{i + 1}</PaginationLink>
+                </PaginationItem>
+              ))}
+
+              {this.state.currentPage !== this.state.noPages - 1 ? (
+                <PaginationItem
+                  onClick={() => this.toPage(this.state.currentPage + 1)}>
+                  <PaginationLink next tag="button">Next</PaginationLink>
+                </PaginationItem>
+              ): null}
             </Pagination>
           }
         </CardFooter>
