@@ -114,4 +114,10 @@ func registerRoutes(r *mux.Router) {
 	sr.HandleFunc("/", home)
 	sr.HandleFunc("/me", myAccount)
 	sr.HandleFunc("/logout", logout)
+
+	r.Path("/new-api/quiz-templates").Methods("GET").HandlerFunc(getQuizTemplates)
+	r.Path("/new-api/quiz-templates").Methods("POST").HandlerFunc(postQuizTemplates)
+	r.Path("/new-api/quiz-templates/{id}").Methods("GET").HandlerFunc(getQuizTemplate)
+	r.Path("/new-api/quiz-templates/{id}").Methods("PUT").HandlerFunc(putQuizTemplate)
+	r.Path("/new-api/quiz-templates/{id}").Methods("DELETE").HandlerFunc(deleteQuizTemplate)
 }

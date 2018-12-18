@@ -5,7 +5,7 @@ import "github.com/jinzhu/gorm"
 type QuizTemplate struct {
 	gorm.Model
 	Name      string
-	Questions []*QuestionTemplate `gorm:"many2many:quiz_quesiton_templates;"`
+	Questions []*QuestionTemplate `gorm:"many2many:quiz_quesiton_templates;association_autoupdate:false;"`
 }
 
 type QuestionTemplate struct {
