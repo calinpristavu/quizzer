@@ -10,8 +10,6 @@ import {
   Table
 } from 'reactstrap';
 
-import usersData from './UsersData'
-
 function UserRow(props) {
   const user = props.user;
   const userLink = `/users/${user.ID}`;
@@ -45,17 +43,56 @@ function UserRow(props) {
   )
 }
 
+class UserList extends Component {
+  render() {
+    return <Col xl={6}>
+      <Card>
+        <CardHeader>
+          <i className="fa fa-align-justify"/> {this.props.title} <small className="text-muted">list</small>
+        </CardHeader>
+        <CardBody>
+          <Table responsive hover>
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Registered</th>
+              <th scope="col">Role</th>
+              <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+              {this.props.users.map((user, index) =>
+                  <UserRow key={index} user={user}/>
+              )}
+            </tbody>
+          </Table>
+        </CardBody>
+      </Card>
+    </Col>;
+  }
+}
+
 class Users extends Component {
   state = {
-    users: []
+    all: [],
+    online: []
   };
 
   componentDidMount() {
     fetch("http://localhost:8001/new-api/users")
-      .then((response) => response.json())
-      .then((response) => {
+      .then(r => r.json())
+      .then(r => {
         this.setState({
-          users: response
+          all: r
+        })
+      });
+
+    fetch("http://localhost:8001/new-api/users-logged-in")
+      .then(r => r.json())
+      .then(r => {
+        this.setState({
+          online: r ? r : []
         })
       })
   }
@@ -64,31 +101,12 @@ class Users extends Component {
     return (
       <div className="animated fadeIn">
         <Row>
-          <Col xl={6}>
-            <Card>
-              <CardHeader>
-                <i className="fa fa-align-justify" /> Users <small className="text-muted">list</small>
-              </CardHeader>
-              <CardBody>
-                <Table responsive hover>
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Registered</th>
-                      <th scope="col">Role</th>
-                      <th scope="col">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.users.map((user, index) =>
-                      <UserRow key={index} user={user}/>
-                    )}
-                  </tbody>
-                </Table>
-              </CardBody>
-            </Card>
-          </Col>
+          <UserList
+            title="All"
+            users={this.state.all}/>
+          <UserList
+            title="Currently Online"
+            users={this.state.online}/>
         </Row>
       </div>
     )

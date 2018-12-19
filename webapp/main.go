@@ -129,5 +129,6 @@ func registerRoutes(r *mux.Router) {
 	r.Path("/new-api/question-templates/{id}").Methods("DELETE").HandlerFunc(deleteQuestionTemplate)
 
 	r.Path("/new-api/users").Methods("GET").HandlerFunc(getUsers)
+	r.Path("/new-api/users-logged-in").Methods("GET").HandlerFunc(getUsersLoggedIn)
 	r.Path("/new-api/users/{id}").Methods("GET").HandlerFunc(getUser)
 }

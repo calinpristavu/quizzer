@@ -197,10 +197,20 @@ func deleteQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func getUsers(w http.ResponseWriter, r *http.Request) {
+func getUsers(w http.ResponseWriter, _ *http.Request) {
 	var us []User
 	h.db.
 		Find(&us)
+
+	jsonResponse(w, us, http.StatusOK)
+}
+
+func getUsersLoggedIn(w http.ResponseWriter, _ *http.Request) {
+	var us []User
+
+	for _, u := range LoggedIn {
+		us = append(us, *u)
+	}
 
 	jsonResponse(w, us, http.StatusOK)
 }
