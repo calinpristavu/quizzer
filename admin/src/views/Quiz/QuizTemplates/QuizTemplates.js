@@ -93,7 +93,7 @@ class QuizList extends Component {
   perPage = 5;
 
   state = {
-    currentPage: 1,
+    currentPage: 0,
     noPages: 1,
     visibleItems: [],
     allItems: []
@@ -105,7 +105,7 @@ class QuizList extends Component {
       allItems: nextProps.quizzes
     });
 
-    this.toPage(0);
+    this.toPage(this.state.currentPage);
   }
 
   toPage = (pageNo) => {
