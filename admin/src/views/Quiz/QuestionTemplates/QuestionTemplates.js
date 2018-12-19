@@ -60,6 +60,19 @@ class QuestionTemplates extends Component{
     })
   };
 
+  deleteQuestion = (qId) => {
+    fetch("http://localhost:8001/new-api/question-templates/" + qId, {
+      method: "DELETE"
+    })
+      .then(() => {
+        this.setState((oldState) => {
+          return {
+            questions: oldState.questions.filter(q => q.ID !== qId)
+          }
+        })
+      });
+  };
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -71,7 +84,8 @@ class QuestionTemplates extends Component{
               openEditView={(item) => this.setState({
                 openedView: views.edit,
                 editItem: item
-              })}/>
+              })}
+              delete={this.deleteQuestion}/>
           </Col>
 
           <Col xs="12" lg="6">
@@ -92,7 +106,7 @@ export class QuestionsList extends Component {
   perPage = 5;
 
   state = {
-    currentPage: 1,
+    currentPage: 0,
     noPages: 1,
     visibleItems: [],
     allItems: []
@@ -104,7 +118,7 @@ export class QuestionsList extends Component {
       allItems: nextProps.questions
     });
 
-    this.toPage(0);
+    this.toPage(this.state.currentPage)
   }
 
   toPage = (pageNo) => {
@@ -149,7 +163,9 @@ export class QuestionsList extends Component {
                 <td>{q.Text}</td>
                 <td>{q.Type}</td>
                 <td>{q.ChoiceAnswerTemplates.map((a) => a.Text)}</td>
-                <td />
+                <td>
+                  <i onClick={() => this.props.delete(q.ID)} className="fa fa-minus-circle"/>
+                </td>
               </tr>
             )}
             </tbody>
