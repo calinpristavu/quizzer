@@ -23,19 +23,18 @@ func init() {
 func FindByUsername(uname string) (*User, error) {
 	u := &User{Username: uname}
 
-	var err error
 	res := h.db.Where(&u).
-		Preload("CurrentQuiz").
+		Preload("CurrentQuiz", "active = ?", true).
 		Preload("CurrentQuiz.Questions").
 		Preload("CurrentQuiz.Questions.ChoiceAnswers").
 		Preload("CurrentQuiz.Questions.TextAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
 		First(&u)
 	if res.RecordNotFound() {
-		err = fmt.Errorf("No user with username %s\n", uname)
+		return nil, fmt.Errorf("No user with username %s\n", uname)
 	}
 
-	return u, err
+	return u, nil
 }
 
 func FindByUsernameAndPassword(uname, pass string) (*User, error) {
@@ -44,12 +43,18 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 		Password: pass,
 	}
 
-	var err error
-	if h.db.Where(u).Preload("CurrentQuiz").First(u).RecordNotFound() {
-		err = fmt.Errorf("Bad credentials: %s, %s\n", uname, pass)
+	res := h.db.Where(&u).
+		Preload("CurrentQuiz", "active = ?", true).
+		Preload("CurrentQuiz.Questions").
+		Preload("CurrentQuiz.Questions.ChoiceAnswers").
+		Preload("CurrentQuiz.Questions.TextAnswer").
+		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
+		First(&u)
+	if res.RecordNotFound() {
+		return nil, fmt.Errorf("Bad credentials: %s, %s\n", uname, pass)
 	}
 
-	return u, err
+	return u, nil
 }
 
 func (u *User) Save() {
