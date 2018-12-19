@@ -10,10 +10,51 @@ import {
   Table
 } from 'reactstrap';
 
+class Users extends Component {
+  state = {
+    all: [],
+    online: []
+  };
+
+  componentDidMount() {
+    fetch("http://localhost:8001/new-api/users")
+      .then(r => r.json())
+      .then(r => {
+        this.setState({
+          all: r
+        })
+      });
+
+    fetch("http://localhost:8001/new-api/users-logged-in")
+      .then(r => r.json())
+      .then(r => {
+        this.setState({
+          online: r ? r : []
+        })
+      })
+  }
+
+  render() {
+    return (
+      <div className="animated fadeIn">
+        <Row>
+          <UserList
+            title="All"
+            users={this.state.all}/>
+          <UserList
+            title="Currently Online"
+            users={this.state.online}/>
+        </Row>
+      </div>
+    )
+  }
+}
+
 function UserRow(props) {
   const user = props.user;
   const userLink = `/users/${user.ID}`;
 
+  // Todo: Do we need this?
   const getBadge = (status) => {
     return status === 'Active' ? 'success' :
       status === 'Inactive' ? 'secondary' :
@@ -70,46 +111,6 @@ class UserList extends Component {
         </CardBody>
       </Card>
     </Col>;
-  }
-}
-
-class Users extends Component {
-  state = {
-    all: [],
-    online: []
-  };
-
-  componentDidMount() {
-    fetch("http://localhost:8001/new-api/users")
-      .then(r => r.json())
-      .then(r => {
-        this.setState({
-          all: r
-        })
-      });
-
-    fetch("http://localhost:8001/new-api/users-logged-in")
-      .then(r => r.json())
-      .then(r => {
-        this.setState({
-          online: r ? r : []
-        })
-      })
-  }
-
-  render() {
-    return (
-      <div className="animated fadeIn">
-        <Row>
-          <UserList
-            title="All"
-            users={this.state.all}/>
-          <UserList
-            title="Currently Online"
-            users={this.state.online}/>
-        </Row>
-      </div>
-    )
   }
 }
 
