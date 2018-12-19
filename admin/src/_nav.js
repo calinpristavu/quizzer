@@ -37,7 +37,7 @@ export default {
       },
       {
           name: 'Management',
-          url: '/theme/colors',
+          url: '/users',
           icon: 'icon-people',
       },
       {

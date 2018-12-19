@@ -197,6 +197,35 @@ func deleteQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func getUsers(w http.ResponseWriter, r *http.Request) {
+	var us []User
+	h.db.
+		Find(&us)
+
+	jsonResponse(w, us, http.StatusOK)
+}
+
+func getUser(w http.ResponseWriter, r *http.Request) {
+	var u User
+
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		w.WriteHeader(404)
+
+		return
+	}
+
+	res := h.db.
+		First(&u, id)
+	if res.RecordNotFound() {
+		w.WriteHeader(404)
+
+		return
+	}
+
+	jsonResponse(w, u, http.StatusOK)
+}
+
 // Helper to send json responses
 func jsonResponse(w http.ResponseWriter, payload interface{}, status int) {
 	w.Header().Set("Content-Type", "application/json")

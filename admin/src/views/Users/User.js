@@ -1,15 +1,37 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
-
-import usersData from './UsersData'
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Row,
+  Table
+} from 'reactstrap';
 
 class User extends Component {
+  state = {
+    user: {}
+  };
+
+  componentDidMount() {
+    fetch("http://localhost:8001/new-api/users/" + this.props.match.params.id)
+      .then((response) => response.json())
+      .then((response) => {
+        this.setState({
+          user: response
+        })
+      })
+  }
 
   render() {
 
-    const user = usersData.find( user => user.id.toString() === this.props.match.params.id)
+    const user = this.state.user;
 
-    const userDetails = user ? Object.entries(user) : [['id', (<span><i className="text-muted icon-ban"></i> Not found</span>)]]
+    const userDetails = user
+      ? Object.entries(user)
+      : [[
+        'id', (<span><i className="text-muted icon-ban" /> Not found</span>)
+      ]];
 
     return (
       <div className="animated fadeIn">
@@ -17,7 +39,9 @@ class User extends Component {
           <Col lg={6}>
             <Card>
               <CardHeader>
-                <strong><i className="icon-info pr-1"></i>User id: {this.props.match.params.id}</strong>
+                <strong>
+                  <i className="icon-info pr-1" />User id: {user.ID}
+                </strong>
               </CardHeader>
               <CardBody>
                   <Table responsive striped hover>
