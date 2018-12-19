@@ -34,7 +34,7 @@ class QuestionTemplates extends Component{
     questions: [
       {
         ID: 1,
-        Text: "Quesiton 1",
+        Text: "Question 1",
         Type: 1,
         ChoiceAnswerTemplates: ["Checkbox 1"]
       }
