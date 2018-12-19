@@ -24,7 +24,14 @@ func FindByUsername(uname string) (*User, error) {
 	u := &User{Username: uname}
 
 	var err error
-	if h.db.Where(u).Preload("CurrentQuiz").First(u).RecordNotFound() {
+	res := h.db.Where(&u).
+		Preload("CurrentQuiz").
+		Preload("CurrentQuiz.Questions").
+		Preload("CurrentQuiz.Questions.ChoiceAnswers").
+		Preload("CurrentQuiz.Questions.TextAnswer").
+		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
+		First(&u)
+	if res.RecordNotFound() {
 		err = fmt.Errorf("No user with username %s\n", uname)
 	}
 

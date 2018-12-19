@@ -42,7 +42,7 @@
                             <ul>
                                 {{range .ChoiceAnswers}}
                                     <li class="{{if eq .IsCorrect true}}text-success{{else}}text-danger{{end}}">
-                                        {{ if and .IsSelected }}
+                                        {{ if .IsSelected }}
                                             <i class="far fa-check-square"></i>
                                         {{else}}
                                             <i class="far fa-square"></i>
