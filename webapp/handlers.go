@@ -231,7 +231,9 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var qts []QuizTemplate
-	h.db.Find(&qts)
+	h.db.
+		Preload("Questions").
+		Find(&qts)
 
 	err := h.templating.home.Execute(w, struct {
 		User    User
