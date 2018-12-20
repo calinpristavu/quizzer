@@ -71,6 +71,10 @@ func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question) 
 	var err error
 
 	if r.Method == http.MethodPost {
+		err = r.ParseForm()
+		if err != nil {
+			log.Fatalf("could not parse form: %v", err)
+		}
 		err = question.saveChoices(r.Form["answer[]"], quiz)
 		if err != nil {
 			log.Fatalf("could not save answers: %v", err)
@@ -100,6 +104,10 @@ func textQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
 	var err error
 
 	if r.Method == http.MethodPost {
+		err = r.ParseForm()
+		if err != nil {
+			log.Fatalf("could not parse form: %v", err)
+		}
 		err = question.saveText(r.FormValue("answer"), quiz)
 		if err != nil {
 			log.Fatalf("could not save answer: %v", err)
@@ -129,6 +137,10 @@ func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Quest
 	var err error
 
 	if r.Method == http.MethodPost {
+		err = r.ParseForm()
+		if err != nil {
+			log.Fatalf("could not parse form: %v", err)
+		}
 		log.Println(r.FormValue("flow_diagram"))
 		err = question.saveFlowDiagram(r.FormValue("flow_diagram"), quiz)
 		if err != nil {
