@@ -259,11 +259,11 @@ class CreateStep1 extends Component {
       <div>
         <CardBody>
           <FormGroup row>
-            <Col md="12">
+            <div md="12">
               <Row>
                 <Col xs="12">
                   <FormGroup>
-                    <Label htmlFor="question-text">Name</Label>
+                    <Label>Name</Label>
                     <Input
                       type="text"
                       value={this.state.Name}
@@ -273,7 +273,26 @@ class CreateStep1 extends Component {
                   </FormGroup>
                 </Col>
               </Row>
-            </Col>
+              <Row>
+                <Col xs="12">
+                  <Label>Quiz Presets (WIP)</Label>
+                  <div>
+                    <FormGroup check inline>
+                      <Input className="form-check-input" type="radio" id="quiz-type-1" name="inline-radios" value="option1" />
+                      <Label className="form-check-label" check htmlFor="quiz-type-1">One</Label>
+                    </FormGroup>
+                    <FormGroup check inline>
+                      <Input className="form-check-input" type="radio" id="quiz-type-2" name="inline-radios" value="option2" />
+                      <Label className="form-check-label" check htmlFor="quiz-type-2">Two</Label>
+                    </FormGroup>
+                    <FormGroup check inline>
+                      <Input className="form-check-input" type="radio" id="quiz-type-3" name="inline-radios" value="option3" />
+                      <Label className="form-check-label" check htmlFor="quiz-type-3">Three</Label>
+                    </FormGroup>
+                  </div>
+                </Col>
+              </Row>
+            </div>
           </FormGroup>
         </CardBody>
         <CardFooter>
