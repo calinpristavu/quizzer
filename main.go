@@ -15,19 +15,10 @@ import (
 )
 
 func main() {
-	// TODO: ADD PROPPER CORS HANDLING!!!!!
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowCredentials: true,
-		// Enable Debugging for testing, consider disabling in production
-		Debug: true,
-	})
-
-	appPort := flag.String("appPort", "8000", "app port")
 	dbHost := flag.String("dbHost", "127.0.0.1", "db host")
 	dbUser := flag.String("dbUser", "root", "db user")
 	dbPass := flag.String("dbPass", "", "db password")
+	appPort := flag.String("appPort", "8000", "app port")
 	flag.Parse()
 
 	db := initDb(*dbHost, *dbUser, *dbPass)
@@ -36,14 +27,7 @@ func main() {
 
 	webapp.Init(db, r)
 
-	fmt.Printf("App running on: %s\n", *appPort)
-	err := http.ListenAndServe(
-		fmt.Sprintf(":%s", *appPort),
-		c.Handler(r),
-	)
-	if err != nil {
-		panic(err)
-	}
+	bootWs(r, *appPort)
 }
 
 func initDb(host, user, pass string) *gorm.DB {
@@ -55,4 +39,24 @@ func initDb(host, user, pass string) *gorm.DB {
 	}
 
 	return db.Debug()
+}
+
+func bootWs(r *mux.Router, port string) {
+	// TODO: ADD PROPPER CORS HANDLING!!!!!
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowCredentials: true,
+		// Enable Debugging for testing, consider disabling in production
+		Debug: true,
+	})
+
+	fmt.Printf("App running on: %s\n", port)
+	err := http.ListenAndServe(
+		fmt.Sprintf(":%s", port),
+		c.Handler(r),
+	)
+	if err != nil {
+		panic(err)
+	}
 }
