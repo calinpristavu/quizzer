@@ -9,8 +9,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/qor/admin"
-	"github.com/qor/qor"
 	"github.com/rs/cors"
 
 	"github.com/calinpristavu/quizzer/webapp"
@@ -38,9 +36,6 @@ func main() {
 
 	webapp.Init(db, r)
 
-	// addAdmin(db, r)
-	addAPI(db, r)
-
 	fmt.Printf("App running on: %s\n", *appPort)
 	err := http.ListenAndServe(
 		fmt.Sprintf(":%s", *appPort),
@@ -60,69 +55,4 @@ func initDb(host, user, pass string) *gorm.DB {
 	}
 
 	return db.Debug()
-}
-
-func addAdmin(db *gorm.DB, r *mux.Router) {
-	Admin := admin.New(&admin.AdminConfig{DB: db})
-
-	Admin.AddResource(&webapp.User{})
-	questionAdmin := Admin.AddResource(&webapp.QuestionTemplate{})
-	questionAdmin.Meta(&admin.Meta{
-		Name: "Type",
-		Config: &admin.SelectOneConfig{
-			Collection: [][]string{
-				{"1", "Checkboxes"},
-				{"2", "Free text"},
-				{"3", "Flow Diagram"},
-			},
-		},
-	})
-	Admin.AddResource(&webapp.ChoiceAnswerTemplate{})
-	quizAdmin := Admin.AddResource(&webapp.QuizTemplate{})
-	quizAdmin.Meta(&admin.Meta{
-		Name: "Questions",
-		Config: &admin.SelectManyConfig{
-			Placeholder: "Chose a question",
-			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
-				var qts []*webapp.QuestionTemplate
-				context.GetDB().Find(&qts)
-
-				for _, qt := range qts {
-					idStr := fmt.Sprintf("%d", qt.ID)
-					var option = []string{idStr, qt.Text}
-					options = append(options, option)
-				}
-
-				return options
-			},
-		},
-	})
-
-	m := http.NewServeMux()
-	Admin.MountTo("/admin", m)
-	r.PathPrefix("/admin").Handler(m)
-}
-
-func addAPI(db *gorm.DB, r *mux.Router) {
-	API := admin.New(&qor.Config{DB: db})
-	API.AddResource(&webapp.User{})
-	API.AddResource(&webapp.QuizTemplate{})
-	question := API.AddResource(&webapp.QuestionTemplate{})
-	_, _ = question.AddSubResource("ChoiceAnswerTemplates")
-	_, _ = question.AddSubResource("FlowDiagramAnswerTemplates")
-
-	m := http.NewServeMux()
-
-	API.MountTo("/api", m)
-
-	// FIXME: THESE LINES DISABLE CSRF PROTECTION!!!! this is bad in prod.
-	API.
-		GetRouter().
-		GetMiddleware("csrf_check").
-		Handler = func(context *admin.Context, middleware *admin.Middleware) {
-
-		middleware.Next(context)
-	}
-
-	r.PathPrefix("/api").Handler(m)
 }
