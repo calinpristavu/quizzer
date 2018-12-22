@@ -10,6 +10,7 @@ type User struct {
 	gorm.Model
 	Username      string
 	Password      string `json:"-"`
+	Role          int    `sql:"DEFAULT:0"` // fixme: for now, 0 is user, 1 is admin
 	CurrentQuizID *uint
 	CurrentQuiz   *Quiz
 }
@@ -59,4 +60,14 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 
 func (u *User) Save() {
 	h.db.Save(u)
+}
+
+type Role struct {
+	ID int
+}
+
+func (u User) IsGranted(r Role) bool {
+	// TODO: implement role hierarchy
+
+	return u.Role == r.ID
 }

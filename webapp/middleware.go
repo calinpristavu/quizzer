@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func AuthMiddleware(next http.Handler) http.Handler {
+func UserSession(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("user")
 		if err != nil {
@@ -30,5 +30,19 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		ctx := context.WithValue(r.Context(), "user", LoggedIn[username])
 
 		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+func RoleUser(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		u := r.Context().Value("user").(*User)
+
+		if !u.IsGranted(Role{0}) {
+			http.Error(w, "Forbidden", http.StatusForbidden)
+
+			return
+		}
+
+		next.ServeHTTP(w, r)
 	})
 }

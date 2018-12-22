@@ -261,11 +261,11 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
 func myAccount(w http.ResponseWriter, r *http.Request) {
 	validationErrors := make(map[string]interface{}, 1)
-	u := r.Context().Value("user")
+	u := r.Context().Value("user").(*User)
 
 	if r.FormValue("save") != "" {
-		u.(*User).Username = r.FormValue("username")
-		u.(*User).Save()
+		u.Username = r.FormValue("username")
+		u.Save()
 	}
 
 	err := h.templating.myAccount.Execute(w, struct {
