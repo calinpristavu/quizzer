@@ -69,9 +69,26 @@ class ResultList extends Component {
   };
 
   static computePercentCompleted(questions) {
+    return questions.reduce(
+      (carry, q) => carry + (q.IsAnswered ? 1 : 0), 
+      0
+    ) * 100 / questions.length
+  }
+
+  static countCorrect(questions) {
     return questions.reduce((carry, q) => {
-      return carry + (q.IsAnswered ? 1 : 0)
-    }, 0) * 100 / questions.length
+      switch (q.Type) {
+        case 1:
+          // considered correct if all checked answers are correct and no correct answer is missed
+          return carry + q.ChoiceAnswers.reduce((ok, a) => a.IsCorrect === a.IsSelected ? ok : 0, 1);
+        case 2:
+          return carry + q.TextAnswer.IsCorrect;
+        case 3:
+          return carry + q.FlowDiagramAnswer.IsCorrect;
+        default:
+          return carry;
+      }
+    }, 0)
   }
 
   static computeTimeSpent(start, end) {
@@ -109,7 +126,7 @@ class ResultList extends Component {
                  <td>{q.User ? q.User.Username : '-'}</td>
                  <td>{q.Name}</td>
                  <td>{ResultList.computePercentCompleted(q.Questions)} <small className="text-muted">%</small></td>
-                 <td>{100} / {q.Questions.length}</td>
+                 <td>{ResultList.countCorrect(q.Questions)} / {q.Questions.length}</td>
                  <td>{q.Active ? 'In Progress' : 'Finished'}</td>
                  <td>{q.Active
                    ? '-'

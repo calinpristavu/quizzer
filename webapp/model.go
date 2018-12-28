@@ -41,12 +41,14 @@ type TextAnswer struct {
 	gorm.Model
 	QuestionID uint
 	Text       string `sql:"size:999999"`
+	IsCorrect  bool
 }
 
 type FlowDiagramAnswer struct {
 	gorm.Model
 	QuestionID uint
 	Text       string `sql:"size:999999"`
+	IsCorrect  bool
 }
 
 func newQuiz(u *User, noQ int) *Quiz {

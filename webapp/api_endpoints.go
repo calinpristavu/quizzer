@@ -240,6 +240,9 @@ func getQuizzes(w http.ResponseWriter, r *http.Request) {
 	var qs []Quiz
 	h.db.
 		Preload("Questions").
+		Preload("Questions.ChoiceAnswers").
+		Preload("Questions.TextAnswer").
+		Preload("Questions.FlowDiagramAnswer").
 		Preload("User").
 		Order("id desc").
 		Find(&qs)
