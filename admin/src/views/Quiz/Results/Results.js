@@ -9,12 +9,18 @@ import {
   Table,
   Pagination,
   PaginationItem,
-  PaginationLink
+  PaginationLink,
+  FormGroup,
+  Label,
+  Input
 } from 'reactstrap'
+import Select from "react-select";
+var nestedProp = require('nested-property');
 
 class Results extends Component {
   state = {
-    quizzes: []
+    quizzes: [],
+    filters: [] // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
   };
 
   componentDidMount() {
@@ -23,13 +29,101 @@ class Results extends Component {
       .then(r => this.setState({quizzes: r}))
   }
 
+  getFilteredQuizzes = () => {
+    return this.state.quizzes.filter(q => {
+      return this.state.filters.reduce(
+        (ok, f) => ok && f.values.includes(nestedProp.get(q, f.propertyPath)),
+        true
+      );
+    });
+  };
+
+  addFilter = (propertyPath, val) => {
+    this.setState((oldState) => {
+      const filters = oldState.filters;
+      let filter = filters.find(f => f.propertyPath === propertyPath);
+      if (filter === undefined) {
+        filter = {
+          propertyPath: propertyPath
+        }
+      }
+
+      filter.values = val;
+
+      filters.push(filter);
+      return {filters: filters}
+    })
+  };
+
+  clearFilter = (propertyPath) => {
+    this.setState((oldState) => {
+      const filters = oldState.filters;
+
+      return {
+        filters: filters.filter(f => f.propertyPath !== propertyPath)
+      }
+    })
+  };
+
   render() {
     return (
       <div className="animated fadeIn">
         <Row>
-          <ResultList
-            items={this.state.quizzes}/>
+          <Col xl={6}>
+            <Card>
+              <CardHeader>
+                <i className="fa fa-align-justify"/> Quiz Results <small className="text-muted">list</small>
+                <ResultFilters
+                  addFilter={this.addFilter}
+                  clearFilter={this.clearFilter}
+                  items={this.state.quizzes}/>
+              </CardHeader>
+
+              <ResultList
+                items={this.getFilteredQuizzes()}/>
+            </Card>
+          </Col>
         </Row>
+      </div>
+    )
+  }
+}
+
+class ResultFilters extends Component {
+  static uniqueUsers = (quizzes) => {
+    return quizzes.reduce((unique, q) => {
+      if (unique.find(u => u.ID === q.User.ID) === undefined) {
+        unique.push(q.User)
+      }
+
+      return unique
+    }, []);
+  };
+
+  userFilter = (options) => {
+    const filterName = 'User.ID';
+
+    if (options.length === 0) {
+      return this.props.clearFilter(filterName)
+    }
+    this.props.addFilter(filterName, options.map(o => o.value))
+  };
+
+  render() {
+    return (
+      <div>
+        <Col xs="4">
+          <FormGroup>
+            <Select
+              isMulti
+              placeholder="Filter by user"
+              onChange={this.userFilter}
+              options={ResultFilters.uniqueUsers(this.props.items).map(u => ({
+                value: u.ID,
+                label: u.Username
+              }))}/>
+          </FormGroup>
+        </Col>
       </div>
     )
   }
@@ -101,11 +195,7 @@ class ResultList extends Component {
 
   render() {
     return (
-     <Col xl={6}>
-       <Card>
-         <CardHeader>
-           <i className="fa fa-align-justify"/> Quiz Results <small className="text-muted">list</small>
-         </CardHeader>
+      <div>
          <CardBody>
            <Table>
              <thead>
@@ -170,8 +260,7 @@ class ResultList extends Component {
            </Pagination>
            }
          </CardFooter>
-       </Card>
-     </Col>
+      </div>
     )
   }
 }
