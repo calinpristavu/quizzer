@@ -36,11 +36,19 @@ func Init(db *gorm.DB, r *mux.Router) {
 
 func registerTemplates() {
 	var err error
-	h.templating.choiceQuestion, err = template.ParseFiles("templates/choice_question.gohtml", "templates/header.gohtml", "templates/footer.gohtml")
+	h.templating.choiceQuestion, err = template.ParseFiles(
+		"templates/choice_question.gohtml",
+		"templates/header.gohtml",
+		"templates/footer.gohtml",
+	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
-	h.templating.textQuestion, err = template.ParseFiles("templates/text_question.gohtml", "templates/header.gohtml", "templates/footer.gohtml")
+	h.templating.textQuestion, err = template.ParseFiles(
+		"templates/text_question.gohtml",
+		"templates/header.gohtml",
+		"templates/footer.gohtml",
+	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
@@ -48,11 +56,20 @@ func registerTemplates() {
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
-	h.templating.home, err = template.ParseFiles("templates/home.gohtml", "templates/header.gohtml", "templates/footer.gohtml")
+	h.templating.home, err = template.ParseFiles(
+		"templates/home.gohtml",
+		"templates/header.gohtml",
+		"templates/footer.gohtml",
+	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
-	h.templating.myAccount, err = template.ParseFiles("templates/myAccount.gohtml", "templates/header.gohtml", "templates/footer.gohtml", "templates/account_nav.gohtml")
+	h.templating.myAccount, err = template.ParseFiles(
+		"templates/myAccount.gohtml",
+		"templates/header.gohtml",
+		"templates/footer.gohtml",
+		"templates/account_nav.gohtml",
+	)
 	if err != nil {
 		log.Fatalf("could not parse template: %v", err)
 	}
@@ -133,4 +150,6 @@ func registerRoutes(public *mux.Router) {
 	api.Path("/new-api/users").Methods("GET").HandlerFunc(getUsers)
 	api.Path("/new-api/users-logged-in").Methods("GET").HandlerFunc(getUsersLoggedIn)
 	api.Path("/new-api/users/{id}").Methods("GET").HandlerFunc(getUser)
+
+	api.Path("/new-api/quizzes").Methods("GET").HandlerFunc(getQuizzes)
 }

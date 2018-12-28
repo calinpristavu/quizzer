@@ -236,6 +236,17 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, u, http.StatusOK)
 }
 
+func getQuizzes(w http.ResponseWriter, r *http.Request) {
+	var qs []Quiz
+	h.db.
+		Preload("Questions").
+		Preload("User").
+		Order("id desc").
+		Find(&qs)
+
+	jsonResponse(w, qs, http.StatusOK)
+}
+
 // Helper to send json responses
 func jsonResponse(w http.ResponseWriter, payload interface{}, status int) {
 	w.Header().Set("Content-Type", "application/json")

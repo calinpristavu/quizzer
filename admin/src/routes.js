@@ -38,6 +38,7 @@ const Typography = React.lazy(() => import('./views/Theme/Typography'));
 const Widgets = React.lazy(() => import('./views/Widgets/Widgets'));
 const Users = React.lazy(() => import('./views/Users/Users'));
 const User = React.lazy(() => import('./views/Users/User'));
+const Results = React.lazy(() => import('./views/Quiz/Results/Results'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -46,6 +47,8 @@ const routes = [
   { path: '/quiz/quiz-templates', name: 'Quiz Templates', component: QuizTemplates },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/quiz/results', exact: true,  name: 'Results', component: Results },
+  // { path: '/results/:id', exact: true, name: 'User Details', component: User },
 
 
 

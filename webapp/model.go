@@ -11,6 +11,7 @@ const questionsPerQuiz = 10
 
 type Quiz struct {
 	gorm.Model
+	Name      string
 	UserID    uint
 	User      *User
 	Questions []*Question
@@ -51,6 +52,7 @@ type FlowDiagramAnswer struct {
 func newQuiz(u *User, noQ int) *Quiz {
 	q := &Quiz{
 		UserID: u.ID,
+		Name:   "Generated",
 		Active: true,
 	}
 

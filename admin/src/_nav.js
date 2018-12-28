@@ -42,7 +42,7 @@ export default {
       },
       {
           name: 'Results',
-          url: '/theme/colors',
+          url: '/quiz/results',
           icon: 'icon-speedometer',
       },
     {
