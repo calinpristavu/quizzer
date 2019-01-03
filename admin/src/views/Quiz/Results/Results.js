@@ -13,6 +13,7 @@ import {
   FormGroup,
 } from 'reactstrap'
 import Select from "react-select";
+import moment from 'moment';
 var nestedProp = require('nested-property');
 
 class Results extends Component {
@@ -260,11 +261,10 @@ class ResultList extends Component {
   }
 
   static computeTimeSpent(start, end) {
-    return Date.diff(
-      'n',
-      new Date(start),
-      new Date(end)
-    )
+    const mStart = moment(start);
+    const mEnd = moment(end);
+
+    return moment.duration(mEnd.diff(mStart)).humanize()
   }
 
   render() {
@@ -295,12 +295,7 @@ class ResultList extends Component {
                  <td>{q.Active ? 'In Progress' : 'Finished'}</td>
                  <td>{q.Active
                    ? '-'
-                   : <span>
-                     {ResultList.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}
-                     <small className="text-muted">
-                       min
-                     </small>
-                   </span>
+                   : <span>{ResultList.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}</span>
                  }</td>
                  <td>
                    <i className="fa fa-eye" onClick={() => this.props.openQuiz(q.ID)}/>
@@ -342,19 +337,5 @@ class ResultList extends Component {
     )
   }
 }
-
-// datepart: 'y', 'm', 'w', 'd', 'h', 'n', 's'
-Date.diff = function(datepart, fromdate, todate) {
-  datepart = datepart.toLowerCase();
-  var diff = todate - fromdate;
-  var divideBy = {
-    w:604800000,
-    d:86400000,
-    h:3600000,
-    n:60000,
-    s:1000 };
-
-  return Math.ceil( diff/divideBy[datepart]);
-};
 
 export default Results

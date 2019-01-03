@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import {
   Card,
   CardBody,
@@ -27,12 +28,6 @@ class User extends Component {
 
     const user = this.state.user;
 
-    const userDetails = user
-      ? Object.entries(user)
-      : [[
-        'id', (<span><i className="text-muted icon-ban" /> Not found</span>)
-      ]];
-
     return (
       <div className="animated fadeIn">
         <Row>
@@ -44,18 +39,44 @@ class User extends Component {
                 </strong>
               </CardHeader>
               <CardBody>
-                  <Table responsive striped hover>
+                  <Table responsive striped>
                     <tbody>
-                      {
-                        userDetails.map(([key, value]) => {
-                          return (
-                            <tr key={key}>
-                              <td>{`${key}:`}</td>
-                              <td><strong>{value}</strong></td>
-                            </tr>
-                          )
-                        })
-                      }
+                      <tr>
+                        <td>ID:</td>
+                        <td><strong>{user.ID}</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Username</td>
+                        <td><strong>{user.Username}</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Role</td>
+                        <td><strong>{user.Role}</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Created At:</td>
+                        <td><strong>{moment(user.CreatedAt).format('DD-MM-YYYY [at] k:mm')}</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Updated At:</td>
+                        <td>
+                          <strong>
+                            {user.UpdatedAt && moment(user.UpdatedAt).format('DD-MM-YYYY [at] k:mm')}
+                          </strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Deleted At:</td>
+                        <td>
+                          <strong>
+                            {user.DeletedAt && moment(user.DeletedAt).format('DD-MM-YYYY [at] k:mm')}
+                          </strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Current Quiz ID</td>
+                        <td><strong>{user.CurrentQuizID}</strong></td>
+                      </tr>
                     </tbody>
                   </Table>
               </CardBody>

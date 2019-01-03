@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import {
   Badge,
   Card,
@@ -71,9 +72,8 @@ function UserRow(props) {
       <td>
         <Link to={userLink}>{user.Username}</Link>
       </td>
-      <td>{user.CreatedAt}</td>
-      {/*<td>{user.role}</td>*/}
-      <td>Smecher</td>
+      <td>{moment(user.CreatedAt).format('DD-MM-YYYY [at] k:mm')}</td>
+      <td>{user.Role}</td>
       <td>
         <Link to={userLink}>
           {/*<Badge color={getBadge(user.status)}>{user.status}</Badge>*/}
