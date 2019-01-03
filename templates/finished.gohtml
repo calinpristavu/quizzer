@@ -47,7 +47,9 @@
                                 {{else if eq .Type 2}}
                                     <p>{{.TextAnswer.Text}}</p>
                                 {{else if eq .Type 3}}
-                                    <div class="flow-diagram" data-json="{{.FlowDiagramAnswer.Text}}"></div>
+                                    <div class="flow-diagram">
+                                        {{raw .FlowDiagramAnswer.SVG}}
+                                    </div>
                                 {{end}}
                             </td>
                         </tr>
@@ -55,30 +57,12 @@
                 </tbody>
             </table>
             <div class="text-center">
-        <form action="/finished" method="POST">
-            <button type="submit" class="btn btn-success">Back home</button>
-        </form>
-    </div>
+                <form action="/finished" method="POST">
+                    <button type="submit" class="btn btn-success">Back home</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="diagram" style="display: none;flex-grow: 1; height: 750px; border: solid 1px black"></div>
-
-{{ template "flow_diagram_js" }}
-
-<script>
-    var flowDiagrams = document.querySelectorAll(".flow-diagram");
-    var diagHolder = document.querySelector("#diagram");
-
-    flowDiagrams.forEach(function(element) {
-        var myDiagram = initDiagram(diagHolder);
-
-        setDiagramStyles(myDiagram);
-
-        myDiagram.model = go.Model.fromJson(element.getAttribute('data-json'));
-
-        element.appendChild(myDiagram.makeSVG({ scale: 1.0 }));
-    });
-</script>
 {{ template "footer" }}
