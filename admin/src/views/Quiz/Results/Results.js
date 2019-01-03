@@ -11,8 +11,6 @@ import {
   PaginationItem,
   PaginationLink,
   FormGroup,
-  Label,
-  Input
 } from 'reactstrap'
 import Select from "react-select";
 var nestedProp = require('nested-property');
@@ -20,7 +18,8 @@ var nestedProp = require('nested-property');
 class Results extends Component {
   state = {
     quizzes: [],
-    filters: [] // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
+    filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
+    openQuiz: null
   };
 
   componentDidMount() {
@@ -28,6 +27,12 @@ class Results extends Component {
       .then(r => r.json())
       .then(r => this.setState({quizzes: r}))
   }
+
+  openQuiz = (id) => {
+    this.setState({
+      openQuiz: id
+    })
+  };
 
   getFilteredQuizzes = () => {
     return this.state.quizzes.filter(q => {
@@ -80,29 +85,102 @@ class Results extends Component {
               </CardHeader>
 
               <ResultList
+                openQuiz={this.openQuiz}
                 items={this.getFilteredQuizzes()}/>
             </Card>
           </Col>
+          {this.state.openQuiz &&
+            <SingleResult
+              quiz={this.state.quizzes.find(q => q.ID === this.state.openQuiz)} />
+          }
         </Row>
       </div>
     )
   }
 }
 
+class SingleResult extends Component {
+
+  renderQuestion = (q, k) => {
+    switch (q.Type) {
+      case 1:
+        return this.renderChoiceQuestion(q, k);
+      case 2:
+        return this.renderTextQuestion(q, k);
+      case 3:
+        return this.renderFlowDiagramQuestion(q, k);
+      default:
+        console.log('Unknown diagram type');
+
+        return null;
+    }
+  };
+
+  renderFlowDiagramQuestion = (q, k) => {
+    return (
+      <div key={k}>
+        <h3>{q.Text}</h3>
+        <div dangerouslySetInnerHTML={{__html: q.FlowDiagramAnswer.SVG}}/>
+      </div>
+    )
+  };
+
+  renderTextQuestion = (q, k) => {
+    return (
+      <div key={k}>
+        <h3>{q.Text}</h3>
+      </div>
+    )
+  };
+
+  renderChoiceQuestion = (q, k) => {
+    return (
+      <div key={k}>
+        <h3>{q.Text}</h3>
+        <ul>
+          {q.ChoiceAnswers.map((a, i) => (
+            <li key={i}>{a.Text}</li>
+          ))}
+        </ul>
+      </div>
+    )
+  };
+
+  render() {
+    return (
+      <Col xl={6}>
+        <Card>
+          <CardHeader>
+            <i className="fa fa-eye"/> Quiz "{this.props.quiz.Name}" for user {this.props.quiz.User.Username}
+          </CardHeader>
+          <CardBody>
+            {this.props.quiz.Questions.map((q, k) => (
+              this.renderQuestion(q, k)
+            ))}
+          </CardBody>
+          <CardFooter>Footer</CardFooter>
+        </Card>
+      </Col>
+    )
+  }
+}
+
 class ResultFilters extends Component {
-  static uniqueUsers = (quizzes) => {
+
+  static buildUserOptions = (quizzes) => {
     return quizzes.reduce((unique, q) => {
-      if (unique.find(u => u.ID === q.User.ID) === undefined) {
-        unique.push(q.User)
+      if (unique.find(u => u.value === q.User.ID) === undefined) {
+        unique.push({
+          value: q.User.ID,
+          label: q.User.Username
+        })
       }
 
       return unique
     }, []);
   };
 
-  userFilter = (options) => {
-    const filterName = 'User.ID';
-
+  addFilter = (options, filterName) => {
     if (options.length === 0) {
       return this.props.clearFilter(filterName)
     }
@@ -117,11 +195,8 @@ class ResultFilters extends Component {
             <Select
               isMulti
               placeholder="Filter by user"
-              onChange={this.userFilter}
-              options={ResultFilters.uniqueUsers(this.props.items).map(u => ({
-                value: u.ID,
-                label: u.Username
-              }))}/>
+              onChange={(opt) => this.addFilter(opt, 'User.ID')}
+              options={ResultFilters.buildUserOptions(this.props.items)}/>
           </FormGroup>
         </Col>
       </div>
@@ -207,6 +282,7 @@ class ResultList extends Component {
                   <th>Score</th>
                   <th>Status</th>
                   <th>Time spent</th>
+                  <th></th>
                 </tr>
              </thead>
              <tbody>
@@ -227,6 +303,9 @@ class ResultList extends Component {
                      </small>
                    </span>
                  }</td>
+                 <td>
+                   <i className="fa fa-eye" onClick={() => this.props.openQuiz(q.ID)}/>
+                 </td>
                </tr>
              )}
              </tbody>
