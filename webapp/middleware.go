@@ -37,7 +37,7 @@ func RoleUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		u := r.Context().Value("user").(*User)
 
-		if !u.IsGranted(Role{0}) {
+		if !u.IsGranted(roleUser) {
 			http.Error(w, "Forbidden", http.StatusForbidden)
 
 			return

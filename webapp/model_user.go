@@ -10,7 +10,8 @@ type User struct {
 	gorm.Model
 	Username      string
 	Password      string `json:"-"`
-	Role          int    `sql:"DEFAULT:0"` // fixme: for now, 0 is user, 1 is admin
+	RoleID        int    `sql:"DEFAULT:0"`
+	Role          Role   `sql:"-"`
 	CurrentQuizID *uint
 	CurrentQuiz   *Quiz
 }
@@ -35,6 +36,12 @@ func FindByUsername(uname string) (*User, error) {
 		return nil, fmt.Errorf("No user with username %s\n", uname)
 	}
 
+	r, err := roleRoot.findChildWithId(u.RoleID)
+	if err != nil {
+		return nil, fmt.Errorf("could not assign role to user %d: %v", u.ID, err)
+	}
+
+	u.Role = r
 	return u, nil
 }
 
@@ -63,11 +70,43 @@ func (u *User) Save() {
 }
 
 type Role struct {
-	ID int
+	ID       int
+	Name     string
+	Children []Role
 }
 
-func (u User) IsGranted(r Role) bool {
-	// TODO: implement role hierarchy
+// Roles
+var (
+	roleDumb  = Role{ID: 999, Name: "dumb", Children: []Role{}}
+	roleAdmin = Role{ID: 1, Name: "admin_only", Children: []Role{}}
+	roleUser  = Role{ID: 2, Name: "user", Children: []Role{roleDumb}}
+	roleRoot  = Role{
+		ID:   0,
+		Name: "root",
+		Children: []Role{
+			roleAdmin,
+			roleUser,
+		},
+	}
+)
 
-	return u.Role == r.ID
+func (u User) IsGranted(r Role) bool {
+	_, err := u.Role.findChildWithId(r.ID)
+
+	return err == nil
+}
+
+func (r Role) findChildWithId(id int) (Role, error) {
+	if r.ID == id {
+		return r, nil
+	}
+
+	for _, c := range r.Children {
+		found, err := c.findChildWithId(id)
+		if err == nil {
+			return found, nil
+		}
+	}
+
+	return Role{}, fmt.Errorf("role %d not found", id)
 }
