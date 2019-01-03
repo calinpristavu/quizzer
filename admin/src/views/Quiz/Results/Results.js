@@ -158,7 +158,6 @@ class SingleResult extends Component {
               this.renderQuestion(q, k)
             ))}
           </CardBody>
-          <CardFooter>Footer</CardFooter>
         </Card>
       </Col>
     )
