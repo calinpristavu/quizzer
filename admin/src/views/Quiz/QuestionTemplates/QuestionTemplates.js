@@ -41,7 +41,7 @@ class QuestionTemplates extends Component{
   };
 
   componentDidMount = () => {
-    fetch("http://localhost:8001/new-api/question-templates")
+    fetch(process.env.REACT_APP_API_BASE_URL + "/question-templates")
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -60,7 +60,7 @@ class QuestionTemplates extends Component{
   };
 
   deleteQuestion = (qId) => {
-    fetch("http://localhost:8001/new-api/question-templates/" + qId, {
+    fetch(process.env.REACT_APP_API_BASE_URL + "/question-templates/" + qId, {
       method: "DELETE"
     })
       .then(() => {
@@ -203,8 +203,7 @@ class CreateQuestion extends Component {
   };
 
   create = () => {
-    // TODO: extract backend domain name to global var.
-    fetch("http://localhost:8001/new-api/question-templates", {
+    fetch(process.env.REACT_APP_API_BASE_URL + "/question-templates", {
       method: "POST",
       body: JSON.stringify(this.state),
       headers: {

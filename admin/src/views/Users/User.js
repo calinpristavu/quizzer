@@ -23,7 +23,7 @@ class User extends Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:8001/new-api/users/" + this.props.match.params.id)
+    fetch(process.env.REACT_APP_API_BASE_URL + "/users/" + this.props.match.params.id)
       .then((response) => response.json())
       .then((response) => {
         this.setState({

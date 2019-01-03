@@ -40,7 +40,7 @@ class QuizTemplates extends Component {
   };
 
   deleteQuiz = (qId) => {
-    fetch("http://localhost:8001/new-api/quiz-templates/" + qId, {
+    fetch(process.env.REACT_APP_API_BASE_URL + "/quiz-templates/" + qId, {
       method: "DELETE"
     })
       .then(() => {
@@ -53,7 +53,7 @@ class QuizTemplates extends Component {
   };
 
   componentDidMount = () => {
-    fetch("http://localhost:8001/new-api/quiz-templates")
+    fetch(process.env.REACT_APP_API_BASE_URL + "/quiz-templates")
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -204,7 +204,7 @@ class CreateQuiz extends Component {
     const quiz = this.state.quiz;
     quiz.Questions = qIds.map(id => ({"ID": id}));
 
-    fetch("http://localhost:8001/new-api/quiz-templates", {
+    fetch(process.env.REACT_APP_API_BASE_URL + "/quiz-templates", {
       method: "POST",
       body: JSON.stringify(quiz)
     })
@@ -300,7 +300,7 @@ class CreateStep2 extends Component {
   };
 
   componentDidMount = () => {
-    fetch("http://localhost:8001/new-api/question-templates")
+    fetch(process.env.REACT_APP_API_BASE_URL + "/question-templates")
       .then((response) => response.json())
       .then((response) => {
         this.setState({
