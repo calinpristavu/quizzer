@@ -12,13 +12,21 @@ import (
 func startQuiz(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*User)
 
-	if id, ok := mux.Vars(r)["foo"]; ok {
+	if id, ok := mux.Vars(r)["id"]; ok {
 		intId, err := strconv.Atoi(id)
 		if err != nil {
 			log.Fatalf("cannot interpret %s as int: %v", id, err)
 		}
-		q := find(intId)
-		u.CurrentQuiz = &q
+
+		var qt QuizTemplate
+
+		h.db.
+			Preload("Questions").
+			Preload("Questions.ChoiceAnswerTemplates").
+			Preload("Questions.FlowDiagramAnswerTemplate").
+			First(&qt, intId)
+
+		u.CurrentQuiz = qt.start(u)
 	} else {
 		u.CurrentQuiz = newQuiz(u, questionsPerQuiz)
 	}
@@ -141,8 +149,11 @@ func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Quest
 		if err != nil {
 			log.Fatalf("could not parse form: %v", err)
 		}
-		log.Println(r.FormValue("flow_diagram"))
-		err = question.saveFlowDiagram(r.FormValue("flow_diagram"), quiz)
+		err = question.saveFlowDiagram(
+			r.FormValue("flow_diagram_json"),
+			r.FormValue("flow_diagram_svg"),
+			quiz,
+		)
 		if err != nil {
 			log.Fatalf("could not save answer: %v", err)
 		}

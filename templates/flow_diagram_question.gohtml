@@ -12,7 +12,8 @@
             </div>
 
             <form name="flow_diagram_question" action="/question" method="POST" onsubmit="return save(this);">
-                <input type="hidden" id="diagram-json" name="flow_diagram">
+                <input type="hidden" id="diagram-json" name="flow_diagram_json">
+                <input type="hidden" id="diagram-svg" name="flow_diagram_svg">
                 <button type="submit" id="save-button" class="btn btn-primary" disabled>Next ></button>
             </form>
             <ul>
@@ -60,7 +61,8 @@
 
     // Show the diagram's model in JSON format that the user may edit
     function save() {
-        document.forms['flow_diagram_question']['flow_diagram'].value = myDiagram.model.toJson();
+        document.forms['flow_diagram_question']['flow_diagram_json'].value = myDiagram.model.toJson();
+        document.forms['flow_diagram_question']['flow_diagram_svg'].value = myDiagram.makeSvg().outerHTML;
         myDiagram.isModified = false;
     }
 

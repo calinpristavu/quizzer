@@ -48,6 +48,7 @@ type FlowDiagramAnswer struct {
 	gorm.Model
 	QuestionID uint
 	Text       string `sql:"size:999999"`
+	SVG        string `sql:"size:999999"`
 	IsCorrect  bool
 }
 
@@ -141,8 +142,9 @@ func (q *Question) saveText(text string, quiz *Quiz) error {
 	return nil
 }
 
-func (q *Question) saveFlowDiagram(text string, quiz *Quiz) error {
-	q.FlowDiagramAnswer.Text = text
+func (q *Question) saveFlowDiagram(json string, svg string, quiz *Quiz) error {
+	q.FlowDiagramAnswer.Text = json
+	q.FlowDiagramAnswer.SVG = svg
 	q.IsAnswered = true
 	h.db.Save(q)
 
@@ -179,7 +181,7 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
 	h.db.Save(&q)
 
 	q.TextAnswer = &TextAnswer{Text: "", QuestionID: q.ID}
-	q.FlowDiagramAnswer = &FlowDiagramAnswer{Text: "", QuestionID: q.ID}
+	q.FlowDiagramAnswer = &FlowDiagramAnswer{Text: "", SVG: "", QuestionID: q.ID}
 	for _, cat := range qt.ChoiceAnswerTemplates {
 		ca := &ChoiceAnswer{
 			QuestionID: q.ID,

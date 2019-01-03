@@ -28,3 +28,19 @@ type FlowDiagramAnswerTemplate struct {
 	QuestionTemplateID uint
 	Text               string
 }
+
+func (qt QuizTemplate) start(u *User) *Quiz {
+	q := &Quiz{
+		UserID: u.ID,
+		Name:   qt.Name,
+		Active: true,
+	}
+
+	h.db.Save(&q)
+
+	for _, questionTemplate := range qt.Questions {
+		questionTemplate.addToQuiz(q)
+	}
+
+	return q
+}
