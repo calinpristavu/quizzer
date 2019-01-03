@@ -15,6 +15,7 @@ import {
   Input
 } from "reactstrap";
 import Select from "react-select";
+import PropTypes from 'prop-types';
 
 const views = {
   create: 1,
@@ -97,6 +98,13 @@ class QuizList extends Component {
     noPages: 1,
     visibleItems: [],
     allItems: []
+  };
+
+  static propTypes = {
+    openEdit: PropTypes.func,
+    openCreate: PropTypes.func,
+    delete: PropTypes.func,
+    quizzes: PropTypes.arrayOf(PropTypes.object),
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -199,6 +207,10 @@ class CreateQuiz extends Component {
   };
 
   state = this.defaultState;
+
+  static propTypes = {
+    appendQuiz: PropTypes.func
+  };
 
   advanceToStep2 = (text) => {
     this.setState({
@@ -346,6 +358,11 @@ class CreateStep2 extends Component {
 }
 
 class EditQuiz extends Component {
+
+  static propTypes = {
+    quiz: PropTypes.object
+  };
+
   render() {
     return (
       <Card>

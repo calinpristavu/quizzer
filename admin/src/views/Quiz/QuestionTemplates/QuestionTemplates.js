@@ -1,4 +1,5 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {
   Row,
   Col,
@@ -112,6 +113,13 @@ export class QuestionsList extends Component {
     allItems: []
   };
 
+  static propTypes = {
+    questions: PropTypes.arrayOf(PropTypes.object),
+    openCreateView: PropTypes.func,
+    openEditView: PropTypes.func,
+    delete: PropTypes.func,
+  };
+
   componentWillReceiveProps(nextProps, nextContext) {
     this.setState({
       noPages: Math.ceil(nextProps.questions.length / this.perPage),
@@ -210,6 +218,10 @@ class CreateQuestion extends Component {
     Type: null,
     ChoiceAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null
+  };
+
+  static propTypes = {
+    appendQuestion: PropTypes.func,
   };
 
   create = () => {
@@ -334,6 +346,10 @@ class EditQuestion extends Component {
     Type: null,
     ChoiceAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null
+  };
+
+  static propTypes = {
+    question: PropTypes.arrayOf(PropTypes.object),
   };
 
   componentWillReceiveProps = (nextProps) => {

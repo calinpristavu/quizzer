@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import PropTypes from 'prop-types'
 import {
   Badge,
   Card,
@@ -85,6 +86,11 @@ function UserRow(props) {
 }
 
 class UserList extends Component {
+  static propTypes = {
+    title: PropTypes.string,
+    users: PropTypes.arrayOf(PropTypes.object)
+  };
+
   render() {
     return <Col xl={6}>
       <Card>

@@ -5,6 +5,7 @@ import {
   Input,
 } from "reactstrap";
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 
 export class ChoiceAnswerTemplates extends Component {
   defaultState = {
@@ -14,14 +15,18 @@ export class ChoiceAnswerTemplates extends Component {
 
   state = this.defaultState;
 
+  static propTypes = {
+    addChoice: PropTypes.func,
+    removeChoice: PropTypes.func,
+    answers: PropTypes.arrayOf(PropTypes.object),
+  };
+
   textInputRefName = 'question-option-add-text';
 
   addAndNext = () => {
     this.props.addChoice(this.state);
 
     this.setState(this.defaultState);
-
-    console.log(this.refs[this.textInputRefName]);
   };
 
   render() {

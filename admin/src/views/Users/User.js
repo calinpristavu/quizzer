@@ -11,7 +11,15 @@ import {
 
 class User extends Component {
   state = {
-    user: {}
+    user: {
+      ID: null,
+      Username: null,
+      Role: null,
+      CreatedAt: null,
+      UpdatedAt: null,
+      DeletedAt: null,
+      CurrentQuizID: null
+    }
   };
 
   componentDidMount() {
