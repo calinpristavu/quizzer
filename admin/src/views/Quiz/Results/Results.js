@@ -7,13 +7,11 @@ import {
   CardBody,
   CardFooter,
   Table,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   FormGroup,
 } from 'reactstrap'
 import Select from "react-select";
 import moment from 'moment';
+import Pager from "../../Base/Paginations/Pager";
 var nestedProp = require('nested-property');
 
 class Results extends Component {
@@ -307,30 +305,10 @@ class ResultList extends Component {
          </CardBody>
          <CardFooter>
            {this.state.noPages > 1 &&
-           <Pagination>
-             {this.state.currentPage !== 0 ? (
-               <PaginationItem
-                 onClick={() => this.toPage(this.state.currentPage - 1)}>
-                 <PaginationLink previous tag="button">Prev</PaginationLink>
-               </PaginationItem>
-             ): null}
-
-             {[...Array(this.state.noPages).keys()].map((i) => (
-               <PaginationItem
-                 onClick={() => this.toPage(i)}
-                 key={i}
-                 active={i === this.state.currentPage}>
-                 <PaginationLink tag="button">{i + 1}</PaginationLink>
-               </PaginationItem>
-             ))}
-
-             {this.state.currentPage !== this.state.noPages - 1 ? (
-               <PaginationItem
-                 onClick={() => this.toPage(this.state.currentPage + 1)}>
-                 <PaginationLink next tag="button">Next</PaginationLink>
-               </PaginationItem>
-             ): null}
-           </Pagination>
+             <Pager
+               noPages={this.state.noPages}
+               currentPage={this.state.currentPage}
+               toPage={this.toPage}/>
            }
          </CardFooter>
       </div>
