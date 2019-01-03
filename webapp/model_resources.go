@@ -36,7 +36,7 @@ func (qt QuizTemplate) start(u *User) *Quiz {
 		Active: true,
 	}
 
-	h.db.Save(&q)
+	g.db.Save(&q)
 
 	for _, questionTemplate := range qt.Questions {
 		questionTemplate.addToQuiz(q)

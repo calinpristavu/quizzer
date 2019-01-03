@@ -11,7 +11,7 @@ import (
 
 func getQuizTemplates(w http.ResponseWriter, _ *http.Request) {
 	var qts []QuizTemplate
-	h.db.
+	g.db.
 		Preload("Questions").
 		Order("id desc").
 		Find(&qts)
@@ -30,7 +30,7 @@ func postQuizTemplates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.db.Create(&qt)
+	g.db.Create(&qt)
 
 	jsonResponse(w, qt, http.StatusCreated)
 }
@@ -45,7 +45,7 @@ func getQuizTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := h.db.Preload("Questions").First(&qt, id)
+	res := g.db.Preload("Questions").First(&qt, id)
 	if res.RecordNotFound() {
 		w.WriteHeader(404)
 
@@ -60,7 +60,7 @@ func putQuizTemplate(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 
-	res := h.db.First(&qt, id)
+	res := g.db.First(&qt, id)
 	if res.RecordNotFound() {
 		w.WriteHeader(404)
 
@@ -77,7 +77,7 @@ func putQuizTemplate(w http.ResponseWriter, r *http.Request) {
 	qt.ID = uint(id)
 
 	res.Association("Questions").Replace(qt.Questions)
-	h.db.Save(&qt)
+	g.db.Save(&qt)
 
 	jsonResponse(w, qt, http.StatusOK)
 }
@@ -92,7 +92,7 @@ func deleteQuizTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := h.db.Delete(&qt, id)
+	res := g.db.Delete(&qt, id)
 	if res.RowsAffected == 0 {
 		w.WriteHeader(404)
 
@@ -104,7 +104,7 @@ func deleteQuizTemplate(w http.ResponseWriter, r *http.Request) {
 
 func getQuestionTemplates(w http.ResponseWriter, _ *http.Request) {
 	var qts []QuestionTemplate
-	h.db.
+	g.db.
 		Preload("ChoiceAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
 		Order("id desc").
@@ -124,7 +124,7 @@ func postQuestionTemplates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.db.Create(&qt)
+	g.db.Create(&qt)
 
 	jsonResponse(w, qt, http.StatusCreated)
 }
@@ -139,7 +139,7 @@ func getQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := h.db.Preload("ChoiceAnswerTemplates").Preload("FlowDiagramAnswerTemplate").First(&qt, id)
+	res := g.db.Preload("ChoiceAnswerTemplates").Preload("FlowDiagramAnswerTemplate").First(&qt, id)
 	if res.RecordNotFound() {
 		w.WriteHeader(404)
 
@@ -154,7 +154,7 @@ func putQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 
-	res := h.db.First(&qt, id)
+	res := g.db.First(&qt, id)
 	if res.RecordNotFound() {
 		w.WriteHeader(404)
 
@@ -172,7 +172,7 @@ func putQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 
 	res.Association("ChoiceAnswerTemplates").Replace(qt.ChoiceAnswerTemplates)
 	res.Association("FlowDiagramAnswerTemplate").Replace(qt.FlowDiagramAnswerTemplate)
-	h.db.Save(&qt)
+	g.db.Save(&qt)
 
 	jsonResponse(w, qt, http.StatusOK)
 }
@@ -187,7 +187,7 @@ func deleteQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := h.db.Delete(&qt, id)
+	res := g.db.Delete(&qt, id)
 	if res.RowsAffected == 0 {
 		w.WriteHeader(404)
 
@@ -199,7 +199,7 @@ func deleteQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 
 func getUsers(w http.ResponseWriter, _ *http.Request) {
 	var us []User
-	h.db.
+	g.db.
 		Find(&us)
 
 	jsonResponse(w, us, http.StatusOK)
@@ -225,7 +225,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := h.db.
+	res := g.db.
 		First(&u, id)
 	if res.RecordNotFound() {
 		w.WriteHeader(404)
@@ -238,7 +238,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 
 func getQuizzes(w http.ResponseWriter, r *http.Request) {
 	var qs []Quiz
-	h.db.
+	g.db.
 		Preload("Questions").
 		Preload("Questions.ChoiceAnswers").
 		Preload("Questions.TextAnswer").

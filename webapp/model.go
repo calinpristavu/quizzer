@@ -59,11 +59,11 @@ func newQuiz(u *User, noQ int) *Quiz {
 		Active: true,
 	}
 
-	h.db.Save(&q)
+	g.db.Save(&q)
 
 	var qts []QuestionTemplate
 
-	h.db.
+	g.db.
 		Model(&QuestionTemplate{}).
 		Preload("ChoiceAnswerTemplates").
 		Order(gorm.Expr("rand()")).
@@ -80,7 +80,7 @@ func newQuiz(u *User, noQ int) *Quiz {
 func findAllFinishedForUser(u *User) []Quiz {
 	var qs []Quiz
 
-	h.db.Model(&Quiz{}).
+	g.db.Model(&Quiz{}).
 		Preload("Questions").
 		Preload("Questions.ChoiceAnswers").
 		Preload("Questions.TextAnswer").
@@ -94,7 +94,7 @@ func findAllFinishedForUser(u *User) []Quiz {
 
 func find(id int) Quiz {
 	var q Quiz
-	h.db.
+	g.db.
 		Model(Quiz{}).
 		Preload("Questions").
 		Preload("Questions.ChoiceAnswers").
@@ -129,7 +129,7 @@ func (q *Question) saveChoices(answerIds []string, quiz *Quiz) error {
 	}
 
 	q.IsAnswered = true
-	h.db.Save(q)
+	g.db.Save(q)
 
 	return nil
 }
@@ -137,7 +137,7 @@ func (q *Question) saveChoices(answerIds []string, quiz *Quiz) error {
 func (q *Question) saveText(text string, quiz *Quiz) error {
 	q.TextAnswer.Text = text
 	q.IsAnswered = true
-	h.db.Save(q)
+	g.db.Save(q)
 
 	return nil
 }
@@ -146,7 +146,7 @@ func (q *Question) saveFlowDiagram(json string, svg string, quiz *Quiz) error {
 	q.FlowDiagramAnswer.Text = json
 	q.FlowDiagramAnswer.SVG = svg
 	q.IsAnswered = true
-	h.db.Save(q)
+	g.db.Save(q)
 
 	return nil
 }
@@ -163,11 +163,11 @@ func (q *Quiz) getNextQuestion() (*Question, error) {
 
 func (u *User) finishQuiz() {
 	u.CurrentQuiz.Active = false
-	h.db.Save(&u.CurrentQuiz)
+	g.db.Save(&u.CurrentQuiz)
 
 	u.CurrentQuiz = nil
 	u.CurrentQuizID = nil
-	h.db.Save(&u)
+	g.db.Save(&u)
 }
 
 func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
@@ -178,7 +178,7 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
 		Type:       qt.Type,
 	}
 
-	h.db.Save(&q)
+	g.db.Save(&q)
 
 	q.TextAnswer = &TextAnswer{Text: "", QuestionID: q.ID}
 	q.FlowDiagramAnswer = &FlowDiagramAnswer{Text: "", SVG: "", QuestionID: q.ID}
@@ -189,7 +189,7 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
 			IsCorrect:  cat.IsCorrect,
 			IsSelected: false,
 		}
-		h.db.Save(&ca)
+		g.db.Save(&ca)
 		q.ChoiceAnswers = append(q.ChoiceAnswers, ca)
 	}
 

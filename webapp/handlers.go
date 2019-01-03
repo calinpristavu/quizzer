@@ -20,7 +20,7 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 
 		var qt QuizTemplate
 
-		h.db.
+		g.db.
 			Preload("Questions").
 			Preload("Questions.ChoiceAnswerTemplates").
 			Preload("Questions.FlowDiagramAnswerTemplate").
@@ -32,7 +32,7 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 	}
 
 	u.CurrentQuizID = &u.CurrentQuiz.ID
-	h.db.Save(&u)
+	g.db.Save(&u)
 
 	http.Redirect(w, r, "/question", 302)
 }
@@ -94,7 +94,7 @@ func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question) 
 		return
 	}
 
-	err = h.templating.choiceQuestion.Execute(w, struct {
+	err = g.templating.Lookup("choice_question.gohtml").Execute(w, struct {
 		Question Question
 		User     interface{}
 	}{Question: *question, User: u})
@@ -127,7 +127,7 @@ func textQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
 		return
 	}
 
-	err = h.templating.textQuestion.Execute(w, struct {
+	err = g.templating.Lookup("text_question.gohtml").Execute(w, struct {
 		Question Question
 		User     interface{}
 	}{Question: *question, User: u})
@@ -164,7 +164,7 @@ func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Quest
 		return
 	}
 
-	err = h.templating.flowDiagramQuestion.Execute(w, struct {
+	err = g.templating.Lookup("flow_diagram_question.gohtml").Execute(w, struct {
 		Question Question
 		User     interface{}
 	}{Question: *question, User: u})
@@ -186,7 +186,7 @@ func finished(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.templating.finished.Execute(w, struct {
+	err := g.templating.Lookup("finished.gohtml").Execute(w, struct {
 		Quiz Quiz
 		User interface{}
 	}{Quiz: *quiz, User: u})
@@ -200,7 +200,7 @@ func history(w http.ResponseWriter, r *http.Request) {
 
 	qs := findAllFinishedForUser(u.(*User))
 
-	err := h.templating.quizHistory.Execute(w, struct {
+	err := g.templating.Lookup("history.gohtml").Execute(w, struct {
 		Quizzes []Quiz
 		Current *Quiz
 		User    interface{}
@@ -218,7 +218,7 @@ func viewQuiz(w http.ResponseWriter, r *http.Request) {
 	qs := findAllFinishedForUser(u)
 
 	current := find(id)
-	err := h.templating.quizHistory.Execute(w, struct {
+	err := g.templating.Lookup("history.gohtml").Execute(w, struct {
 		Quizzes []Quiz
 		Current *Quiz
 		User    User
@@ -242,11 +242,11 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var qts []QuizTemplate
-	h.db.
+	g.db.
 		Preload("Questions").
 		Find(&qts)
 
-	err := h.templating.home.Execute(w, struct {
+	err := g.templating.Lookup("home.gohtml").Execute(w, struct {
 		User    User
 		Quizzes []QuizTemplate
 	}{User: *u, Quizzes: qts})
@@ -279,7 +279,7 @@ func myAccount(w http.ResponseWriter, r *http.Request) {
 		u.Save()
 	}
 
-	err := h.templating.myAccount.Execute(w, struct {
+	err := g.templating.Lookup("my_account.gohtml").Execute(w, struct {
 		User   interface{}
 		Errors map[string]interface{}
 	}{
@@ -317,7 +317,7 @@ func page(w http.ResponseWriter, r *http.Request) {
 		errors = append(errors, "Invalid username or password.")
 	}
 
-	err := h.templating.login.Execute(w, struct {
+	err := g.templating.Lookup("login.gohtml").Execute(w, struct {
 		Errors   []string
 		PrevData struct {
 			Username string

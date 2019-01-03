@@ -2,30 +2,20 @@ package webapp
 
 import (
 	"html/template"
-	"log"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 )
 
-type handler struct {
+type globals struct {
 	db         *gorm.DB
-	templating struct {
-		choiceQuestion      *template.Template
-		textQuestion        *template.Template
-		flowDiagramQuestion *template.Template
-		finished            *template.Template
-		quizHistory         *template.Template
-		login               *template.Template
-		home                *template.Template
-		myAccount           *template.Template
-	}
+	templating *template.Template
 }
 
-var h *handler
+var g *globals
 
 func Init(db *gorm.DB, r *mux.Router) {
-	h = &handler{
+	g = &globals{
 		db: db,
 	}
 
@@ -35,76 +25,22 @@ func Init(db *gorm.DB, r *mux.Router) {
 }
 
 func registerTemplates() {
-	var err error
-	h.templating.choiceQuestion, err = template.ParseFiles(
-		"templates/choice_question.gohtml",
-		"templates/header.gohtml",
-		"templates/footer.gohtml",
+	customFunctions := template.FuncMap{
+		"raw": func(s string) template.HTML {
+			return template.HTML(s)
+		},
+	}
+
+	g.templating = template.Must(
+		template.
+			New("all").
+			Funcs(customFunctions).
+			ParseGlob("./templates/*.gohtml"),
 	)
-	if err != nil {
-		log.Fatalf("could not parse template: %v", err)
-	}
-	h.templating.textQuestion, err = template.ParseFiles(
-		"templates/text_question.gohtml",
-		"templates/header.gohtml",
-		"templates/footer.gohtml",
-	)
-	if err != nil {
-		log.Fatalf("could not parse template: %v", err)
-	}
-	h.templating.login, err = template.ParseFiles("templates/login.gohtml")
-	if err != nil {
-		log.Fatalf("could not parse template: %v", err)
-	}
-	h.templating.home, err = template.ParseFiles(
-		"templates/home.gohtml",
-		"templates/header.gohtml",
-		"templates/footer.gohtml",
-	)
-	if err != nil {
-		log.Fatalf("could not parse template: %v", err)
-	}
-	h.templating.myAccount, err = template.ParseFiles(
-		"templates/myAccount.gohtml",
-		"templates/header.gohtml",
-		"templates/footer.gohtml",
-		"templates/account_nav.gohtml",
-	)
-	if err != nil {
-		log.Fatalf("could not parse template: %v", err)
-	}
-	h.templating.flowDiagramQuestion, err = template.ParseFiles(
-		"templates/flow_diagram_question.gohtml",
-		"templates/flow_diagram_js.gohtml",
-		"templates/header.gohtml",
-		"templates/footer.gohtml",
-	)
-	if err != nil {
-		log.Fatalf("could not parse template: %v", err)
-	}
-	h.templating.finished, err = template.ParseFiles(
-		"templates/finished.gohtml",
-		"templates/flow_diagram_js.gohtml",
-		"templates/header.gohtml",
-		"templates/footer.gohtml",
-	)
-	if err != nil {
-		log.Fatalf("could not parse template: %v", err)
-	}
-	h.templating.quizHistory, err = template.ParseFiles(
-		"templates/history.gohtml",
-		"templates/flow_diagram_js.gohtml",
-		"templates/header.gohtml",
-		"templates/footer.gohtml",
-		"templates/account_nav.gohtml",
-	)
-	if err != nil {
-		log.Fatalf("could not parse template: %v", err)
-	}
 }
 
 func migrateDb() *gorm.DB {
-	return h.db.AutoMigrate(
+	return g.db.AutoMigrate(
 		&User{},
 		&Quiz{},
 		&Question{},

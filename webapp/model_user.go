@@ -24,7 +24,7 @@ func init() {
 func FindByUsername(uname string) (*User, error) {
 	u := &User{Username: uname}
 
-	res := h.db.Where(&u).
+	res := g.db.Where(&u).
 		Preload("CurrentQuiz", "active = ?", true).
 		Preload("CurrentQuiz.Questions").
 		Preload("CurrentQuiz.Questions.ChoiceAnswers").
@@ -44,7 +44,7 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 		Password: pass,
 	}
 
-	res := h.db.Where(&u).
+	res := g.db.Where(&u).
 		Preload("CurrentQuiz", "active = ?", true).
 		Preload("CurrentQuiz.Questions").
 		Preload("CurrentQuiz.Questions.ChoiceAnswers").
@@ -59,7 +59,7 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 }
 
 func (u *User) Save() {
-	h.db.Save(u)
+	g.db.Save(u)
 }
 
 type Role struct {
