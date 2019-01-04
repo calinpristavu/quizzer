@@ -59,7 +59,7 @@ class User extends Component {
                       </tr>
                       <tr>
                         <td>Role</td>
-                        <td><strong>{user.Role}</strong></td>
+                        <td><strong>{user.Role && user.Role.Name}</strong></td>
                       </tr>
                       <tr>
                         <td>Created At:</td>

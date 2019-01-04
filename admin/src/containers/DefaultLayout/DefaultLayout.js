@@ -57,7 +57,7 @@ class DefaultLayout extends Component {
                 <Switch>
                   {routes.map((route, idx) => {
                     return route.component ? (
-                      <Route
+                      <PrivateRoute
                         key={idx}
                         path={route.path}
                         exact={route.exact}
@@ -86,6 +86,27 @@ class DefaultLayout extends Component {
       </div>
     );
   }
+}
+
+function PrivateRoute({ render, ...rest }) {
+  // TODO: Improve login
+  const loggedIn = localStorage.getItem("loggedIn");
+
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        loggedIn ? render(props) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: props.location }
+            }}
+          />
+        )
+      }
+    />
+  );
 }
 
 export default DefaultLayout;

@@ -74,7 +74,7 @@ function UserRow(props) {
         <Link to={userLink}>{user.Username}</Link>
       </td>
       <td>{moment(user.CreatedAt).format('DD-MM-YYYY [at] k:mm')}</td>
-      <td>{user.Role}</td>
+      <td>{user.Role.Name}</td>
       <td>
         <Link to={userLink}>
           {/*<Badge color={getBadge(user.status)}>{user.status}</Badge>*/}
