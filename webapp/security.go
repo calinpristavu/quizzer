@@ -24,7 +24,7 @@ var (
 func init() {
 	k, err := ioutil.ReadFile(privKeyPath)
 	if err != nil {
-		log.Fatal("Error reading private key")
+		log.Fatal("Error reading private key. Generate it in folder ./jwt using `openssl genrsa -out webapp 1024`")
 		return
 	}
 
@@ -32,7 +32,7 @@ func init() {
 
 	v, err := ioutil.ReadFile(pubKeyPath)
 	if err != nil {
-		log.Fatal("Error reading public key")
+		log.Fatal("Error reading public key. Generate it in folder ./jwt using `openssl rsa -in webapp -pubout > webapp.pub`")
 		return
 	}
 
