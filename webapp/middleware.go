@@ -46,3 +46,18 @@ func RoleUser(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+func ValidateJwtToken(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		tokenHeader := r.Header.Get("Authorization")
+
+		_, err := extractTokenClaims(tokenHeader)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusForbidden)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}

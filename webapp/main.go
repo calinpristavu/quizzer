@@ -58,8 +58,7 @@ func registerRoutes(public *mux.Router) {
 	public.HandleFunc("/login", page)
 
 	quiz := public.NewRoute().Subrouter()
-	quiz.Use(UserSession)
-	quiz.Use(RoleUser)
+	quiz.Use(UserSession, RoleUser)
 	quiz.HandleFunc("/question", getQuestion)
 	quiz.HandleFunc("/finished", finished)
 	quiz.HandleFunc("/quiz-history", history)
@@ -70,7 +69,11 @@ func registerRoutes(public *mux.Router) {
 	quiz.HandleFunc("/me", myAccount)
 	quiz.HandleFunc("/logout", logout)
 
+	apiJwt := public.NewRoute().Subrouter()
+	apiJwt.Path("/new-api/token").Methods("POST").HandlerFunc(postToken)
+
 	api := public.NewRoute().Subrouter()
+	api.Use(ValidateJwtToken)
 	api.Path("/new-api/quiz-templates").Methods("GET").HandlerFunc(getQuizTemplates)
 	api.Path("/new-api/quiz-templates").Methods("POST").HandlerFunc(postQuizTemplates)
 	api.Path("/new-api/quiz-templates/{id}").Methods("GET").HandlerFunc(getQuizTemplate)

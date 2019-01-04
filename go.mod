@@ -2,9 +2,10 @@ module github.com/calinpristavu/quizzer
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20180720115003-f9ffefc3facf // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/gorilla/handlers v1.4.0
-	github.com/gorilla/mux v1.6.2
+	github.com/gorilla/mux v1.6.3-0.20181228004216-ef912dd76ebe
 	github.com/gorilla/sessions v1.1.3 // indirect
 	github.com/gosimple/slug v1.3.0 // indirect
 	github.com/jinzhu/gorm v1.9.1

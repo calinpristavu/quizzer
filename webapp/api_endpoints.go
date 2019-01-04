@@ -2,6 +2,7 @@ package webapp
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -248,6 +249,42 @@ func getQuizzes(w http.ResponseWriter, r *http.Request) {
 		Find(&qs)
 
 	jsonResponse(w, qs, http.StatusOK)
+}
+
+func postToken(w http.ResponseWriter, r *http.Request) {
+	var postData struct {
+		Username string
+		Password string
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&postData)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Error in request")
+		return
+	}
+
+	user, err := FindByUsernameAndPassword(postData.Username, postData.Password)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprint(w, "Invalid credentials")
+		return
+	}
+
+	tokenString, err := newToken(user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(w, "Error while signing the token")
+		return
+	}
+
+	jsonResponse(
+		w,
+		struct {
+			T string `json:"token"`
+		}{tokenString},
+		http.StatusOK,
+	)
 }
 
 // Helper to send json responses
