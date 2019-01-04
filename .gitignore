@@ -20,5 +20,6 @@ fabric.properties
 *.out
 Build___Run
 vendor/
-jwt/
+jwt/webapp
+jwt/webapp.pub
 quizzer
