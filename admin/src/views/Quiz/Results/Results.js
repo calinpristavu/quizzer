@@ -4,7 +4,7 @@ import {
   Col,
   Card,
   CardHeader,
-} from 'reactstrap'
+} from 'reactstrap';
 import SingleResult from "./SingleResult";
 import Filters from "./Filters";
 import List from "./List";
