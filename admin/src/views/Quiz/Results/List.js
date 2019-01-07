@@ -2,6 +2,7 @@ import {CardBody, CardFooter, Table} from "reactstrap";
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import moment from 'moment';
+import PropTypes from 'prop-types';
 
 class List extends Component {
   state = {
@@ -10,7 +11,10 @@ class List extends Component {
     visibleItems: []
   };
 
-  // TODO: PropTypes
+  static propTypes = {
+    openQuiz: PropTypes.func.isRequired,
+    quizzes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  };
 
   getVisibleItems = () => {
     const firstPosition = this.state.perPage * this.state.currentPage;

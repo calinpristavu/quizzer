@@ -1,8 +1,11 @@
 import {Card, CardBody, CardHeader, Col} from "reactstrap";
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 
 class SingleResult extends Component {
-  // TODO: PropTypes
+  static propTypes = {
+    quiz: PropTypes.object
+  };
 
   renderQuestion = (q, k) => {
     switch (q.Type) {

@@ -1,10 +1,14 @@
 import {Col, FormGroup, Row} from "reactstrap";
 import Select from "react-select";
 import React, {Component} from "react";
-
+import PropTypes from 'prop-types';
 
 class Filters extends Component {
-  // TODO: PropTypes
+  static propTypes = {
+    addFilter: PropTypes.func.isRequired,
+    clearFilter: PropTypes.func.isRequired,
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  };
 
   static buildUserOptions = (quizzes) => {
     return quizzes.reduce((unique, q) => {
