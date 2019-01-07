@@ -39,7 +39,7 @@ export class QuestionsList extends Component {
           </span>
         </CardHeader>
         <CardBody>
-          <Table responsive>
+          <Table responsive hover>
             <thead>
             <tr>
               <th>Text</th>
@@ -50,12 +50,13 @@ export class QuestionsList extends Component {
             </thead>
             <tbody>
             {this.getVisibleItems().map((q, k) =>
-              <tr key={k} onClick={() => {this.props.openEditView(q)}}>
+              <tr key={k}>
                 <td>{q.Text}</td>
                 <td>{q.Type}</td>
                 <td>{q.ChoiceAnswerTemplates.map((a) => a.Text)}</td>
                 <td>
-                  <i onClick={() => this.props.delete(q.ID)} className="fa fa-minus-circle"/>
+                  <i onClick={() => {this.props.openEditView(q)}} className="fa fa-edit text-warning"/>
+                  <i onClick={() => this.props.delete(q.ID)} className="fa fa-minus-circle text-danger"/>
                 </td>
               </tr>
             )}
