@@ -178,6 +178,13 @@ class ResultFilters extends Component {
     }, []);
   };
 
+  static buildStatusOptions = () => {
+    return [
+      {value: true, label: "In Progress"},
+      {value: false, label: "Finished"},
+    ];
+  };
+
   addFilter = (options, filterName) => {
     if (options.length === 0) {
       return this.props.clearFilter(filterName)
@@ -187,7 +194,7 @@ class ResultFilters extends Component {
 
   render() {
     return (
-      <div>
+      <Row>
         <Col xs="4">
           <FormGroup>
             <Select
@@ -197,7 +204,16 @@ class ResultFilters extends Component {
               options={ResultFilters.buildUserOptions(this.props.items)}/>
           </FormGroup>
         </Col>
-      </div>
+        <Col xs="4">
+          <FormGroup>
+            <Select
+              isMulti
+              placeholder="Filter by status"
+              onChange={(opt) => this.addFilter(opt, 'Active')}
+              options={ResultFilters.buildStatusOptions(this.props.items)}/>
+          </FormGroup>
+        </Col>
+      </Row>
     )
   }
 }
