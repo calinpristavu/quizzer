@@ -46,6 +46,7 @@ func bootWs(r *mux.Router, port string) {
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Authorization", "Content-Type"},
 		AllowCredentials: true,
 		// Enable Debugging for testing, consider disabling in production
 		Debug: true,

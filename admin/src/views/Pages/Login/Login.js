@@ -3,12 +3,25 @@ import {Link, Redirect} from 'react-router-dom';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 
 class Login extends Component {
-  state = { redirectToReferrer: false };
+  state = {
+    redirectToReferrer: false,
+    username: '',
+    password: ''
+  };
 
   login = () => {
-    // TODO: You can do better.
-    localStorage.setItem('loggedIn', 'yes');
-    setTimeout(() => this.setState({ redirectToReferrer: true }), 100);
+    fetch('/token', {
+      method: "POST",
+      body: JSON.stringify({
+        Username: this.state.username,
+        Password: this.state.password
+      })
+    })
+      .then(r => r.json())
+      .then(r => {
+        localStorage.setItem('token', r.token);
+        this.setState({ redirectToReferrer: true });
+      });
   };
 
   render() {
@@ -34,7 +47,11 @@ class Login extends Component {
                             <i className="icon-user"></i>
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input type="text" placeholder="Username" autoComplete="username" />
+                        <Input
+                          type="text"
+                          placeholder="Username"
+                          onChange={(e) => this.setState({username: e.target.value})}
+                          autoComplete="username" />
                       </InputGroup>
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
@@ -42,7 +59,11 @@ class Login extends Component {
                             <i className="icon-lock"></i>
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input type="password" placeholder="Password" autoComplete="current-password" />
+                        <Input
+                          type="password"
+                          placeholder="Password"
+                          onChange={(e) => this.setState({password: e.target.value})}
+                          autoComplete="current-password" />
                       </InputGroup>
                       <Row>
                         <Col xs="6">

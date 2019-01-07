@@ -19,7 +19,7 @@ class Users extends Component {
   };
 
   componentDidMount() {
-    fetch(process.env.REACT_APP_API_BASE_URL + "/users")
+    fetch("/users")
       .then(r => r.json())
       .then(r => {
         this.setState({
@@ -27,7 +27,7 @@ class Users extends Component {
         })
       });
 
-    fetch(process.env.REACT_APP_API_BASE_URL + "/users-logged-in")
+    fetch("/users-logged-in")
       .then(r => r.json())
       .then(r => {
         this.setState({

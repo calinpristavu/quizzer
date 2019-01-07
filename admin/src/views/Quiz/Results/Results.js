@@ -22,7 +22,7 @@ class Results extends Component {
   };
 
   componentDidMount() {
-    fetch(process.env.REACT_APP_API_BASE_URL + "/quizzes")
+    fetch("/quizzes")
       .then(r => r.json())
       .then(r => this.setState({quizzes: r}))
   }

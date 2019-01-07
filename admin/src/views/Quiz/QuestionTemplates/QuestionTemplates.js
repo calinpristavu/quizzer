@@ -41,7 +41,7 @@ class QuestionTemplates extends Component{
   };
 
   componentDidMount = () => {
-    fetch(process.env.REACT_APP_API_BASE_URL + "/question-templates")
+    fetch("/question-templates")
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -60,7 +60,7 @@ class QuestionTemplates extends Component{
   };
 
   deleteQuestion = (qId) => {
-    fetch(process.env.REACT_APP_API_BASE_URL + "/question-templates/" + qId, {
+    fetch("/question-templates/" + qId, {
       method: "DELETE"
     })
       .then(() => {
@@ -203,7 +203,7 @@ class CreateQuestion extends Component {
   };
 
   create = () => {
-    fetch(process.env.REACT_APP_API_BASE_URL + "/question-templates", {
+    fetch("/question-templates", {
       method: "POST",
       body: JSON.stringify(this.state),
       headers: {
