@@ -16,12 +16,14 @@ import {ChoiceAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
 import React, {Component} from "react";
 
 class CreateQuestion extends Component {
-  state = {
+  defaultState = {
     Text: '',
     Type: null,
     ChoiceAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null
   };
+
+  state = this.defaultState;
 
   static propTypes = {
     appendQuestion: PropTypes.func,
@@ -37,6 +39,9 @@ class CreateQuestion extends Component {
     })
       .then(() => {
         return this.props.appendQuestion(this.state);
+      })
+      .then(() => {
+        this.setState(this.defaultState)
       })
   };
 
@@ -92,6 +97,7 @@ class CreateQuestion extends Component {
                   <Input
                     className="form-check-input"
                     type="radio"
+                    checked={this.state.Type === 1}
                     onChange={() => this.setState({Type: 1})}
                     id="question-type-1"
                     name="Type"/>
@@ -101,6 +107,7 @@ class CreateQuestion extends Component {
                   <Input
                     className="form-check-input"
                     type="radio"
+                    checked={this.state.Type === 2}
                     onChange={() => this.setState({Type: 2})}
                     id="question-type-2"
                     name="Type" />
@@ -110,6 +117,7 @@ class CreateQuestion extends Component {
                   <Input
                     className="form-check-input"
                     type="radio"
+                    checked={this.state.Type === 3}
                     onChange={() => this.setState({Type: 3})}
                     id="question-type-3"
                     name="Type" />
