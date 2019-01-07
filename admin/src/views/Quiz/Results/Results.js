@@ -81,7 +81,7 @@ class Results extends Component {
 
               <List
                 openQuiz={this.openQuiz}
-                items={this.getFilteredQuizzes()}/>
+                quizzes={this.getFilteredQuizzes()}/>
             </Card>
           </Col>
           {this.state.openQuiz &&

@@ -89,13 +89,10 @@ class QuizTemplates extends Component {
 }
 
 class QuizList extends Component {
-  perPage = 5;
-
   state = {
+    perPage: 5,
     currentPage: 0,
-    noPages: 1,
-    visibleItems: [],
-    allItems: []
+    visibleItems: []
   };
 
   static propTypes = {
@@ -105,27 +102,13 @@ class QuizList extends Component {
     quizzes: PropTypes.arrayOf(PropTypes.object),
   };
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    this.setState({
-      noPages: Math.ceil(nextProps.quizzes.length / this.perPage),
-      allItems: nextProps.quizzes
-    });
+  getVisibleItems = () => {
+    const firstPosition = this.state.perPage * this.state.currentPage;
 
-    this.toPage(this.state.currentPage);
-  }
-
-  toPage = (pageNo) => {
-    this.setState((oldState) => {
-      const firstPosition = this.perPage * pageNo;
-
-      return {
-        currentPage: pageNo,
-        visibleItems: oldState.allItems.slice(
-          firstPosition,
-          firstPosition + this.perPage
-        )
-      }
-    })
+    return this.props.quizzes.slice(
+      firstPosition,
+      firstPosition + this.state.perPage
+    );
   };
 
   render() {
@@ -143,32 +126,32 @@ class QuizList extends Component {
         <CardBody>
           <Table responsive>
             <thead>
-            <tr>
-              <th>Name</th>
-              <th>#noQuestions</th>
-              <th>?</th>
-            </tr>
+              <tr>
+                <th>Name</th>
+                <th>#noQuestions</th>
+                <th>?</th>
+              </tr>
             </thead>
             <tbody>
-            {this.state.visibleItems.map((q, k) =>
-              <tr key={k} onClick={() => this.props.openEdit(q)}>
-                <td>{q.Name}</td>
-                <td>{q.Questions !== null ? q.Questions.length : 0}</td>
-                <td>
-                  <i onClick={() => this.props.delete(q.ID)} className="fa fa-minus-circle"/>
-                </td>
-              </tr>
-            )}
+              {this.getVisibleItems().map((q, k) =>
+                <tr key={k} onClick={() => this.props.openEdit(q)}>
+                  <td>{q.Name}</td>
+                  <td>{q.Questions !== null ? q.Questions.length : 0}</td>
+                  <td>
+                    <i onClick={() => this.props.delete(q.ID)} className="fa fa-minus-circle"/>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </Table>
         </CardBody>
         <CardFooter>
-          {this.state.noPages > 1 &&
-            <Pager
-              noPages={this.state.noPages}
-              currentPage={this.state.currentPage}
-              toPage={this.toPage}/>
-          }
+          <Pager
+            noPages={Math.ceil(this.props.quizzes.length / this.state.perPage)}
+            currentPage={this.state.currentPage}
+            perPage={this.state.perPage}
+            toPage={(pageNo) => this.setState({currentPage: pageNo})}
+            setPerPage={(v) => this.setState({perPage: v})}/>
         </CardFooter>
       </Card>
     );
@@ -249,7 +232,7 @@ class CreateStep1 extends Component {
       <div>
         <CardBody>
           <FormGroup row>
-            <div md="12">
+            <Col md="12">
               <Row>
                 <Col xs="12">
                   <FormGroup>
@@ -282,7 +265,7 @@ class CreateStep1 extends Component {
                   </div>
                 </Col>
               </Row>
-            </div>
+            </Col>
           </FormGroup>
         </CardBody>
         <CardFooter>

@@ -102,13 +102,10 @@ class QuestionTemplates extends Component{
 }
 
 export class QuestionsList extends Component {
-  perPage = 5;
-
   state = {
+    perPage: 5,
     currentPage: 0,
-    noPages: 1,
-    visibleItems: [],
-    allItems: []
+    visibleItems: []
   };
 
   static propTypes = {
@@ -118,27 +115,13 @@ export class QuestionsList extends Component {
     delete: PropTypes.func,
   };
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    this.setState({
-      noPages: Math.ceil(nextProps.questions.length / this.perPage),
-      allItems: nextProps.questions
-    });
+  getVisibleItems = () => {
+    const firstPosition = this.state.perPage * this.state.currentPage;
 
-    this.toPage(this.state.currentPage)
-  }
-
-  toPage = (pageNo) => {
-    this.setState((oldState) => {
-      const firstPosition = this.perPage * pageNo;
-
-      return {
-        currentPage: pageNo,
-        visibleItems: oldState.allItems.slice(
-          firstPosition,
-          firstPosition + this.perPage
-        )
-      }
-    })
+    return this.props.questions.slice(
+      firstPosition,
+      firstPosition + this.state.perPage
+    );
   };
 
   render() {
@@ -164,7 +147,7 @@ export class QuestionsList extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.state.visibleItems.map((q, k) =>
+            {this.getVisibleItems().map((q, k) =>
               <tr key={k} onClick={() => {this.props.openEditView(q)}}>
                 <td>{q.Text}</td>
                 <td>{q.Type}</td>
@@ -178,12 +161,12 @@ export class QuestionsList extends Component {
           </Table>
         </CardBody>
         <CardFooter>
-          {this.state.noPages > 1 &&
-            <Pager
-              noPages={this.state.noPages}
-              currentPage={this.state.currentPage}
-              toPage={this.toPage}/>
-          }
+          <Pager
+            noPages={Math.ceil(this.props.questions.length / this.state.perPage)}
+            currentPage={this.state.currentPage}
+            perPage={this.state.perPage}
+            toPage={(pageNo) => this.setState({currentPage: pageNo})}
+            setPerPage={(v) => this.setState({perPage: v})}/>
         </CardFooter>
       </Card>
     );
@@ -293,13 +276,13 @@ class CreateQuestion extends Component {
               </Col>
             </FormGroup>
             {this.state.Type === 1 &&
-            <ChoiceAnswerTemplates
-              removeChoice={this.removeChoice}
-              addChoice={this.addChoice}
-              answers={this.state.ChoiceAnswerTemplates}/>
+              <ChoiceAnswerTemplates
+                removeChoice={this.removeChoice}
+                addChoice={this.addChoice}
+                answers={this.state.ChoiceAnswerTemplates}/>
             }
             {this.state.Type === 3 &&
-            <FlowDiagramAnswer />
+              <FlowDiagramAnswer />
             }
           </CardBody>
           <CardFooter>

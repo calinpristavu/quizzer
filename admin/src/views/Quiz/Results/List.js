@@ -4,38 +4,21 @@ import Pager from "../../Base/Paginations/Pager";
 import moment from 'moment';
 
 class List extends Component {
-  perPage = 5;
-
   state = {
-    noPages: 0,
+    perPage: 5,
     currentPage: 0,
-    allItems: [],
     visibleItems: []
   };
 
   // TODO: PropTypes
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    this.setState({
-      noPages: Math.ceil(nextProps.items.length / this.perPage),
-      allItems: nextProps.items
-    });
+  getVisibleItems = () => {
+    const firstPosition = this.state.perPage * this.state.currentPage;
 
-    this.toPage(this.state.currentPage)
-  }
-
-  toPage = (pageNo) => {
-    this.setState((oldState) => {
-      const firstPosition = this.perPage * pageNo;
-
-      return {
-        currentPage: pageNo,
-        visibleItems: oldState.allItems.slice(
-          firstPosition,
-          firstPosition + this.perPage
-        )
-      }
-    })
+    return this.props.quizzes.slice(
+      firstPosition,
+      firstPosition + this.state.perPage
+    );
   };
 
   static computePercentCompleted(questions) {
@@ -86,7 +69,7 @@ class List extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.state.visibleItems.map((q, k) =>
+            {this.getVisibleItems().map((q, k) =>
               <tr key={k}>
                 <td>{q.ID}</td>
                 <td>{q.User ? q.User.Username : '-'}</td>
@@ -107,12 +90,12 @@ class List extends Component {
           </Table>
         </CardBody>
         <CardFooter>
-          {this.state.noPages > 1 &&
           <Pager
-            noPages={this.state.noPages}
+            noPages={Math.ceil(this.props.quizzes.length / this.state.perPage)}
             currentPage={this.state.currentPage}
-            toPage={this.toPage}/>
-          }
+            perPage={this.state.perPage}
+            toPage={(pageNo) => this.setState({currentPage: pageNo})}
+            setPerPage={(v) => this.setState({perPage: v})}/>
         </CardFooter>
       </div>
     )
