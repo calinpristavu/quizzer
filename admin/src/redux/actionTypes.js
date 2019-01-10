@@ -1,0 +1,1 @@
+export const SET_QUIZ_TEMPLATES = "SET_QUIZ_TEMPLATES";
