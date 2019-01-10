@@ -1,8 +1,9 @@
-import PropTypes from "prop-types";
 import {Card, CardHeader} from "reactstrap";
 import React, {Component} from "react";
 import CreateStep1 from "./CreateStep1";
 import CreateStep2 from "./CreateStep2";
+import {connect} from "react-redux";
+import {createQuizTemplate} from "../../../redux/creators";
 
 class Create extends Component {
   defaultState = {
@@ -14,10 +15,6 @@ class Create extends Component {
   };
 
   state = this.defaultState;
-
-  static propTypes = {
-    appendQuiz: PropTypes.func
-  };
 
   advanceToStep2 = (text) => {
     this.setState({
@@ -33,17 +30,8 @@ class Create extends Component {
     const quiz = this.state.quiz;
     quiz.Questions = qIds.map(id => ({"ID": id}));
 
-    fetch("/quiz-templates", {
-      method: "POST",
-      body: JSON.stringify(quiz)
-    })
-      .then((r) => {
-        return r.json()
-      })
-      .then((q) => {
-        this.setState(this.defaultState);
-        this.props.appendQuiz(q);
-      })
+    this.props.createQuizTemplate(quiz)
+      .then(() => this.setState(this.defaultState))
   };
 
   render() {
@@ -68,4 +56,7 @@ class Create extends Component {
   }
 }
 
-export default Create;
+export default connect(
+  null,
+  {createQuizTemplate}
+)(Create);

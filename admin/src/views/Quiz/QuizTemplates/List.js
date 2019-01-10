@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
+import {connect} from "react-redux";
+import {deleteQuizTemplate, getQuizTemplates} from "../../../redux/creators";
 
 class List extends Component {
   state = {
@@ -17,13 +19,22 @@ class List extends Component {
     quizzes: PropTypes.arrayOf(PropTypes.object),
   };
 
+  componentDidMount() {
+    this.props.getQuizTemplates();
+  };
+
   getVisibleItems = () => {
     const firstPosition = this.state.perPage * this.state.currentPage;
 
-    return this.props.quizzes.slice(
+    return this.props.list.slice(
       firstPosition,
       firstPosition + this.state.perPage
     );
+  };
+
+  delete = (e, qId) => {
+    e.stopPropagation();
+    this.props.deleteQuizTemplate(qId)
   };
 
   render() {
@@ -53,7 +64,7 @@ class List extends Component {
                 <td>{q.Name}</td>
                 <td>{q.Questions !== null ? q.Questions.length : 0}</td>
                 <td>
-                  <i onClick={() => this.props.delete(q.ID)} className="fa fa-minus-circle"/>
+                  <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle"/>
                 </td>
               </tr>
             )}
@@ -62,7 +73,7 @@ class List extends Component {
         </CardBody>
         <CardFooter>
           <Pager
-            noPages={Math.ceil(this.props.quizzes.length / this.state.perPage)}
+            noPages={Math.ceil(this.props.list.length / this.state.perPage)}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}
             toPage={(pageNo) => this.setState({currentPage: pageNo})}
@@ -73,4 +84,9 @@ class List extends Component {
   }
 }
 
-export default List;
+export default connect(
+  state => ({
+    list: state.quizTemplate.list
+  }),
+  {getQuizTemplates, deleteQuizTemplate}
+)(List);
