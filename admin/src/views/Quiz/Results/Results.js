@@ -8,19 +8,18 @@ import {
 import SingleResult from "./SingleResult";
 import Filters from "./Filters";
 import List from "./List";
+import {connect} from "react-redux";
+import {getQuizzes} from "../../../redux/creators";
 var nestedProp = require('nested-property');
 
 class Results extends Component {
   state = {
-    quizzes: [],
     filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
     openQuiz: null
   };
 
   componentDidMount() {
-    fetch("/quizzes")
-      .then(r => r.json())
-      .then(r => this.setState({quizzes: r}))
+    this.props.getQuizzes();
   }
 
   openQuiz = (id) => {
@@ -30,7 +29,7 @@ class Results extends Component {
   };
 
   getFilteredQuizzes = () => {
-    return this.state.quizzes.filter(q => {
+    return this.props.list.filter(q => {
       return this.state.filters.reduce(
         (ok, f) => ok && f.values.includes(nestedProp.get(q, f.propertyPath)),
         true
@@ -76,7 +75,7 @@ class Results extends Component {
                 <Filters
                   addFilter={this.addFilter}
                   clearFilter={this.clearFilter}
-                  items={this.state.quizzes}/>
+                  items={this.props.list}/>
               </CardHeader>
 
               <List
@@ -86,7 +85,7 @@ class Results extends Component {
           </Col>
           {this.state.openQuiz &&
             <SingleResult
-              quiz={this.state.quizzes.find(q => q.ID === this.state.openQuiz)} />
+              quiz={this.props.list.find(q => q.ID === this.state.openQuiz)} />
           }
         </Row>
       </div>
@@ -94,4 +93,9 @@ class Results extends Component {
   }
 }
 
-export default Results
+export default connect(
+  state => ({
+    list: state.quiz.list
+  }),
+  { getQuizzes }
+)(Results);

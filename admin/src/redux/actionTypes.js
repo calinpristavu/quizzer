@@ -1,1 +1,2 @@
 export const SET_QUIZ_TEMPLATES = "SET_QUIZ_TEMPLATES";
+export const SET_QUIZZES = "SET_QUIZZES";
