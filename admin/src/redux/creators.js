@@ -1,4 +1,12 @@
-import {appendQuizTemplate, removeQuizTemplate, setQuizTemplates, setQuizzes} from "./actions";
+import {
+  appendQuestionTemplate,
+  appendQuizTemplate,
+  removeQuestionTemplate,
+  removeQuizTemplate,
+  setQuestionTemplates,
+  setQuizTemplates,
+  setQuizzes
+} from "./actions";
 
 export function getQuizTemplates() {
   return dispatch => {
@@ -33,5 +41,33 @@ export function getQuizzes() {
     return fetch("/quizzes")
       .then(r => r.json())
       .then(r => dispatch(setQuizzes(r)))
+  }
+}
+
+export function getQuestionTemplates() {
+  return dispatch => {
+    return fetch("/question-templates")
+      .then(r => r.json())
+      .then(r => dispatch(setQuestionTemplates(r)))
+  }
+}
+
+export function deleteQuestionTemplate(id) {
+  return dispatch => {
+    return fetch('/question-templates/' + id, {
+      method: "DELETE"
+    })
+      .then(() => dispatch(removeQuestionTemplate(id)));
+  }
+}
+
+export function createQuestionTemplate(questionTemplate) {
+  return dispatch => {
+    return fetch("/question-templates", {
+      method: "POST",
+      body: JSON.stringify(questionTemplate)
+    })
+      .then(r => r.json())
+      .then(r => dispatch(appendQuestionTemplate(r)));
   }
 }

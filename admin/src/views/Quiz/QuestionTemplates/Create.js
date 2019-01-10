@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
   Button,
   Card,
@@ -14,6 +13,8 @@ import {
 } from "reactstrap";
 import {ChoiceAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
 import React, {Component} from "react";
+import {connect} from "react-redux";
+import {createQuestionTemplate} from "../../../redux/creators";
 
 class CreateQuestion extends Component {
   defaultState = {
@@ -25,24 +26,9 @@ class CreateQuestion extends Component {
 
   state = this.defaultState;
 
-  static propTypes = {
-    appendQuestion: PropTypes.func,
-  };
-
   create = () => {
-    fetch("/question-templates", {
-      method: "POST",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(() => {
-        return this.props.appendQuestion(this.state);
-      })
-      .then(() => {
-        this.setState(this.defaultState)
-      })
+    this.props.createQuestionTemplate(this.state)
+      .then(() => this.setState(this.defaultState))
   };
 
   removeChoice = (choiceIndex) => {
@@ -126,13 +112,13 @@ class CreateQuestion extends Component {
               </Col>
             </FormGroup>
             {this.state.Type === 1 &&
-            <ChoiceAnswerTemplates
-              removeChoice={this.removeChoice}
-              addChoice={this.addChoice}
-              answers={this.state.ChoiceAnswerTemplates}/>
+              <ChoiceAnswerTemplates
+                removeChoice={this.removeChoice}
+                addChoice={this.addChoice}
+                answers={this.state.ChoiceAnswerTemplates}/>
             }
             {this.state.Type === 3 &&
-            <FlowDiagramAnswer />
+              <FlowDiagramAnswer />
             }
           </CardBody>
           <CardFooter>
@@ -150,4 +136,7 @@ class CreateQuestion extends Component {
   }
 }
 
-export default CreateQuestion;
+export default connect(
+  null,
+  {createQuestionTemplate}
+)(CreateQuestion);

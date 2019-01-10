@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
+import {connect} from "react-redux";
+import {deleteQuestionTemplate, getQuestionTemplates} from "../../../redux/creators";
 
 export class QuestionsList extends Component {
   state = {
@@ -11,19 +13,27 @@ export class QuestionsList extends Component {
   };
 
   static propTypes = {
-    questions: PropTypes.arrayOf(PropTypes.object),
     openCreateView: PropTypes.func,
     openEditView: PropTypes.func,
     delete: PropTypes.func,
   };
 
+  componentDidMount() {
+    this.props.getQuestionTemplates();
+  };
+
   getVisibleItems = () => {
     const firstPosition = this.state.perPage * this.state.currentPage;
 
-    return this.props.questions.slice(
+    return this.props.list.slice(
       firstPosition,
       firstPosition + this.state.perPage
     );
+  };
+
+  delete = (e, qId) => {
+    e.preventDefault();
+    this.props.deleteQuestionTemplate(qId);
   };
 
   render() {
@@ -56,7 +66,7 @@ export class QuestionsList extends Component {
                 <td>{q.ChoiceAnswerTemplates.map((a) => a.Text)}</td>
                 <td>
                   <i onClick={() => {this.props.openEditView(q)}} className="fa fa-edit text-warning"/>
-                  <i onClick={() => this.props.delete(q.ID)} className="fa fa-minus-circle text-danger"/>
+                  <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle text-danger"/>
                 </td>
               </tr>
             )}
@@ -65,7 +75,7 @@ export class QuestionsList extends Component {
         </CardBody>
         <CardFooter>
           <Pager
-            noPages={Math.ceil(this.props.questions.length / this.state.perPage)}
+            noPages={Math.ceil(this.props.list.length / this.state.perPage)}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}
             toPage={(pageNo) => this.setState({currentPage: pageNo})}
@@ -76,4 +86,9 @@ export class QuestionsList extends Component {
   }
 }
 
-export default QuestionsList;
+export default connect(
+  state => ({
+    list: state.questionTemplate.list
+  }),
+  {getQuestionTemplates, deleteQuestionTemplate}
+)(QuestionsList);

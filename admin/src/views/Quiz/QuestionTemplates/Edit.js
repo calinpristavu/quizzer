@@ -89,13 +89,13 @@ class EditQuestion extends Component {
             </Col>
           </FormGroup>
           {this.state.Type === 1 &&
-          <ChoiceAnswerTemplates
-            removeChoice={this.removeChoice}
-            addChoice={this.addChoice}
-            answers={this.state.ChoiceAnswerTemplates}/>
+            <ChoiceAnswerTemplates
+              removeChoice={this.removeChoice}
+              addChoice={this.addChoice}
+              answers={this.state.ChoiceAnswerTemplates}/>
           }
           {this.state.Type === 3 &&
-          <FlowDiagramAnswer />
+            <FlowDiagramAnswer />
           }
         </CardBody>
       </Card>

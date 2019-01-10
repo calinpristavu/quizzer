@@ -16,47 +16,7 @@ const views = {
 class QuestionTemplates extends Component{
   state = {
     openedView: views.create,
-    editItem: {},
-    questions: [
-      {
-        ID: 1,
-        Text: "Question 1",
-        Type: 1,
-        ChoiceAnswerTemplates: ["Checkbox 1"]
-      }
-    ]
-  };
-
-  componentDidMount() {
-    fetch("/question-templates")
-      .then((response) => response.json())
-      .then((response) => {
-        this.setState({
-          questions: response
-        })
-      })
-  };
-
-  appendQuestion = (question) => {
-    this.setState((oldState) => {
-      const newQuestions = oldState.questions;
-      newQuestions.unshift(question);
-
-      return {questions: newQuestions}
-    })
-  };
-
-  deleteQuestion = (qId) => {
-    fetch("/question-templates/" + qId, {
-      method: "DELETE"
-    })
-      .then(() => {
-        this.setState((oldState) => {
-          return {
-            questions: oldState.questions.filter(q => q.ID !== qId)
-          }
-        })
-      });
+    editItem: {}
   };
 
   render() {
@@ -65,18 +25,16 @@ class QuestionTemplates extends Component{
         <Row>
           <Col xs="12" lg="6">
             <QuestionsList
-              questions={this.state.questions}
               openCreateView={() => this.setState({openedView: views.create})}
               openEditView={(item) => this.setState({
                 openedView: views.edit,
                 editItem: item
-              })}
-              delete={this.deleteQuestion}/>
+              })}/>
           </Col>
 
           <Col xs="12" lg="6">
             {this.state.openedView === views.create ?
-              <CreateQuestion appendQuestion={this.appendQuestion}/> : null
+              <CreateQuestion /> : null
             }
             {this.state.openedView === views.edit ?
               <EditQuestion question={this.state.editItem}/> : null
