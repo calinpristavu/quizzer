@@ -1,34 +1,24 @@
 import React, { Component } from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import {connect} from "react-redux";
+import {getToken} from "../../../redux/creators";
 
 class Login extends Component {
   state = {
-    redirectToReferrer: false,
     username: '',
     password: ''
   };
 
-  login = () => {
-    fetch('/token', {
-      method: "POST",
-      body: JSON.stringify({
-        Username: this.state.username,
-        Password: this.state.password
-      })
-    })
-      .then(r => r.json())
-      .then(r => {
-        localStorage.setItem('token', r.token);
-        this.setState({ redirectToReferrer: true });
-      });
+  login = (e) => {
+    e.preventDefault();
+    this.props.getToken(this.state.username, this.state.password);
   };
 
   render() {
     let { from } = this.props.location.state || { from: { pathname: "/" } };
-    let { redirectToReferrer } = this.state;
 
-    if (redirectToReferrer) return <Redirect to={from} />;
+    if (this.props.loggedIn) return <Redirect to={from} />;
 
     return (
       <div className="app flex-row align-items-center">
@@ -38,7 +28,7 @@ class Login extends Component {
               <CardGroup>
                 <Card className="p-4">
                   <CardBody>
-                    <Form>
+                    <Form onSubmit={this.login}>
                       <h1>Login</h1>
                       <p className="text-muted">Sign In to your account</p>
                       <InputGroup className="mb-3">
@@ -67,7 +57,7 @@ class Login extends Component {
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="primary" className="px-4" onClick={this.login}>Login</Button>
+                          <Button color="primary" className="px-4">Login</Button>
                         </Col>
                         <Col xs="6" className="text-right">
                           <Button color="link" className="px-0">Forgot password?</Button>
@@ -97,4 +87,9 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default connect(
+  state => ({
+    loggedIn: state.user.token !== null
+  }),
+  {getToken}
+)(Login);

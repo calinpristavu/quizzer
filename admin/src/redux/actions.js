@@ -1,6 +1,6 @@
 import {
   APPEND_QUESTION_TEMPLATE,
-  APPEND_QUIZ_TEMPLATE, REMOVE_QUESTION_TEMPLATE,
+  APPEND_QUIZ_TEMPLATE, LOGIN, LOGOUT, REMOVE_QUESTION_TEMPLATE,
   REMOVE_QUIZ_TEMPLATE,
   SET_QUESTION_TEMPLATES,
   SET_QUIZ_TEMPLATES,
@@ -57,3 +57,15 @@ export const setViewedUser = user => ({
   type: SET_VIEWED_USER,
   payload: user
 });
+
+export const login = token => ({
+  type: LOGIN,
+  payload: token
+});
+
+export const logout = () => {
+  localStorage.clear();
+  return {
+    type: LOGOUT
+  }
+};

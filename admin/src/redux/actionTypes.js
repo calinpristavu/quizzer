@@ -11,3 +11,6 @@ export const SET_QUIZZES = "SET_QUIZZES";
 export const SET_VIEWED_USER = "SET_VIEWED_USER";
 export const SET_USERS = "SET_USERS";
 export const SET_USERS_ONLINE = "SET_USERS_ONLINE";
+
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';

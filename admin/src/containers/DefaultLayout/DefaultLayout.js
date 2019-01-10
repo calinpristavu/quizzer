@@ -18,6 +18,8 @@ import {
 import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
+import {connect} from "react-redux";
+import {logout} from "../../redux/actions";
 
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
@@ -27,9 +29,9 @@ class DefaultLayout extends Component {
 
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
-  signOut(e) {
+  logout(e) {
     e.preventDefault();
-    localStorage.clear();
+    this.props.logout();
     this.props.history.push('/login')
   }
 
@@ -38,7 +40,7 @@ class DefaultLayout extends Component {
       <div className="app">
         <AppHeader fixed>
           <Suspense  fallback={this.loading()}>
-            <DefaultHeader onLogout={e=>this.signOut(e)}/>
+            <DefaultHeader onLogout={e=>this.logout(e)}/>
           </Suspense>
         </AppHeader>
         <div className="app-body">
@@ -109,4 +111,7 @@ function PrivateRoute({ render, ...rest }) {
   );
 }
 
-export default DefaultLayout;
+export default connect(
+  null,
+  {logout}
+)(DefaultLayout);

@@ -1,13 +1,26 @@
-import {SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER} from "../actionTypes";
+import {LOGIN, LOGOUT, SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER} from "../actionTypes";
 
 const initialState = {
   all: [],
   online: [],
   viewedUser: null,
+  token: localStorage.getItem('token')
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case LOGIN: {
+      return {
+        ...state,
+        token: action.payload
+      }
+    }
+    case LOGOUT: {
+      return {
+        ...state,
+        token: null
+      }
+    }
     case SET_VIEWED_USER: {
       return {
         ...state,

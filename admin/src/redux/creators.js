@@ -1,6 +1,6 @@
 import {
   appendQuestionTemplate,
-  appendQuizTemplate,
+  appendQuizTemplate, login,
   removeQuestionTemplate,
   removeQuizTemplate,
   setQuestionTemplates,
@@ -96,6 +96,23 @@ export function getUsersOnline() {
         if (null !== r) {
           dispatch(setUsersOnline(r))
         }
+      })
+  }
+}
+
+export function getToken(username, password) {
+  return dispatch => {
+    return fetch('/token', {
+      method: "POST",
+      body: JSON.stringify({
+        Username: username,
+        Password: password
+      })
+    })
+      .then(r => r.json())
+      .then(r => {
+        localStorage.setItem('token', r.token);
+        dispatch(login(r.token));
       })
   }
 }
