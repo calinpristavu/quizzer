@@ -8,33 +8,35 @@ import {
   Row,
   Table
 } from 'reactstrap';
+import {connect} from "react-redux";
+import {getUser} from "../../redux/creators";
+import PropTypes from 'prop-types';
 
 class User extends Component {
-  state = {
-    user: {
-      ID: null,
-      Username: null,
-      Role: null,
-      CreatedAt: null,
-      UpdatedAt: null,
-      DeletedAt: null,
-      CurrentQuizID: null
-    }
+  static propTypes = {
+    user: PropTypes.shape({
+      ID: PropTypes.number.isRequired,
+      Username: PropTypes.string.isRequired,
+      Role: PropTypes.shape({
+        Name: PropTypes.string.isRequired
+      }).isRequired,
+      CreatedAt: PropTypes.string.isRequired,
+      UpdatedAt: PropTypes.string.isRequired,
+      DeletedAt: PropTypes.string.isRequired,
+      CurrentQuizID: PropTypes.number.isRequired,
+    })
   };
 
   componentDidMount() {
-    fetch("/users/" + this.props.match.params.id)
-      .then((response) => response.json())
-      .then((response) => {
-        this.setState({
-          user: response
-        })
-      })
+    this.props.getUser(this.props.match.params.id)
   }
 
   render() {
+    const user = this.props.viewedUser;
 
-    const user = this.state.user;
+    if (null === user) {
+      return null;
+    }
 
     return (
       <div className="animated fadeIn">
@@ -96,4 +98,9 @@ class User extends Component {
   }
 }
 
-export default User;
+export default connect(
+  state => ({
+    viewedUser: state.user.viewedUser
+  }),
+  {getUser}
+)(User);

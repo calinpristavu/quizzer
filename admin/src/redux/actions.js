@@ -4,7 +4,8 @@ import {
   REMOVE_QUIZ_TEMPLATE,
   SET_QUESTION_TEMPLATES,
   SET_QUIZ_TEMPLATES,
-  SET_QUIZZES
+  SET_QUIZZES,
+  SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER
 } from "./actionTypes";
 
 export const setQuizTemplates = quizzes => ({
@@ -40,4 +41,19 @@ export const appendQuestionTemplate = q => ({
 export const setQuizzes = quizzes => ({
   type: SET_QUIZZES,
   payload: quizzes
+});
+
+export const setUsers = users => ({
+  type: SET_USERS,
+  payload: users
+});
+
+export const setUsersOnline = users => ({
+  type: SET_USERS_ONLINE,
+  payload: users
+});
+
+export const setViewedUser = user => ({
+  type: SET_VIEWED_USER,
+  payload: user
 });
