@@ -9,7 +9,7 @@ import SingleResult from "./SingleResult";
 import Filters from "./Filters";
 import List from "./List";
 import {connect} from "react-redux";
-import {getQuizzes} from "../../../redux/creators";
+import {getQuizzes} from "../../../redux/actions";
 var nestedProp = require('nested-property');
 
 class Results extends Component {

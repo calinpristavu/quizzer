@@ -14,7 +14,7 @@ import {
 import {ChoiceAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {createQuestionTemplate} from "../../../redux/creators";
+import {createQuestionTemplate} from "../../../redux/actions";
 
 class CreateQuestion extends Component {
   defaultState = {

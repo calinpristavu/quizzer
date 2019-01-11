@@ -3,7 +3,7 @@ import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import {connect} from "react-redux";
-import {deleteQuizTemplate, getQuizTemplates} from "../../../redux/creators";
+import {deleteQuizTemplate, getQuizTemplates} from "../../../redux/actions";
 
 class List extends Component {
   state = {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Col, Row} from 'reactstrap';
 import {connect} from "react-redux";
-import {getUsers, getUsersOnline} from "../../redux/creators";
+import {getUsers, getUsersOnline} from "../../redux/actions";
 import UserList from "./List";
 
 class Users extends Component {

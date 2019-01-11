@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import CreateStep1 from "./CreateStep1";
 import CreateStep2 from "./CreateStep2";
 import {connect} from "react-redux";
-import {createQuizTemplate} from "../../../redux/creators";
+import {createQuizTemplate} from "../../../redux/actions";
 
 class Create extends Component {
   defaultState = {

@@ -1,6 +1,8 @@
 import {
   APPEND_QUESTION_TEMPLATE,
-  APPEND_QUIZ_TEMPLATE, LOGIN, LOGOUT, REMOVE_QUESTION_TEMPLATE,
+  APPEND_QUIZ_TEMPLATE, LOGIN,
+  LOGOUT,
+  REMOVE_QUESTION_TEMPLATE,
   REMOVE_QUIZ_TEMPLATE,
   SET_QUESTION_TEMPLATES,
   SET_QUIZ_TEMPLATES,
@@ -8,74 +10,174 @@ import {
   SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER
 } from "./actionTypes";
 
-export const setQuizTemplates = quizzes => ({
-  type: SET_QUIZ_TEMPLATES,
-  payload: quizzes
-});
-
-export const removeQuizTemplate = id => ({
-  type: REMOVE_QUIZ_TEMPLATE,
-  payload: id
-});
-
-export const appendQuizTemplate = q => ({
-  type: APPEND_QUIZ_TEMPLATE,
-  payload: q
-});
-
-export const setQuestionTemplates = questions => ({
-  type: SET_QUESTION_TEMPLATES,
-  payload: questions
-});
-
-export const removeQuestionTemplate = id => ({
-  type: REMOVE_QUESTION_TEMPLATE,
-  payload: id
-});
-
-export const appendQuestionTemplate = q => ({
-  type: APPEND_QUESTION_TEMPLATE,
-  payload: q
-});
-
-export const setQuizzes = quizzes => ({
-  type: SET_QUIZZES,
-  payload: quizzes
-});
-
-export const setUsers = users => ({
-  type: SET_USERS,
-  payload: users
-});
-
-export const setUsersOnline = users => ({
-  type: SET_USERS_ONLINE,
-  payload: users
-});
-
-export const setViewedUser = user => ({
-  type: SET_VIEWED_USER,
-  payload: user
-});
-
-export const login = token => ({
-  type: LOGIN,
-  payload: token
-});
-
 export const logout = () => {
   localStorage.clear();
+
   return {
     type: LOGOUT
   }
 };
 
-export const setStatAvgResult = r => ({
-  type: SET_STAT_AVG_RESULT,
-  payload: r
-});
+export function getQuizTemplates() {
+  return dispatch => {
+    return fetch("/quiz-templates")
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: SET_QUIZ_TEMPLATES,
+        payload: r
+      }))
+  }
+}
 
-export const setStatBestResult = r => ({
-  type: SET_STAT_BEST_RESULT,
-  payload: r
-});
+export function deleteQuizTemplate(id) {
+  return dispatch => {
+    return fetch('/quiz-templates/' + id, {
+      method: "DELETE"
+    })
+      .then(() => dispatch({
+        type: REMOVE_QUIZ_TEMPLATE,
+        payload: id
+      }));
+  }
+}
+
+export function createQuizTemplate(quizTemplate) {
+  return dispatch => {
+    return fetch("/quiz-templates", {
+      method: "POST",
+      body: JSON.stringify(quizTemplate)
+    })
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: APPEND_QUIZ_TEMPLATE,
+        payload: r
+      }));
+  }
+}
+
+export function getQuestionTemplates() {
+  return dispatch => {
+    return fetch("/question-templates")
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: SET_QUESTION_TEMPLATES,
+        payload: r
+      }))
+  }
+}
+
+export function deleteQuestionTemplate(id) {
+  return dispatch => {
+    return fetch('/question-templates/' + id, {
+      method: "DELETE"
+    })
+      .then(() => dispatch({
+        type: REMOVE_QUESTION_TEMPLATE,
+        payload: id
+      }));
+  }
+}
+
+export function createQuestionTemplate(questionTemplate) {
+  return dispatch => {
+    return fetch("/question-templates", {
+      method: "POST",
+      body: JSON.stringify(questionTemplate)
+    })
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: APPEND_QUESTION_TEMPLATE,
+        payload: r
+      }));
+  }
+}
+
+export function getQuizzes() {
+  return dispatch => {
+    return fetch("/quizzes")
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: SET_QUIZZES,
+        payload: r
+      }))
+  }
+}
+
+export function getUsers() {
+  return dispatch => {
+    return fetch("/users")
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: SET_USERS,
+        payload: r
+      }))
+  }
+}
+
+export function getUser(id) {
+  return dispatch => {
+    return fetch("/users/" + id)
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: SET_VIEWED_USER,
+        payload: r
+      }))
+  }
+}
+
+export function getUsersOnline() {
+  return dispatch => {
+    return fetch("/users-logged-in")
+      .then(r => r.json())
+      .then(r => {
+        if (null !== r) {
+          dispatch({
+            type: SET_USERS_ONLINE,
+            payload: r
+          })
+        }
+      })
+  }
+}
+
+export function getToken(username, password) {
+  return dispatch => {
+    return fetch('/token', {
+      method: "POST",
+      body: JSON.stringify({
+        Username: username,
+        Password: password
+      })
+    })
+      .then(r => r.json())
+      .then(r => {
+        localStorage.setItem('token', r.token);
+        dispatch({
+          type: LOGIN,
+          payload: r.token
+        });
+      })
+  }
+}
+
+export function getStatAvgResult() {
+  return dispatch => {
+    return fetch('/stats/avg-result')
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: SET_STAT_AVG_RESULT,
+        payload: r
+      }))
+  }
+}
+
+export function getStatBestResult() {
+  return dispatch => {
+    return fetch('/stats/best-result')
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: SET_STAT_BEST_RESULT,
+        payload: r
+      }))
+  }
+}

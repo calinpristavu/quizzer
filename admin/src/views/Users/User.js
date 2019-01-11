@@ -9,7 +9,7 @@ import {
   Table
 } from 'reactstrap';
 import {connect} from "react-redux";
-import {getUser} from "../../redux/creators";
+import {getUser} from "../../redux/actions";
 import PropTypes from 'prop-types';
 
 class User extends Component {
