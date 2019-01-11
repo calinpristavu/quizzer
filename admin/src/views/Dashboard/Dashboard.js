@@ -23,11 +23,11 @@ import OverallQuality from "../Charts/OverallQuality";
 
 const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
 
-const brandPrimary = getStyle('--primary')
-const brandSuccess = getStyle('--success')
-const brandInfo = getStyle('--info')
-const brandWarning = getStyle('--warning')
-const brandDanger = getStyle('--danger')
+const brandPrimary = getStyle('--primary');
+const brandSuccess = getStyle('--success');
+const brandInfo = getStyle('--info');
+const brandWarning = getStyle('--warning');
+const brandDanger = getStyle('--danger');
 
 // Card Chart 1
 const cardChartData1 = {
@@ -84,7 +84,7 @@ const cardChartOpts1 = {
       hoverRadius: 4,
     },
   }
-}
+};
 
 
 // Card Chart 2
@@ -400,7 +400,7 @@ class Dashboard extends Component {
     });
   }
 
-  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
+  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
   render() {
 
@@ -411,9 +411,12 @@ class Dashboard extends Component {
             <Card className="text-white bg-info">
               <CardBody className="pb-0">
                 <ButtonGroup className="float-right">
-                  <ButtonDropdown id='card1' isOpen={this.state.card1} toggle={() => { this.setState({ card1: !this.state.card1 }); }}>
+                  <ButtonDropdown
+                    id='card1'
+                    isOpen={this.state.card1}
+                    toggle={() => { this.setState({ card1: !this.state.card1 }); }}>
                     <DropdownToggle caret className="p-0" color="transparent">
-                      <i className="icon-settings"></i>
+                      <i className="icon-settings" />
                     </DropdownToggle>
                     <DropdownMenu right>
                       <DropdownItem>Action</DropdownItem>
@@ -438,7 +441,7 @@ class Dashboard extends Component {
                 <ButtonGroup className="float-right">
                   <Dropdown id='card2' isOpen={this.state.card2} toggle={() => { this.setState({ card2: !this.state.card2 }); }}>
                     <DropdownToggle className="p-0" color="transparent">
-                      <i className="icon-location-pin"></i>
+                      <i className="icon-location-pin" />
                     </DropdownToggle>
                     <DropdownMenu right>
                       <DropdownItem>Action</DropdownItem>
@@ -462,7 +465,7 @@ class Dashboard extends Component {
                 <ButtonGroup className="float-right">
                   <Dropdown id='card3' isOpen={this.state.card3} toggle={() => { this.setState({ card3: !this.state.card3 }); }}>
                     <DropdownToggle caret className="p-0" color="transparent">
-                      <i className="icon-settings"></i>
+                      <i className="icon-settings" />
                     </DropdownToggle>
                     <DropdownMenu right>
                       <DropdownItem>Action</DropdownItem>
@@ -486,7 +489,7 @@ class Dashboard extends Component {
                 <ButtonGroup className="float-right">
                   <ButtonDropdown id='card4' isOpen={this.state.card4} toggle={() => { this.setState({ card4: !this.state.card4 }); }}>
                     <DropdownToggle caret className="p-0" color="transparent">
-                      <i className="icon-settings"></i>
+                      <i className="icon-settings" />
                     </DropdownToggle>
                     <DropdownMenu right>
                       <DropdownItem>Action</DropdownItem>
@@ -698,7 +701,7 @@ class Dashboard extends Component {
                     <ul>
                       <div className="progress-group">
                         <div className="progress-group-header">
-                          <i className="icon-user progress-group-icon"></i>
+                          <i className="icon-user progress-group-icon" />
                           <span className="title">Male</span>
                           <span className="ml-auto font-weight-bold">43%</span>
                         </div>
@@ -708,7 +711,7 @@ class Dashboard extends Component {
                       </div>
                       <div className="progress-group mb-5">
                         <div className="progress-group-header">
-                          <i className="icon-user-female progress-group-icon"></i>
+                          <i className="icon-user-female progress-group-icon"/>
                           <span className="title">Female</span>
                           <span className="ml-auto font-weight-bold">37%</span>
                         </div>
@@ -718,7 +721,7 @@ class Dashboard extends Component {
                       </div>
                       <div className="progress-group">
                         <div className="progress-group-header">
-                          <i className="icon-globe progress-group-icon"></i>
+                          <i className="icon-globe progress-group-icon"/>
                           <span className="title">Organic Search</span>
                           <span className="ml-auto font-weight-bold">191,235 <span className="text-muted small">(56%)</span></span>
                         </div>
@@ -728,7 +731,7 @@ class Dashboard extends Component {
                       </div>
                       <div className="progress-group">
                         <div className="progress-group-header">
-                          <i className="icon-social-facebook progress-group-icon"></i>
+                          <i className="icon-social-facebook progress-group-icon"/>
                           <span className="title">Facebook</span>
                           <span className="ml-auto font-weight-bold">51,223 <span className="text-muted small">(15%)</span></span>
                         </div>
@@ -738,7 +741,7 @@ class Dashboard extends Component {
                       </div>
                       <div className="progress-group">
                         <div className="progress-group-header">
-                          <i className="icon-social-twitter progress-group-icon"></i>
+                          <i className="icon-social-twitter progress-group-icon"/>
                           <span className="title">Twitter</span>
                           <span className="ml-auto font-weight-bold">37,564 <span className="text-muted small">(11%)</span></span>
                         </div>
@@ -748,7 +751,7 @@ class Dashboard extends Component {
                       </div>
                       <div className="progress-group">
                         <div className="progress-group-header">
-                          <i className="icon-social-linkedin progress-group-icon"></i>
+                          <i className="icon-social-linkedin progress-group-icon"/>
                           <span className="title">LinkedIn</span>
                           <span className="ml-auto font-weight-bold">27,319 <span className="text-muted small">(8%)</span></span>
                         </div>
@@ -758,7 +761,7 @@ class Dashboard extends Component {
                       </div>
                       <div className="divider text-center">
                         <Button color="link" size="sm" className="text-muted" data-toggle="tooltip" data-placement="top"
-                                title="" data-original-title="show more"><i className="icon-options"></i></Button>
+                                title="" data-original-title="show more"><i className="icon-options"/></Button>
                       </div>
                     </ul>
                   </Col>
@@ -767,7 +770,7 @@ class Dashboard extends Component {
                 <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-light">
                   <tr>
-                    <th className="text-center"><i className="icon-people"></i></th>
+                    <th className="text-center"><i className="icon-people"/></th>
                     <th>User</th>
                     <th className="text-center">Country</th>
                     <th>Usage</th>
@@ -780,7 +783,7 @@ class Dashboard extends Component {
                     <td className="text-center">
                       <div className="avatar">
                         <img src={'assets/img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-                        <span className="avatar-status badge-success"></span>
+                        <span className="avatar-status badge-success"/>
                       </div>
                     </td>
                     <td>
@@ -790,7 +793,7 @@ class Dashboard extends Component {
                       </div>
                     </td>
                     <td className="text-center">
-                      <i className="flag-icon flag-icon-us h4 mb-0" title="us" id="us"></i>
+                      <i className="flag-icon flag-icon-us h4 mb-0" title="us" id="us"/>
                     </td>
                     <td>
                       <div className="clearfix">
@@ -804,7 +807,7 @@ class Dashboard extends Component {
                       <Progress className="progress-xs" color="success" value="50" />
                     </td>
                     <td className="text-center">
-                      <i className="fa fa-cc-mastercard" style={{ fontSize: 24 + 'px' }}></i>
+                      <i className="fa fa-cc-mastercard" style={{fontSize: 24 + 'px'}}/>
                     </td>
                     <td>
                       <div className="small text-muted">Last login</div>
@@ -815,7 +818,7 @@ class Dashboard extends Component {
                     <td className="text-center">
                       <div className="avatar">
                         <img src={'assets/img/avatars/2.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-                        <span className="avatar-status badge-danger"></span>
+                        <span className="avatar-status badge-danger"/>
                       </div>
                     </td>
                     <td>
@@ -826,7 +829,7 @@ class Dashboard extends Component {
                       </div>
                     </td>
                     <td className="text-center">
-                      <i className="flag-icon flag-icon-br h4 mb-0" title="br" id="br"></i>
+                      <i className="flag-icon flag-icon-br h4 mb-0" title="br" id="br"/>
                     </td>
                     <td>
                       <div className="clearfix">
@@ -840,7 +843,7 @@ class Dashboard extends Component {
                       <Progress className="progress-xs" color="info" value="10" />
                     </td>
                     <td className="text-center">
-                      <i className="fa fa-cc-visa" style={{ fontSize: 24 + 'px' }}></i>
+                      <i className="fa fa-cc-visa" style={{fontSize: 24 + 'px'}}/>
                     </td>
                     <td>
                       <div className="small text-muted">Last login</div>
@@ -851,7 +854,7 @@ class Dashboard extends Component {
                     <td className="text-center">
                       <div className="avatar">
                         <img src={'assets/img/avatars/3.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-                        <span className="avatar-status badge-warning"></span>
+                        <span className="avatar-status badge-warning"/>
                       </div>
                     </td>
                     <td>
@@ -861,7 +864,7 @@ class Dashboard extends Component {
                       </div>
                     </td>
                     <td className="text-center">
-                      <i className="flag-icon flag-icon-in h4 mb-0" title="in" id="in"></i>
+                      <i className="flag-icon flag-icon-in h4 mb-0" title="in" id="in"/>
                     </td>
                     <td>
                       <div className="clearfix">
@@ -875,7 +878,7 @@ class Dashboard extends Component {
                       <Progress className="progress-xs" color="warning" value="74" />
                     </td>
                     <td className="text-center">
-                      <i className="fa fa-cc-stripe" style={{ fontSize: 24 + 'px' }}></i>
+                      <i className="fa fa-cc-stripe" style={{fontSize: 24 + 'px'}}/>
                     </td>
                     <td>
                       <div className="small text-muted">Last login</div>
@@ -886,7 +889,7 @@ class Dashboard extends Component {
                     <td className="text-center">
                       <div className="avatar">
                         <img src={'assets/img/avatars/4.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-                        <span className="avatar-status badge-secondary"></span>
+                        <span className="avatar-status badge-secondary"/>
                       </div>
                     </td>
                     <td>
@@ -896,7 +899,7 @@ class Dashboard extends Component {
                       </div>
                     </td>
                     <td className="text-center">
-                      <i className="flag-icon flag-icon-fr h4 mb-0" title="fr" id="fr"></i>
+                      <i className="flag-icon flag-icon-fr h4 mb-0" title="fr" id="fr"/>
                     </td>
                     <td>
                       <div className="clearfix">
@@ -910,7 +913,7 @@ class Dashboard extends Component {
                       <Progress className="progress-xs" color="danger" value="98" />
                     </td>
                     <td className="text-center">
-                      <i className="fa fa-paypal" style={{ fontSize: 24 + 'px' }}></i>
+                      <i className="fa fa-paypal" style={{fontSize: 24 + 'px'}}/>
                     </td>
                     <td>
                       <div className="small text-muted">Last login</div>
@@ -921,7 +924,7 @@ class Dashboard extends Component {
                     <td className="text-center">
                       <div className="avatar">
                         <img src={'assets/img/avatars/5.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-                        <span className="avatar-status badge-success"></span>
+                        <span className="avatar-status badge-success"/>
                       </div>
                     </td>
                     <td>
@@ -931,7 +934,7 @@ class Dashboard extends Component {
                       </div>
                     </td>
                     <td className="text-center">
-                      <i className="flag-icon flag-icon-es h4 mb-0" title="es" id="es"></i>
+                      <i className="flag-icon flag-icon-es h4 mb-0" title="es" id="es"/>
                     </td>
                     <td>
                       <div className="clearfix">
@@ -945,7 +948,7 @@ class Dashboard extends Component {
                       <Progress className="progress-xs" color="info" value="22" />
                     </td>
                     <td className="text-center">
-                      <i className="fa fa-google-wallet" style={{ fontSize: 24 + 'px' }}></i>
+                      <i className="fa fa-google-wallet" style={{fontSize: 24 + 'px'}}/>
                     </td>
                     <td>
                       <div className="small text-muted">Last login</div>
@@ -956,7 +959,7 @@ class Dashboard extends Component {
                     <td className="text-center">
                       <div className="avatar">
                         <img src={'assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-                        <span className="avatar-status badge-danger"></span>
+                        <span className="avatar-status badge-danger"/>
                       </div>
                     </td>
                     <td>
@@ -966,7 +969,7 @@ class Dashboard extends Component {
                       </div>
                     </td>
                     <td className="text-center">
-                      <i className="flag-icon flag-icon-pl h4 mb-0" title="pl" id="pl"></i>
+                      <i className="flag-icon flag-icon-pl h4 mb-0" title="pl" id="pl"/>
                     </td>
                     <td>
                       <div className="clearfix">
@@ -980,7 +983,7 @@ class Dashboard extends Component {
                       <Progress className="progress-xs" color="success" value="43" />
                     </td>
                     <td className="text-center">
-                      <i className="fa fa-cc-amex" style={{ fontSize: 24 + 'px' }}></i>
+                      <i className="fa fa-cc-amex" style={{fontSize: 24 + 'px'}}/>
                     </td>
                     <td>
                       <div className="small text-muted">Last login</div>
