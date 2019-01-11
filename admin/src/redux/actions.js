@@ -4,7 +4,7 @@ import {
   REMOVE_QUIZ_TEMPLATE,
   SET_QUESTION_TEMPLATES,
   SET_QUIZ_TEMPLATES,
-  SET_QUIZZES,
+  SET_QUIZZES, SET_STAT_AVG_RESULT, SET_STAT_BEST_RESULT,
   SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER
 } from "./actionTypes";
 
@@ -69,3 +69,13 @@ export const logout = () => {
     type: LOGOUT
   }
 };
+
+export const setStatAvgResult = r => ({
+  type: SET_STAT_AVG_RESULT,
+  payload: r
+});
+
+export const setStatBestResult = r => ({
+  type: SET_STAT_BEST_RESULT,
+  payload: r
+});

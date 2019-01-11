@@ -5,7 +5,7 @@ import {
   removeQuizTemplate,
   setQuestionTemplates,
   setQuizTemplates,
-  setQuizzes, setUsers, setUsersOnline, setViewedUser
+  setQuizzes, setStatAvgResult, setStatBestResult, setStatTotalAttempts, setUsers, setUsersOnline, setViewedUser
 } from "./actions";
 
 export function getQuizTemplates() {
@@ -113,6 +113,26 @@ export function getToken(username, password) {
       .then(r => {
         localStorage.setItem('token', r.token);
         dispatch(login(r.token));
+      })
+  }
+}
+
+export function getStatAvgResult() {
+  return dispatch => {
+    return fetch('/stats/avg-result')
+      .then(r => r.json())
+      .then(r => {
+        dispatch(setStatAvgResult(r));
+      })
+  }
+}
+
+export function getStatBestResult() {
+  return dispatch => {
+    return fetch('/stats/best-result')
+      .then(r => r.json())
+      .then(r => {
+        dispatch(setStatBestResult(r));
       })
   }
 }

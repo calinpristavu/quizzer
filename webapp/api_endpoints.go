@@ -237,7 +237,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, u, http.StatusOK)
 }
 
-func getQuizzes(w http.ResponseWriter, r *http.Request) {
+func getQuizzes(w http.ResponseWriter, _ *http.Request) {
 	var qs []Quiz
 	g.db.
 		Preload("Questions").
@@ -285,6 +285,59 @@ func postToken(w http.ResponseWriter, r *http.Request) {
 		}{tokenString},
 		http.StatusOK,
 	)
+}
+
+func statsTotalAttempts(w http.ResponseWriter, _ *http.Request) {
+	var stats []struct {
+		Date   time.Time
+		Number int
+	}
+
+	g.db.Raw(`
+SELECT 
+	COUNT(*) as number,
+	DATE(updated_at) as date
+FROM quizzes
+GROUP BY DATE(updated_at)
+`).Scan(&stats)
+
+	jsonResponse(w, stats, http.StatusOK)
+}
+
+func statsAvgResult(w http.ResponseWriter, _ *http.Request) {
+	var stats []struct {
+		Date   time.Time
+		Number float32
+	}
+
+	g.db.Raw(`
+SELECT 
+	AVG(score) as number,
+	DATE(updated_at) as date
+FROM quizzes
+WHERE score IS NOT NULL
+GROUP BY DATE(updated_at)
+`).Scan(&stats)
+
+	jsonResponse(w, stats, http.StatusOK)
+}
+
+func statsBestResult(w http.ResponseWriter, _ *http.Request) {
+	var stats []struct {
+		Date   time.Time
+		Number float32
+	}
+
+	g.db.Raw(`
+SELECT 
+	MAX(score) as number,
+	DATE(updated_at) as date
+FROM quizzes
+WHERE score IS NOT NULL
+GROUP BY DATE(updated_at)
+`).Scan(&stats)
+
+	jsonResponse(w, stats, http.StatusOK)
 }
 
 // Helper to send json responses

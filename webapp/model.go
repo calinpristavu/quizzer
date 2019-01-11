@@ -16,6 +16,7 @@ type Quiz struct {
 	User      *User
 	Questions []*Question
 	Active    bool
+	Score     uint
 }
 
 type Question struct {
