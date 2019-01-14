@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
+import {Card, CardBody, CardFooter, CardHeader, Col, Progress, Table} from "reactstrap";
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import {connect} from "react-redux";
-import {deleteQuestionTemplate, getQuestionTemplates} from "../../../redux/actions";
+import {deleteQuestionTemplate, getQuestionTemplates, getQuizzes} from "../../../redux/actions";
+import {selectQuestionTemplatesWithUsage} from "../../../redux/selectors";
 
 export class QuestionsList extends Component {
   state = {
@@ -20,6 +21,7 @@ export class QuestionsList extends Component {
 
   componentDidMount() {
     this.props.getQuestionTemplates();
+    this.props.getQuizzes();
   };
 
   getVisibleItems = () => {
@@ -35,6 +37,19 @@ export class QuestionsList extends Component {
     e.preventDefault();
     this.props.deleteQuestionTemplate(qId);
   };
+
+  static percentToColor(percent) {
+    switch (true) {
+      case percent < 25:
+        return "warning";
+      case percent < 50:
+        return "info";
+      case percent < 75:
+        return "primary";
+      default:
+        return "success";
+    }
+  }
 
   render() {
     return (
@@ -54,7 +69,7 @@ export class QuestionsList extends Component {
             <tr>
               <th>Text</th>
               <th>Type</th>
-              <th>Answer Template</th>
+              <th>Usage rate</th>
               <th />
             </tr>
             </thead>
@@ -63,7 +78,14 @@ export class QuestionsList extends Component {
               <tr key={k}>
                 <td>{q.Text}</td>
                 <td>{q.Type}</td>
-                <td>{q.ChoiceAnswerTemplates.map((a) => a.Text)}</td>
+                <td>
+                  <Progress
+                    style={{maxWidth: "80px"}}
+                    max={100}
+                    className="progress-xs mt-2"
+                    color={QuestionsList.percentToColor(q.usage)}
+                    value={q.usage} />
+                </td>
                 <td>
                   <i onClick={() => {this.props.openView(q)}} className="fa fa-eye"/>
                   <i onClick={() => {this.props.openEditView(q)}} className="fa fa-edit text-warning"/>
@@ -89,7 +111,7 @@ export class QuestionsList extends Component {
 
 export default connect(
   state => ({
-    list: state.questionTemplate.list
+    list: selectQuestionTemplatesWithUsage(state)
   }),
-  {getQuestionTemplates, deleteQuestionTemplate}
+  {getQuestionTemplates, deleteQuestionTemplate, getQuizzes}
 )(QuestionsList);

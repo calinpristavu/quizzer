@@ -8,6 +8,20 @@ export function selectStatBestResult(state) {
   return findStatFrom(state.stats.bestResult, state.stats.from);
 }
 
+export function selectQuestionTemplatesWithUsage (state) {
+  return state.questionTemplate.list.map((qt) => {
+    qt.usage = state.quiz.list.reduce((count, q) => {
+      if (q.Questions.some(e => e.QuestionTemplateID === qt.ID)) {
+        count ++;
+      }
+
+      return count;
+    }, 0) * 100 / state.quiz.list.length;
+
+    return qt;
+  })
+}
+
 function findStatFrom(data, from) {
   const values = [];
 
