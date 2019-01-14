@@ -100,11 +100,7 @@ export function createQuestionTemplate(questionTemplate) {
 }
 
 export function getQuizzes() {
-  return (dispatch, getState) => {
-    if (getState().quiz.list.length > 0) {
-      return;
-    }
-
+  return dispatch => {
     return fetch("/quizzes")
       .then(r => r.json())
       .then(r => dispatch({
