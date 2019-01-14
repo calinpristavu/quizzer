@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {getQuizzes} from "../../redux/actions";
 import moment from "moment";
 import {totalInProgressOptions} from "./chartConfigs";
+import {selectInProgressQuizzes} from "../../redux/selectors";
 
 class TotalInProgressCard extends Component {
   componentDidMount() {
@@ -59,8 +60,7 @@ class TotalInProgressCard extends Component {
 
 export default connect(
   state => ({
-    // TODO: move me to selector
-    quizzes: state.quiz.list.filter(quiz => !quiz.Questions.some(question => !question.isAnswered))
+    quizzes: selectInProgressQuizzes(state)
   }),
   {getQuizzes}
 )(TotalInProgressCard);
