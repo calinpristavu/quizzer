@@ -18,7 +18,6 @@ import {
   Tooltips,
 } from './Base';
 
-import { ButtonDropdowns, ButtonGroups, Buttons, BrandButtons } from './Buttons';
 import { Login, Page404, Page500, Register } from './Pages';
 
 export {
@@ -26,10 +25,6 @@ export {
   Page500,
   Register,
   Login,
-  ButtonDropdowns,
-  ButtonGroups,
-  BrandButtons,
-  Buttons,
   Tooltips,
   Tabs,
   Tables,
