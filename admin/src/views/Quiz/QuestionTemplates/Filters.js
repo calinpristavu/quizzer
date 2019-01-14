@@ -11,24 +11,17 @@ class Filters extends Component {
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
-  static buildUserOptions = (quizzes) => {
+  static buildTypeOptions = (quizzes) => {
     return quizzes.reduce((unique, q) => {
-      if (unique.find(u => u.value === q.User.ID) === undefined) {
+      if (unique.find(u => u.value === q.Type) === undefined) {
         unique.push({
-          value: q.User.ID,
-          label: q.User.Username
+          value: q.Type,
+          label: q.Type
         })
       }
 
       return unique
     }, []);
-  };
-
-  static buildStatusOptions = () => {
-    return [
-      {value: true, label: "In Progress"},
-      {value: false, label: "Finished"},
-    ];
   };
 
   addFilter = (options, filterName) => {
@@ -54,18 +47,9 @@ class Filters extends Component {
           <FormGroup>
             <Select
               isMulti
-              placeholder="Filter by user"
-              onChange={(opt) => this.addFilter(opt, 'User.ID')}
-              options={Filters.buildUserOptions(this.props.items)}/>
-          </FormGroup>
-        </Col>
-        <Col xs="4">
-          <FormGroup>
-            <Select
-              isMulti
-              placeholder="Filter by status"
-              onChange={(opt) => this.addFilter(opt, 'Active')}
-              options={Filters.buildStatusOptions(this.props.items)}/>
+              placeholder="Filter by type"
+              onChange={(opt) => this.addFilter(opt, 'Type')}
+              options={Filters.buildTypeOptions(this.props.items)}/>
           </FormGroup>
         </Col>
       </Row>

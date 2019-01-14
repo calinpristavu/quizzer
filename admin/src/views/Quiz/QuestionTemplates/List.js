@@ -1,16 +1,18 @@
 import PropTypes from "prop-types";
-import {Card, CardBody, CardFooter, CardHeader, Col, Progress, Table} from "reactstrap";
+import {Card, CardBody, CardFooter, CardHeader, Progress, Table} from "reactstrap";
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import {connect} from "react-redux";
 import {deleteQuestionTemplate, getQuestionTemplates, getQuizzes} from "../../../redux/actions";
 import {selectQuestionTemplatesWithUsage} from "../../../redux/selectors";
+import Filters from "./Filters";
 
 export class QuestionsList extends Component {
   state = {
     perPage: 5,
     currentPage: 0,
-    visibleItems: []
+    visibleItems: [],
+    filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
   };
 
   static propTypes = {
@@ -27,10 +29,9 @@ export class QuestionsList extends Component {
   getVisibleItems = () => {
     const firstPosition = this.state.perPage * this.state.currentPage;
 
-    return this.props.list.slice(
-      firstPosition,
-      firstPosition + this.state.perPage
-    );
+    return Filters
+      .apply(this.props.list, this.state.filters)
+      .slice(firstPosition, firstPosition + this.state.perPage);
   };
 
   delete = (e, qId) => {
@@ -51,11 +52,42 @@ export class QuestionsList extends Component {
     }
   }
 
+  addFilter = (propertyPath, val) => {
+    this.setState((oldState) => {
+      const filters = oldState.filters;
+      let filter = filters.find(f => f.propertyPath === propertyPath);
+      if (filter === undefined) {
+        filter = {
+          propertyPath: propertyPath
+        }
+      }
+
+      filter.values = val;
+
+      filters.push(filter);
+      return {filters: filters}
+    })
+  };
+
+  clearFilter = (propertyPath) => {
+    this.setState((oldState) => {
+      const filters = oldState.filters;
+
+      return {
+        filters: filters.filter(f => f.propertyPath !== propertyPath)
+      }
+    })
+  };
+
   render() {
     return (
       <Card>
         <CardHeader>
           <i className="fa fa-align-justify" /> Question Templates
+          <Filters
+            addFilter={this.addFilter}
+            clearFilter={this.clearFilter}
+            items={this.props.list}/>
           <span className="float-right">
             <i
               onClick={this.props.openCreateView}
@@ -98,7 +130,9 @@ export class QuestionsList extends Component {
         </CardBody>
         <CardFooter>
           <Pager
-            noPages={Math.ceil(this.props.list.length / this.state.perPage)}
+            noPages={Math.ceil(
+              Filters.apply(this.props.list, this.state.filters).length / this.state.perPage
+            )}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}
             toPage={(pageNo) => this.setState({currentPage: pageNo})}

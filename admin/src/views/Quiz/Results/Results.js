@@ -10,7 +10,6 @@ import Filters from "./Filters";
 import List from "./List";
 import {connect} from "react-redux";
 import {getQuizzes} from "../../../redux/actions";
-var nestedProp = require('nested-property');
 
 class Results extends Component {
   state = {
@@ -26,15 +25,6 @@ class Results extends Component {
     this.setState({
       openQuiz: id
     })
-  };
-
-  getFilteredQuizzes = () => {
-    return this.props.list.filter(q => {
-      return this.state.filters.reduce(
-        (ok, f) => ok && f.values.includes(nestedProp.get(q, f.propertyPath)),
-        true
-      );
-    });
   };
 
   addFilter = (propertyPath, val) => {
@@ -80,7 +70,7 @@ class Results extends Component {
 
               <List
                 openQuiz={this.openQuiz}
-                quizzes={this.getFilteredQuizzes()}/>
+                quizzes={Filters.apply(this.props.list, this.state.filters)}/>
             </Card>
           </Col>
           {this.state.openQuiz &&
