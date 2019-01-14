@@ -3,21 +3,21 @@ import React, {Component} from 'react';
 import {Card, CardBody} from "reactstrap";
 import {Line} from "react-chartjs-2";
 import {connect} from "react-redux";
-import {getQuizTemplates} from "../../redux/actions";
+import {getQuestionTemplates} from "../../redux/actions";
 import moment from "moment";
-import {quizCountOptions} from "./chartConfigs";
+import {questionCountOptions} from "./chartConfigs";
 
-const brandInfo = getStyle('--info');
+const brandPrimary = getStyle('--primary');
 
-class QuizCountCard extends Component {
+class QuestionCountCard extends Component {
   componentDidMount() {
-    this.props.getQuizTemplates();
+    this.props.getQuestionTemplates();
   }
 
   getData = () => {
     const groupedByDateCreated = [];
 
-    this.props.quizTemplates
+    this.props.questionTemplates
       .reverse()
       .forEach(qt => {
         let createdAt = moment(qt.CreatedAt).format("Y M");
@@ -33,8 +33,8 @@ class QuizCountCard extends Component {
       labels: Object.keys(groupedByDateCreated),
       datasets: [
         {
-          label: 'Quiz Templates',
-          backgroundColor: brandInfo,
+          label: 'Question Templates',
+          backgroundColor: brandPrimary,
           borderColor: 'rgba(255,255,255,.55)',
           data: Object.values(groupedByDateCreated),
         },
@@ -44,15 +44,15 @@ class QuizCountCard extends Component {
 
   render() {
     return (
-      <Card className="text-white bg-info">
+      <Card className="text-white bg-primary">
         <CardBody className="pb-0">
-          <div className="text-value">{this.props.quizTemplates.length}</div>
-          <div>Quiz Templates</div>
+          <div className="text-value">{this.props.questionTemplates.length}</div>
+          <div>Question Templates</div>
         </CardBody>
         <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
           <Line
             data={this.getData()}
-            options={quizCountOptions(this.getData().datasets[0].data)}
+            options={questionCountOptions(this.getData().datasets[0].data)}
             height={70} />
         </div>
       </Card>
@@ -62,7 +62,7 @@ class QuizCountCard extends Component {
 
 export default connect(
   state => ({
-    quizTemplates: state.quizTemplate.list
+    questionTemplates: state.questionTemplate.list
   }),
-  {getQuizTemplates}
-)(QuizCountCard);
+  {getQuestionTemplates}
+)(QuestionCountCard);

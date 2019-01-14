@@ -11,9 +11,9 @@ import {
 import {Line} from "react-chartjs-2";
 import {getStyle, hexToRgba} from "@coreui/coreui/dist/js/coreui-utilities";
 import {connect} from "react-redux";
-import {config} from './OverallQualityChartConfig';
 import {getStatAvgResult, getStatBestResult} from "../../redux/actions";
 import {noGraphEntries, selectStatAvgResult, selectStatBestResult} from "../../redux/selectors";
+import {overallQualityOptions} from "./chartConfigs";
 
 const brandSuccess = getStyle('--success');
 const brandWarning = getStyle('--warning');
@@ -40,8 +40,6 @@ class OverallQuality extends Component {
       },
     }
   };
-
-  mainChartOpts = config(100);
 
   componentDidMount() {
     this.props.getStatAvgResult();
@@ -93,7 +91,7 @@ class OverallQuality extends Component {
           <CardTitle className="mb-0">Overall Performances</CardTitle>
           <div className="small text-muted">Per day</div>
           <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-            <Line data={this.getData()} options={this.mainChartOpts} height={300} />
+            <Line data={this.getData()} options={overallQualityOptions(100)} height={300} />
           </div>
         </CardBody>
         <CardFooter>
