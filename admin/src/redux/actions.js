@@ -19,7 +19,10 @@ export const logout = () => {
 };
 
 export function getQuizTemplates() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    if (getState().quizTemplate.list.length > 0) {
+      return;
+    }
     return fetch("/quiz-templates")
       .then(r => r.json())
       .then(r => dispatch({
@@ -56,7 +59,11 @@ export function createQuizTemplate(quizTemplate) {
 }
 
 export function getQuestionTemplates() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    if (getState().questionTemplate.list.length > 0) {
+      return;
+    }
+
     return fetch("/question-templates")
       .then(r => r.json())
       .then(r => dispatch({
@@ -93,7 +100,11 @@ export function createQuestionTemplate(questionTemplate) {
 }
 
 export function getQuizzes() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    if (getState().quiz.list.length > 0) {
+      return;
+    }
+
     return fetch("/quizzes")
       .then(r => r.json())
       .then(r => dispatch({
@@ -104,7 +115,11 @@ export function getQuizzes() {
 }
 
 export function getUsers() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    if (getState().user.all.length > 0) {
+      return;
+    }
+
     return fetch("/users")
       .then(r => r.json())
       .then(r => dispatch({
