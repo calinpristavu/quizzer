@@ -108,6 +108,7 @@ func getQuestionTemplates(w http.ResponseWriter, _ *http.Request) {
 	g.db.
 		Preload("ChoiceAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
+		Preload("Usages").
 		Order("id desc").
 		Find(&qts)
 

@@ -21,13 +21,15 @@ type Quiz struct {
 
 type Question struct {
 	gorm.Model
-	QuizID            uint
-	Text              string
-	Type              uint
-	IsAnswered        bool
-	ChoiceAnswers     []*ChoiceAnswer
-	TextAnswer        *TextAnswer
-	FlowDiagramAnswer *FlowDiagramAnswer
+	QuizID             uint
+	Text               string
+	Type               uint
+	IsAnswered         bool `gorm:"not null";sql:"DEFAULT:0"`
+	IsCorrect          bool `gorm:"not null";sql:"DEFAULT:0"`
+	ChoiceAnswers      []*ChoiceAnswer
+	TextAnswer         *TextAnswer
+	FlowDiagramAnswer  *FlowDiagramAnswer
+	QuestionTemplateID uint
 }
 
 type ChoiceAnswer struct {
@@ -129,6 +131,13 @@ func (q *Question) saveChoices(answerIds []string, quiz *Quiz) error {
 		return fmt.Errorf("invalid answers: %v", err)
 	}
 
+	correct := true
+	for _, a := range q.ChoiceAnswers {
+		if a.IsCorrect != a.IsCorrect {
+			correct = false
+		}
+	}
+	q.IsCorrect = correct
 	q.IsAnswered = true
 	g.db.Save(q)
 
@@ -173,10 +182,11 @@ func (u *User) finishQuiz() {
 
 func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
 	q := &Question{
-		IsAnswered: false,
-		QuizID:     quiz.ID,
-		Text:       qt.Text,
-		Type:       qt.Type,
+		IsAnswered:         false,
+		QuizID:             quiz.ID,
+		Text:               qt.Text,
+		Type:               qt.Type,
+		QuestionTemplateID: qt.ID,
 	}
 
 	g.db.Save(&q)

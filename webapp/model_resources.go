@@ -14,6 +14,7 @@ type QuestionTemplate struct {
 	Type                      uint // choice / text / ...
 	ChoiceAnswerTemplates     []*ChoiceAnswerTemplate
 	FlowDiagramAnswerTemplate *FlowDiagramAnswerTemplate
+	Usages                    []Question
 }
 
 type ChoiceAnswerTemplate struct {

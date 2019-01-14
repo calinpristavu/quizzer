@@ -6,6 +6,7 @@ import {
 import QuestionsList from "./List";
 import CreateQuestion from "./Create";
 import EditQuestion from "./Edit";
+import View from "./View";
 
 const views = {
   create: 1,
@@ -16,7 +17,8 @@ const views = {
 class QuestionTemplates extends Component{
   state = {
     openedView: views.create,
-    editItem: {}
+    editItem: {},
+    viewItem: {},
   };
 
   render() {
@@ -29,6 +31,10 @@ class QuestionTemplates extends Component{
               openEditView={(item) => this.setState({
                 openedView: views.edit,
                 editItem: item
+              })}
+              openView={(item) => this.setState({
+                openedView: views.view,
+                viewItem: item
               })}/>
           </Col>
 
@@ -38,6 +44,9 @@ class QuestionTemplates extends Component{
             }
             {this.state.openedView === views.edit ?
               <EditQuestion question={this.state.editItem}/> : null
+            }
+            {this.state.openedView === views.view ?
+              <View question={this.state.viewItem}/> : null
             }
           </Col>
         </Row>

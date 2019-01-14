@@ -13,9 +13,9 @@ export class QuestionsList extends Component {
   };
 
   static propTypes = {
-    openCreateView: PropTypes.func,
-    openEditView: PropTypes.func,
-    delete: PropTypes.func,
+    openCreateView: PropTypes.func.isRequired,
+    openEditView: PropTypes.func.isRequired,
+    openView: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -65,6 +65,7 @@ export class QuestionsList extends Component {
                 <td>{q.Type}</td>
                 <td>{q.ChoiceAnswerTemplates.map((a) => a.Text)}</td>
                 <td>
+                  <i onClick={() => {this.props.openView(q)}} className="fa fa-eye"/>
                   <i onClick={() => {this.props.openEditView(q)}} className="fa fa-edit text-warning"/>
                   <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle text-danger"/>
                 </td>
