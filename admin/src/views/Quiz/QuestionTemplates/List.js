@@ -41,9 +41,9 @@ export class QuestionsList extends Component {
   static percentToColor(percent) {
     switch (true) {
       case percent < 25:
-        return "warning";
+        return "danger";
       case percent < 50:
-        return "info";
+        return "warning";
       case percent < 75:
         return "primary";
       default:
@@ -78,7 +78,7 @@ export class QuestionsList extends Component {
               <tr key={k}>
                 <td>{q.Text}</td>
                 <td>{q.Type}</td>
-                <td>
+                <td title={`${q.usage.toFixed(2)} %`}>
                   <Progress
                     style={{maxWidth: "80px"}}
                     max={100}
