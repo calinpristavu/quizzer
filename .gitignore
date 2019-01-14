@@ -23,3 +23,5 @@ vendor/
 jwt/webapp
 jwt/webapp.pub
 quizzer
+/jwt/*
+!/jwt/.gitkeep
