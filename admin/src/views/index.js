@@ -19,17 +19,13 @@ import {
 } from './Base';
 
 import { ButtonDropdowns, ButtonGroups, Buttons, BrandButtons } from './Buttons';
-import { Alerts, Badges, Modals } from './Notifications';
 import { Login, Page404, Page500, Register } from './Pages';
 
 export {
-  Badges,
   Page404,
   Page500,
   Register,
   Login,
-  Modals,
-  Alerts,
   ButtonDropdowns,
   ButtonGroups,
   BrandButtons,
