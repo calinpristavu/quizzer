@@ -1,15 +1,13 @@
 {
-  "name": "@coreui/coreui-free-react-admin-template",
-  "version": "2.1.2",
-  "description": "CoreUI React Open Source Bootstrap 4 Admin Template",
-  "author": "Łukasz Holeczek",
-  "homepage": "https://coreui.io",
-  "copyright": "Copyright 2018 creativeLabs Łukasz Holeczek",
-  "license": "MIT",
+  "name": "@calinpristavu/quizer",
+  "version": "1.0.0",
+  "description": "Admin area for the Quiz App",
+  "author": "Evozon Systems",
+  "homepage": "https://quiz.evozon.com",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
+    "url": "git@github.com:calinpristavu/quizzer.git"
   },
   "dependencies": {
     "@coreui/coreui": "^2.1.1",
@@ -56,7 +54,7 @@
     "eject": "react-scripts eject"
   },
   "bugs": {
-    "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
+    "url": "https://github.com/calinpristavu/quizzer/issues"
   },
   "eslintConfig": {
     "extends": "react-app"
