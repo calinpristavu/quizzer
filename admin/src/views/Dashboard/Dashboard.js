@@ -3,15 +3,10 @@ import { Bar, Line } from 'react-chartjs-2';
 import {
   Badge,
   Button,
-  ButtonDropdown,
-  ButtonGroup,
   Card,
   CardBody,
   CardHeader,
   Col,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
   Progress,
   Row,
   Table,
@@ -22,6 +17,7 @@ import OverallQuality from "../Charts/OverallQuality";
 import QuizCountCard from "../Charts/QuizCountCard";
 import QuestionCountCard from "../Charts/QuestionCountCard";
 import TotalCompletedCard from "../Charts/TotalCompletedCard";
+import TotalInProgressCard from "../Charts/TotalInProgressCard";
 
 const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
 
@@ -29,41 +25,6 @@ const brandPrimary = getStyle('--primary');
 const brandSuccess = getStyle('--success');
 const brandWarning = getStyle('--warning');
 const brandDanger = getStyle('--danger');
-
-// Card Chart 4
-const cardChartData4 = {
-  labels: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: 'rgba(255,255,255,.3)',
-      borderColor: 'transparent',
-      data: [78, 81, 80, 45, 34, 12, 40, 75, 34, 89, 32, 68, 54, 72, 18, 98],
-    },
-  ],
-};
-
-const cardChartOpts4 = {
-  tooltips: {
-    enabled: false,
-    custom: CustomTooltips
-  },
-  maintainAspectRatio: false,
-  legend: {
-    display: false,
-  },
-  scales: {
-    xAxes: [
-      {
-        display: false,
-        barPercentage: 0.6,
-      }],
-    yAxes: [
-      {
-        display: false,
-      }],
-  },
-};
 
 // Social Box Chart
 const socialBoxData = [
@@ -239,27 +200,7 @@ class Dashboard extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-            <Card className="text-white bg-danger">
-              <CardBody className="pb-0">
-                <ButtonGroup className="float-right">
-                  <ButtonDropdown id='card4' isOpen={this.state.card4} toggle={() => { this.setState({ card4: !this.state.card4 }); }}>
-                    <DropdownToggle caret className="p-0" color="transparent">
-                      <i className="icon-settings" />
-                    </DropdownToggle>
-                    <DropdownMenu right>
-                      <DropdownItem>Action</DropdownItem>
-                      <DropdownItem>Another action</DropdownItem>
-                      <DropdownItem>Something else here</DropdownItem>
-                    </DropdownMenu>
-                  </ButtonDropdown>
-                </ButtonGroup>
-                <div className="text-value">9.823</div>
-                <div>Members online</div>
-              </CardBody>
-              <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
-                <Bar data={cardChartData4} options={cardChartOpts4} height={70} />
-              </div>
-            </Card>
+            <TotalInProgressCard/>
           </Col>
         </Row>
         <Row>

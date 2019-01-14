@@ -171,3 +171,27 @@ export function totalCompletedOptions() {
     },
   }
 }
+
+export function totalInProgressOptions() {
+  return {
+    tooltips: {
+      enabled: false,
+      custom: CustomTooltips
+    },
+    maintainAspectRatio: false,
+    legend: {
+      display: false,
+    },
+    scales: {
+      xAxes: [
+        {
+          display: false,
+          barPercentage: 0.6,
+        }],
+      yAxes: [
+        {
+          display: false,
+        }],
+    },
+  }
+}
