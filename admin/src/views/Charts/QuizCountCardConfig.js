@@ -1,10 +1,4 @@
-import {getStyle} from "@coreui/coreui/dist/js/coreui-utilities";
 import {CustomTooltips} from "@coreui/coreui-plugin-chartjs-custom-tooltips";
-import React, {Component} from 'react';
-import {Card, CardBody} from "reactstrap";
-import {Line} from "react-chartjs-2";
-import {connect} from "react-redux";
-import {getQuizTemplates} from "../../redux/actions";
 
 export function config(data) {
   return {

@@ -47,7 +47,7 @@ class QuizCountCard extends Component {
       <Card className="text-white bg-info">
         <CardBody className="pb-0">
           <div className="text-value">{this.props.quizTemplates.length}</div>
-          <div>Predefined quizzes</div>
+          <div>Quiz Templates</div>
         </CardBody>
         <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
           <Line
