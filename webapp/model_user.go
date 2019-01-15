@@ -60,6 +60,13 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 		return nil, fmt.Errorf("Bad credentials: %s, %s\n", uname, pass)
 	}
 
+	r, err := roleRoot.findChildWithId(u.RoleID)
+	if err != nil {
+		return nil, fmt.Errorf("could not assign role to user %d: %v", u.ID, err)
+	}
+
+	u.Role = r
+
 	return u, nil
 }
 
@@ -89,8 +96,9 @@ var (
 )
 
 func (u User) IsGranted(r Role) bool {
-	// TODO: you can do better.
-	return true
+	_, err := u.Role.findChildWithId(r.ID)
+
+	return err == nil
 }
 
 func (r Role) findChildWithId(id int) (Role, error) {
