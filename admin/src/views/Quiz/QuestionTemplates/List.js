@@ -3,7 +3,12 @@ import {Card, CardBody, CardFooter, CardHeader, Progress, Table} from "reactstra
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import {connect} from "react-redux";
-import {deleteQuestionTemplate, getQuestionTemplates, getQuizzes} from "../../../redux/actions";
+import {
+  deleteQuestionTemplate,
+  getQuestionTemplates,
+  getQuizzes,
+  openQuestionTemplateView
+} from "../../../redux/actions";
 import {selectQuestionTemplatesWithUsage} from "../../../redux/selectors";
 import Filters from "./Filters";
 import {questionTypes} from "./QuestionTemplates";
@@ -19,7 +24,7 @@ export class QuestionsList extends Component {
   static propTypes = {
     openCreateView: PropTypes.func.isRequired,
     openEditView: PropTypes.func.isRequired,
-    openView: PropTypes.func.isRequired
+    openQuestionTemplateView: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -84,17 +89,17 @@ export class QuestionsList extends Component {
     return (
       <Card>
         <CardHeader>
-          <i className="fa fa-align-justify" /> Question Templates
-          <Filters
-            addFilter={this.addFilter}
-            clearFilter={this.clearFilter}
-            items={this.props.list}/>
           <span className="float-right">
             <i
               onClick={this.props.openCreateView}
               className="fa fa-plus-circle text-success"
               style={{cursor: "pointer"}}/>
           </span>
+          <i className="fa fa-align-justify" /> Question Templates
+          <Filters
+            addFilter={this.addFilter}
+            clearFilter={this.clearFilter}
+            items={this.props.list}/>
         </CardHeader>
         <CardBody>
           <Table responsive hover>
@@ -120,7 +125,7 @@ export class QuestionsList extends Component {
                     value={q.usage} />
                 </td>
                 <td>
-                  <i onClick={() => {this.props.openView(q)}} className="fa fa-eye"/>
+                  <i onClick={() => {this.props.openQuestionTemplateView(q)}} className="fa fa-eye"/>
                   <i onClick={() => {this.props.openEditView(q)}} className="fa fa-edit text-warning"/>
                   <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle text-danger"/>
                 </td>
@@ -148,5 +153,5 @@ export default connect(
   state => ({
     list: selectQuestionTemplatesWithUsage(state)
   }),
-  {getQuestionTemplates, deleteQuestionTemplate, getQuizzes}
+  {getQuestionTemplates, deleteQuestionTemplate, getQuizzes, openQuestionTemplateView}
 )(QuestionsList);

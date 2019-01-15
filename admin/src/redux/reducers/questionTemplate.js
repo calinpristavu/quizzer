@@ -1,11 +1,12 @@
 import {
-  APPEND_QUESTION_TEMPLATE,
+  APPEND_QUESTION_TEMPLATE, OPEN_QUESTION_TEMPLATE_VIEW,
   REMOVE_QUESTION_TEMPLATE,
   SET_QUESTION_TEMPLATES
 } from "../actionTypes";
 
 const initialState = {
-  list: []
+  list: [],
+  viewedItem: null,
 };
 
 export default function(state = initialState, action) {
@@ -29,6 +30,12 @@ export default function(state = initialState, action) {
           action.payload,
           ...state.list
         ]
+      }
+    }
+    case OPEN_QUESTION_TEMPLATE_VIEW: {
+      return {
+        ...state,
+        viewedItem: action.payload
       }
     }
 

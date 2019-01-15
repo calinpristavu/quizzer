@@ -1,7 +1,8 @@
-import {SET_QUIZZES} from "../actionTypes";
+import {OPEN_QUIZ_VIEW, SET_QUIZZES} from "../actionTypes";
 
 const initialState = {
-  list: []
+  list: [],
+  viewedItem: null,
 };
 
 export default function(state = initialState, action) {
@@ -10,6 +11,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         list: action.payload
+      }
+    }
+    case OPEN_QUIZ_VIEW: {
+      return {
+        ...state,
+        viewedItem: action.payload
       }
     }
 

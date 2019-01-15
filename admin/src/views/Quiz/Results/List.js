@@ -3,6 +3,8 @@ import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
+import {openQuizView} from "../../../redux/actions";
 
 class List extends Component {
   state = {
@@ -12,7 +14,7 @@ class List extends Component {
   };
 
   static propTypes = {
-    openQuiz: PropTypes.func.isRequired,
+    openQuizView: PropTypes.func.isRequired,
     quizzes: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
@@ -86,7 +88,7 @@ class List extends Component {
                   : <span>{List.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}</span>
                 }</td>
                 <td>
-                  <i className="fa fa-eye" onClick={() => this.props.openQuiz(q.ID)}/>
+                  <i className="fa fa-eye" onClick={() => this.props.openQuizView(q)}/>
                 </td>
               </tr>
             )}
@@ -106,4 +108,7 @@ class List extends Component {
   }
 }
 
-export default List;
+export default connect(
+  null,
+  {openQuizView}
+)(List);

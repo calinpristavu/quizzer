@@ -5,7 +5,7 @@ import {
   Card,
   CardHeader,
 } from 'reactstrap';
-import SingleResult from "./SingleResult";
+import View from "./View";
 import Filters from "./Filters";
 import List from "./List";
 import {connect} from "react-redux";
@@ -14,18 +14,11 @@ import {getQuizzes} from "../../../redux/actions";
 class Results extends Component {
   state = {
     filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
-    openQuiz: null
   };
 
   componentDidMount() {
     this.props.getQuizzes();
   }
-
-  openQuiz = (id) => {
-    this.setState({
-      openQuiz: id
-    })
-  };
 
   addFilter = (propertyPath, val) => {
     this.setState((oldState) => {
@@ -69,14 +62,10 @@ class Results extends Component {
               </CardHeader>
 
               <List
-                openQuiz={this.openQuiz}
                 quizzes={Filters.apply(this.props.list, this.state.filters)}/>
             </Card>
           </Col>
-          {this.state.openQuiz &&
-            <SingleResult
-              quiz={this.props.list.find(q => q.ID === this.state.openQuiz)} />
-          }
+          <View />
         </Row>
       </div>
     )

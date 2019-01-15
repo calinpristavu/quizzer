@@ -6,6 +6,8 @@ import {
 } from "reactstrap";
 import React, {Component} from "react";
 import {Pie} from "react-chartjs-2";
+import {connect} from "react-redux";
+import {openQuestionTemplateView} from "../../../redux/actions";
 
 class View extends Component {
   static propTypes = {
@@ -15,7 +17,7 @@ class View extends Component {
       Usages: PropTypes.arrayOf(PropTypes.shape({
         IsAnswered: PropTypes.bool.isRequired,
         IsCorrect: PropTypes.bool.isRequired,
-      })).isRequired,
+      })),
     }),
   };
 
@@ -55,10 +57,20 @@ class View extends Component {
   };
 
   render() {
+    if (null === this.props.question) {
+      return null;
+    }
+
     return (
       <Card>
         <CardHeader>
-          <i className="fa fa-edit text-warning" />
+          <span className="float-right">
+            <i
+              onClick={() => this.props.openQuestionTemplateView(null)}
+              className="fa fa-close"
+              style={{cursor: "pointer"}}/>
+          </span>
+          <i className="fa fa-eye" />
           <strong>{this.props.question.Text}</strong>
           <small> Overview</small>
         </CardHeader>
@@ -74,4 +86,9 @@ class View extends Component {
   }
 }
 
-export default View;
+export default connect(
+  state => ({
+    question: state.questionTemplate.viewedItem
+  }),
+  {openQuestionTemplateView}
+)(View);

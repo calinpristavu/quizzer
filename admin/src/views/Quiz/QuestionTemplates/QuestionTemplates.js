@@ -22,9 +22,7 @@ export const questionTypes = {
 
 class QuestionTemplates extends Component{
   state = {
-    openedView: views.create,
     editItem: {},
-    viewItem: {},
   };
 
   render() {
@@ -37,10 +35,6 @@ class QuestionTemplates extends Component{
               openEditView={(item) => this.setState({
                 openedView: views.edit,
                 editItem: item
-              })}
-              openView={(item) => this.setState({
-                openedView: views.view,
-                viewItem: item
               })}/>
           </Col>
 
@@ -51,9 +45,7 @@ class QuestionTemplates extends Component{
             {this.state.openedView === views.edit ?
               <EditQuestion question={this.state.editItem}/> : null
             }
-            {this.state.openedView === views.view ?
-              <View question={this.state.viewItem}/> : null
-            }
+            <View/>
           </Col>
         </Row>
       </div>

@@ -1,8 +1,10 @@
 import {Card, CardBody, CardHeader, Col} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
+import {openQuizView} from "../../../redux/actions";
 
-class SingleResult extends Component {
+class View extends Component {
   static propTypes = {
     quiz: PropTypes.object
   };
@@ -53,6 +55,10 @@ class SingleResult extends Component {
   };
 
   render() {
+    if (null === this.props.quiz) {
+      return null;
+    }
+
     return (
       <Col xl={6}>
         <Card>
@@ -61,7 +67,10 @@ class SingleResult extends Component {
           </CardHeader>
           <CardBody>
             {this.props.quiz.Questions.map((q, k) => (
-              this.renderQuestion(q, k)
+              <div>
+                {this.renderQuestion(q, k)}
+                <hr/>
+              </div>
             ))}
           </CardBody>
         </Card>
@@ -70,4 +79,9 @@ class SingleResult extends Component {
   }
 }
 
-export default SingleResult;
+export default connect(
+  state => ({
+    quiz: state.quiz.viewedItem
+  }),
+  {openQuizView}
+)(View);

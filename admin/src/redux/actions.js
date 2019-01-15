@@ -1,7 +1,7 @@
 import {
   APPEND_QUESTION_TEMPLATE,
   APPEND_QUIZ_TEMPLATE, LOGIN,
-  LOGOUT,
+  LOGOUT, OPEN_QUESTION_TEMPLATE_VIEW, OPEN_QUIZ_VIEW,
   REMOVE_QUESTION_TEMPLATE,
   REMOVE_QUIZ_TEMPLATE,
   SET_QUESTION_TEMPLATES,
@@ -190,5 +190,23 @@ export function getStatBestResult() {
         type: SET_STAT_BEST_RESULT,
         payload: r
       }))
+  }
+}
+
+export function openQuestionTemplateView(qt) {
+  return dispatch => {
+    return dispatch({
+        type: OPEN_QUESTION_TEMPLATE_VIEW,
+        payload: qt
+      })
+  }
+}
+
+export function openQuizView(q) {
+  return dispatch => {
+    return dispatch({
+        type: OPEN_QUIZ_VIEW,
+        payload: q
+      })
   }
 }
