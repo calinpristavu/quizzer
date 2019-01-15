@@ -1,30 +1,32 @@
-import {CardBody, CardFooter, Table} from "reactstrap";
+import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import moment from 'moment';
-import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {openQuizView} from "../../../redux/actions";
+import {getQuizzes, openQuizView} from "../../../redux/actions";
+import Filters from "./Filters";
 
 class List extends Component {
   state = {
     perPage: 5,
     currentPage: 0,
-    visibleItems: []
+    visibleItems: [],
+    filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
   };
 
-  static propTypes = {
-    openQuizView: PropTypes.func.isRequired,
-    quizzes: PropTypes.arrayOf(PropTypes.object).isRequired,
-  };
+  componentDidMount() {
+    this.props.getQuizzes();
+  }
 
   getVisibleItems = () => {
     const firstPosition = this.state.perPage * this.state.currentPage;
 
-    return this.props.quizzes.slice(
-      firstPosition,
-      firstPosition + this.state.perPage
-    );
+    return Filters
+      .apply(this.props.list, this.state.filters)
+      .slice(
+        firstPosition,
+        firstPosition + this.state.perPage
+      );
   };
 
   static computePercentCompleted(questions) {
@@ -33,6 +35,33 @@ class List extends Component {
       0
     ) * 100 / questions.length
   }
+
+  addFilter = (propertyPath, val) => {
+    this.setState((oldState) => {
+      const filters = oldState.filters;
+      let filter = filters.find(f => f.propertyPath === propertyPath);
+      if (filter === undefined) {
+        filter = {
+          propertyPath: propertyPath
+        }
+      }
+
+      filter.values = val;
+
+      filters.push(filter);
+      return {filters: filters}
+    })
+  };
+
+  clearFilter = (propertyPath) => {
+    this.setState((oldState) => {
+      const filters = oldState.filters;
+
+      return {
+        filters: filters.filter(f => f.propertyPath !== propertyPath)
+      }
+    })
+  };
 
   static countCorrect(questions) {
     return questions.reduce((carry, q) => {
@@ -59,7 +88,14 @@ class List extends Component {
 
   render() {
     return (
-      <div>
+      <Card>
+        <CardHeader>
+          <i className="fa fa-align-justify"/> Quiz Results <small className="text-muted">list</small>
+          <Filters
+            addFilter={this.addFilter}
+            clearFilter={this.clearFilter}
+            items={this.props.list}/>
+        </CardHeader>
         <CardBody>
           <Table>
             <thead>
@@ -97,18 +133,22 @@ class List extends Component {
         </CardBody>
         <CardFooter>
           <Pager
-            noPages={Math.ceil(this.props.quizzes.length / this.state.perPage)}
+            noPages={Math.ceil(
+              Filters.apply(this.props.list, this.state.filters).length / this.state.perPage
+            )}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}
             toPage={(pageNo) => this.setState({currentPage: pageNo})}
             setPerPage={(v) => this.setState({perPage: v})}/>
         </CardFooter>
-      </div>
+      </Card>
     )
   }
 }
 
 export default connect(
-  null,
-  {openQuizView}
+  state => ({
+    list: state.quiz.list
+  }),
+  { getQuizzes, openQuizView}
 )(List);

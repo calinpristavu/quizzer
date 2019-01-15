@@ -1,4 +1,4 @@
-import {Card, CardBody, CardHeader, Col} from "reactstrap";
+import {Card, CardBody, CardHeader} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
@@ -60,21 +60,25 @@ class View extends Component {
     }
 
     return (
-      <Col xl={6}>
-        <Card>
-          <CardHeader>
-            <i className="fa fa-eye"/> Quiz "{this.props.quiz.Name}" for user {this.props.quiz.User.Username}
-          </CardHeader>
-          <CardBody>
-            {this.props.quiz.Questions.map((q, k) => (
-              <div>
-                {this.renderQuestion(q, k)}
-                <hr/>
-              </div>
-            ))}
-          </CardBody>
-        </Card>
-      </Col>
+      <Card>
+        <CardHeader>
+          <span className="float-right">
+            <i
+              onClick={() => this.props.openQuizView(null)}
+              className="fa fa-close"
+              style={{cursor: "pointer"}}/>
+          </span>
+          <i className="fa fa-eye"/> Quiz "{this.props.quiz.Name}" for user {this.props.quiz.User.Username}
+        </CardHeader>
+        <CardBody>
+          {this.props.quiz.Questions.map((q, k) => (
+            <div key={k}>
+              {this.renderQuestion(q, k)}
+              <hr/>
+            </div>
+          ))}
+        </CardBody>
+      </Card>
     )
   }
 }
