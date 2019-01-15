@@ -5,6 +5,7 @@ import moment from 'moment';
 import {connect} from "react-redux";
 import {getQuizzes, openQuizView} from "../../../redux/actions";
 import Filters from "./Filters";
+import {Link} from "react-router-dom";
 
 class List extends Component {
   state = {
@@ -86,6 +87,12 @@ class List extends Component {
     return moment.duration(mEnd.diff(mStart)).humanize()
   }
 
+  renderQuizTemplateCell = (name) => {
+    return name === 'Generated'
+      ? name
+      : <Link to="/quiz/quiz-templates">{name}</Link>
+  };
+
   render() {
     return (
       <Card>
@@ -102,7 +109,7 @@ class List extends Component {
             <tr>
               <th>#</th>
               <th>User</th>
-              <th>Quiz</th>
+              <th>Quiz Template</th>
               <th>% Completed</th>
               <th>Score</th>
               <th>Status</th>
@@ -115,7 +122,7 @@ class List extends Component {
               <tr key={k}>
                 <td>{q.ID}</td>
                 <td>{q.User ? q.User.Username : '-'}</td>
-                <td>{q.Name}</td>
+                <td>{this.renderQuizTemplateCell(q.Name)}</td>
                 <td>{List.computePercentCompleted(q.Questions).toFixed(2)} <small className="text-muted">%</small></td>
                 <td>{List.countCorrect(q.Questions)} / {q.Questions.length}</td>
                 <td>{q.Active ? 'In Progress' : 'Finished'}</td>
