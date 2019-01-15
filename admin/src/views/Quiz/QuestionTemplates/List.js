@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {deleteQuestionTemplate, getQuestionTemplates, getQuizzes} from "../../../redux/actions";
 import {selectQuestionTemplatesWithUsage} from "../../../redux/selectors";
 import Filters from "./Filters";
+import {questionTypes} from "./QuestionTemplates";
 
 export class QuestionsList extends Component {
   state = {
@@ -109,7 +110,7 @@ export class QuestionsList extends Component {
             {this.getVisibleItems().map((q, k) =>
               <tr key={k}>
                 <td>{q.Text}</td>
-                <td>{q.Type}</td>
+                <td>{questionTypes[q.Type]}</td>
                 <td title={`${q.usage.toFixed(2)} %`}>
                   <Progress
                     style={{maxWidth: "80px"}}

@@ -11,6 +11,7 @@ import {
 } from "reactstrap";
 import {ChoiceAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
 import React, {Component} from "react";
+import {questionTypes} from "./QuestionTemplates";
 
 class EditQuestion extends Component {
   state = {
@@ -61,30 +62,24 @@ class EditQuestion extends Component {
                   className="form-check-input"
                   type="radio"
                   onChange={() => this.setState({Type: 1})}
-                  id="question-type-1"
-                  checked={this.state.Type === 1}
-                  name="Type"/>
-                <Label className="form-check-label" check htmlFor="question-type-1">Checkboxes</Label>
+                  checked={this.state.Type === 1}/>
+                <Label className="form-check-label" check htmlFor="question-type-1">{questionTypes[1]}</Label>
               </FormGroup>
               <FormGroup check inline>
                 <Input
                   className="form-check-input"
                   type="radio"
                   onChange={() => this.setState({Type: 2})}
-                  id="question-type-2"
-                  checked={this.state.Type === 2}
-                  name="Type" />
-                <Label className="form-check-label" check htmlFor="question-type-2">Free text</Label>
+                  checked={this.state.Type === 2}/>
+                <Label className="form-check-label" check htmlFor="question-type-2">{questionTypes[2]}</Label>
               </FormGroup>
               <FormGroup check inline>
                 <Input
                   className="form-check-input"
                   type="radio"
                   onChange={() => this.setState({Type: 3})}
-                  id="question-type-3"
-                  checked={this.state.Type === 3}
-                  name="Type" />
-                <Label className="form-check-label" check htmlFor="question-type-3">Flow Diagram</Label>
+                  checked={this.state.Type === 3}/>
+                <Label className="form-check-label" check htmlFor="question-type-3">{questionTypes[3]}</Label>
               </FormGroup>
             </Col>
           </FormGroup>

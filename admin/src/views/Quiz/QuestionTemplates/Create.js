@@ -15,6 +15,7 @@ import {ChoiceAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {createQuestionTemplate} from "../../../redux/actions";
+import {questionTypes} from "./QuestionTemplates";
 
 class CreateQuestion extends Component {
   defaultState = {
@@ -87,7 +88,7 @@ class CreateQuestion extends Component {
                     onChange={() => this.setState({Type: 1})}
                     id="question-type-1"
                     name="Type"/>
-                  <Label className="form-check-label" check htmlFor="question-type-1">Checkboxes</Label>
+                  <Label className="form-check-label" check htmlFor="question-type-1">{questionTypes[1]}</Label>
                 </FormGroup>
                 <FormGroup check inline>
                   <Input
@@ -97,7 +98,7 @@ class CreateQuestion extends Component {
                     onChange={() => this.setState({Type: 2})}
                     id="question-type-2"
                     name="Type" />
-                  <Label className="form-check-label" check htmlFor="question-type-2">Free text</Label>
+                  <Label className="form-check-label" check htmlFor="question-type-2">{questionTypes[2]}</Label>
                 </FormGroup>
                 <FormGroup check inline>
                   <Input
@@ -107,7 +108,7 @@ class CreateQuestion extends Component {
                     onChange={() => this.setState({Type: 3})}
                     id="question-type-3"
                     name="Type" />
-                  <Label className="form-check-label" check htmlFor="question-type-3">Flow Diagram</Label>
+                  <Label className="form-check-label" check htmlFor="question-type-3">{questionTypes[3]}</Label>
                 </FormGroup>
               </Col>
             </FormGroup>

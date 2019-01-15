@@ -2,6 +2,7 @@ import {Col, FormGroup, Row} from "reactstrap";
 import Select from "react-select";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
+import {questionTypes} from "./QuestionTemplates";
 var nestedProp = require('nested-property');
 
 class Filters extends Component {
@@ -16,7 +17,7 @@ class Filters extends Component {
       if (unique.find(u => u.value === q.Type) === undefined) {
         unique.push({
           value: q.Type,
-          label: q.Type
+          label: questionTypes[q.Type]
         })
       }
 

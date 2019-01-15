@@ -14,6 +14,12 @@ const views = {
   view: 3
 };
 
+export const questionTypes = {
+  1: "Checkboxes",
+  2: "Free text",
+  3: "Flow Diagram",
+};
+
 class QuestionTemplates extends Component{
   state = {
     openedView: views.create,
