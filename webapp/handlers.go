@@ -34,7 +34,7 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 	u.CurrentQuizID = &u.CurrentQuiz.ID
 	g.db.Save(&u)
 
-	http.Redirect(w, r, "/question", 302)
+	http.Redirect(w, r, "/question", http.StatusFound)
 }
 
 func getQuestion(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +43,7 @@ func getQuestion(w http.ResponseWriter, r *http.Request) {
 	quiz := u.CurrentQuiz
 	if quiz == nil {
 		log.Printf("no active quiz for user %s\n", u.Username)
-		http.Redirect(w, r, "/", 302)
+		http.Redirect(w, r, "/", http.StatusFound)
 
 		return
 	}
@@ -51,7 +51,7 @@ func getQuestion(w http.ResponseWriter, r *http.Request) {
 	question, err := quiz.getNextQuestion()
 	if err != nil {
 		log.Printf("No questions left. Redirecting to /finished: %v \n", err)
-		http.Redirect(w, r, "/finished", 302)
+		http.Redirect(w, r, "/finished", http.StatusFound)
 		return
 	}
 
@@ -182,7 +182,7 @@ func finished(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		u.finishQuiz()
 
-		http.Redirect(w, r, "/", 302)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
@@ -236,7 +236,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*User)
 
 	if u.CurrentQuiz != nil {
-		http.Redirect(w, r, "/question", 301)
+		http.Redirect(w, r, "/question", http.StatusFound)
 
 		return
 	}
@@ -267,7 +267,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now(),
 	})
 
-	http.Redirect(w, r, "/login", 301)
+	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
 func myAccount(w http.ResponseWriter, r *http.Request) {
@@ -310,7 +310,7 @@ func page(w http.ResponseWriter, r *http.Request) {
 			}
 			http.SetCookie(w, cookie)
 
-			http.Redirect(w, r, "/", 301)
+			http.Redirect(w, r, "/", http.StatusFound)
 			return
 		}
 

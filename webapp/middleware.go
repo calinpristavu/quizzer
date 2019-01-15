@@ -27,23 +27,16 @@ func UserSession(next http.Handler) http.Handler {
 				return
 			}
 		}
-		ctx := context.WithValue(r.Context(), "user", LoggedIn[username])
 
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
-}
-
-func RoleUser(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		u := r.Context().Value("user").(*User)
-
-		if !u.IsGranted(roleUser) {
+		if !LoggedIn[username].IsGranted(roleUser) {
 			http.Error(w, "Forbidden", http.StatusForbidden)
 
 			return
 		}
 
-		next.ServeHTTP(w, r)
+		ctx := context.WithValue(r.Context(), "user", LoggedIn[username])
+
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
