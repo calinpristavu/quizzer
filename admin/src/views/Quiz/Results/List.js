@@ -11,7 +11,6 @@ class List extends Component {
   state = {
     perPage: 5,
     currentPage: 0,
-    visibleItems: [],
     filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
   };
 
@@ -123,7 +122,7 @@ class List extends Component {
                 <td>{q.ID}</td>
                 <td>{q.User ? q.User.Username : '-'}</td>
                 <td>{this.renderQuizTemplateCell(q.Name)}</td>
-                <td>{List.computePercentCompleted(q.Questions).toFixed(2)} <small className="text-muted">%</small></td>
+                <td>{List.computePercentCompleted(q.Questions).toFixed(0)}<small className="text-muted">%</small></td>
                 <td>{List.countCorrect(q.Questions)} / {q.Questions.length}</td>
                 <td>{q.Active ? 'In Progress' : 'Finished'}</td>
                 <td>{q.Active
