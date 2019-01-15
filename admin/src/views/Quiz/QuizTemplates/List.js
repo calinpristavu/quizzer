@@ -8,8 +8,7 @@ import {deleteQuizTemplate, getQuizTemplates} from "../../../redux/actions";
 class List extends Component {
   state = {
     perPage: 5,
-    currentPage: 0,
-    visibleItems: []
+    currentPage: 0
   };
 
   static propTypes = {
