@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Admin area for the Quiz App",
   "author": "Evozon Systems",
-  "homepage": "https://quiz.evozon.com",
+  "homepage": "https://quiz.evozon.com/admin",
   "private": true,
   "repository": {
     "type": "git",
