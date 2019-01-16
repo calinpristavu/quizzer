@@ -83,12 +83,35 @@
                 {{.}}
             </div>
         {{ end }}
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="remember_me" value="remember-me"> Remember me
-            </label>
-        </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit" name="login">Enter</button>
+    </form>
+
+    <form action="/complete-registration" method="POST" class="form-signin">
+
+        <h1 class="h3 mb-3 font-weight-normal">Complete registration</h1>
+        <input
+                type="text"
+                name="username"
+                id="complete-username"
+                class="form-control"
+                placeholder="Username received from HR"
+                required
+                autofocus>
+        <input
+                type="password"
+                id="complete-password"
+                name="password"
+                class="form-control"
+                placeholder="Password"
+                required>
+        <input
+                type="password"
+                id="complete-repeated"
+                name="repeated"
+                class="form-control"
+                placeholder="Repeat password"
+                required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="login">Register</button>
     </form>
 </body>
 </html>

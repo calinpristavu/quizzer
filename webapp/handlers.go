@@ -256,20 +256,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func logout(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("user")
-	if err == nil {
-		delete(LoggedIn, cookie.Value)
-	}
-	http.SetCookie(w, &http.Cookie{
-		Name:    "user",
-		Value:   "",
-		Expires: time.Now(),
-	})
-
-	http.Redirect(w, r, "/login", http.StatusFound)
-}
-
 func myAccount(w http.ResponseWriter, r *http.Request) {
 	validationErrors := make(map[string]interface{}, 1)
 	u := r.Context().Value("user").(*User)
@@ -292,12 +278,26 @@ func myAccount(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func page(w http.ResponseWriter, r *http.Request) {
+func logout(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("user")
+	if err == nil {
+		delete(LoggedIn, cookie.Value)
+	}
+	http.SetCookie(w, &http.Cookie{
+		Name:    "user",
+		Value:   "",
+		Expires: time.Now(),
+	})
+
+	http.Redirect(w, r, "/login", http.StatusFound)
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
 	var errors []string
 
 	uname := r.FormValue("username")
 
-	if r.FormValue("username") != "" {
+	if uname != "" {
 		pass := r.FormValue("password")
 
 		u, err := FindByUsernameAndPassword(uname, pass)
@@ -327,4 +327,35 @@ func page(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf("could not exec template login: %v", err)
 	}
+}
+
+func completeRegistration(w http.ResponseWriter, r *http.Request) {
+	uname := r.FormValue("username")
+
+	if uname == "" {
+		http.Error(w, "Empty username", http.StatusBadRequest)
+
+		return
+	}
+
+	pass := r.FormValue("password")
+	repeated := r.FormValue("repeated")
+
+	if pass == "" || pass != repeated {
+		http.Error(w, "Passwords do not match or are invalid", http.StatusBadRequest)
+
+		return
+	}
+
+	u, err := FindByUsername(uname)
+	if err != nil {
+		http.Error(w, "No user with that username", http.StatusNotFound)
+
+		return
+	}
+
+	u.Password = pass
+	g.db.Save(u)
+
+	login(w, r)
 }

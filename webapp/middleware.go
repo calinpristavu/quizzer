@@ -29,7 +29,7 @@ func UserSession(next http.Handler) http.Handler {
 		}
 
 		if !LoggedIn[username].IsGranted(roleUser) {
-			http.Error(w, "Forbidden", http.StatusForbidden)
+			http.Redirect(w, r, "/login", http.StatusUnauthorized)
 
 			return
 		}

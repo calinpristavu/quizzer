@@ -55,7 +55,8 @@ func migrateDb() *gorm.DB {
 }
 
 func registerRoutes(public *mux.Router) {
-	public.HandleFunc("/login", page)
+	public.HandleFunc("/login", login)
+	public.HandleFunc("/complete-registration", completeRegistration)
 
 	quiz := public.NewRoute().Subrouter()
 	quiz.Use(UserSession)
