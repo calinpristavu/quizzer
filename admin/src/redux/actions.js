@@ -1,7 +1,7 @@
 import {
   APPEND_QUESTION_TEMPLATE,
   APPEND_QUIZ_TEMPLATE, APPEND_USER, LOGIN,
-  LOGOUT, OPEN_QUESTION_TEMPLATE_VIEW, OPEN_QUIZ_VIEW,
+  LOGOUT, OPEN_QUESTION_TEMPLATE_VIEW, OPEN_QUIZ_VIEW, SET_USER_CREATE,
   REMOVE_QUESTION_TEMPLATE,
   REMOVE_QUIZ_TEMPLATE,
   SET_QUESTION_TEMPLATES,
@@ -140,6 +140,10 @@ export function getUser(id) {
         payload: r
       }))
   }
+}
+
+export function setUserCreate(val) {
+  return dispatch => dispatch({type: SET_USER_CREATE, payload: val})
 }
 
 export function getUsersOnline() {

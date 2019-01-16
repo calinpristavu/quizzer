@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Card, CardBody, CardFooter, CardHeader, Col, Form, FormGroup, Input, Label} from "reactstrap";
 import {connect} from "react-redux";
-import {createUser} from "../../redux/actions";
+import {createUser, setUserCreate} from "../../redux/actions";
 import {roles} from "./Users";
 
 class Create extends Component {
@@ -18,10 +18,20 @@ class Create extends Component {
   };
 
   render() {
+    if (!this.props.isOpen) {
+      return null
+    }
+
     return (
       <Card>
         <Form>
           <CardHeader>
+            <span className="float-right">
+              <i
+                onClick={() => this.props.setUserCreate(false)}
+                className="fa fa-close"
+                style={{cursor: "pointer"}}/>
+            </span>
             <i className="fa fa-plus-circle text-success" />
             <strong>Register User</strong>
             <small> Form</small>
@@ -102,6 +112,8 @@ class Create extends Component {
 }
 
 export default connect(
-  null,
-  {createUser}
+  state => ({
+    isOpen: state.user.createUser
+  }),
+  {createUser, setUserCreate}
 )(Create);

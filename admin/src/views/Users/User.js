@@ -32,7 +32,7 @@ class User extends Component {
   }
 
   render() {
-    const user = this.props.viewedUser;
+    const user = this.props.viewUser;
 
     if (null === user) {
       return null;
@@ -100,7 +100,7 @@ class User extends Component {
 
 export default connect(
   state => ({
-    viewedUser: state.user.viewedUser
+    viewUser: state.user.viewUser
   }),
   {getUser}
 )(User);

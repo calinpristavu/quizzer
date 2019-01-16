@@ -2,7 +2,7 @@ import {Card, CardBody, CardHeader, Table} from "reactstrap";
 import UserRow from "./UserRow";
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {getUsers} from "../../redux/actions";
+import {getUsers, setUserCreate} from "../../redux/actions";
 
 class UserList extends Component {
   componentDidMount() {
@@ -15,7 +15,7 @@ class UserList extends Component {
         <CardHeader>
           <span className="float-right">
             <i
-              onClick={this.props.openCreateView}
+              onClick={() => this.props.setUserCreate(true)}
               className="fa fa-plus-circle text-success"
               style={{cursor: "pointer"}}/>
           </span>
@@ -48,5 +48,5 @@ export default connect(
   state => ({
     list: state.user.all,
   }),
-  {getUsers}
+  {getUsers, setUserCreate}
 )(UserList);

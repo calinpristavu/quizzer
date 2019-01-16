@@ -1,7 +1,7 @@
 import {
   APPEND_USER,
   LOGIN,
-  LOGOUT,
+  LOGOUT, SET_USER_CREATE,
   SET_USERS,
   SET_USERS_ONLINE,
   SET_VIEWED_USER
@@ -10,7 +10,8 @@ import {
 const initialState = {
   all: [],
   online: [],
-  viewedUser: null,
+  viewUser: null,
+  createUser: true,
   token: localStorage.getItem('token')
 };
 
@@ -31,7 +32,7 @@ export default function(state = initialState, action) {
     case SET_VIEWED_USER: {
       return {
         ...state,
-        viewedUser: action.payload
+        viewUser: action.payload
       }
     }
     case SET_USERS: {
@@ -53,6 +54,12 @@ export default function(state = initialState, action) {
           action.payload,
           ...state.all
         ]
+      }
+    }
+    case SET_USER_CREATE: {
+      return {
+        ...state,
+        createUser: action.payload
       }
     }
 
