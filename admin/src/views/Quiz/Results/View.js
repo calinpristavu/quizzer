@@ -1,57 +1,34 @@
-import {Card, CardBody, CardHeader} from "reactstrap";
+import {Button, Card, CardBody, CardFooter, CardHeader} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {openQuizView} from "../../../redux/actions";
+import {openQuizView, saveScores} from "../../../redux/actions";
+import TextQuestion from "./TextQuestion";
+import CheckboxQuestion from "./CheckboxQuestion";
+import FlowDiagramQuestion from "./FlowDiagramQuestion";
 
 class View extends Component {
   static propTypes = {
     quiz: PropTypes.object
   };
 
-  renderQuestion = (q, k) => {
+  renderQuestion = q => {
     switch (q.Type) {
       case 1:
-        return this.renderChoiceQuestion(q, k);
+        return <CheckboxQuestion question={q}/>;
       case 2:
-        return this.renderTextQuestion(q, k);
+        return <TextQuestion question={q}/>;
       case 3:
-        return this.renderFlowDiagramQuestion(q, k);
+        return <FlowDiagramQuestion question={q}/>;
       default:
-        console.log('Unknown diagram type');
+        console.log('Unknown Question type');
 
         return null;
     }
   };
 
-  renderFlowDiagramQuestion = (q, k) => {
-    return (
-      <div key={k}>
-        <h3>{q.Text}</h3>
-        <div dangerouslySetInnerHTML={{__html: q.FlowDiagramAnswer.SVG}}/>
-      </div>
-    )
-  };
-
-  renderTextQuestion = (q, k) => {
-    return (
-      <div key={k}>
-        <h3>{q.Text}</h3>
-      </div>
-    )
-  };
-
-  renderChoiceQuestion = (q, k) => {
-    return (
-      <div key={k}>
-        <h3>{q.Text}</h3>
-        <ul>
-          {q.ChoiceAnswers.map((a, i) => (
-            <li key={i}>{a.Text}</li>
-          ))}
-        </ul>
-      </div>
-    )
+  saveScores = () => {
+    this.props.saveScores(this.props.quiz.Questions)
   };
 
   render() {
@@ -69,6 +46,9 @@ class View extends Component {
               style={{cursor: "pointer"}}/>
           </span>
           <i className="fa fa-eye"/> Quiz "{this.props.quiz.Name}" for user {this.props.quiz.User.Username}
+          <div>
+            <small>DO NOT FORGET TO SAVE SCORES AFTER EVALUATING THE QUIZ!</small>
+          </div>
         </CardHeader>
         <CardBody>
           {this.props.quiz.Questions.map((q, k) => (
@@ -78,6 +58,18 @@ class View extends Component {
             </div>
           ))}
         </CardBody>
+        <CardFooter>
+            <Button
+              className="btn-block"
+              onClick={this.saveScores}
+              type="button"
+              size="sm"
+              color="primary">
+              <h3>
+                <i className="fa fa-dot-circle-o" /> Save scores
+              </h3>
+            </Button>
+        </CardFooter>
       </Card>
     )
   }
@@ -87,5 +79,5 @@ export default connect(
   state => ({
     quiz: state.quiz.viewedItem
   }),
-  {openQuizView}
+  {openQuizView, saveScores}
 )(View);

@@ -1,4 +1,4 @@
-import {OPEN_QUIZ_VIEW, SET_QUIZZES} from "../actionTypes";
+import {OPEN_QUIZ_VIEW, SET_QUESTION_SCORE, SET_QUIZZES} from "../actionTypes";
 
 const initialState = {
   list: [],
@@ -17,6 +17,22 @@ export default function(state = initialState, action) {
       return {
         ...state,
         viewedItem: action.payload
+      }
+    }
+    case SET_QUESTION_SCORE: {
+      const Questions = state.viewedItem.Questions;
+
+      Questions[Questions.indexOf(action.payload.question)].Score = action.payload.score;
+
+      return {
+        ...state,
+        viewedItem: {
+          ...state.viewedItem,
+          Questions: [...Questions]
+        },
+        list: [
+          ...state.list
+        ]
       }
     }
 

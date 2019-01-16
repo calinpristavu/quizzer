@@ -7,8 +7,9 @@ import {
   SET_QUESTION_TEMPLATES,
   SET_QUIZ_TEMPLATES,
   SET_QUIZZES, SET_STAT_AVG_RESULT, SET_STAT_BEST_RESULT,
-  SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER
+  SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER, SET_QUESTION_SCORE
 } from "./actionTypes";
+import Noty from "noty";
 
 export const logout = () => {
   localStorage.clear();
@@ -213,6 +214,36 @@ export function openQuizView(q) {
     return dispatch({
         type: OPEN_QUIZ_VIEW,
         payload: q
+      })
+  }
+}
+
+export function setQuestionScore(question, score) {
+  return dispatch => {
+    return dispatch({
+      type: SET_QUESTION_SCORE,
+      payload: {
+        question: question,
+        score: score
+      }
+    })
+  }
+}
+
+export function saveScores(questions) {
+  return () => {
+    fetch('/quizzes/save-scores', {
+      method: "POST",
+      body: JSON.stringify(questions.map(q => ({
+        ID: q.ID,
+        Score: q.Score
+      })))
+    })
+      .then(r => {
+        new Noty({
+          text: r,
+          type: 'success',
+        }).show();
       })
   }
 }

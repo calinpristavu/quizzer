@@ -26,6 +26,7 @@ type Question struct {
 	Type               uint
 	IsAnswered         bool `gorm:"not null";sql:"DEFAULT:0"`
 	IsCorrect          bool `gorm:"not null";sql:"DEFAULT:0"`
+	Score              uint `sql:"default:0"`
 	ChoiceAnswers      []*ChoiceAnswer
 	TextAnswer         *TextAnswer
 	FlowDiagramAnswer  *FlowDiagramAnswer
@@ -138,6 +139,9 @@ func (q *Question) saveChoices(answerIds []string, quiz *Quiz) error {
 		}
 	}
 	q.IsCorrect = correct
+	if q.IsCorrect {
+		q.Score = 100
+	}
 	q.IsAnswered = true
 	g.db.Save(q)
 

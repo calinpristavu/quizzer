@@ -63,20 +63,8 @@ class List extends Component {
     })
   };
 
-  static countCorrect(questions) {
-    return questions.reduce((carry, q) => {
-      switch (q.Type) {
-        case 1:
-          // considered correct if all checked answers are correct and no correct answer is missed
-          return carry + q.ChoiceAnswers.reduce((ok, a) => a.IsCorrect === a.IsSelected ? ok : 0, 1);
-        case 2:
-          return carry + q.TextAnswer.IsCorrect;
-        case 3:
-          return carry + q.FlowDiagramAnswer.IsCorrect;
-        default:
-          return carry;
-      }
-    }, 0)
+  static computeScore(questions) {
+    return questions.reduce((carry, q) => carry + q.Score, 0)
   }
 
   static computeTimeSpent(start, end) {
@@ -123,7 +111,7 @@ class List extends Component {
                 <td>{q.User ? q.User.Username : '-'}</td>
                 <td>{this.renderQuizTemplateCell(q.Name)}</td>
                 <td>{List.computePercentCompleted(q.Questions).toFixed(0)}<small className="text-muted">%</small></td>
-                <td>{List.countCorrect(q.Questions)} / {q.Questions.length}</td>
+                <td>{List.computeScore(q.Questions)}</td>
                 <td>{q.Active ? 'In Progress' : 'Finished'}</td>
                 <td>{q.Active
                   ? '-'

@@ -273,6 +273,22 @@ func getQuizzes(w http.ResponseWriter, _ *http.Request) {
 	jsonResponse(w, qs, http.StatusOK)
 }
 
+func saveScores(w http.ResponseWriter, r *http.Request) {
+	var qs []Question
+
+	err := json.NewDecoder(r.Body).Decode(&qs)
+	if err != nil {
+		jsonResponse(w, "Error in request", http.StatusBadRequest)
+		return
+	}
+
+	for _, q := range qs {
+		g.db.Model(&q).Select("score").Updates(q)
+	}
+
+	jsonResponse(w, "Scores updated.", http.StatusOK)
+}
+
 func postToken(w http.ResponseWriter, r *http.Request) {
 	var postData struct {
 		Username string
