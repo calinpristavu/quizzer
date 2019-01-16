@@ -10,7 +10,6 @@ class UserRow extends Component {
     user: PropTypes.object.isRequired
   };
 
-  // Todo: Do we need this?
   static getBadge = (status) => {
     return status === 'Active' ? 'success' :
       status === 'Inactive' ? 'secondary' :
@@ -42,7 +41,6 @@ class UserRow extends Component {
         <td>{roles[user.RoleID]}</td>
         <td>
           <Link to={userLink}>
-            {/*<Badge color={getBadge(user.status)}>{user.status}</Badge>*/}
             <Badge color={UserRow.getBadge(status)}>{status}</Badge>
           </Link>
         </td>
