@@ -21,7 +21,6 @@ class TextQuestion extends Component {
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
-    console.log(nextProps);
     if (nextProps.question !== undefined) {
       this.setState({
         Score: nextProps.question.Score
