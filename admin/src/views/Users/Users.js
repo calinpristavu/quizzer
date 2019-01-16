@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import {Col, Row} from 'reactstrap';
-import {connect} from "react-redux";
-import {getUsers, getUsersOnline} from "../../redux/actions";
 import UserList from "./List";
+import Create from "./Create";
+
+const views = {
+  create: 1,
+  edit: 2,
+  view: 3
+};
 
 class Users extends Component {
-  componentDidMount() {
-    this.props.getUsers();
-    this.props.getUsersOnline();
-  }
+  state = {
+    openedView: 1
+  };
 
   render() {
     return (
@@ -16,13 +20,12 @@ class Users extends Component {
         <Row>
           <Col xl={6}>
             <UserList
-              title="All"
-              users={this.props.all}/>
+              openCreateView={() => this.setState({openedView: views.create})}/>
           </Col>
           <Col xl={6}>
-            <UserList
-              title="Currently Online"
-              users={this.props.online}/>
+            {this.state.openedView === views.create ?
+              <Create/> : null
+            }
           </Col>
         </Row>
       </div>
@@ -30,10 +33,4 @@ class Users extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    all: state.user.all,
-    online: state.user.online,
-  }),
-  {getUsers, getUsersOnline}
-)(Users);
+export default Users;

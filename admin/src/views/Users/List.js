@@ -1,19 +1,25 @@
-import PropTypes from "prop-types";
 import {Card, CardBody, CardHeader, Table} from "reactstrap";
 import UserRow from "./UserRow";
 import React, {Component} from "react";
+import {connect} from "react-redux";
+import {getUsers} from "../../redux/actions";
 
 class UserList extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    users: PropTypes.arrayOf(PropTypes.object).isRequired
-  };
+  componentDidMount() {
+    this.props.getUsers();
+  }
 
   render() {
     return (
       <Card>
         <CardHeader>
-          <i className="fa fa-align-justify"/> {this.props.title} <small className="text-muted">list</small>
+          <span className="float-right">
+            <i
+              onClick={this.props.openCreateView}
+              className="fa fa-plus-circle text-success"
+              style={{cursor: "pointer"}}/>
+          </span>
+          <i className="fa fa-align-justify"/> Users <small className="text-muted">list</small>
         </CardHeader>
         <CardBody>
           <Table responsive hover>
@@ -27,9 +33,9 @@ class UserList extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.props.users.map((user, index) =>
-              <UserRow key={index} user={user}/>
-            )}
+              {this.props.list.map((user, index) =>
+                <UserRow key={index} user={user}/>
+              )}
             </tbody>
           </Table>
         </CardBody>
@@ -38,4 +44,9 @@ class UserList extends Component {
   }
 }
 
-export default UserList;
+export default connect(
+  state => ({
+    list: state.user.all,
+  }),
+  {getUsers}
+)(UserList);

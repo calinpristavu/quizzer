@@ -87,6 +87,7 @@ func registerRoutes(public *mux.Router) {
 	api.Path("/new-api/question-templates/{id}").Methods("DELETE").HandlerFunc(deleteQuestionTemplate)
 
 	api.Path("/new-api/users").Methods("GET").HandlerFunc(getUsers)
+	api.Path("/new-api/users").Methods("POST").HandlerFunc(postUsers)
 	api.Path("/new-api/users-logged-in").Methods("GET").HandlerFunc(getUsersLoggedIn)
 	api.Path("/new-api/users/{id}").Methods("GET").HandlerFunc(getUser)
 

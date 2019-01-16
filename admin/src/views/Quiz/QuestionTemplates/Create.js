@@ -53,7 +53,7 @@ class CreateQuestion extends Component {
   render() {
     return (
       <Card>
-        <Form name="create-question">
+        <Form>
           <CardHeader>
             <i className="fa fa-plus-circle text-success" />
             <strong>Create Question</strong>

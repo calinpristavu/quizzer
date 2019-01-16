@@ -23,6 +23,7 @@ export const questionTypes = {
 class QuestionTemplates extends Component{
   state = {
     editItem: {},
+    openedView: 1
   };
 
   render() {

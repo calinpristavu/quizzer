@@ -8,7 +8,7 @@ import (
 
 type User struct {
 	gorm.Model
-	Username      string
+	Username      string `gorm:"unique_index"`
 	Password      string `json:"-"`
 	RoleID        int    `sql:"DEFAULT:0"`
 	Role          Role   `sql:"-"`

@@ -2,7 +2,6 @@ package webapp
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -238,6 +237,28 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, u, http.StatusOK)
 }
 
+func postUsers(w http.ResponseWriter, r *http.Request) {
+	var u User
+
+	err := json.NewDecoder(r.Body).Decode(&u)
+	if err != nil {
+		w.WriteHeader(422)
+
+		return
+	}
+
+	u.CreatedAt = time.Now()
+
+	res := g.db.Create(&u)
+	if res.Error != nil {
+		jsonResponse(w, "Username already exists", http.StatusUnprocessableEntity)
+
+		return
+	}
+
+	jsonResponse(w, u, http.StatusCreated)
+}
+
 func getQuizzes(w http.ResponseWriter, _ *http.Request) {
 	var qs []Quiz
 	g.db.
@@ -260,22 +281,19 @@ func postToken(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&postData)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Error in request")
+		jsonResponse(w, "Error in request", http.StatusBadRequest)
 		return
 	}
 
 	user, err := FindByUsernameAndPassword(postData.Username, postData.Password)
 	if err != nil {
-		w.WriteHeader(http.StatusForbidden)
-		fmt.Fprint(w, "Invalid credentials")
+		jsonResponse(w, "Invalid credentials", http.StatusForbidden)
 		return
 	}
 
 	tokenString, err := newToken(user)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(w, "Error while signing the token")
+		jsonResponse(w, "Error while signing the token", http.StatusInternalServerError)
 		return
 	}
 

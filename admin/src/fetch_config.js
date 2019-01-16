@@ -22,18 +22,22 @@ global.fetch = function(url, opts) {
 
   const promise = fetch(url, opts)
     .then(r => {
-      if (r.status === 403) {
-        return Promise.reject('Unauthorized')
+      if (r.status >= 400) {
+        return Promise.reject(r)
       }
 
       return r
     });
 
   promise.catch(err => {
-    console.log('Logging out: ', err);
-    localStorage.removeItem('token');
+    if (err.status === 403) {
+      console.log('Logging out: ', err);
+      localStorage.removeItem('token');
 
-    window.location = '/';
+      window.location = '/';
+    }
+
+    return err
   });
 
   return promise

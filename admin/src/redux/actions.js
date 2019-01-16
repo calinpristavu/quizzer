@@ -1,6 +1,6 @@
 import {
   APPEND_QUESTION_TEMPLATE,
-  APPEND_QUIZ_TEMPLATE, LOGIN,
+  APPEND_QUIZ_TEMPLATE, APPEND_USER, LOGIN,
   LOGOUT, OPEN_QUESTION_TEMPLATE_VIEW, OPEN_QUIZ_VIEW,
   REMOVE_QUESTION_TEMPLATE,
   REMOVE_QUIZ_TEMPLATE,
@@ -120,6 +120,20 @@ export function getUsers() {
       .then(r => r.json())
       .then(r => dispatch({
         type: SET_USERS,
+        payload: r
+      }))
+  }
+}
+
+export function createUser(u) {
+  return dispatch => {
+    return fetch("/users", {
+      method: "POST",
+      body: JSON.stringify(u)
+    })
+      .then(r => r.json())
+      .then(r => dispatch({
+        type: APPEND_USER,
         payload: r
       }))
   }

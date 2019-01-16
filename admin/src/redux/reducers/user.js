@@ -1,4 +1,11 @@
-import {LOGIN, LOGOUT, SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER} from "../actionTypes";
+import {
+  APPEND_USER,
+  LOGIN,
+  LOGOUT,
+  SET_USERS,
+  SET_USERS_ONLINE,
+  SET_VIEWED_USER
+} from "../actionTypes";
 
 const initialState = {
   all: [],
@@ -37,6 +44,15 @@ export default function(state = initialState, action) {
       return {
         ...state,
         online: action.payload
+      }
+    }
+    case APPEND_USER: {
+      return {
+        ...state,
+        all: [
+          action.payload,
+          ...state.all
+        ]
       }
     }
 
