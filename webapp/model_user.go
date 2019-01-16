@@ -12,6 +12,7 @@ type User struct {
 	Password      string `json:"-"`
 	RoleID        int    `sql:"DEFAULT:0"`
 	Role          Role   `sql:"-"`
+	IsEnabled     bool   `sql:"DEFAULT:0"`
 	CurrentQuizID *uint
 	CurrentQuiz   *Quiz
 }

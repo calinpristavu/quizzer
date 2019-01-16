@@ -3,6 +3,7 @@ import moment from "moment";
 import {Badge} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
+import {roles} from "./Users";
 
 class UserRow extends Component {
   static propTypes = {
@@ -10,7 +11,7 @@ class UserRow extends Component {
   };
 
   // Todo: Do we need this?
-  getBadge = (status) => {
+  static getBadge = (status) => {
     return status === 'Active' ? 'success' :
       status === 'Inactive' ? 'secondary' :
         status === 'Pending' ? 'warning' :
@@ -18,9 +19,16 @@ class UserRow extends Component {
             'primary'
   };
 
+  getStatus = () => {
+    return this.props.user.IsEnabled
+      ? "Active"
+      : "Inactive";
+  };
+
   render() {
     const user = this.props.user;
     const userLink = `/users/${user.ID}`;
+    const status = this.getStatus();
 
     return (
       <tr key={user.ID}>
@@ -31,11 +39,11 @@ class UserRow extends Component {
           <Link to={userLink}>{user.Username}</Link>
         </td>
         <td>{moment(user.CreatedAt).format('DD-MM-YYYY [at] k:mm')}</td>
-        <td>{user.Role.Name}</td>
+        <td>{roles[user.RoleID]}</td>
         <td>
           <Link to={userLink}>
             {/*<Badge color={getBadge(user.status)}>{user.status}</Badge>*/}
-            <Badge color={this.getBadge("Banned")}>Banned</Badge>
+            <Badge color={UserRow.getBadge(status)}>{status}</Badge>
           </Link>
         </td>
       </tr>

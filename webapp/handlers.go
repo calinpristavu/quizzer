@@ -355,6 +355,7 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	u.Password = pass
+	u.IsEnabled = true
 	g.db.Save(u)
 
 	login(w, r)

@@ -9,6 +9,12 @@ const views = {
   view: 3
 };
 
+export const roles = {
+  0: "Root",
+  1: "Admin",
+  2: "User",
+};
+
 class Users extends Component {
   state = {
     openedView: 1
