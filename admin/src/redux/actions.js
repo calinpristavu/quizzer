@@ -24,7 +24,6 @@ export function getQuizTemplates() {
       return;
     }
     return fetch("/quiz-templates")
-      .then(r => r.json())
       .then(r => dispatch({
         type: SET_QUIZ_TEMPLATES,
         payload: r
@@ -50,7 +49,6 @@ export function createQuizTemplate(quizTemplate) {
       method: "POST",
       body: JSON.stringify(quizTemplate)
     })
-      .then(r => r.json())
       .then(r => dispatch({
         type: APPEND_QUIZ_TEMPLATE,
         payload: r
@@ -65,7 +63,6 @@ export function getQuestionTemplates() {
     }
 
     return fetch("/question-templates")
-      .then(r => r.json())
       .then(r => dispatch({
         type: SET_QUESTION_TEMPLATES,
         payload: r
@@ -91,7 +88,6 @@ export function createQuestionTemplate(questionTemplate) {
       method: "POST",
       body: JSON.stringify(questionTemplate)
     })
-      .then(r => r.json())
       .then(r => dispatch({
         type: APPEND_QUESTION_TEMPLATE,
         payload: r
@@ -102,7 +98,6 @@ export function createQuestionTemplate(questionTemplate) {
 export function getQuizzes() {
   return dispatch => {
     return fetch("/quizzes")
-      .then(r => r.json())
       .then(r => dispatch({
         type: SET_QUIZZES,
         payload: r
@@ -117,7 +112,6 @@ export function getUsers() {
     }
 
     return fetch("/users")
-      .then(r => r.json())
       .then(r => dispatch({
         type: SET_USERS,
         payload: r
@@ -131,7 +125,6 @@ export function createUser(u) {
       method: "POST",
       body: JSON.stringify(u)
     })
-      .then(r => r.json())
       .then(r => dispatch({
         type: APPEND_USER,
         payload: r
@@ -142,7 +135,6 @@ export function createUser(u) {
 export function getUser(id) {
   return dispatch => {
     return fetch("/users/" + id)
-      .then(r => r.json())
       .then(r => dispatch({
         type: SET_VIEWED_USER,
         payload: r
@@ -153,7 +145,6 @@ export function getUser(id) {
 export function getUsersOnline() {
   return dispatch => {
     return fetch("/users-logged-in")
-      .then(r => r.json())
       .then(r => {
         if (null !== r) {
           dispatch({
@@ -174,7 +165,6 @@ export function getToken(username, password) {
         Password: password
       })
     })
-      .then(r => r.json())
       .then(r => {
         localStorage.setItem('token', r.token);
         dispatch({
@@ -188,7 +178,6 @@ export function getToken(username, password) {
 export function getStatAvgResult() {
   return dispatch => {
     return fetch('/stats/avg-result')
-      .then(r => r.json())
       .then(r => dispatch({
         type: SET_STAT_AVG_RESULT,
         payload: r
@@ -199,7 +188,6 @@ export function getStatAvgResult() {
 export function getStatBestResult() {
   return dispatch => {
     return fetch('/stats/best-result')
-      .then(r => r.json())
       .then(r => dispatch({
         type: SET_STAT_BEST_RESULT,
         payload: r

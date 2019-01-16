@@ -1,3 +1,4 @@
+import Noty from 'noty';
 const fetch = global.fetch;
 
 global.fetch = function(url, opts) {
@@ -20,25 +21,30 @@ global.fetch = function(url, opts) {
   }
   opts.headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
 
-  const promise = fetch(url, opts)
+  return fetch(url, opts)
     .then(r => {
       if (r.status >= 400) {
         return Promise.reject(r)
       }
 
-      return r
+      return r.json()
+    })
+    .catch(err => {
+      err.text()
+        .then(msg => {
+          new Noty({
+            text: msg,
+            type: 'error',
+          }).show();
+        });
+
+      return err;
+    })
+    .catch(err => {
+      if (err.status === 403) {
+        localStorage.removeItem('token');
+
+        window.location = '/';
+      }
     });
-
-  promise.catch(err => {
-    if (err.status === 403) {
-      console.log('Logging out: ', err);
-      localStorage.removeItem('token');
-
-      window.location = '/';
-    }
-
-    return err
-  });
-
-  return promise
 };

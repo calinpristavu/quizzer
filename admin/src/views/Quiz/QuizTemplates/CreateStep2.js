@@ -10,7 +10,6 @@ class CreateStep2 extends Component {
 
   componentDidMount() {
     fetch("/question-templates")
-      .then((response) => response.json())
       .then((response) => {
         this.setState({
           options: response.map((q) => ({
