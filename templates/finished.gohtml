@@ -29,7 +29,7 @@
                 <tbody>
                     {{range .Quiz.Questions}}
                         <tr>
-                            <td>{{.Text}}</td>
+                            <td>{{raw .Text}}</td>
                             <td class="text-left">
                                 {{if eq .Type 1}}
                                     <ul>
