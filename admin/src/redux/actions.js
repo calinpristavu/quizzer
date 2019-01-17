@@ -230,14 +230,11 @@ export function setQuestionScore(question, score) {
   }
 }
 
-export function saveScores(questions) {
+export function saveScores(quiz) {
   return () => {
     fetch('/quizzes/save-scores', {
       method: "POST",
-      body: JSON.stringify(questions.map(q => ({
-        ID: q.ID,
-        Score: q.Score
-      })))
+      body: JSON.stringify(quiz)
     })
       .then(r => {
         new Noty({

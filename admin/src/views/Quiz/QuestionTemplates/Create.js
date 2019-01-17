@@ -22,17 +22,20 @@ import {questionTypes} from "./QuestionTemplates";
 
 class CreateQuestion extends Component {
   defaultState = {
-    Text: '',
+    Text: '<p>Here\'s where the question text goes...</p>',
     Type: null,
     ChoiceAnswerTemplates: [],
-    FlowDiagramAnswerTemplate: null
+    FlowDiagramAnswerTemplate: null,
   };
 
   state = this.defaultState;
 
   create = () => {
     this.props.createQuestionTemplate(this.state)
-      .then(() => this.setState(this.defaultState))
+      .then(() => this.setState({
+        ...this.defaultState,
+        ChoiceAnswerTemplates: []
+      }))
   };
 
   removeChoice = (choiceIndex) => {
@@ -50,6 +53,15 @@ class CreateQuestion extends Component {
       choices.push(choice);
 
       return {ChoiceAnswerTemplates: choices}
+    })
+  };
+
+  uploadCallback = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve({data: {link: reader.result}});
+      reader.onerror = error => reject(error);
     })
   };
 
@@ -71,6 +83,10 @@ class CreateQuestion extends Component {
                     initialEditorState={this.state.Text}
                     editorStyle={{
                       border: "1px solid #c8ced3"
+                    }}
+                    toolbar={{
+                      options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
+                      image: { uploadCallback: this.uploadCallback, previewImage: true }
                     }}
                     onEditorStateChange={editorState => this.setState({
                       Text: draftToHtml(convertToRaw(editorState.getCurrentContent()))
