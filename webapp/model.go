@@ -22,7 +22,7 @@ type Quiz struct {
 type Question struct {
 	gorm.Model
 	QuizID             uint
-	Text               string
+	Text               string `sql:"type:longtext"`
 	Type               uint
 	IsAnswered         bool `gorm:"not null";sql:"DEFAULT:0"`
 	IsCorrect          bool `gorm:"not null";sql:"DEFAULT:0"`

@@ -53,6 +53,15 @@ class CreateQuestion extends Component {
     })
   };
 
+  uploadCallback = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve({data: {link: reader.result}});
+      reader.onerror = error => reject(error);
+    })
+  };
+
   render() {
     return (
       <Card>
@@ -72,6 +81,7 @@ class CreateQuestion extends Component {
                     editorStyle={{
                       border: "1px solid #c8ced3"
                     }}
+                    toolbar={{ image: { uploadCallback: this.uploadCallback, previewImage: true }}}
                     onEditorStateChange={editorState => this.setState({
                       Text: draftToHtml(convertToRaw(editorState.getCurrentContent()))
                     })}

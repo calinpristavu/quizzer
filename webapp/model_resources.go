@@ -10,8 +10,8 @@ type QuizTemplate struct {
 
 type QuestionTemplate struct {
 	gorm.Model
-	Text                      string
-	Type                      uint // choice / text / ...
+	Text                      string `sql:"type:longtext"`
+	Type                      uint   // choice / text / ...
 	ChoiceAnswerTemplates     []*ChoiceAnswerTemplate
 	FlowDiagramAnswerTemplate *FlowDiagramAnswerTemplate
 	Usages                    []Question
