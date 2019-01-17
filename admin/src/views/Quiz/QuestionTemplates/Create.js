@@ -11,11 +11,15 @@ import {
   Label,
   Row
 } from "reactstrap";
+import {Editor} from 'react-draft-wysiwyg';
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 import {ChoiceAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {createQuestionTemplate} from "../../../redux/actions";
 import {questionTypes} from "./QuestionTemplates";
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 class CreateQuestion extends Component {
   defaultState = {
@@ -64,14 +68,15 @@ class CreateQuestion extends Component {
               <Col xs="12">
                 <FormGroup>
                   <Label htmlFor="question-text">Text</Label>
-                  <Input
-                    name="Text"
-                    type="text"
-                    id="question-text"
-                    value={this.state.Text}
-                    onChange={(e) => this.setState({Text: e.target.value})}
-                    placeholder="Type in the question text"
-                    required />
+                  <Editor
+                    initialEditorState={this.state.Text}
+                    editorStyle={{
+                      border: "1px solid #c8ced3"
+                    }}
+                    onEditorStateChange={editorState => this.setState({
+                      Text: draftToHtml(convertToRaw(editorState.getCurrentContent()))
+                    })}
+                  />
                 </FormGroup>
               </Col>
             </Row>

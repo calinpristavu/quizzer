@@ -114,7 +114,7 @@ export class QuestionsList extends Component {
             <tbody>
             {this.getVisibleItems().map((q, k) =>
               <tr key={k}>
-                <td>{q.Text}</td>
+                <td dangerouslySetInnerHTML={{__html: q.Text}}/>
                 <td>{questionTypes[q.Type]}</td>
                 <td title={`${q.usage.toFixed(2)} %`}>
                   <Progress
