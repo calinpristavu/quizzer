@@ -28,7 +28,7 @@ class View extends Component {
   };
 
   saveScores = () => {
-    this.props.saveScores(this.props.quiz.Questions)
+    this.props.saveScores(this.props.quiz)
   };
 
   render() {

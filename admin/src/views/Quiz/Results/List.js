@@ -30,10 +30,10 @@ class List extends Component {
   };
 
   static computePercentCompleted(questions) {
-    return questions.reduce(
+    return (questions.reduce(
       (carry, q) => carry + (q.IsAnswered ? 1 : 0),
       0
-    ) * 100 / questions.length
+    ) * 100 / questions.length) || 0
   }
 
   addFilter = (propertyPath, val) => {
@@ -64,7 +64,7 @@ class List extends Component {
   };
 
   static computeScore(questions) {
-    return questions.reduce((carry, q) => carry + q.Score, 0)
+    return (questions.reduce((carry, q) => carry + q.Score, 0) / questions.length) || 0
   }
 
   static computeTimeSpent(start, end) {
@@ -111,7 +111,7 @@ class List extends Component {
                 <td>{q.User ? q.User.Username : '-'}</td>
                 <td>{this.renderQuizTemplateCell(q.Name)}</td>
                 <td>{List.computePercentCompleted(q.Questions).toFixed(0)}<small className="text-muted">%</small></td>
-                <td>{List.computeScore(q.Questions)}</td>
+                <td>{List.computeScore(q.Questions).toFixed(0)}<small>%</small></td>
                 <td>{q.Active ? 'In Progress' : 'Finished'}</td>
                 <td>{q.Active
                   ? '-'
