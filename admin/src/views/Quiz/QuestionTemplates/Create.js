@@ -25,14 +25,17 @@ class CreateQuestion extends Component {
     Text: '<p>Here\'s where the question text goes...</p>',
     Type: null,
     ChoiceAnswerTemplates: [],
-    FlowDiagramAnswerTemplate: null
+    FlowDiagramAnswerTemplate: null,
   };
 
   state = this.defaultState;
 
   create = () => {
     this.props.createQuestionTemplate(this.state)
-      .then(() => this.setState(this.defaultState))
+      .then(() => this.setState({
+        ...this.defaultState,
+        ChoiceAnswerTemplates: []
+      }))
   };
 
   removeChoice = (choiceIndex) => {
