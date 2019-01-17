@@ -37,7 +37,7 @@
             {{if .Current}}
                 {{range .Current.Questions}}
                     <div class="question">
-                        <p class="text-center">{{.Text}}</p>
+                        <p>{{raw .Text}}</p>
                         {{if eq .Type 1}}
                             <ul>
                                 {{range .ChoiceAnswers}}
