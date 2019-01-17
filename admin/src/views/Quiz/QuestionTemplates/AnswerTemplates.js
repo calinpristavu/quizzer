@@ -91,9 +91,7 @@ export class ChoiceAnswerTemplates extends Component {
 export class FlowDiagramAnswer extends Component {
   render() {
     return (
-      <div>
-        add diagram answer here
-      </div>
+      <div />
     );
   }
 }
