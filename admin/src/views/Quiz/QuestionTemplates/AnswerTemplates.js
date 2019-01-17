@@ -29,6 +29,13 @@ export class ChoiceAnswerTemplates extends Component {
     this.setState(this.defaultState);
   };
 
+  addOption = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.setState({Text: e.target.value}, this.addAndNext)
+    }
+  };
+
   render() {
     return (
       <div>
@@ -60,6 +67,7 @@ export class ChoiceAnswerTemplates extends Component {
                     value={this.state.Text}
                     autoFocus={true}
                     onChange={(e) => this.setState({Text: e.target.value})}
+                    onKeyPress={this.addOption}
                     placeholder="Type in the question text"
                     required />
                 </Label>
@@ -73,6 +81,7 @@ export class ChoiceAnswerTemplates extends Component {
                     type="checkbox"
                     checked={this.state.IsCorrect}
                     onChange={(e) => this.setState({IsCorrect: e.target.checked})}
+                    onKeyPress={(e) => e.key === 'Enter' && this.addAndNext()}
                     name="Type" />
                 </Label>
               </FormGroup>
