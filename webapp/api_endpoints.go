@@ -284,12 +284,12 @@ func saveScores(w http.ResponseWriter, r *http.Request) {
 
 	quizScore := uint(0)
 	for _, q := range quiz.Questions {
-		g.db.Model(&q).Select("score").Updates(q)
+		g.db.Model(&q).Update("score", q.Score)
 		quizScore += q.Score
 	}
 
 	quiz.Score = quizScore / uint(len(quiz.Questions))
-	g.db.Model(&quiz).Select("score").Updates(quiz)
+	g.db.Model(&quiz).Update("score", quiz.Score)
 
 	jsonResponse(w, "Scores updated.", http.StatusOK)
 }
