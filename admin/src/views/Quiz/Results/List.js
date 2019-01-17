@@ -118,7 +118,7 @@ class List extends Component {
                   : <span>{List.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}</span>
                 }</td>
                 <td>
-                  <i className="fa fa-eye" onClick={() => this.props.openQuizView(q)}/>
+                  {!q.Active && <i className="fa fa-eye" onClick={() => this.props.openQuizView(q)}/>}
                 </td>
               </tr>
             )}

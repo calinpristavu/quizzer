@@ -75,7 +75,7 @@ class TextQuestion extends Component {
               </Col>
             </FormGroup>
           </div>
-          <h3>{this.props.question.Text}</h3>
+          <div dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
         </div>
         <div>
           <pre>

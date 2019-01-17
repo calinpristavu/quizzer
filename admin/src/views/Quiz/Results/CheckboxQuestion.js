@@ -55,7 +55,7 @@ class CheckboxQuestion extends Component {
               dataOn={'\u2713'}
               dataOff={'\u2715'} />
           </div>
-          <h3>{this.props.question.Text}</h3>
+          <div dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
           <small>
             <span style={{color: "#4DBD74"}}>GREEN</span>
             {' '}answers are the correct ones
