@@ -22,7 +22,7 @@ import {questionTypes} from "./QuestionTemplates";
 
 class CreateQuestion extends Component {
   defaultState = {
-    Text: '',
+    Text: '<p>Here\'s where the question text goes...</p>',
     Type: null,
     ChoiceAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null
@@ -81,7 +81,10 @@ class CreateQuestion extends Component {
                     editorStyle={{
                       border: "1px solid #c8ced3"
                     }}
-                    toolbar={{ image: { uploadCallback: this.uploadCallback, previewImage: true }}}
+                    toolbar={{
+                      options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
+                      image: { uploadCallback: this.uploadCallback, previewImage: true }
+                    }}
                     onEditorStateChange={editorState => this.setState({
                       Text: draftToHtml(convertToRaw(editorState.getCurrentContent()))
                     })}
