@@ -19,7 +19,6 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {createQuestionTemplate} from "../../../redux/actions";
 import {questionTypes} from "./QuestionTemplates";
-import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 class CreateQuestion extends Component {
   defaultState = {

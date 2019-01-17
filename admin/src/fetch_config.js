@@ -46,5 +46,7 @@ global.fetch = function(url, opts) {
 
         window.location = '/';
       }
+
+      return err;
     });
 };
