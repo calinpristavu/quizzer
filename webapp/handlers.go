@@ -244,6 +244,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	var qts []QuizTemplate
 	g.db.
 		Preload("Questions").
+		Order("id desc").
 		Find(&qts)
 
 	err := g.templating.Lookup("home.gohtml").Execute(w, struct {

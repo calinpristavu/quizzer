@@ -79,9 +79,11 @@ class OverallQuality extends Component {
   };
 
   computeGlobalAverage = () => {
-    return this.props.avgResult.reduce((sum, a) => {
+    let avgResult = this.props.avgResult.filter(v => v !== 0);
+
+    return avgResult.reduce((sum, a) => {
       return sum + a
-    }, 0) / (this.props.avgResult.length || 1)
+    }, 0) / (avgResult.length || 1)
   };
 
   render() {

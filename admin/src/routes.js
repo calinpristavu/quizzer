@@ -20,7 +20,7 @@ const Switches = React.lazy(() => import('./views/Base/Switches'));
 const Tables = React.lazy(() => import('./views/Base/Tables'));
 const Tabs = React.lazy(() => import('./views/Base/Tabs'));
 const Tooltips = React.lazy(() => import('./views/Base/Tooltips'));
-const Charts = React.lazy(() => import('./views/Charts'));
+const Charts = React.lazy(() => import('./views/Charts/Charts'));
 const Dashboard = React.lazy(() => import('./views/Dashboard'));
 const Users = React.lazy(() => import('./views/Users/Users'));
 const User = React.lazy(() => import('./views/Users/User'));
