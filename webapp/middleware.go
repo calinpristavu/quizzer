@@ -11,7 +11,7 @@ func UserSession(next http.Handler) http.Handler {
 		cookie, err := r.Cookie("user")
 		if err != nil {
 			log.Printf("error with user cookie: %v", err)
-			http.Redirect(w, r, "/login", http.StatusUnauthorized)
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
 
 			return
 		}
@@ -22,14 +22,14 @@ func UserSession(next http.Handler) http.Handler {
 			LoggedIn[username], err = FindByUsername(username)
 			if err != nil {
 				log.Printf("could not find user for username %s", username)
-				http.Redirect(w, r, "/login", http.StatusUnauthorized)
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
 
 				return
 			}
 		}
 
 		if !LoggedIn[username].IsGranted(roleUser) {
-			http.Redirect(w, r, "/login", http.StatusUnauthorized)
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
 
 			return
 		}
