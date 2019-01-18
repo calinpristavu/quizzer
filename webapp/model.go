@@ -92,6 +92,7 @@ func findAllFinishedForUser(u *User) []Quiz {
 		Preload("Questions.FlowDiagramAnswer").
 		Where("user_id = ?", u.ID).
 		Where("active = 0").
+		Order("id desc").
 		Find(&qs)
 
 	return qs
