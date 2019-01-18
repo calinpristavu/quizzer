@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col-3" id="quiz-nav">
             {{range .Quizzes}}
-                 <a href="/quiz-history/{{.ID}}">{{.UpdatedAt}}</a>
+                 <a href="/quiz-history/{{.ID}}">{{.UpdatedAt.Format "2006-01-02 15:04"}} Quiz#{{.QuizTemplateID}}</a>
             {{end}}
         </div>
         <div class="col-9">

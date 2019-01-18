@@ -32,9 +32,10 @@ type FlowDiagramAnswerTemplate struct {
 
 func (qt QuizTemplate) start(u *User) *Quiz {
 	q := &Quiz{
-		UserID: u.ID,
-		Name:   qt.Name,
-		Active: true,
+		UserID:         u.ID,
+		Name:           qt.Name,
+		Active:         true,
+		QuizTemplateID: qt.ID,
 	}
 
 	g.db.Save(&q)

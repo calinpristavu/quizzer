@@ -11,12 +11,13 @@ const questionsPerQuiz = 10
 
 type Quiz struct {
 	gorm.Model
-	Name      string
-	UserID    uint
-	User      *User
-	Questions []*Question
-	Active    bool
-	Score     uint
+	Name           string
+	UserID         uint
+	User           *User
+	Questions      []*Question
+	Active         bool
+	Score          uint
+	QuizTemplateID uint
 }
 
 type Question struct {
