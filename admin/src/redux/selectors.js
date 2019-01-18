@@ -23,9 +23,7 @@ export function selectQuestionTemplatesWithUsage (state) {
 }
 
 export function selectInProgressQuizzes (state) {
-  return state.quiz.list.filter(
-    quiz => !quiz.Questions.some(question => !question.isAnswered)
-  )
+  return state.quiz.list.filter(q => q.Active)
 }
 
 function findStatFrom(data, from) {
