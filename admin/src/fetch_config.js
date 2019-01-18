@@ -30,17 +30,6 @@ global.fetch = function(url, opts) {
       return r.json()
     })
     .catch(err => {
-      err.text()
-        .then(msg => {
-          new Noty({
-            text: msg,
-            type: 'error',
-          }).show();
-        });
-
-      return err;
-    })
-    .catch(err => {
       if (err.status === 403) {
         localStorage.removeItem('token');
 
