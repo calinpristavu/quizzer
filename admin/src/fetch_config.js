@@ -1,4 +1,3 @@
-import Noty from 'noty';
 const fetch = global.fetch;
 
 global.fetch = function(url, opts) {

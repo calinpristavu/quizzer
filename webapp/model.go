@@ -177,6 +177,11 @@ func (q *Quiz) getNextQuestion() (*Question, error) {
 
 func (u *User) finishQuiz() {
 	u.CurrentQuiz.Active = false
+
+	for _, q := range u.CurrentQuiz.Questions {
+		u.CurrentQuiz.Score += q.Score
+	}
+	u.CurrentQuiz.Score = u.CurrentQuiz.Score / uint(len(u.CurrentQuiz.Questions))
 	g.db.Save(&u.CurrentQuiz)
 
 	u.CurrentQuiz = nil
