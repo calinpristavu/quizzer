@@ -134,7 +134,7 @@ func (q *Question) saveChoices(answerIds []string, quiz *Quiz) error {
 
 	correct := true
 	for _, a := range q.ChoiceAnswers {
-		if a.IsCorrect != a.IsCorrect {
+		if a.IsCorrect != a.IsSelected {
 			correct = false
 		}
 	}
