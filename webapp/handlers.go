@@ -355,7 +355,13 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u.Password,_ = HashPassword(pass)
+	u.Password, err = HashPassword(pass)
+	if err != nil {
+		http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
+		log.Printf("The password %s for user %s cannot be hashed",pass, uname)
+
+		return
+	}
 	u.IsEnabled = true
 	g.db.Save(u)
 
