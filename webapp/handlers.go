@@ -275,12 +275,20 @@ func myAccount(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("change-password") != "" {
 			password := r.FormValue("password")
 		    repeated := r.FormValue("repeated")
+			var err error
+			u.Password, err = HashPassword(password)
+			if err != nil {
+				http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
+				log.Printf("The password %s for user %s cannot be hashed",password, u.Username)
+
+				return
+			}
+
 			if password != repeated {
 				validationErrors["password"] = "Passwords do not match"
 			} else if len(password) < 3 || len(password) > 255 {
 				validationErrors["password"] = "Password must have at least 3 and not more than 255 characters"
 			} else {
-				u.Password,_ = HashPassword(password)
 				u.Save()
 			}
 	}
