@@ -39,4 +39,9 @@ cp .env.dist .env
 
 ```
 
-- You're ready now, just run `go  build` and the magic will happen.
+- You're ready now :rocket: Run the following  
+```
+go build 
+cd admin && npm run start
+``` 
+and the magic will happen :tada:
