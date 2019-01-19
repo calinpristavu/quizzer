@@ -262,7 +262,7 @@ func myAccount(w http.ResponseWriter, r *http.Request) {
 	validationErrors := make(map[string]interface{}, 2)
 	u := r.Context().Value("user").(*User)
 
-	if r.FormValue("save-username") != "" {
+	if r.FormValue("change-username") != "" {
 		u.Username = r.FormValue("username")
 		_, err := govalidator.ValidateStruct(u)
 		if err != nil {
