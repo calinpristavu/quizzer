@@ -23,3 +23,4 @@ vendor/
 quizzer
 /jwt/*
 !/jwt/.gitkeep
+.env

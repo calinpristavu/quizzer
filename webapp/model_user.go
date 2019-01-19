@@ -55,9 +55,12 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 		Preload("CurrentQuiz.Questions.ChoiceAnswers").
 		Preload("CurrentQuiz.Questions.TextAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
-		Where("Username = ? AND Password = ?", uname, pass).
+		Where("Username = ?", uname).
 		First(&u)
-	if res.RecordNotFound() {
+
+	checkPass:= CheckPassword(u.Password, pass)
+
+	if res.RecordNotFound() || checkPass == false  {
 		return nil, fmt.Errorf("Bad credentials: %s, %s\n", uname, pass)
 	}
 

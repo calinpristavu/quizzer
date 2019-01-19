@@ -355,7 +355,7 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u.Password = pass
+	u.Password,_ = HashPassword(pass)
 	u.IsEnabled = true
 	g.db.Save(u)
 
