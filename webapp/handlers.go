@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/asaskevich/govalidator"
 )
 
 func startQuiz(w http.ResponseWriter, r *http.Request) {
@@ -258,12 +259,30 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func myAccount(w http.ResponseWriter, r *http.Request) {
-	validationErrors := make(map[string]interface{}, 1)
+	validationErrors := make(map[string]interface{}, 2)
 	u := r.Context().Value("user").(*User)
 
-	if r.FormValue("save") != "" {
+	if r.FormValue("save-username") != "" {
 		u.Username = r.FormValue("username")
-		u.Save()
+		_, err := govalidator.ValidateStruct(u)
+		if err != nil {
+			validationErrors["username"] = err.Error()
+		} else {
+			u.Save()
+		}
+	}
+
+	if r.FormValue("change-password") != "" {
+			password := r.FormValue("password")
+		    repeated := r.FormValue("repeated")
+			if password != repeated {
+				validationErrors["password"] = "Passwords do not match"
+			} else if len(password) < 3 || len(password) > 255 {
+				validationErrors["password"] = "Password must have at least 3 and not more than 255 characters"
+			} else {
+				u.Password,_ = HashPassword(password)
+				u.Save()
+			}
 	}
 
 	err := g.templating.Lookup("my_account.gohtml").Execute(w, struct {
