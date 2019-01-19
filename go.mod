@@ -29,4 +29,5 @@ require (
 	google.golang.org/appengine v1.3.0 // indirect
 	golang.org/x/crypto/bcrypt
 	github.com/joho/godotenv
+	github.com/asaskevich/govalidator
 )
