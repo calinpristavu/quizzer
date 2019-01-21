@@ -11,6 +11,7 @@ require (
 	github.com/jinzhu/gorm v1.9.1
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
 	github.com/jinzhu/now v0.0.0-20181116074157-8ec929ed50c3 // indirect
+	github.com/joho/godotenv v1.3.0 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.1 // indirect
 	github.com/qor/admin v0.0.0-20181026061101-0ef7c2aa0f33
 	github.com/qor/assetfs v0.0.0-20170713023933-ff57fdc13a14 // indirect
@@ -23,8 +24,7 @@ require (
 	github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be // indirect
 	github.com/rs/cors v1.6.0
 	github.com/theplant/cldr v0.0.0-20170713054817-b97a4c2a76cf // indirect
+	golang.org/x/crypto v0.0.0-20190103213133-ff983b9c42bc
 	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
 	google.golang.org/appengine v1.3.0 // indirect
-	golang.org/x/crypto/bcrypt
-	github.com/joho/godotenv
 )
