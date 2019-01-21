@@ -167,16 +167,6 @@ func (q *Question) saveFlowDiagram(json string, svg string, quiz *Quiz) error {
 	return nil
 }
 
-func (q *Quiz) getNextQuestion() (*Question, error) {
-	for _, question := range q.Questions {
-		if !question.IsAnswered {
-			return question, nil
-		}
-	}
-
-	return nil, fmt.Errorf("all questions have been answered")
-}
-
 func (u *User) finishQuiz() {
 	u.CurrentQuiz.Active = false
 

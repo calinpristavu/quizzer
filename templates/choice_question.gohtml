@@ -12,7 +12,7 @@
     <div class="section col-md-12">
         <div class="section-content">
             <div>{{raw .Question.Text}}</div>
-            <form action="/question" method="POST">
+            <form action="/question/{{.Qidx}}" method="POST">
                 {{range .Question.ChoiceAnswers}}
                     <div class="form-group form-check text-left">
                         <input
@@ -20,6 +20,7 @@
                             class="form-check-input"
                             type="checkbox"
                             name="answer[]"
+                            {{if .IsSelected}}checked="checked"{{end}}
                             value="{{.ID}}">
                         <label
                             for="answer-{{.ID}}"

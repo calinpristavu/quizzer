@@ -9,10 +9,10 @@
     <div class="section col-md-12">
         <div class="section-content">
             <div>{{raw .Question.Text}}</div>
-            <form action="/question" method="POST">
+            <form action="/question/{{.Qidx}}" method="POST">
                 <div class="form-group">
                     <label for="answer" class="form-check-label">
-                        <textarea id="answer" class="form-input" name="answer"></textarea>
+                        <textarea id="answer" class="form-input" name="answer">{{.Question.TextAnswer.Text}}</textarea>
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary">Next ></button>

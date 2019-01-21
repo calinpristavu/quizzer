@@ -1,6 +1,7 @@
 package webapp
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -34,7 +35,7 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 	u.CurrentQuizID = &u.CurrentQuiz.ID
 	g.db.Save(&u)
 
-	http.Redirect(w, r, "/question", http.StatusFound)
+	http.Redirect(w, r, "/question/0", http.StatusFound)
 }
 
 func getQuestion(w http.ResponseWriter, r *http.Request) {
@@ -48,22 +49,31 @@ func getQuestion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	question, err := quiz.getNextQuestion()
+	qIdx, err := strconv.Atoi(mux.Vars(r)["idx"])
 	if err != nil {
-		log.Printf("No questions left. Redirecting to /finished: %v \n", err)
-		http.Redirect(w, r, "/finished", http.StatusFound)
+		log.Printf("invalid question index\n")
+		http.Error(w, "Invalid question index", http.StatusNotFound)
+
 		return
 	}
 
+	if qIdx > len(quiz.Questions)-1 {
+		http.Redirect(w, r, "/finished", http.StatusFound)
+
+		return
+	}
+
+	question := quiz.Questions[qIdx]
+
 	switch question.Type {
 	case 1:
-		choiceQuestion(w, r, question)
+		choiceQuestion(w, r, question, qIdx)
 		break
 	case 2:
-		textQuestion(w, r, question)
+		textQuestion(w, r, question, qIdx)
 		break
 	case 3:
-		flowDiagramQuestion(w, r, question)
+		flowDiagramQuestion(w, r, question, qIdx)
 		break
 	default:
 		log.Fatalf("unhandled question type %v", question.Type)
@@ -71,7 +81,7 @@ func getQuestion(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
+func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question, qIdx int) {
 	u := r.Context().Value("user").(*User)
 
 	quiz := u.CurrentQuiz
@@ -88,8 +98,7 @@ func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question) 
 			log.Fatalf("could not save answers: %v", err)
 		}
 
-		r.Method = http.MethodGet
-		getQuestion(w, r)
+		http.Redirect(w, r, fmt.Sprintf("/question/%d", qIdx+1), http.StatusFound)
 
 		return
 	}
@@ -97,14 +106,15 @@ func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question) 
 	err = g.templating.Lookup("choice_question.gohtml").Execute(w, struct {
 		Question Question
 		User     interface{}
-	}{Question: *question, User: u})
+		Qidx     int
+	}{Question: *question, User: u, Qidx: qIdx})
 
 	if err != nil {
 		log.Fatalf("could not render choice question template: %v", err)
 	}
 }
 
-func textQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
+func textQuestion(w http.ResponseWriter, r *http.Request, question *Question, qIdx int) {
 	u := r.Context().Value("user").(*User)
 
 	quiz := u.CurrentQuiz
@@ -121,8 +131,7 @@ func textQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
 			log.Fatalf("could not save answer: %v", err)
 		}
 
-		r.Method = http.MethodGet
-		getQuestion(w, r)
+		http.Redirect(w, r, fmt.Sprintf("/question/%d", qIdx+1), http.StatusFound)
 
 		return
 	}
@@ -130,14 +139,15 @@ func textQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
 	err = g.templating.Lookup("text_question.gohtml").Execute(w, struct {
 		Question Question
 		User     interface{}
-	}{Question: *question, User: u})
+		Qidx     int
+	}{Question: *question, User: u, Qidx: qIdx})
 
 	if err != nil {
 		log.Fatalf("could not render text question template: %v", err)
 	}
 }
 
-func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Question) {
+func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Question, qIdx int) {
 	u := r.Context().Value("user").(*User)
 
 	quiz := u.CurrentQuiz
@@ -158,8 +168,7 @@ func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Quest
 			log.Fatalf("could not save answer: %v", err)
 		}
 
-		r.Method = http.MethodGet
-		getQuestion(w, r)
+		http.Redirect(w, r, fmt.Sprintf("/question/%d", qIdx+1), http.StatusFound)
 
 		return
 	}
@@ -167,7 +176,8 @@ func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Quest
 	err = g.templating.Lookup("flow_diagram_question.gohtml").Execute(w, struct {
 		Question Question
 		User     interface{}
-	}{Question: *question, User: u})
+		Qidx     int
+	}{Question: *question, User: u, Qidx: qIdx})
 
 	if err != nil {
 		log.Fatalf("could not render flow diagram question template: %v", err)
