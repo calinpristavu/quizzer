@@ -15,6 +15,9 @@
                         <textarea id="answer" class="form-input" name="answer">{{.Question.TextAnswer.Text}}</textarea>
                     </label>
                 </div>
+                {{if ge .PrevIdx 0 }}
+                    <a href="/question/{{.PrevIdx}}" class="btn">< Back</a>
+                {{end}}
                 <button type="submit" class="btn btn-primary">Next ></button>
             </form>
             <ul>

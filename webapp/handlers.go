@@ -107,7 +107,13 @@ func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question, 
 		Question Question
 		User     interface{}
 		Qidx     int
-	}{Question: *question, User: u, Qidx: qIdx})
+		PrevIdx  int
+	}{
+		Question: *question,
+		User:     u,
+		Qidx:     qIdx,
+		PrevIdx:  qIdx - 1,
+	})
 
 	if err != nil {
 		log.Fatalf("could not render choice question template: %v", err)
@@ -140,7 +146,13 @@ func textQuestion(w http.ResponseWriter, r *http.Request, question *Question, qI
 		Question Question
 		User     interface{}
 		Qidx     int
-	}{Question: *question, User: u, Qidx: qIdx})
+		PrevIdx  int
+	}{
+		Question: *question,
+		User:     u,
+		Qidx:     qIdx,
+		PrevIdx:  qIdx - 1,
+	})
 
 	if err != nil {
 		log.Fatalf("could not render text question template: %v", err)
@@ -177,11 +189,13 @@ func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Quest
 		Question Question
 		User     interface{}
 		Qidx     int
-	}{Question: *question, User: u, Qidx: qIdx})
-
-	if err != nil {
-		log.Fatalf("could not render flow diagram question template: %v", err)
-	}
+		PrevIdx  int
+	}{
+		Question: *question,
+		User:     u,
+		Qidx:     qIdx,
+		PrevIdx:  qIdx - 1,
+	})
 }
 
 func finished(w http.ResponseWriter, r *http.Request) {
