@@ -190,30 +190,3 @@ func (u *User) finishQuiz() {
 	u.CurrentQuizID = nil
 	g.db.Save(&u)
 }
-
-func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
-	q := &Question{
-		IsAnswered:         false,
-		QuizID:             quiz.ID,
-		Text:               qt.Text,
-		Type:               qt.Type,
-		QuestionTemplateID: qt.ID,
-	}
-
-	g.db.Save(&q)
-
-	q.TextAnswer = &TextAnswer{Text: "", QuestionID: q.ID}
-	q.FlowDiagramAnswer = &FlowDiagramAnswer{Text: "", SVG: "", QuestionID: q.ID}
-	for _, cat := range qt.ChoiceAnswerTemplates {
-		ca := &ChoiceAnswer{
-			QuestionID: q.ID,
-			Text:       cat.Text,
-			IsCorrect:  cat.IsCorrect,
-			IsSelected: false,
-		}
-		g.db.Save(&ca)
-		q.ChoiceAnswers = append(q.ChoiceAnswers, ca)
-	}
-
-	quiz.Questions = append(quiz.Questions, q)
-}
