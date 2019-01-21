@@ -235,7 +235,7 @@ func viewQuiz(w http.ResponseWriter, r *http.Request) {
 func home(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*User)
 
-	if u.CurrentQuiz != nil {
+	if u.CurrentQuizID != nil {
 		http.Redirect(w, r, "/question", http.StatusFound)
 
 		return
@@ -358,7 +358,7 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 	u.Password, err = HashPassword(pass)
 	if err != nil {
 		http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
-		log.Printf("The password %s for user %s cannot be hashed",pass, uname)
+		log.Printf("The password %s for user %s cannot be hashed", pass, uname)
 
 		return
 	}
