@@ -246,7 +246,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*User)
 
 	if u.CurrentQuizID != nil {
-		http.Redirect(w, r, "/question", http.StatusFound)
+		http.Redirect(w, r, "/question/0", http.StatusFound)
 
 		return
 	}
