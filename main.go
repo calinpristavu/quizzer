@@ -21,7 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-
+  
 	appPort := flag.String("appPort", "8000", "app port")
 	flag.Parse()
 
