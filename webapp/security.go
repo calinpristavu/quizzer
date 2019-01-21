@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const (
@@ -87,4 +88,16 @@ func extractTokenClaims(tokenHeader string) (*TokenClaims, error) {
 	}
 
 	return claims, nil
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+
+	return string(bytes), err
+}
+
+func CheckPassword(expectedPasswordHashed, password string) bool {
+	check := bcrypt.CompareHashAndPassword([]byte((expectedPasswordHashed)), []byte(password))
+
+	return check == nil
 }

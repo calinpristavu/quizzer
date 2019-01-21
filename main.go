@@ -5,19 +5,29 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/rs/cors"
-
 	"github.com/calinpristavu/quizzer/webapp"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	dbHost := flag.String("dbHost", "127.0.0.1", "db host")
-	dbUser := flag.String("dbUser", "root", "db user")
-	dbPass := flag.String("dbPass", "", "db password")
+	// load from .env
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	dbHostEnv := os.Getenv("DB_HOST")
+	dbUserEnv := os.Getenv("DB_USER")
+	dbPassEnv := os.Getenv("DB_PASSWORD")
+
+	dbHost := flag.String("dbHost", dbHostEnv, "db host")
+	dbUser := flag.String("dbUser", dbUserEnv, "db user")
+	dbPass := flag.String("dbPass", dbPassEnv, "db password")
 	appPort := flag.String("appPort", "8000", "app port")
 	flag.Parse()
 

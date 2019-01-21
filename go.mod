@@ -25,4 +25,6 @@ require (
 	github.com/theplant/cldr v0.0.0-20170713054817-b97a4c2a76cf // indirect
 	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
 	google.golang.org/appengine v1.3.0 // indirect
+	golang.org/x/crypto/bcrypt
+	github.com/joho/godotenv
 )
