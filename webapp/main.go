@@ -60,7 +60,7 @@ func registerRoutes(public *mux.Router) {
 
 	quiz := public.NewRoute().Subrouter()
 	quiz.Use(UserSession)
-	quiz.HandleFunc("/question/{idx}", getQuestion)
+	quiz.HandleFunc("/question/{idx}", question)
 	quiz.HandleFunc("/finished", finished)
 	quiz.HandleFunc("/quiz-history", history)
 	quiz.HandleFunc("/quiz-history/{id}", viewQuiz)

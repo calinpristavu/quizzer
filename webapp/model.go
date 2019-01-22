@@ -2,6 +2,7 @@ package webapp
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 
 	"github.com/jinzhu/gorm"
@@ -128,7 +129,7 @@ func (q *Question) markChoicesAsSelected(ids []string) error {
 	return nil
 }
 
-func (q *Question) saveChoices(answerIds []string, quiz *Quiz) error {
+func (q *Question) saveChoices(answerIds []string) error {
 	err := q.markChoicesAsSelected(answerIds)
 	if err != nil {
 		return fmt.Errorf("invalid answers: %v", err)
@@ -150,7 +151,7 @@ func (q *Question) saveChoices(answerIds []string, quiz *Quiz) error {
 	return nil
 }
 
-func (q *Question) saveText(text string, quiz *Quiz) error {
+func (q *Question) saveText(text string) error {
 	q.TextAnswer.Text = text
 	q.IsAnswered = true
 	g.db.Save(q)
@@ -158,13 +159,30 @@ func (q *Question) saveText(text string, quiz *Quiz) error {
 	return nil
 }
 
-func (q *Question) saveFlowDiagram(json string, svg string, quiz *Quiz) error {
+func (q *Question) saveFlowDiagram(json string, svg string) error {
 	q.FlowDiagramAnswer.Text = json
 	q.FlowDiagramAnswer.SVG = svg
 	q.IsAnswered = true
 	g.db.Save(q)
 
 	return nil
+}
+
+func (q *Question) SaveAnswer(r *http.Request) error {
+	var err error
+
+	switch q.Type {
+	case 1:
+		err = q.saveChoices(r.Form["answer[]"])
+	case 2:
+		err = q.saveText(r.FormValue("answer"))
+	case 3:
+		err = q.saveFlowDiagram(r.FormValue("flow_diagram_json"), r.FormValue("flow_diagram_svg"))
+	default:
+		err = fmt.Errorf("unhandled question type %v", q.Type)
+	}
+
+	return err
 }
 
 func (u *User) finishQuiz() {

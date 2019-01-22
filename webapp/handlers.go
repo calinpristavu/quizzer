@@ -2,6 +2,7 @@ package webapp
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"strconv"
@@ -38,11 +39,10 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/question/0", http.StatusFound)
 }
 
-func getQuestion(w http.ResponseWriter, r *http.Request) {
+func question(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*User)
 
-	quiz := u.CurrentQuiz
-	if quiz == nil {
+	if u.CurrentQuiz == nil {
 		log.Printf("no active quiz for user %s\n", u.Username)
 		http.Redirect(w, r, "/", http.StatusFound)
 
@@ -57,145 +57,62 @@ func getQuestion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if qIdx > len(quiz.Questions)-1 {
+	if qIdx > len(u.CurrentQuiz.Questions)-1 {
 		http.Redirect(w, r, "/finished", http.StatusFound)
 
 		return
 	}
 
-	question := quiz.Questions[qIdx]
+	question := u.CurrentQuiz.Questions[qIdx]
 
+	if r.Method == http.MethodGet {
+		err = getTemplateForQuestion(question).Execute(w, struct {
+			Question Question
+			User     interface{}
+			Qidx     int
+			PrevIdx  int
+		}{
+			Question: *question,
+			User:     u,
+			Qidx:     qIdx,
+			PrevIdx:  qIdx - 1,
+		})
+		if err != nil {
+			http.Error(w, "could not render template for question", http.StatusInternalServerError)
+		}
+
+		return
+	}
+
+	if r.Method == http.MethodPost {
+
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "could not parse form", http.StatusBadRequest)
+		}
+
+		if err := question.SaveAnswer(r); err != nil {
+			http.Error(w, "could not save answers", http.StatusBadRequest)
+			return
+		}
+
+		http.Redirect(w, r, fmt.Sprintf("/question/%d", qIdx+1), http.StatusFound)
+		return
+	}
+}
+
+func getTemplateForQuestion(question *Question) *template.Template {
 	switch question.Type {
 	case 1:
-		choiceQuestion(w, r, question, qIdx)
-		break
+		return g.templating.Lookup("choice_question.gohtml")
 	case 2:
-		textQuestion(w, r, question, qIdx)
-		break
+		return g.templating.Lookup("text_question.gohtml")
 	case 3:
-		flowDiagramQuestion(w, r, question, qIdx)
-		break
+		return g.templating.Lookup("flow_diagram_question.gohtml")
 	default:
 		log.Fatalf("unhandled question type %v", question.Type)
-		break
-	}
-}
-
-func choiceQuestion(w http.ResponseWriter, r *http.Request, question *Question, qIdx int) {
-	u := r.Context().Value("user").(*User)
-
-	quiz := u.CurrentQuiz
-
-	var err error
-
-	if r.Method == http.MethodPost {
-		err = r.ParseForm()
-		if err != nil {
-			log.Fatalf("could not parse form: %v", err)
-		}
-		err = question.saveChoices(r.Form["answer[]"], quiz)
-		if err != nil {
-			log.Fatalf("could not save answers: %v", err)
-		}
-
-		http.Redirect(w, r, fmt.Sprintf("/question/%d", qIdx+1), http.StatusFound)
-
-		return
 	}
 
-	err = g.templating.Lookup("choice_question.gohtml").Execute(w, struct {
-		Question Question
-		User     interface{}
-		Qidx     int
-		PrevIdx  int
-	}{
-		Question: *question,
-		User:     u,
-		Qidx:     qIdx,
-		PrevIdx:  qIdx - 1,
-	})
-
-	if err != nil {
-		log.Fatalf("could not render choice question template: %v", err)
-	}
-}
-
-func textQuestion(w http.ResponseWriter, r *http.Request, question *Question, qIdx int) {
-	u := r.Context().Value("user").(*User)
-
-	quiz := u.CurrentQuiz
-
-	var err error
-
-	if r.Method == http.MethodPost {
-		err = r.ParseForm()
-		if err != nil {
-			log.Fatalf("could not parse form: %v", err)
-		}
-		err = question.saveText(r.FormValue("answer"), quiz)
-		if err != nil {
-			log.Fatalf("could not save answer: %v", err)
-		}
-
-		http.Redirect(w, r, fmt.Sprintf("/question/%d", qIdx+1), http.StatusFound)
-
-		return
-	}
-
-	err = g.templating.Lookup("text_question.gohtml").Execute(w, struct {
-		Question Question
-		User     interface{}
-		Qidx     int
-		PrevIdx  int
-	}{
-		Question: *question,
-		User:     u,
-		Qidx:     qIdx,
-		PrevIdx:  qIdx - 1,
-	})
-
-	if err != nil {
-		log.Fatalf("could not render text question template: %v", err)
-	}
-}
-
-func flowDiagramQuestion(w http.ResponseWriter, r *http.Request, question *Question, qIdx int) {
-	u := r.Context().Value("user").(*User)
-
-	quiz := u.CurrentQuiz
-
-	var err error
-
-	if r.Method == http.MethodPost {
-		err = r.ParseForm()
-		if err != nil {
-			log.Fatalf("could not parse form: %v", err)
-		}
-		err = question.saveFlowDiagram(
-			r.FormValue("flow_diagram_json"),
-			r.FormValue("flow_diagram_svg"),
-			quiz,
-		)
-		if err != nil {
-			log.Fatalf("could not save answer: %v", err)
-		}
-
-		http.Redirect(w, r, fmt.Sprintf("/question/%d", qIdx+1), http.StatusFound)
-
-		return
-	}
-
-	err = g.templating.Lookup("flow_diagram_question.gohtml").Execute(w, struct {
-		Question Question
-		User     interface{}
-		Qidx     int
-		PrevIdx  int
-	}{
-		Question: *question,
-		User:     u,
-		Qidx:     qIdx,
-		PrevIdx:  qIdx - 1,
-	})
+	return nil
 }
 
 func finished(w http.ResponseWriter, r *http.Request) {
