@@ -6,6 +6,7 @@ import {openQuizView, saveScores} from "../../../redux/actions";
 import TextQuestion from "./TextQuestion";
 import CheckboxQuestion from "./CheckboxQuestion";
 import FlowDiagramQuestion from "./FlowDiagramQuestion";
+import RadioQuestion from "./RadioQuestion";
 
 class View extends Component {
   static propTypes = {
@@ -20,6 +21,8 @@ class View extends Component {
         return <TextQuestion question={q}/>;
       case 3:
         return <FlowDiagramQuestion question={q}/>;
+      case 4:
+        return <RadioQuestion question={q}/>;
       default:
         console.log('Unknown Question type');
 
