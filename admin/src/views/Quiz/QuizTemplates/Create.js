@@ -10,7 +10,7 @@ class Create extends Component {
     step: 1,
     quiz: {
       Name: '',
-      Questions: []
+      QuizQuestions: []
     }
   };
 
@@ -21,14 +21,14 @@ class Create extends Component {
       step: 2,
       quiz: {
         Name: text,
-        Questions: []
+        QuizQuestions: []
       }
     })
   };
 
   stop = (qIds) => {
     const quiz = this.state.quiz;
-    quiz.Questions = qIds.map(id => ({"ID": id}));
+    quiz.QuizQuestions = qIds.map(id => ({"ID": id}));
 
     this.props.createQuizTemplate(quiz)
       .then(() => this.setState(this.defaultState))

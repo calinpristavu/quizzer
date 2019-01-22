@@ -114,7 +114,7 @@ class CreateQuestion extends Component {
                       border: "1px solid #c8ced3"
                     }}
                     toolbar={{
-                      options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
+                      questions: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
                       image: { uploadCallback: this.uploadCallback, previewImage: true }
                     }}
                     onEditorStateChange={editorState => this.setState({

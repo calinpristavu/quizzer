@@ -61,7 +61,7 @@ class List extends Component {
             {this.getVisibleItems().map((q, k) =>
               <tr key={k} onClick={() => this.props.openEdit(q)}>
                 <td>{q.Name}</td>
-                <td>{q.Questions !== null ? q.Questions.length : 0}</td>
+                <td>{q.QuizQuestions !== null ? q.QuizQuestions.length : 0}</td>
                 <td>
                   <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle"/>
                 </td>

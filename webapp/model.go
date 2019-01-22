@@ -29,6 +29,7 @@ type Question struct {
 	IsAnswered         bool `gorm:"not null";sql:"DEFAULT:0"`
 	IsCorrect          bool `gorm:"not null";sql:"DEFAULT:0"`
 	Score              uint `sql:"default:0"`
+	Weight             uint `sql:"default:1"`
 	CheckboxAnswers    []*CheckboxAnswer
 	RadioAnswers       []*RadioAnswer
 	TextAnswer         *TextAnswer

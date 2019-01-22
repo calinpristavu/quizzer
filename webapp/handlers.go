@@ -23,10 +23,11 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 		var qt QuizTemplate
 
 		g.db.
-			Preload("Questions").
-			Preload("Questions.CheckboxAnswerTemplates").
-			Preload("Questions.RadioAnswerTemplates").
-			Preload("Questions.FlowDiagramAnswerTemplate").
+			Preload("QuizQuestions").
+			Preload("QuizQuestions.Question").
+			Preload("QuizQuestions.Question.CheckboxAnswerTemplates").
+			Preload("QuizQuestions.Question.RadioAnswerTemplates").
+			Preload("QuizQuestions.Question.FlowDiagramAnswerTemplate").
 			First(&qt, intId)
 
 		u.CurrentQuiz = qt.start(u)
@@ -189,7 +190,8 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 	var qts []QuizTemplate
 	g.db.
-		Preload("Questions").
+		Model(&qts).
+		Preload("QuizQuestions").
 		Order("id desc").
 		Find(&qts)
 

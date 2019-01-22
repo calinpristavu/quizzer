@@ -4,18 +4,28 @@ import "github.com/jinzhu/gorm"
 
 type QuizTemplate struct {
 	gorm.Model
-	Name      string
-	Questions []*QuestionTemplate `gorm:"many2many:quiz_quesiton_templates;association_autoupdate:false;"`
+	Name          string
+	QuizQuestions []*QuizQuestionTemplate `gorm:"foreignkey:QuizID"`
 }
 
 type QuestionTemplate struct {
 	gorm.Model
 	Text                      string `sql:"type:longtext"`
 	Type                      uint
+	QuizQuestions             []*QuizQuestionTemplate `gorm:"foreignkey:QuestionID"`
 	CheckboxAnswerTemplates   []*CheckboxAnswerTemplate
 	RadioAnswerTemplates      []*RadioAnswerTemplate
 	FlowDiagramAnswerTemplate *FlowDiagramAnswerTemplate
 	Usages                    []Question
+}
+
+type QuizQuestionTemplate struct {
+	ID         uint
+	Quiz       *QuizTemplate
+	QuizID     uint
+	Question   *QuestionTemplate
+	QuestionID uint
+	Weight     uint
 }
 
 type CheckboxAnswerTemplate struct {
@@ -48,8 +58,8 @@ func (qt QuizTemplate) start(u *User) *Quiz {
 
 	g.db.Save(&q)
 
-	for _, questionTemplate := range qt.Questions {
-		questionTemplate.addToQuiz(q)
+	for _, qq := range qt.QuizQuestions {
+		qq.Question.addToQuiz(q)
 	}
 
 	return q

@@ -12,7 +12,9 @@ import (
 func getQuizTemplates(w http.ResponseWriter, _ *http.Request) {
 	var qts []QuizTemplate
 	g.db.
-		Preload("Questions").
+		Model(&qts).
+		Preload("QuizQuestions").
+		Preload("QuizQuestions.Question").
 		Order("id desc").
 		Find(&qts)
 
@@ -76,7 +78,7 @@ func putQuizTemplate(w http.ResponseWriter, r *http.Request) {
 
 	qt.ID = uint(id)
 
-	res.Association("Questions").Replace(qt.Questions)
+	res.Association("QuizQuestions").Replace(qt.QuizQuestions)
 	g.db.Save(&qt)
 
 	jsonResponse(w, qt, http.StatusOK)
@@ -105,6 +107,8 @@ func deleteQuizTemplate(w http.ResponseWriter, r *http.Request) {
 func getQuestionTemplates(w http.ResponseWriter, _ *http.Request) {
 	var qts []QuestionTemplate
 	g.db.
+		Preload("QuizQuestions").
+		Preload("QuizQuestions.Quiz").
 		Preload("CheckboxAnswerTemplates").
 		Preload("RadioAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
