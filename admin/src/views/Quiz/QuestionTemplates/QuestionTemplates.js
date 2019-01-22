@@ -15,9 +15,10 @@ const views = {
 };
 
 export const questionTypes = {
-  1: "Checkboxes",
+  1: "Multiple answer",
   2: "Free text",
   3: "Flow Diagram",
+  4: "Single answer",
 };
 
 class QuestionTemplates extends Component{

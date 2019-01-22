@@ -30,6 +30,7 @@ func FindByUsername(uname string) (*User, error) {
 		Preload("CurrentQuiz", "active = ?", true).
 		Preload("CurrentQuiz.Questions").
 		Preload("CurrentQuiz.Questions.CheckboxAnswers").
+		Preload("CurrentQuiz.Questions.RadioAnswers").
 		Preload("CurrentQuiz.Questions.TextAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
 		First(&u)
@@ -53,6 +54,7 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 		Preload("CurrentQuiz", "active = ?", true).
 		Preload("CurrentQuiz.Questions").
 		Preload("CurrentQuiz.Questions.CheckboxAnswers").
+		Preload("CurrentQuiz.Questions.RadioAnswers").
 		Preload("CurrentQuiz.Questions.TextAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
 		Where("Username = ?", uname).

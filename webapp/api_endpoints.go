@@ -106,6 +106,7 @@ func getQuestionTemplates(w http.ResponseWriter, _ *http.Request) {
 	var qts []QuestionTemplate
 	g.db.
 		Preload("CheckboxAnswerTemplates").
+		Preload("RadioAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
 		Preload("Usages").
 		Order("id desc").
@@ -130,6 +131,7 @@ func postQuestionTemplates(w http.ResponseWriter, r *http.Request) {
 	g.db.
 		Model(&qt).
 		Preload("CheckboxAnswerTemplates").
+		Preload("RadioAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
 		Preload("Usages").
 		First(&qt)
@@ -147,7 +149,11 @@ func getQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := g.db.Preload("CheckboxAnswerTemplates").Preload("FlowDiagramAnswerTemplate").First(&qt, id)
+	res := g.db.
+		Preload("CheckboxAnswerTemplates").
+		Preload("RadioAnswerTemplates").
+		Preload("FlowDiagramAnswerTemplate").
+		First(&qt, id)
 	if res.RecordNotFound() {
 		w.WriteHeader(404)
 
@@ -179,6 +185,7 @@ func putQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 	qt.ID = uint(id)
 
 	res.Association("CheckboxAnswerTemplates").Replace(qt.CheckboxAnswerTemplates)
+	res.Association("RadioAnswerTemplates").Replace(qt.RadioAnswerTemplates)
 	res.Association("FlowDiagramAnswerTemplate").Replace(qt.FlowDiagramAnswerTemplate)
 	g.db.Save(&qt)
 
@@ -271,6 +278,7 @@ func getQuizzes(w http.ResponseWriter, _ *http.Request) {
 	g.db.
 		Preload("Questions").
 		Preload("Questions.CheckboxAnswers").
+		Preload("Questions.RadioAnswers").
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("User").

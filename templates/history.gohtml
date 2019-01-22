@@ -55,6 +55,19 @@
                             <p>{{.TextAnswer.Text}}</p>
                         {{else if eq .Type 3}}
                             <div class="flow-diagram" data-json="{{.FlowDiagramAnswer.Text}}"></div>
+                        {{else if eq .Type 4}}
+                            <ul>
+                                {{range .RadioAnswers}}
+                                    <li class="{{if eq .IsCorrect true}}text-success{{else}}text-danger{{end}}">
+                                        {{ if .IsSelected }}
+                                            <i class="far fa-check-circle"></i>
+                                        {{else}}
+                                            <i class="far fa-circle"></i>
+                                        {{end}}
+                                        {{.Text}}
+                                    </li>
+                                {{end}}
+                            </ul>
                         {{end}}
                     </div>
                     <hr>

@@ -45,11 +45,13 @@ func migrateDb() *gorm.DB {
 		&Quiz{},
 		&Question{},
 		&CheckboxAnswer{},
+		&RadioAnswer{},
 		&TextAnswer{},
 		&FlowDiagramAnswer{},
 		&QuizTemplate{},
 		&QuestionTemplate{},
 		&CheckboxAnswerTemplate{},
+		&RadioAnswerTemplate{},
 		&FlowDiagramAnswerTemplate{},
 	)
 }

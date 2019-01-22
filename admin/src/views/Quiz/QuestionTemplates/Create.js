@@ -14,7 +14,7 @@ import {
 import {Editor} from 'react-draft-wysiwyg';
 import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import {CheckboxAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
+import {CheckboxAnswerTemplates, FlowDiagramAnswer, RadioAnswerTemplates} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {createQuestionTemplate} from "../../../redux/actions";
@@ -25,20 +25,40 @@ class CreateQuestion extends Component {
     Text: '<p>Here\'s where the question text goes...</p>',
     Type: null,
     CheckboxAnswerTemplates: [],
+    RadioAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null,
   };
 
   state = this.defaultState;
 
+  createFormRef = React.createRef();
+
   create = () => {
-    this.props.createQuestionTemplate(this.state)
+    const question = this.state;
+
+    const correctQIndex = parseInt(this.createFormRef.current['Answer'].value);
+    question.RadioAnswerTemplates.forEach((a, k) => {
+      question.RadioAnswerTemplates[k].IsCorrect = k === correctQIndex
+    });
+
+    this.props.createQuestionTemplate(question)
       .then(() => this.setState({
         ...this.defaultState,
-        CheckboxAnswerTemplates: []
+        CheckboxAnswerTemplates: [],
+        RadioAnswerTemplates: [],
       }))
   };
 
-  removeChoice = (choiceIndex) => {
+  addCheckboxChoice = (choice) => {
+    this.setState((oldState) => {
+      const choices = oldState.CheckboxAnswerTemplates;
+      choices.push(choice);
+
+      return {CheckboxAnswerTemplates: choices}
+    })
+  };
+
+  removeCheckboxChoice = (choiceIndex) => {
     this.setState((oldState) => {
       const choices = oldState.CheckboxAnswerTemplates;
       delete choices[choiceIndex];
@@ -47,12 +67,21 @@ class CreateQuestion extends Component {
     })
   };
 
-  addChoice = (choice) => {
+  addRadioChoice = (choice) => {
     this.setState((oldState) => {
-      const choices = oldState.CheckboxAnswerTemplates;
+      const choices = oldState.RadioAnswerTemplates;
       choices.push(choice);
 
-      return {CheckboxAnswerTemplates: choices}
+      return {RadioAnswerTemplates: choices}
+    })
+  };
+
+  removeRadioChoice = (choiceIndex) => {
+    this.setState((oldState) => {
+      const choices = oldState.RadioAnswerTemplates;
+      delete choices[choiceIndex];
+
+      return {RadioAnswerTemplates: choices}
     })
   };
 
@@ -68,7 +97,7 @@ class CreateQuestion extends Component {
   render() {
     return (
       <Card>
-        <Form>
+        <Form innerRef={this.createFormRef}>
           <CardHeader>
             <i className="fa fa-plus-circle text-success" />
             <strong>Create Question</strong>
@@ -114,6 +143,16 @@ class CreateQuestion extends Component {
                   <Input
                     className="form-check-input"
                     type="radio"
+                    checked={this.state.Type === 4}
+                    onChange={() => this.setState({Type: 4})}
+                    id="question-type-4"
+                    name="Type"/>
+                  <Label className="form-check-label" check htmlFor="question-type-4">{questionTypes[4]}</Label>
+                </FormGroup>
+                <FormGroup check inline>
+                  <Input
+                    className="form-check-input"
+                    type="radio"
                     checked={this.state.Type === 2}
                     onChange={() => this.setState({Type: 2})}
                     id="question-type-2"
@@ -134,12 +173,18 @@ class CreateQuestion extends Component {
             </FormGroup>
             {this.state.Type === 1 &&
               <CheckboxAnswerTemplates
-                removeChoice={this.removeChoice}
-                addChoice={this.addChoice}
+                removeChoice={this.removeCheckboxChoice}
+                addChoice={this.addCheckboxChoice}
                 answers={this.state.CheckboxAnswerTemplates}/>
             }
             {this.state.Type === 3 &&
               <FlowDiagramAnswer />
+            }
+            {this.state.Type === 4 &&
+            <RadioAnswerTemplates
+              removeChoice={this.removeRadioChoice}
+              addChoice={this.addRadioChoice}
+              answers={this.state.RadioAnswerTemplates}/>
             }
           </CardBody>
           <CardFooter>

@@ -50,6 +50,19 @@
                                     <div class="flow-diagram">
                                         {{raw .FlowDiagramAnswer.SVG}}
                                     </div>
+                                {{else if eq .Type 4}}
+                                    <ul>
+                                        {{range .RadioAnswers}}
+                                            <li class="text-left">
+                                                {{ if .IsSelected }}
+                                                    <i class="far fa-check-circle"></i>
+                                                {{else}}
+                                                    <i class="far fa-circle"></i>
+                                                {{end}}
+                                                {{.Text}}
+                                            </li>
+                                        {{end}}
+                                    </ul>
                                 {{end}}
                             </td>
                         </tr>

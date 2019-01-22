@@ -13,11 +13,19 @@ type QuestionTemplate struct {
 	Text                      string `sql:"type:longtext"`
 	Type                      uint
 	CheckboxAnswerTemplates   []*CheckboxAnswerTemplate
+	RadioAnswerTemplates      []*RadioAnswerTemplate
 	FlowDiagramAnswerTemplate *FlowDiagramAnswerTemplate
 	Usages                    []Question
 }
 
 type CheckboxAnswerTemplate struct {
+	gorm.Model
+	QuestionTemplateID uint
+	Text               string
+	IsCorrect          bool
+}
+
+type RadioAnswerTemplate struct {
 	gorm.Model
 	QuestionTemplateID uint
 	Text               string
@@ -69,6 +77,16 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
 		}
 		g.db.Save(&ca)
 		q.CheckboxAnswers = append(q.CheckboxAnswers, ca)
+	}
+	for _, rat := range qt.RadioAnswerTemplates {
+		ra := &RadioAnswer{
+			QuestionID: q.ID,
+			Text:       rat.Text,
+			IsCorrect:  rat.IsCorrect,
+			IsSelected: false,
+		}
+		g.db.Save(&ra)
+		q.RadioAnswers = append(q.RadioAnswers, ra)
 	}
 
 	quiz.Questions = append(quiz.Questions, q)

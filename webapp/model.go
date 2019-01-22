@@ -30,12 +30,21 @@ type Question struct {
 	IsCorrect          bool `gorm:"not null";sql:"DEFAULT:0"`
 	Score              uint `sql:"default:0"`
 	CheckboxAnswers    []*CheckboxAnswer
+	RadioAnswers       []*RadioAnswer
 	TextAnswer         *TextAnswer
 	FlowDiagramAnswer  *FlowDiagramAnswer
 	QuestionTemplateID uint
 }
 
 type CheckboxAnswer struct {
+	gorm.Model
+	QuestionID uint
+	Text       string
+	IsCorrect  bool
+	IsSelected bool
+}
+
+type RadioAnswer struct {
 	gorm.Model
 	QuestionID uint
 	Text       string
@@ -72,6 +81,7 @@ func newQuiz(u *User, noQ int) *Quiz {
 	g.db.
 		Model(&QuestionTemplate{}).
 		Preload("CheckboxAnswerTemplates").
+		Preload("RadioAnswerTemplates").
 		Order(gorm.Expr("rand()")).
 		Limit(noQ).
 		Find(&qts)
@@ -89,6 +99,7 @@ func findAllFinishedForUser(u *User) []Quiz {
 	g.db.Model(&Quiz{}).
 		Preload("Questions").
 		Preload("Questions.CheckboxAnswers").
+		Preload("Questions.RadioAnswers").
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Where("user_id = ?", u.ID).
@@ -105,6 +116,7 @@ func find(id int) Quiz {
 		Model(Quiz{}).
 		Preload("Questions").
 		Preload("Questions.CheckboxAnswers").
+		Preload("Questions.RadioAnswers").
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		First(&q, id)
@@ -151,6 +163,34 @@ func (q *Question) saveCheckboxes(answerIds []string) error {
 	return nil
 }
 
+func (q *Question) saveRadios(answerId string) error {
+	id, err := strconv.Atoi(answerId)
+	if err != nil {
+		return fmt.Errorf("could not convert %s to int: %v", answerId, err)
+	}
+
+	correct := true
+	for _, a := range q.RadioAnswers {
+		a.IsSelected = false
+		if a.ID == uint(id) {
+			a.IsSelected = true
+		}
+		g.db.Save(&a)
+
+		if a.IsCorrect != a.IsSelected {
+			correct = false
+		}
+	}
+	q.IsCorrect = correct
+	if q.IsCorrect {
+		q.Score = 100
+	}
+	q.IsAnswered = true
+	g.db.Save(q)
+
+	return nil
+}
+
 func (q *Question) saveText(text string) error {
 	q.TextAnswer.Text = text
 	q.IsAnswered = true
@@ -178,6 +218,8 @@ func (q *Question) SaveAnswer(r *http.Request) error {
 		err = q.saveText(r.FormValue("answer"))
 	case 3:
 		err = q.saveFlowDiagram(r.FormValue("flow_diagram_json"), r.FormValue("flow_diagram_svg"))
+	case 4:
+		err = q.saveRadios(r.FormValue("answer"))
 	default:
 		err = fmt.Errorf("unhandled question type %v", q.Type)
 	}

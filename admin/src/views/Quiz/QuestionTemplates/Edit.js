@@ -85,8 +85,8 @@ class EditQuestion extends Component {
           </FormGroup>
           {this.state.Type === 1 &&
             <CheckboxAnswerTemplates
-              removeChoice={this.removeChoice}
-              addChoice={this.addChoice}
+              removeChoice={this.removeCheckboxChoice}
+              addChoice={this.addCheckboxChoice}
               answers={this.state.CheckboxAnswerTemplates}/>
           }
           {this.state.Type === 3 &&

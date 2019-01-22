@@ -25,6 +25,7 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 		g.db.
 			Preload("Questions").
 			Preload("Questions.CheckboxAnswerTemplates").
+			Preload("Questions.RadioAnswerTemplates").
 			Preload("Questions.FlowDiagramAnswerTemplate").
 			First(&qt, intId)
 
@@ -110,6 +111,8 @@ func getTemplateForQuestion(question *Question) *template.Template {
 		return g.templating.Lookup("text_question.gohtml")
 	case 3:
 		return g.templating.Lookup("flow_diagram_question.gohtml")
+	case 4:
+		return g.templating.Lookup("radio_question.gohtml")
 	default:
 		log.Fatalf("unhandled question type %v", question.Type)
 	}
