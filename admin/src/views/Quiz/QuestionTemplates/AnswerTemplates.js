@@ -7,7 +7,7 @@ import {
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 
-export class ChoiceAnswerTemplates extends Component {
+export class CheckboxAnswerTemplates extends Component {
   defaultState = {
     Text: '',
     IsCorrect: false

@@ -29,7 +29,7 @@ func FindByUsername(uname string) (*User, error) {
 	res := g.db.Where(&u).
 		Preload("CurrentQuiz", "active = ?", true).
 		Preload("CurrentQuiz.Questions").
-		Preload("CurrentQuiz.Questions.ChoiceAnswers").
+		Preload("CurrentQuiz.Questions.CheckboxAnswers").
 		Preload("CurrentQuiz.Questions.TextAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
 		First(&u)
@@ -52,15 +52,15 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 	res := g.db.Where(&u).
 		Preload("CurrentQuiz", "active = ?", true).
 		Preload("CurrentQuiz.Questions").
-		Preload("CurrentQuiz.Questions.ChoiceAnswers").
+		Preload("CurrentQuiz.Questions.CheckboxAnswers").
 		Preload("CurrentQuiz.Questions.TextAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
 		Where("Username = ?", uname).
 		First(&u)
 
-	checkPass:= CheckPassword(u.Password, pass)
+	checkPass := CheckPassword(u.Password, pass)
 
-	if res.RecordNotFound() || checkPass == false  {
+	if res.RecordNotFound() || checkPass == false {
 		return nil, fmt.Errorf("Bad credentials: %s, %s\n", uname, pass)
 	}
 

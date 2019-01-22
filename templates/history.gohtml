@@ -40,7 +40,7 @@
                         <p>{{raw .Text}}</p>
                         {{if eq .Type 1}}
                             <ul>
-                                {{range .ChoiceAnswers}}
+                                {{range .CheckboxAnswers}}
                                     <li class="{{if eq .IsCorrect true}}text-success{{else}}text-danger{{end}}">
                                         {{ if .IsSelected }}
                                             <i class="far fa-check-square"></i>

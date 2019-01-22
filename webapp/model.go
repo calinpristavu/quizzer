@@ -29,13 +29,13 @@ type Question struct {
 	IsAnswered         bool `gorm:"not null";sql:"DEFAULT:0"`
 	IsCorrect          bool `gorm:"not null";sql:"DEFAULT:0"`
 	Score              uint `sql:"default:0"`
-	ChoiceAnswers      []*ChoiceAnswer
+	CheckboxAnswers    []*CheckboxAnswer
 	TextAnswer         *TextAnswer
 	FlowDiagramAnswer  *FlowDiagramAnswer
 	QuestionTemplateID uint
 }
 
-type ChoiceAnswer struct {
+type CheckboxAnswer struct {
 	gorm.Model
 	QuestionID uint
 	Text       string
@@ -71,7 +71,7 @@ func newQuiz(u *User, noQ int) *Quiz {
 
 	g.db.
 		Model(&QuestionTemplate{}).
-		Preload("ChoiceAnswerTemplates").
+		Preload("CheckboxAnswerTemplates").
 		Order(gorm.Expr("rand()")).
 		Limit(noQ).
 		Find(&qts)
@@ -88,7 +88,7 @@ func findAllFinishedForUser(u *User) []Quiz {
 
 	g.db.Model(&Quiz{}).
 		Preload("Questions").
-		Preload("Questions.ChoiceAnswers").
+		Preload("Questions.CheckboxAnswers").
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Where("user_id = ?", u.ID).
@@ -104,7 +104,7 @@ func find(id int) Quiz {
 	g.db.
 		Model(Quiz{}).
 		Preload("Questions").
-		Preload("Questions.ChoiceAnswers").
+		Preload("Questions.CheckboxAnswers").
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		First(&q, id)
@@ -112,9 +112,9 @@ func find(id int) Quiz {
 	return q
 }
 
-func (q *Question) markChoicesAsSelected(ids []string) error {
+func (q *Question) markCheckboxesAsSelected(ids []string) error {
 	for _, aID := range ids {
-		for _, a := range q.ChoiceAnswers {
+		for _, a := range q.CheckboxAnswers {
 			id, err := strconv.Atoi(aID)
 			if err != nil {
 				return fmt.Errorf("invalid answer id given %v: %v", aID, err)
@@ -129,14 +129,14 @@ func (q *Question) markChoicesAsSelected(ids []string) error {
 	return nil
 }
 
-func (q *Question) saveChoices(answerIds []string) error {
-	err := q.markChoicesAsSelected(answerIds)
+func (q *Question) saveCheckboxes(answerIds []string) error {
+	err := q.markCheckboxesAsSelected(answerIds)
 	if err != nil {
 		return fmt.Errorf("invalid answers: %v", err)
 	}
 
 	correct := true
-	for _, a := range q.ChoiceAnswers {
+	for _, a := range q.CheckboxAnswers {
 		if a.IsCorrect != a.IsSelected {
 			correct = false
 		}
@@ -173,7 +173,7 @@ func (q *Question) SaveAnswer(r *http.Request) error {
 
 	switch q.Type {
 	case 1:
-		err = q.saveChoices(r.Form["answer[]"])
+		err = q.saveCheckboxes(r.Form["answer[]"])
 	case 2:
 		err = q.saveText(r.FormValue("answer"))
 	case 3:

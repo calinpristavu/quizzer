@@ -24,7 +24,7 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 
 		g.db.
 			Preload("Questions").
-			Preload("Questions.ChoiceAnswerTemplates").
+			Preload("Questions.CheckboxAnswerTemplates").
 			Preload("Questions.FlowDiagramAnswerTemplate").
 			First(&qt, intId)
 
@@ -105,7 +105,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 func getTemplateForQuestion(question *Question) *template.Template {
 	switch question.Type {
 	case 1:
-		return g.templating.Lookup("choice_question.gohtml")
+		return g.templating.Lookup("checkbox_question.gohtml")
 	case 2:
 		return g.templating.Lookup("text_question.gohtml")
 	case 3:

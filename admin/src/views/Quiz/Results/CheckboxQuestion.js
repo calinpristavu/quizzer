@@ -10,7 +10,7 @@ class CheckboxQuestion extends Component {
     question: PropTypes.shape({
       ID: PropTypes.number.isRequired,
       Text: PropTypes.string.isRequired,
-      ChoiceAnswers: PropTypes.arrayOf(PropTypes.shape({
+      CheckboxAnswers: PropTypes.arrayOf(PropTypes.shape({
         Text: PropTypes.string.isRequired
       })).isRequired,
       Score: PropTypes.number.isRequired,
@@ -67,7 +67,7 @@ class CheckboxQuestion extends Component {
         </div>
         <div>
           <ListGroup>
-            {this.props.question.ChoiceAnswers.map((a, i) => (
+            {this.props.question.CheckboxAnswers.map((a, i) => (
               <ListGroupItem
                 style={{color: a.IsCorrect ? "#4DBD74" : "inherit"}}
                 key={i}>

@@ -9,7 +9,7 @@ import {
   Label,
   Row
 } from "reactstrap";
-import {ChoiceAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
+import {CheckboxAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {questionTypes} from "./QuestionTemplates";
 
@@ -17,7 +17,7 @@ class EditQuestion extends Component {
   state = {
     Text: "Sample text...",
     Type: null,
-    ChoiceAnswerTemplates: [],
+    CheckboxAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null
   };
 
@@ -84,10 +84,10 @@ class EditQuestion extends Component {
             </Col>
           </FormGroup>
           {this.state.Type === 1 &&
-            <ChoiceAnswerTemplates
+            <CheckboxAnswerTemplates
               removeChoice={this.removeChoice}
               addChoice={this.addChoice}
-              answers={this.state.ChoiceAnswerTemplates}/>
+              answers={this.state.CheckboxAnswerTemplates}/>
           }
           {this.state.Type === 3 &&
             <FlowDiagramAnswer />

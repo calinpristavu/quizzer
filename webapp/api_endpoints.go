@@ -105,7 +105,7 @@ func deleteQuizTemplate(w http.ResponseWriter, r *http.Request) {
 func getQuestionTemplates(w http.ResponseWriter, _ *http.Request) {
 	var qts []QuestionTemplate
 	g.db.
-		Preload("ChoiceAnswerTemplates").
+		Preload("CheckboxAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
 		Preload("Usages").
 		Order("id desc").
@@ -140,7 +140,7 @@ func getQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := g.db.Preload("ChoiceAnswerTemplates").Preload("FlowDiagramAnswerTemplate").First(&qt, id)
+	res := g.db.Preload("CheckboxAnswerTemplates").Preload("FlowDiagramAnswerTemplate").First(&qt, id)
 	if res.RecordNotFound() {
 		w.WriteHeader(404)
 
@@ -171,7 +171,7 @@ func putQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 
 	qt.ID = uint(id)
 
-	res.Association("ChoiceAnswerTemplates").Replace(qt.ChoiceAnswerTemplates)
+	res.Association("CheckboxAnswerTemplates").Replace(qt.CheckboxAnswerTemplates)
 	res.Association("FlowDiagramAnswerTemplate").Replace(qt.FlowDiagramAnswerTemplate)
 	g.db.Save(&qt)
 
@@ -263,7 +263,7 @@ func getQuizzes(w http.ResponseWriter, _ *http.Request) {
 	var qs []Quiz
 	g.db.
 		Preload("Questions").
-		Preload("Questions.ChoiceAnswers").
+		Preload("Questions.CheckboxAnswers").
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("User").

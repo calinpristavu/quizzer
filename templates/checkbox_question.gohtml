@@ -14,7 +14,7 @@
         <div class="section-content">
             <div>{{raw .Question.Text}}</div>
             <form action="/question/{{.Qidx}}" method="POST">
-                {{range .Question.ChoiceAnswers}}
+                {{range .Question.CheckboxAnswers}}
                     <div class="form-group form-check text-left">
                         <input
                             id="answer-{{.ID}}"

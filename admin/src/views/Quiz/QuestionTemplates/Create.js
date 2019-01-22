@@ -14,7 +14,7 @@ import {
 import {Editor} from 'react-draft-wysiwyg';
 import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import {ChoiceAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
+import {CheckboxAnswerTemplates, FlowDiagramAnswer} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {createQuestionTemplate} from "../../../redux/actions";
@@ -24,7 +24,7 @@ class CreateQuestion extends Component {
   defaultState = {
     Text: '<p>Here\'s where the question text goes...</p>',
     Type: null,
-    ChoiceAnswerTemplates: [],
+    CheckboxAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null,
   };
 
@@ -34,25 +34,25 @@ class CreateQuestion extends Component {
     this.props.createQuestionTemplate(this.state)
       .then(() => this.setState({
         ...this.defaultState,
-        ChoiceAnswerTemplates: []
+        CheckboxAnswerTemplates: []
       }))
   };
 
   removeChoice = (choiceIndex) => {
     this.setState((oldState) => {
-      const choices = oldState.ChoiceAnswerTemplates;
+      const choices = oldState.CheckboxAnswerTemplates;
       delete choices[choiceIndex];
 
-      return {ChoiceAnswerTemplates: choices}
+      return {CheckboxAnswerTemplates: choices}
     })
   };
 
   addChoice = (choice) => {
     this.setState((oldState) => {
-      const choices = oldState.ChoiceAnswerTemplates;
+      const choices = oldState.CheckboxAnswerTemplates;
       choices.push(choice);
 
-      return {ChoiceAnswerTemplates: choices}
+      return {CheckboxAnswerTemplates: choices}
     })
   };
 
@@ -133,10 +133,10 @@ class CreateQuestion extends Component {
               </Col>
             </FormGroup>
             {this.state.Type === 1 &&
-              <ChoiceAnswerTemplates
+              <CheckboxAnswerTemplates
                 removeChoice={this.removeChoice}
                 addChoice={this.addChoice}
-                answers={this.state.ChoiceAnswerTemplates}/>
+                answers={this.state.CheckboxAnswerTemplates}/>
             }
             {this.state.Type === 3 &&
               <FlowDiagramAnswer />
