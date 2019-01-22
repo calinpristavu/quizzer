@@ -127,6 +127,13 @@ func postQuestionTemplates(w http.ResponseWriter, r *http.Request) {
 
 	g.db.Create(&qt)
 
+	g.db.
+		Model(&qt).
+		Preload("CheckboxAnswerTemplates").
+		Preload("FlowDiagramAnswerTemplate").
+		Preload("Usages").
+		First(&qt)
+
 	jsonResponse(w, qt, http.StatusCreated)
 }
 
