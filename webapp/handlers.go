@@ -66,16 +66,18 @@ func question(w http.ResponseWriter, r *http.Request) {
 	question := u.CurrentQuiz.Questions[qIdx]
 
 	if r.Method == http.MethodGet {
-		err = getTemplateForQuestion(question).Execute(w, struct {
-			Question Question
-			User     interface{}
-			Qidx     int
-			PrevIdx  int
+		err := getTemplateForQuestion(question).Execute(w, struct {
+			Question     Question
+			AllQuestions []*Question
+			User         interface{}
+			Qidx         int
+			PrevIdx      int
 		}{
-			Question: *question,
-			User:     u,
-			Qidx:     qIdx,
-			PrevIdx:  qIdx - 1,
+			Question:     *question,
+			AllQuestions: u.CurrentQuiz.Questions,
+			User:         u,
+			Qidx:         qIdx,
+			PrevIdx:      qIdx - 1,
 		})
 		if err != nil {
 			http.Error(w, "could not render template for question", http.StatusInternalServerError)

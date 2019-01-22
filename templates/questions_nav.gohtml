@@ -1,0 +1,14 @@
+{{ define "questions_nav" }}
+    <div>
+        <ul>
+            {{range $i, $q := .}}
+                <li>
+                    {{if $q.IsAnswered}}<i class="fa fa-check" style="color: #ccc"></i>{{end}}
+                    <a href="/question/{{$i}}">
+                        Question {{$i}}
+                    </a>
+                </li>
+            {{end}}
+        </ul>
+    </div>
+{{end}}
