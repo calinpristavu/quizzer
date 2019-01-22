@@ -34,7 +34,7 @@
                                 {{if eq .Type 1}}
                                     <ul>
                                         {{range .ChoiceAnswers}}
-                                            <li class="text-left {{if eq .IsCorrect true}}text-success{{else}}text-danger{{end}}">
+                                            <li class="text-left">
                                                 {{ if .IsSelected }}
                                                     <i class="far fa-check-square"></i>
                                                 {{else}}
