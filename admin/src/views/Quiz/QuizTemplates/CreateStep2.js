@@ -9,10 +9,12 @@ import {
 import Select from "react-select";
 import React, {Component} from "react";
 
+const defaultWeight = 10;
+
 class CreateStep2 extends Component {
   state = {
     questions: null,
-    selected: []
+    selected: {}
   };
 
   componentDidMount() {
@@ -37,9 +39,53 @@ class CreateStep2 extends Component {
   };
 
   setSelected = (opt) => {
-    this.setState({
-      selected: opt.map((e) => e.value)
+    this.setState(oldState => {
+      opt.forEach((e) => {
+        oldState.selected[e.value] = defaultWeight;
+      });
+
+      return {
+        selected: {...oldState.selected}
+      }
     })
+  };
+
+  updateQuestionWeight = (qId, weight) => {
+    this.setState(oldState => {
+      oldState.selected[qId] = parseInt(weight);
+
+      return {
+        selected: {...oldState.selected}
+      }
+    })
+  };
+
+  renderSelected = (qId) => {
+    qId = parseInt(qId);
+
+    return (
+      <div key={qId} className="clearfix" style={{
+        padding: "20px",
+        margin: "4px 0",
+      }}>
+        # {this.state.questions[qId].ID}
+
+        <div className="float-right">
+          <InputGroup>
+            <Input
+              min={0}
+              max={50}
+              style={{width: 80}}
+              defaultValue={this.state.selected[qId]}
+              onBlur={(e) => this.updateQuestionWeight(qId, e.target.value)}
+              type="number"/>
+            <InputGroupAddon addonType="append">
+              <InputGroupText>%</InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+      </div>
+    )
   };
 
   render() {
@@ -57,28 +103,7 @@ class CreateStep2 extends Component {
               options={this.getOptions()}/>
           </div>
           <div>
-            {this.state.selected.map((opt, k) => (
-              <div key={k} className="clearfix" style={{
-                padding: "20px",
-                margin: "4px 0",
-              }}>
-                # {this.state.questions[opt].ID}
-
-                <div className="float-right">
-                  <InputGroup>
-                    <Input
-                      min={0}
-                      max={50}
-                      style={{width: 80}}
-                      defaultValue={this.state.questions[opt].Weight || 10}
-                      type="number"/>
-                    <InputGroupAddon addonType="append">
-                      <InputGroupText>%</InputGroupText>
-                    </InputGroupAddon>
-                  </InputGroup>
-                </div>
-              </div>
-            ))}
+            {Object.entries(this.state.selected).map(this.renderSelected)}
           </div>
         </CardBody>
         <CardFooter>

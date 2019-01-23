@@ -2,6 +2,7 @@ package webapp
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -27,6 +28,7 @@ func postQuizTemplates(w http.ResponseWriter, r *http.Request) {
 	qt.CreatedAt = time.Now()
 
 	if err != nil {
+		log.Printf("could not decode QT: %v", err)
 		w.WriteHeader(422)
 
 		return

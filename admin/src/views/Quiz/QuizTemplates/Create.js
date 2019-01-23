@@ -26,9 +26,11 @@ class Create extends Component {
     })
   };
 
-  stop = (qIds) => {
+  stop = (selects) => {
     const quiz = this.state.quiz;
-    quiz.QuizQuestions = qIds.map(id => ({"ID": id}));
+    quiz.QuizQuestions = Object.entries(selects).map(select => {
+      return {"QuestionID": parseInt(select[0]), Weight: select[1]}
+    });
 
     this.props.createQuizTemplate(quiz)
       .then(() => this.setState(this.defaultState))
