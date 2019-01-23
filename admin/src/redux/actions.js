@@ -7,7 +7,7 @@ import {
   SET_QUESTION_TEMPLATES,
   SET_QUIZ_TEMPLATES,
   SET_QUIZZES, SET_STAT_AVG_RESULT, SET_STAT_BEST_RESULT,
-  SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER, SET_QUESTION_SCORE
+  SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER, SET_QUESTION_SCORE, SET_QUESTION_TEMPLATE_CREATE
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -94,6 +94,10 @@ export function createQuestionTemplate(questionTemplate) {
         payload: r
       }));
   }
+}
+
+export function setQuestionTemplateCreate(val) {
+  return dispatch => dispatch({type: SET_QUESTION_TEMPLATE_CREATE, payload: val})
 }
 
 export function getQuizzes() {

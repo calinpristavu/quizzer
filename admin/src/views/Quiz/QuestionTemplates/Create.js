@@ -17,7 +17,7 @@ import draftToHtml from 'draftjs-to-html';
 import {CheckboxAnswerTemplates, FlowDiagramAnswer, RadioAnswerTemplates} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {createQuestionTemplate} from "../../../redux/actions";
+import {createQuestionTemplate, setQuestionTemplateCreate} from "../../../redux/actions";
 import {questionTypes} from "./QuestionTemplates";
 
 class CreateQuestion extends Component {
@@ -95,10 +95,20 @@ class CreateQuestion extends Component {
   };
 
   render() {
+    if (!this.props.isOpen) {
+      return null
+    }
+
     return (
       <Card>
         <Form innerRef={this.createFormRef}>
           <CardHeader>
+            <span className="float-right">
+              <i
+                onClick={() => this.props.setQuestionTemplateCreate(null)}
+                className="fa fa-close"
+                style={{cursor: "pointer"}}/>
+            </span>
             <i className="fa fa-plus-circle text-success" />
             <strong>Create Question</strong>
             <small> Form</small>
@@ -203,6 +213,8 @@ class CreateQuestion extends Component {
 }
 
 export default connect(
-  null,
-  {createQuestionTemplate}
+  state => ({
+    isOpen: state.questionTemplate.createQuestionTemplate
+  }),
+  {createQuestionTemplate, setQuestionTemplateCreate}
 )(CreateQuestion);

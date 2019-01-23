@@ -7,7 +7,8 @@ import {
   deleteQuestionTemplate,
   getQuestionTemplates,
   getQuizzes,
-  openQuestionTemplateView
+  openQuestionTemplateView,
+  setQuestionTemplateCreate,
 } from "../../../redux/actions";
 import {selectQuestionTemplatesWithUsage} from "../../../redux/selectors";
 import Filters from "./Filters";
@@ -22,7 +23,6 @@ export class QuestionsList extends Component {
   };
 
   static propTypes = {
-    openCreateView: PropTypes.func.isRequired,
     openEditView: PropTypes.func.isRequired,
     openQuestionTemplateView: PropTypes.func.isRequired
   };
@@ -91,7 +91,7 @@ export class QuestionsList extends Component {
         <CardHeader>
           <span className="float-right">
             <i
-              onClick={this.props.openCreateView}
+              onClick={this.props.setQuestionTemplateCreate}
               className="fa fa-plus-circle text-success"
               style={{cursor: "pointer"}}/>
           </span>
@@ -153,5 +153,5 @@ export default connect(
   state => ({
     list: selectQuestionTemplatesWithUsage(state)
   }),
-  {getQuestionTemplates, deleteQuestionTemplate, getQuizzes, openQuestionTemplateView}
+  {getQuestionTemplates, deleteQuestionTemplate, getQuizzes, openQuestionTemplateView, setQuestionTemplateCreate}
 )(QuestionsList);

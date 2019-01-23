@@ -33,7 +33,6 @@ class QuestionTemplates extends Component{
         <Row>
           <Col xs="12" lg="6">
             <QuestionsList
-              openCreateView={() => this.setState({openedView: views.create})}
               openEditView={(item) => this.setState({
                 openedView: views.edit,
                 editItem: item
@@ -41,9 +40,7 @@ class QuestionTemplates extends Component{
           </Col>
 
           <Col xs="12" lg="6">
-            {this.state.openedView === views.create ?
-              <CreateQuestion /> : null
-            }
+            <CreateQuestion />
             {this.state.openedView === views.edit ?
               <EditQuestion question={this.state.editItem}/> : null
             }
