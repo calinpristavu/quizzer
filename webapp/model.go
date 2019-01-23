@@ -234,10 +234,13 @@ func (q *Question) SaveAnswer(r *http.Request) error {
 func (u *User) finishQuiz() {
 	u.CurrentQuiz.Active = false
 
+	totalWeight := uint(0)
+	weightedScore := uint(0)
 	for _, q := range u.CurrentQuiz.Questions {
-		u.CurrentQuiz.Score += q.Score
+		weightedScore += q.Score * q.Weight
+		totalWeight += q.Weight
 	}
-	u.CurrentQuiz.Score = u.CurrentQuiz.Score / uint(len(u.CurrentQuiz.Questions))
+	u.CurrentQuiz.Score = weightedScore / totalWeight
 	g.db.Save(&u.CurrentQuiz)
 
 	u.CurrentQuiz = nil

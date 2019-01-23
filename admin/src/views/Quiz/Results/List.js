@@ -63,8 +63,14 @@ class List extends Component {
     })
   };
 
+  /**
+   * Weighted arythmetic mean of question score with weight.
+   */
   static computeScore(questions) {
-    return (questions.reduce((carry, q) => carry + q.Score, 0) / questions.length) || 0
+    return (questions.reduce((carry, q) => carry + (q.Score * q.Weight), 0)
+      /
+      questions.reduce((carry, q) => carry + q.Weight, 0)
+    ) || 0
   }
 
   static computeTimeSpent(start, end) {
