@@ -34,7 +34,7 @@ class CreateStep2 extends Component {
   getOptions = () => {
     return Object.values(this.state.questions).map((q) => ({
       value: q.ID,
-      label: q.Text.substr(0, 100) + "..."
+      label: `# ${q.ID} ${q.Text.substr(0, 100)} ...`
     }))
   };
 
@@ -68,7 +68,7 @@ class CreateStep2 extends Component {
         padding: "20px",
         margin: "4px 0",
       }}>
-        # {this.state.questions[qId].ID}
+        {`#${this.state.questions[qId].ID} ${this.state.questions[qId].Text}`}
 
         <div className="float-right">
           <InputGroup>
