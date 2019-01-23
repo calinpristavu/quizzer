@@ -89,8 +89,9 @@ func newQuiz(u *User, noQ int) *Quiz {
 		Limit(noQ).
 		Find(&qts)
 
+	averageWeight := uint(100 / len(qts))
 	for _, qt := range qts {
-		qt.addToQuiz(q, 1)
+		qt.addToQuiz(q, averageWeight)
 	}
 
 	return q
