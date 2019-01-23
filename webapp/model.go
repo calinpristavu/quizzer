@@ -26,10 +26,11 @@ type Question struct {
 	QuizID             uint
 	Text               string `sql:"type:longtext"`
 	Type               uint
-	IsAnswered         bool `gorm:"not null";sql:"DEFAULT:0"`
-	IsCorrect          bool `gorm:"not null";sql:"DEFAULT:0"`
-	Score              uint `sql:"default:0"`
-	Weight             uint `sql:"default:1"`
+	IsAnswered         bool   `gorm:"not null";sql:"DEFAULT:0"`
+	IsCorrect          bool   `gorm:"not null";sql:"DEFAULT:0"`
+	Score              uint   `sql:"default:0"`
+	Weight             uint   `sql:"default:1"`
+	Notes              string `sql:"type:longtext"`
 	CheckboxAnswers    []*CheckboxAnswer
 	RadioAnswers       []*RadioAnswer
 	TextAnswer         *TextAnswer

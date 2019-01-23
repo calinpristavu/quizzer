@@ -7,7 +7,7 @@ import {
   SET_QUESTION_TEMPLATES,
   SET_QUIZ_TEMPLATES,
   SET_QUIZZES, SET_STAT_AVG_RESULT, SET_STAT_BEST_RESULT,
-  SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER, SET_QUESTION_SCORE, SET_QUESTION_TEMPLATE_CREATE
+  SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER, SET_QUESTION_SCORE, SET_QUESTION_TEMPLATE_CREATE, SET_QUESTION_NOTE
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -229,6 +229,18 @@ export function setQuestionScore(question, score) {
       payload: {
         question: question,
         score: score
+      }
+    })
+  }
+}
+
+export function setQuestionNote(question, note) {
+  return dispatch => {
+    return dispatch({
+      type: SET_QUESTION_NOTE,
+      payload: {
+        question: question,
+        note: note
       }
     })
   }

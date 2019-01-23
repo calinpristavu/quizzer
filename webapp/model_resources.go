@@ -73,6 +73,7 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz, weight uint) {
 		Type:               qt.Type,
 		QuestionTemplateID: qt.ID,
 		Weight:             weight,
+		Notes:              "",
 	}
 
 	g.db.Save(&q)

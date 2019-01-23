@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText} from "reactstrap";
+import {Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row} from "reactstrap";
 import {connect} from "react-redux";
-import {setQuestionScore} from "../../../redux/actions";
+import {setQuestionNote, setQuestionScore} from "../../../redux/actions";
 
 class TextQuestion extends Component {
   static propTypes = {
     question: PropTypes.shape({
       ID: PropTypes.number.isRequired,
       Text: PropTypes.string.isRequired,
+      Notes: PropTypes.string.isRequired,
       TextAnswer: PropTypes.shape({
         Text: PropTypes.string.isRequired
       }).isRequired,
@@ -53,35 +54,49 @@ class TextQuestion extends Component {
   render() {
     return (
       <div>
-        <div>
-          <div className="float-right">
-            <FormGroup row>
-              <Col md="12">
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText style={{backgroundColor: this.getColor()}}>
-                      <i className="fa fa-check" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input
-                    min={0}
-                    max={100}
-                    style={{width: 80}}
-                    onChange={(e) => this.setState({Score: parseInt(e.target.value)})}
-                    onBlur={() => this.props.setQuestionScore(this.props.question, this.state.Score)}
-                    defaultValue={this.props.question.Score}
-                    type="number"/>
-                </InputGroup>
-              </Col>
-            </FormGroup>
-          </div>
-          <div dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
-        </div>
-        <div>
-          <pre>
-            {this.props.question.TextAnswer.Text}
-          </pre>
-        </div>
+        <Row>
+          <Col>
+            <div className="float-right">
+              <FormGroup row>
+                <Col md="12">
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText style={{backgroundColor: this.getColor()}}>
+                        <i className="fa fa-check" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      min={0}
+                      max={100}
+                      style={{width: 80}}
+                      onChange={(e) => this.setState({Score: parseInt(e.target.value)})}
+                      onBlur={() => this.props.setQuestionScore(this.props.question, this.state.Score)}
+                      defaultValue={this.props.question.Score}
+                      type="number"/>
+                  </InputGroup>
+                </Col>
+              </FormGroup>
+            </div>
+            <div dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <pre>
+              {this.props.question.TextAnswer.Text}
+            </pre>
+          </Col>
+        </Row>
+        <FormGroup row>
+          <Col xs="12" md="12">
+            <Input
+              type="textarea"
+              rows="9"
+              defaultValue={this.props.question.Notes}
+              onBlur={(e) => this.props.setQuestionNote(this.props.question, e.target.value)}
+              placeholder="Notable things about the answer..." />
+          </Col>
+        </FormGroup>
       </div>
     );
   }
@@ -89,5 +104,5 @@ class TextQuestion extends Component {
 
 export default connect(
   null,
-  {setQuestionScore}
+  {setQuestionScore, setQuestionNote}
 )(TextQuestion);
