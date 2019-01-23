@@ -25,6 +25,7 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 		g.db.
 			Preload("QuizQuestions").
 			Preload("QuizQuestions.Question").
+			Preload("QuizQuestions.Question").
 			Preload("QuizQuestions.Question.CheckboxAnswerTemplates").
 			Preload("QuizQuestions.Question.RadioAnswerTemplates").
 			Preload("QuizQuestions.Question.FlowDiagramAnswerTemplate").

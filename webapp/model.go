@@ -81,6 +81,8 @@ func newQuiz(u *User, noQ int) *Quiz {
 
 	g.db.
 		Model(&QuestionTemplate{}).
+		Preload("QuizQuestions").
+		Preload("QuizQuestions.Quiz").
 		Preload("CheckboxAnswerTemplates").
 		Preload("RadioAnswerTemplates").
 		Order(gorm.Expr("rand()")).
@@ -88,7 +90,7 @@ func newQuiz(u *User, noQ int) *Quiz {
 		Find(&qts)
 
 	for _, qt := range qts {
-		qt.addToQuiz(q)
+		qt.addToQuiz(q, 1)
 	}
 
 	return q

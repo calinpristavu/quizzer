@@ -59,19 +59,20 @@ func (qt QuizTemplate) start(u *User) *Quiz {
 	g.db.Save(&q)
 
 	for _, qq := range qt.QuizQuestions {
-		qq.Question.addToQuiz(q)
+		qq.Question.addToQuiz(q, qq.Weight)
 	}
 
 	return q
 }
 
-func (qt QuestionTemplate) addToQuiz(quiz *Quiz) {
+func (qt QuestionTemplate) addToQuiz(quiz *Quiz, weight uint) {
 	q := &Question{
 		IsAnswered:         false,
 		QuizID:             quiz.ID,
 		Text:               qt.Text,
 		Type:               qt.Type,
 		QuestionTemplateID: qt.ID,
+		Weight:             weight,
 	}
 
 	g.db.Save(&q)
