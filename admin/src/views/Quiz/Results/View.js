@@ -54,7 +54,7 @@ class View extends Component {
           </div>
         </CardHeader>
         <CardBody>
-          {this.props.quiz.QuizQuestions.map((q, k) => (
+          {this.props.quiz.Questions.map((q, k) => (
             <div key={k}>
               {this.renderQuestion(q, k)}
               <hr/>

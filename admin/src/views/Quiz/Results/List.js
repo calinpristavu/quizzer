@@ -110,8 +110,8 @@ class List extends Component {
                 <td>{q.ID}</td>
                 <td>{q.User ? q.User.Username : '-'}</td>
                 <td>{this.renderQuizTemplateCell(q.Name)}</td>
-                <td>{List.computePercentCompleted(q.QuizQuestions).toFixed(0)}<small className="text-muted">%</small></td>
-                <td>{List.computeScore(q.QuizQuestions).toFixed(0)}<small>%</small></td>
+                <td>{List.computePercentCompleted(q.Questions).toFixed(0)}<small className="text-muted">%</small></td>
+                <td>{List.computeScore(q.Questions).toFixed(0)}<small>%</small></td>
                 <td>{q.Active ? 'In Progress' : 'Finished'}</td>
                 <td>{q.Active
                   ? '-'
