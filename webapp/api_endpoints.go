@@ -303,17 +303,14 @@ func saveScores(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	quizScore := uint(0)
 	for _, q := range quiz.Questions {
 		g.db.Model(&q).
 			Set("gorm:association_autoupdate", false).
 			Update("score", q.Score).
 			Update("notes", q.Notes)
-		// TODO: Use a recomputeScore method on Quiz to apply weighted mean
-		quizScore += q.Score
 	}
 
-	quiz.Score = quizScore / uint(len(quiz.Questions))
+	quiz.UpdateScore()
 	g.db.Model(&quiz).
 		Set("gorm:association_autoupdate", false).
 		Update("score", quiz.Score)

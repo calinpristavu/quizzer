@@ -232,16 +232,20 @@ func (q *Question) SaveAnswer(r *http.Request) error {
 	return err
 }
 
-func (u *User) finishQuiz() {
-	u.CurrentQuiz.Active = false
-
+func (q *Quiz) UpdateScore() {
 	totalWeight := uint(0)
 	weightedScore := uint(0)
-	for _, q := range u.CurrentQuiz.Questions {
+	for _, q := range q.Questions {
 		weightedScore += q.Score * q.Weight
 		totalWeight += q.Weight
 	}
-	u.CurrentQuiz.Score = weightedScore / totalWeight
+	q.Score = weightedScore / totalWeight
+}
+
+func (u *User) finishQuiz() {
+	u.CurrentQuiz.Active = false
+	u.CurrentQuiz.UpdateScore()
+
 	g.db.Save(&u.CurrentQuiz)
 
 	u.CurrentQuiz = nil
