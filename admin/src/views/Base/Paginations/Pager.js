@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
   Col,
-  Input,
+  Input, InputGroup, InputGroupAddon, InputGroupText,
   Label,
   Pagination,
   PaginationItem,
@@ -62,20 +62,25 @@ class Pager extends Component {
   render() {
     return (
       <Row>
-        <Col md={8}>
+        <Col md={12}>
+          <div className="float-right">
+            <InputGroup>
+              <Input
+                type="number"
+                min={1}
+                max={this.props.noPages * this.props.perPage}
+                style={{width: 80}}
+                value={this.props.perPage}
+                onChange={(e) => this.props.setPerPage(parseInt(e.target.value) || 1)}
+                required />
+              <InputGroupAddon addonType="append">
+                <InputGroupText>
+                  / {this.props.noPages * this.props.perPage}
+                </InputGroupText>
+              </InputGroupAddon>
+            </InputGroup>
+          </div>
           {this.renderPagination()}
-        </Col>
-        <Col md={2}>
-          <Label>Per page</Label>
-        </Col>
-        <Col md={2}>
-          <Input
-            type="number"
-            min={1}
-            max={this.props.noPages * this.props.perPage}
-            value={this.props.perPage}
-            onChange={(e) => this.props.setPerPage(parseInt(e.target.value) || 1)}
-            required />
         </Col>
       </Row>
     )
