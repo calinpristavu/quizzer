@@ -14,7 +14,7 @@ type Quiz struct {
 	gorm.Model
 	Name           string
 	UserID         uint
-	User           *User
+	User           *User `gorm:"association_autoupdate:false;association_autocreate:false"`
 	Questions      []*Question
 	Active         bool
 	Score          uint
