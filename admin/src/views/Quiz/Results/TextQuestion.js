@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row} from "reactstrap";
 import {connect} from "react-redux";
 import {setQuestionNote, setQuestionScore} from "../../../redux/actions";
+import {TextTip} from "../../Base/Tooltips/ResultTooltips";
 
 class TextQuestion extends Component {
   static propTypes = {
@@ -77,13 +78,18 @@ class TextQuestion extends Component {
                 </Col>
               </FormGroup>
             </div>
-            <div dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
+            <div className="clearfix">
+              <TextTip id={this.props.question.ID}/>
+              <span dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
+            </div>
           </Col>
         </Row>
         <Row>
           <Col>
             <pre>
-              {this.props.question.TextAnswer.Text}
+              <code>
+                {this.props.question.TextAnswer.Text}
+              </code>
             </pre>
           </Col>
         </Row>

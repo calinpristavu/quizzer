@@ -4,6 +4,7 @@ import {AppSwitch} from "@coreui/react";
 import {ListGroup, ListGroupItem} from "reactstrap";
 import {connect} from "react-redux";
 import {setQuestionScore} from "../../../redux/actions";
+import {RadioTip} from "../../Base/Tooltips/ResultTooltips";
 
 class RadioQuestion extends Component {
   static propTypes = {
@@ -11,7 +12,9 @@ class RadioQuestion extends Component {
       ID: PropTypes.number.isRequired,
       Text: PropTypes.string.isRequired,
       RadioAnswers: PropTypes.arrayOf(PropTypes.shape({
-        Text: PropTypes.string.isRequired
+        Text: PropTypes.string.isRequired,
+        IsCorrect: PropTypes.bool.isRequired,
+        IsSelected: PropTypes.bool.isRequired,
       })).isRequired,
       Score: PropTypes.number.isRequired,
     }).isRequired
@@ -55,15 +58,10 @@ class RadioQuestion extends Component {
               dataOn={'\u2713'}
               dataOff={'\u2715'} />
           </div>
-          <div dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
-          <small>
-            <span style={{color: "#4DBD74"}}>GREEN</span>
-            {' '}answer is the correct one
-          </small>
-          <br/>
-          <small><i className="fa fa-check-circle-o" /> answer is the one the user selected</small>
-          <br/>
-          <small><i className="fa fa-circle-o" /> answers are the ones the user did not select</small>
+          <div className="clearfix">
+            <RadioTip id={this.props.question.ID}/>
+            <span dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
+          </div>
         </div>
         <div>
           <ListGroup>

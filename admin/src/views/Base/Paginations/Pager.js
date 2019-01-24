@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   Col,
   Input, InputGroup, InputGroupAddon, InputGroupText,
-  Label,
   Pagination,
   PaginationItem,
   PaginationLink,

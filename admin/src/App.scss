@@ -9,3 +9,30 @@
 @import '~simple-line-icons/css/simple-line-icons.css';
 // Import Main styles for this application
 @import './scss/style.scss';
+
+.fa-question-circle {
+  margin-right: 3px;
+}
+
+hr {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  border-top: 3px solid rgba(0, 0, 0, 0.1);
+}
+
+pre, code {
+  font-family: monospace, monospace;
+}
+pre {
+  overflow: auto;
+}
+pre > code {
+  display: block;
+  word-wrap: normal;
+  background-color: #f6f8fa;
+  border-radius: 3px;
+  font-size: 85%;
+  line-height: 1.45;
+  overflow: auto;
+  padding: 1rem;
+}

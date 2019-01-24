@@ -4,6 +4,7 @@ import {AppSwitch} from "@coreui/react";
 import {ListGroup, ListGroupItem} from "reactstrap";
 import {connect} from "react-redux";
 import {setQuestionScore} from "../../../redux/actions";
+import {CheckboxTip} from "../../Base/Tooltips/ResultTooltips";
 
 class CheckboxQuestion extends Component {
   static propTypes = {
@@ -11,7 +12,9 @@ class CheckboxQuestion extends Component {
       ID: PropTypes.number.isRequired,
       Text: PropTypes.string.isRequired,
       CheckboxAnswers: PropTypes.arrayOf(PropTypes.shape({
-        Text: PropTypes.string.isRequired
+        Text: PropTypes.string.isRequired,
+        IsCorrect: PropTypes.bool.isRequired,
+        IsSelected: PropTypes.bool.isRequired,
       })).isRequired,
       Score: PropTypes.number.isRequired,
     }).isRequired
@@ -55,15 +58,10 @@ class CheckboxQuestion extends Component {
               dataOn={'\u2713'}
               dataOff={'\u2715'} />
           </div>
-          <div dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
-          <small>
-            <span style={{color: "#4DBD74"}}>GREEN</span>
-            {' '}answers are the correct ones
-          </small>
-          <br/>
-          <small><i className="fa fa-check-square-o" /> answers are the ones the user selected</small>
-          <br/>
-          <small><i className="fa fa-square-o" /> answers are the ones the user did not select</small>
+          <div className="clearfix">
+            <CheckboxTip id={this.props.question.ID}/>
+            <span dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
+          </div>
         </div>
         <div>
           <ListGroup>

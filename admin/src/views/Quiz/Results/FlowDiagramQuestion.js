@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row} from "reactstrap";
 import {connect} from "react-redux";
 import {setQuestionNote, setQuestionScore} from "../../../redux/actions";
+import {FlowDiagramTip} from "../../Base/Tooltips/ResultTooltips";
 
 class FlowDiagramQuestion extends Component {
   static propTypes = {
@@ -77,10 +78,15 @@ class FlowDiagramQuestion extends Component {
                 </Col>
               </FormGroup>
             </div>
-            <div dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
+            <div className="clearfix">
+              <FlowDiagramTip id={this.props.question.ID}/>
+              <span dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
+            </div>
           </Col>
         </Row>
-        <div className="row" dangerouslySetInnerHTML={{__html: this.props.question.FlowDiagramAnswer.SVG}} />
+        <Row>
+          <Col className="text-center" dangerouslySetInnerHTML={{__html: this.props.question.FlowDiagramAnswer.SVG}} />
+        </Row>
         <FormGroup row>
           <Col xs="12" md="12">
             <Input
