@@ -10,6 +10,24 @@
     .table td {
         padding-top: 20px;
     }
+
+    pre, code {
+        font-family: monospace, monospace;
+    }
+    pre {
+        overflow: auto;
+    }
+    pre > code {
+        display: block;
+        word-wrap: normal;
+        background-color: #f6f8fa;
+        border-radius: 3px;
+        border: 1px solid rgb(169, 169, 169);
+        font-size: 85%;
+        line-height: 1.45;
+        overflow: auto;
+        padding: 1rem;
+    }
 </style>
 
 <!--suppress HtmlUnknownTarget, JSUnresolvedVariable, JSUnresolvedFunction -->
@@ -45,7 +63,7 @@
                                         {{end}}
                                     </ul>
                                 {{else if eq .Type 2}}
-                                    <p>{{.TextAnswer.Text}}</p>
+                                    <div><pre><code>{{raw .TextAnswer.Text}}</code></pre></div>
                                 {{else if eq .Type 3}}
                                     <div class="flow-diagram">
                                         {{raw .FlowDiagramAnswer.SVG}}

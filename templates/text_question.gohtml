@@ -3,6 +3,24 @@
     .form-check-label {
         width: 100%;
     }
+
+    pre, code {
+        font-family: monospace, monospace;
+    }
+    pre {
+        overflow: auto;
+    }
+    pre > code {
+        display: block;
+        word-wrap: normal;
+        background-color: #f6f8fa;
+        border-radius: 3px;
+        border: 1px solid rgb(169, 169, 169);
+        font-size: 85%;
+        line-height: 1.45;
+        overflow: auto;
+        padding: 1rem;
+    }
 </style>
 <!--suppress ALL -->
 <div class="container">
@@ -12,9 +30,14 @@
             <div>{{raw .Question.Text}}</div>
             <form action="/question/{{.Qidx}}" method="POST">
                 <div class="form-group">
-                    <label for="answer" class="form-check-label">
-                        <textarea id="answer" class="form-input" name="answer">{{.Question.TextAnswer.Text}}</textarea>
-                    </label>
+                    <pre>
+                        <code
+                                onkeydown="handleKeydown(event)"
+                                onblur="document.getElementById('answer').value = event.target.innerHTML;"
+                                contentEditable="true"
+                                spellcheck="false">{{raw .Question.TextAnswer.Text}}</code>
+                    </pre>
+                    <input type="hidden" id="answer" class="form-input" name="answer">
                 </div>
                 {{if ge .PrevIdx 0 }}
                     <a href="/question/{{.PrevIdx}}" class="btn">< Back</a>
@@ -26,5 +49,37 @@
         </div>
     </div>
 </div>
+
+<script>
+    function handleKeydown(event) {
+        if (event.keyCode === 9) {
+            return handleTab(event);
+        }
+        if (event.keyCode === 8) {
+            return handleBackspace(event);
+        }
+    }
+
+    function handleTab(event) {
+        event.preventDefault();
+
+        var editor = event.target;
+        var doc = editor.ownerDocument.defaultView;
+        var sel = doc.getSelection();
+        var range = sel.getRangeAt(0);
+
+        var tabNode = document.createTextNode('\u00a0\u00a0\u00a0\u00a0');
+        range.insertNode(tabNode);
+
+        range.setStartAfter(tabNode);
+        range.setEndAfter(tabNode);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+
+    function handleBackspace(event) {
+
+    }
+</script>
 
 {{ template "footer" }}

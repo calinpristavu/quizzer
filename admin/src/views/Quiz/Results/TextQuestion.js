@@ -87,9 +87,7 @@ class TextQuestion extends Component {
         <Row>
           <Col>
             <pre>
-              <code>
-                {this.props.question.TextAnswer.Text}
-              </code>
+              <code dangerouslySetInnerHTML={{__html: this.props.question.TextAnswer.Text}} />
             </pre>
           </Col>
         </Row>
