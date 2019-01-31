@@ -23,29 +23,31 @@
     }
 </style>
 <!--suppress ALL -->
-<div class="container">
+<div class="page-wrapper">
     {{template "questions_nav" .AllQuestions}}
-    <div class="section col-md-12">
-        <div class="section-content">
-            <div>{{raw .Question.Text}}</div>
-            <form action="/question/{{.Qidx}}" method="POST">
-                <div class="form-group">
-                    <pre>
-                        <code
-                                onkeydown="handleKeydown(event)"
-                                onblur="document.getElementById('answer').value = event.target.innerHTML;"
-                                contentEditable="true"
-                                spellcheck="false">{{raw .Question.TextAnswer.Text}}</code>
-                    </pre>
-                    <input type="hidden" id="answer" class="form-input" name="answer">
-                </div>
-                {{if ge .PrevIdx 0 }}
-                    <a href="/question/{{.PrevIdx}}" class="btn">< Back</a>
-                {{end}}
-                <button type="submit" class="btn btn-primary">Next ></button>
-            </form>
-            <ul>
-            </ul>
+    <div class="container">
+        <div class="section col-md-12">
+            <div class="section-content">
+                <div>{{raw .Question.Text}}</div>
+                <form action="/question/{{.Qidx}}" method="POST">
+                    <div class="form-group">
+                        <pre>
+                            <code
+                                    onkeydown="handleKeydown(event)"
+                                    onblur="document.getElementById('answer').value = event.target.innerHTML;"
+                                    contentEditable="true"
+                                    spellcheck="false">{{raw .Question.TextAnswer.Text}}</code>
+                        </pre>
+                        <input type="hidden" id="answer" class="form-input" name="answer">
+                    </div>
+                    {{if ge .PrevIdx 0 }}
+                        <a href="/question/{{.PrevIdx}}" class="btn">< Back</a>
+                    {{end}}
+                    <button type="submit" class="btn btn-primary">Next ></button>
+                </form>
+                <ul>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

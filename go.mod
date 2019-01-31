@@ -11,7 +11,7 @@ require (
 	github.com/jinzhu/gorm v1.9.1
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
 	github.com/jinzhu/now v0.0.0-20181116074157-8ec929ed50c3 // indirect
-	github.com/joho/godotenv v1.3.0 // indirect
+	github.com/joho/godotenv v1.3.0
 	github.com/microcosm-cc/bluemonday v1.0.1 // indirect
 	github.com/qor/admin v0.0.0-20181026061101-0ef7c2aa0f33
 	github.com/qor/assetfs v0.0.0-20170713023933-ff57fdc13a14 // indirect

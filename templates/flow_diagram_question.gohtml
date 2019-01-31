@@ -1,27 +1,29 @@
 {{ template "header" .User }}
 
 <!--suppress ALL -->
-<div class="container">
+<div class="page-wrapper">
     {{template "questions_nav" .AllQuestions}}
-    <div class="section col-md-12">
-        <div class="section-content">
-            <div>{{raw .Question.Text}}</div>
+    <div class="container">
+        <div class="section col-md-12">
+            <div class="section-content">
+                <div>{{raw .Question.Text}}</div>
 
-            <div style="width: 100%; display: flex; justify-content: space-between">
-                <div id="palette" style="width: 100px; margin-right: 2px; background-color: whitesmoke; border: solid 1px black"></div>
-                <div id="diagram" style="flex-grow: 1; height: 750px; border: solid 1px black"></div>
+                <div style="width: 100%; display: flex; justify-content: space-between">
+                    <div id="palette" style="width: 100px; margin-right: 2px; background-color: whitesmoke; border: solid 1px black"></div>
+                    <div id="diagram" style="flex-grow: 1; height: 750px; border: solid 1px black"></div>
+                </div>
+
+                <form name="flow_diagram_question" action="/question/{{.Qidx}}" method="POST" onsubmit="return save(this);">
+                    <input type="hidden" id="diagram-json" name="flow_diagram_json">
+                    <input type="hidden" id="diagram-svg" name="flow_diagram_svg">
+                    {{if ge .PrevIdx 0 }}
+                        <a href="/question/{{.PrevIdx}}" class="btn">< Back</a>
+                    {{end}}
+                    <button type="submit" id="save-button" class="btn btn-primary" disabled>Next ></button>
+                </form>
+                <ul>
+                </ul>
             </div>
-
-            <form name="flow_diagram_question" action="/question/{{.Qidx}}" method="POST" onsubmit="return save(this);">
-                <input type="hidden" id="diagram-json" name="flow_diagram_json">
-                <input type="hidden" id="diagram-svg" name="flow_diagram_svg">
-                {{if ge .PrevIdx 0 }}
-                    <a href="/question/{{.PrevIdx}}" class="btn">< Back</a>
-                {{end}}
-                <button type="submit" id="save-button" class="btn btn-primary" disabled>Next ></button>
-            </form>
-            <ul>
-            </ul>
         </div>
     </div>
 </div>

@@ -106,6 +106,65 @@
             display: block;
         }
 
+        .page-wrapper {
+            display: flex;
+            height: 100vh;
+        }
+
+        .all-questions {
+            background-color: #fff;
+        }
+
+        .all-questions ul {
+            list-style: none;
+            padding: 0px;
+        }
+
+        .all-questions li {
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            min-width: 180px;
+            padding: 10px 40px;
+        }
+
+        .all-questions li::before {
+            content: '\25E6';
+            font-size: 50px;
+            opacity: 0.2;
+            color: #696969;
+            position: relative;
+            top: 12px;
+            left: -10px;
+            line-height: 0.5;
+        }
+
+        .all-questions li a {
+            color: #696969;
+        }
+
+        .all-questions li.completed {
+            background-color: #eee;
+        }
+
+        .all-questions li.completed::before {
+            content: '\2022';
+            color: #00aeef;
+            opacity: 1;
+        }
+
+        .all-questions li.completed a {
+            opacity: 0.5;
+        }
+
+        .all-questions li.active {
+            background-color: #eef7fa;
+        }
+
+        .all-questions li.active a {
+            color: #00aeef;
+        }
+
+
     </style>
 </head>
 
@@ -118,15 +177,17 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/me">My profile <span class="sr-only">(current)</span></a>
-            </li>
-        </ul>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/me">My profile <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
         <div class="my-2 my-lg-0 text-white">
             Welcome {{.Username}}
             <a class="text-white" href="/logout"><i class="fa fa-sign-out-alt"></i></a>
         </div>
+
     </div>
 </nav>
 
