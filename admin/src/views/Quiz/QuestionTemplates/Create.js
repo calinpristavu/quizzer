@@ -36,10 +36,12 @@ class CreateQuestion extends Component {
   create = () => {
     const question = this.state;
 
-    const correctQIndex = parseInt(this.createFormRef.current['Answer'].value);
-    question.RadioAnswerTemplates.forEach((a, k) => {
-      question.RadioAnswerTemplates[k].IsCorrect = k === correctQIndex
-    });
+    if (this.state.Type === questionTypes[4]) {
+      const correctQIndex = parseInt(this.createFormRef.current['Answer'].value);
+      question.RadioAnswerTemplates.forEach((a, k) => {
+        question.RadioAnswerTemplates[k].IsCorrect = k === correctQIndex
+      });
+    }
 
     this.props.createQuestionTemplate(question)
       .then(() => this.setState({
@@ -126,7 +128,7 @@ class CreateQuestion extends Component {
                       options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
                       image: { uploadCallback: this.uploadCallback, previewImage: true }
                     }}
-                    onEditorStateChange={editorState => this.setState({
+                    onBlur={(e, editorState) => this.setState({
                       Text: draftToHtml(convertToRaw(editorState.getCurrentContent()))
                     })}
                   />
