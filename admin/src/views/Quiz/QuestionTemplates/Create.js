@@ -119,12 +119,11 @@ class CreateQuestion extends Component {
                 <FormGroup>
                   <Label htmlFor="question-text">Text</Label>
                   <Editor
-                    initialEditorState={this.state.Text}
                     editorStyle={{
                       border: "1px solid #c8ced3"
                     }}
                     toolbar={{
-                      questions: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
+                      options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
                       image: { uploadCallback: this.uploadCallback, previewImage: true }
                     }}
                     onEditorStateChange={editorState => this.setState({
