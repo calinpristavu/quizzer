@@ -68,8 +68,6 @@ class CreateStep2 extends Component {
         padding: "20px",
         margin: "4px 0",
       }}>
-        {`#${this.state.questions[qId].ID} ${this.state.questions[qId].Text}`}
-
         <div className="float-right">
           <InputGroup>
             <Input
@@ -84,6 +82,8 @@ class CreateStep2 extends Component {
             </InputGroupAddon>
           </InputGroup>
         </div>
+
+        <div dangerouslySetInnerHTML={{__html: `#${this.state.questions[qId].ID} ${this.state.questions[qId].Text}`}}/>
       </div>
     )
   };
