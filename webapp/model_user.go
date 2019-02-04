@@ -15,6 +15,7 @@ type User struct {
 	IsEnabled     bool   `sql:"DEFAULT:0"`
 	CurrentQuizID *uint
 	CurrentQuiz   *Quiz
+	Comments      string `sql:"type:longtext"`
 }
 
 var LoggedIn map[string]*User

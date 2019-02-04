@@ -279,6 +279,38 @@ func postUsers(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, u, http.StatusCreated)
 }
 
+func putUser(w http.ResponseWriter, r *http.Request) {
+	var u User
+
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		w.WriteHeader(404)
+
+		return
+	}
+
+	res := g.db.
+		First(&u, id)
+	if res.RecordNotFound() {
+		w.WriteHeader(404)
+
+		return
+	}
+
+	err = json.NewDecoder(r.Body).Decode(&u)
+	if err != nil {
+		w.WriteHeader(422)
+
+		return
+	}
+
+	u.UpdatedAt = time.Now()
+
+	g.db.Save(&u)
+
+	jsonResponse(w, u, http.StatusOK)
+}
+
 func getQuizzes(w http.ResponseWriter, _ *http.Request) {
 	var qs []Quiz
 	g.db.

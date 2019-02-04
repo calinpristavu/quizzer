@@ -1,13 +1,25 @@
 import {
   APPEND_QUESTION_TEMPLATE,
-  APPEND_QUIZ_TEMPLATE, APPEND_USER, LOGIN,
-  LOGOUT, OPEN_QUESTION_TEMPLATE_VIEW, OPEN_QUIZ_VIEW, SET_USER_CREATE,
+  APPEND_QUIZ_TEMPLATE,
+  APPEND_USER,
+  LOGIN,
+  LOGOUT,
+  OPEN_QUESTION_TEMPLATE_VIEW,
+  OPEN_QUIZ_VIEW,
+  SET_USER_CREATE,
   REMOVE_QUESTION_TEMPLATE,
   REMOVE_QUIZ_TEMPLATE,
   SET_QUESTION_TEMPLATES,
   SET_QUIZ_TEMPLATES,
-  SET_QUIZZES, SET_STAT_AVG_RESULT, SET_STAT_BEST_RESULT,
-  SET_USERS, SET_USERS_ONLINE, SET_VIEWED_USER, SET_QUESTION_SCORE, SET_QUESTION_TEMPLATE_CREATE, SET_QUESTION_NOTE
+  SET_QUIZZES,
+  SET_STAT_AVG_RESULT,
+  SET_STAT_BEST_RESULT,
+  SET_USERS,
+  SET_USERS_ONLINE,
+  SET_VIEWED_USER,
+  SET_QUESTION_SCORE,
+  SET_QUESTION_TEMPLATE_CREATE,
+  SET_QUESTION_NOTE
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -134,6 +146,17 @@ export function createUser(u) {
         type: APPEND_USER,
         payload: r
       }))
+  }
+}
+
+export function setUserComments(id, comments) {
+  return () => {
+    return fetch(`/users/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        Comments: comments
+      })
+    })
   }
 }
 

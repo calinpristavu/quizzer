@@ -94,6 +94,7 @@ func registerRoutes(public *mux.Router) {
 	api.Path("/new-api/users").Methods("POST").HandlerFunc(postUsers)
 	api.Path("/new-api/users-logged-in").Methods("GET").HandlerFunc(getUsersLoggedIn)
 	api.Path("/new-api/users/{id}").Methods("GET").HandlerFunc(getUser)
+	api.Path("/new-api/users/{id}").Methods("PUT").HandlerFunc(putUser)
 
 	api.Path("/new-api/quizzes").Methods("GET").HandlerFunc(getQuizzes)
 	api.Path("/new-api/quizzes/save-scores").Methods("POST").HandlerFunc(saveScores)
