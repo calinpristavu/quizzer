@@ -1,9 +1,9 @@
 {{ define "questions_nav" }}
+    {{$qIdx := .Qidx}}
     <div class="all-questions nav">
         <ul>
-            {{range $i, $q := .}}
-                <li>
-                    {{if $q.IsAnswered}}<i class="fa fa-check" style="color: #ccc"></i>{{end}}
+            {{range $i, $q := .AllQuestions}}
+                <li class="{{if eq $i $qIdx}}active{{else if $q.IsAnswered}}completed{{end}}">
                     <a href="/question/{{$i}}">
                         Question {{$i}}
                     </a>
