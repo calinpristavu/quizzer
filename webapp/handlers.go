@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/asaskevich/govalidator"
 )
 
 func startQuiz(w http.ResponseWriter, r *http.Request) {
@@ -260,44 +259,39 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 func myAccount(w http.ResponseWriter, r *http.Request) {
 	validationErrors := make(map[string]interface{}, 2)
-	u := r.Context().Value("user").(*User)
+	var err, hashingErr error
+	user := r.Context().Value("user").(*User)
 
 	if r.FormValue("change-username") != "" {
-		u.Username = r.FormValue("username")
-		_, err := govalidator.ValidateStruct(u)
-		if err != nil {
-			validationErrors["username"] = err.Error()
-		} else {
-			u.Save()
+		validationErrors, err = ChangeUsernameFormValidator(r.Form)
+		if err == nil {
+			user.Username = r.FormValue("username")
+			user.Save()
 		}
 	}
 
 	if r.FormValue("change-password") != "" {
-			password := r.FormValue("password")
-		    repeated := r.FormValue("repeated")
-			var err error
-			u.Password, err = HashPassword(password)
-			if err != nil {
-				http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
-				log.Printf("The password %s for user %s cannot be hashed",password, u.Username)
+		validationErrors, err = ChangePasswordFormValidator(r.Form)
 
-				return
-			}
+		password := r.FormValue("password")
+		user.Password, hashingErr = HashPassword(password)
+		if hashingErr != nil {
+			http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
+			log.Printf("The password %s for user %s cannot be hashed", password, user.Username)
 
-			if password != repeated {
-				validationErrors["password"] = "Passwords do not match"
-			} else if len(password) < 3 || len(password) > 255 {
-				validationErrors["password"] = "Password must have at least 3 and not more than 255 characters"
-			} else {
-				u.Save()
-			}
+			return
+		}
+
+		if err == nil {
+			user.Save()
+		}
 	}
 
-	err := g.templating.Lookup("my_account.gohtml").Execute(w, struct {
+	err = g.templating.Lookup("my_account.gohtml").Execute(w, struct {
 		User   interface{}
 		Errors map[string]interface{}
 	}{
-		User:   u,
+		User:   user,
 		Errors: validationErrors,
 	})
 
@@ -385,7 +379,7 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 	u.Password, err = HashPassword(pass)
 	if err != nil {
 		http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
-		log.Printf("The password %s for user %s cannot be hashed",pass, uname)
+		log.Printf("The password %s for user %s cannot be hashed", pass, uname)
 
 		return
 	}
