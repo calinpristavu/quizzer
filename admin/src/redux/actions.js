@@ -152,11 +152,26 @@ export function createUser(u) {
 export function setUserComments(id, comments) {
   return () => {
     return fetch(`/users/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       body: JSON.stringify({
         Comments: comments
       })
     })
+  }
+}
+
+export function setUserFeeling(id, feeling) {
+  return dispatch => {
+    return fetch(`/users/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        Feeling: feeling
+      })
+    })
+      .then(r => dispatch({
+        type: SET_VIEWED_USER,
+        payload: r
+      }))
   }
 }
 

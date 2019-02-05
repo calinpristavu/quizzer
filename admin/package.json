@@ -23,7 +23,7 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
     "flag-icon-css": "^3.2.1",
-    "font-awesome": "^4.7.0",
+    "@fortawesome/fontawesome-free": "^5.7.1",
     "moment": "^2.23.0",
     "nested-property": "0.0.7",
     "node-sass": "^4.10.0",

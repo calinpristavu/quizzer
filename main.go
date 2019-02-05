@@ -7,12 +7,12 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/calinpristavu/quizzer/webapp"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/rs/cors"
-	"github.com/calinpristavu/quizzer/webapp"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -55,7 +55,7 @@ func bootWs(r *mux.Router, port string) {
 	// TODO: ADD PROPPER CORS HANDLING!!!!!
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Authorization", "Content-Type"},
 		AllowCredentials: true,
 		// Enable Debugging for testing, consider disabling in production

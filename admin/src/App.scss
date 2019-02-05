@@ -4,15 +4,11 @@
 // Import Flag Icons Set
 @import '~flag-icon-css/css/flag-icon.min.css';
 // Import Font Awesome Icons Set
-@import '~font-awesome/css/font-awesome.min.css';
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
 // Import Simple Line Icons Set
 @import '~simple-line-icons/css/simple-line-icons.css';
 // Import Main styles for this application
 @import './scss/style.scss';
-
-.fa-question-circle {
-  margin-right: 3px;
-}
 
 hr {
   margin-top: 2rem;
@@ -35,4 +31,35 @@ pre > code {
   line-height: 1.45;
   overflow: auto;
   padding: 1rem;
+}
+
+.fa-question-circle {
+  margin-right: 3px;
+}
+
+.satisfaction-level {
+  i {
+    margin: 0 5px;
+    cursor: pointer;
+    color: $gray-400;
+    &.active {
+      cursor: default;
+    }
+
+    &:nth-child(1):hover, &:nth-child(1).active {
+      color: #FF0000;
+    }
+    &:nth-child(2):hover, &:nth-child(2).active {
+      color: #ff9f00;
+    }
+    &:nth-child(3):hover, &:nth-child(3).active {
+      color: #b2b200;
+    }
+    &:nth-child(4):hover, &:nth-child(4).active {
+      color: #00FF00;
+    }
+    &:nth-child(5):hover, &:nth-child(5).active {
+      color: #4DBD74;
+    }
+  }
 }

@@ -279,7 +279,7 @@ func postUsers(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, u, http.StatusCreated)
 }
 
-func putUser(w http.ResponseWriter, r *http.Request) {
+func patchUser(w http.ResponseWriter, r *http.Request) {
 	var u User
 
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
