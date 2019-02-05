@@ -37,7 +37,7 @@ pre > code {
   margin-right: 3px;
 }
 
-.satisfaction-level {
+.attitude {
   i {
     margin: 0 5px;
     cursor: pointer;
@@ -46,20 +46,30 @@ pre > code {
       cursor: default;
     }
 
-    &:nth-child(1):hover, &:nth-child(1).active {
-      color: #FF0000;
+    &.fa-frown-open {
+      &:hover, &.active {
+        color: #FF0000;
+      }
     }
-    &:nth-child(2):hover, &:nth-child(2).active {
-      color: #ff9f00;
+    &.fa-frown {
+      &:hover, &.active {
+        color: #ff9f00;
+      }
     }
-    &:nth-child(3):hover, &:nth-child(3).active {
-      color: #b2b200;
+    &.fa-meh {
+      &:hover, &.active {
+        color: #b2b200;
+      }
     }
-    &:nth-child(4):hover, &:nth-child(4).active {
-      color: #00FF00;
+    &.fa-smile {
+      &:hover, &.active {
+        color: #00FF00;
+      }
     }
-    &:nth-child(5):hover, &:nth-child(5).active {
-      color: #4DBD74;
+    &.fa-grin-beam {
+      &:hover, &.active {
+        color: #4DBD74;
+      }
     }
   }
 }

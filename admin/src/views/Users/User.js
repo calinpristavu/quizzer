@@ -10,7 +10,7 @@ import {
   Table
 } from 'reactstrap';
 import {connect} from "react-redux";
-import {getUser, setUserComments, setUserFeeling} from "../../redux/actions";
+import {getUser, setUserComments, setUserAttitude} from "../../redux/actions";
 import PropTypes from 'prop-types';
 
 class User extends Component {
@@ -26,7 +26,7 @@ class User extends Component {
       DeletedAt: PropTypes.string,
       CurrentQuizID: PropTypes.number,
       Comments: PropTypes.string.isRequired,
-      Feeling: PropTypes.number.isRequired,
+      Attitude: PropTypes.number.isRequired,
     })
   };
 
@@ -48,11 +48,11 @@ class User extends Component {
     );
   };
 
-  saveFeeling = (feeling) => {
-    if (this.props.viewUser.Feeling === feeling) {
+  saveAttitude = (attitude) => {
+    if (this.props.viewUser.Attitude === attitude) {
       return;
     }
-    this.props.setUserFeeling(this.props.viewUser.ID, feeling);
+    this.props.setUserAttitude(this.props.viewUser.ID, attitude);
   };
 
   render() {
@@ -133,24 +133,24 @@ class User extends Component {
                       </td>
                     </tr>
                     <tr>
-                      <td>Overall feeling</td>
+                      <td>Attitude</td>
                       <td>
-                        <h2 className="satisfaction-level">
+                        <h2 className="attitude">
                           <i
-                            onClick={() => this.saveFeeling(1)}
-                            className={`fa fa-frown-open ${user.Feeling === 1 && 'active'}`}/>
+                            onClick={() => this.saveAttitude(1)}
+                            className={`fa fa-frown-open ${user.Attitude === 1 && 'active'}`}/>
                           <i
-                            onClick={() => this.saveFeeling(2)}
-                            className={`fa fa-frown ${user.Feeling === 2 && 'active'}`}/>
+                            onClick={() => this.saveAttitude(2)}
+                            className={`fa fa-frown ${user.Attitude === 2 && 'active'}`}/>
                           <i
-                            onClick={() => this.saveFeeling(3)}
-                            className={`fa fa-meh ${user.Feeling === 3 && 'active'}`}/>
+                            onClick={() => this.saveAttitude(3)}
+                            className={`fa fa-meh ${user.Attitude === 3 && 'active'}`}/>
                           <i
-                            onClick={() => this.saveFeeling(4)}
-                            className={`fa fa-smile ${user.Feeling === 4 && 'active'}`}/>
+                            onClick={() => this.saveAttitude(4)}
+                            className={`fa fa-smile ${user.Attitude === 4 && 'active'}`}/>
                           <i
-                            onClick={() => this.saveFeeling(5)}
-                            className={`fa fa-grin-beam ${user.Feeling === 5 && 'active'}`}/>
+                            onClick={() => this.saveAttitude(5)}
+                            className={`fa fa-grin-beam ${user.Attitude === 5 && 'active'}`}/>
                         </h2>
                       </td>
                     </tr>
@@ -169,5 +169,5 @@ export default connect(
   state => ({
     viewUser: state.user.viewUser
   }),
-  {getUser, setUserComments, setUserFeeling}
+  {getUser, setUserComments, setUserAttitude}
 )(User);

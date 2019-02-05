@@ -9,6 +9,14 @@ export const roles = {
   2: "User",
 };
 
+export const attitudes = {
+  1: "fa fa-frown-open",
+  2: "fa fa-frown",
+  3: "fa fa-meh",
+  4: "fa fa-smile",
+  5: "fa fa-grin-beam",
+};
+
 class Users extends Component {
   render() {
     return (

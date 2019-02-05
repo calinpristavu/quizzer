@@ -3,11 +3,21 @@ import moment from "moment";
 import {Badge} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import {roles} from "./Users";
+import {attitudes, roles} from "./Users";
 
 class UserRow extends Component {
   static propTypes = {
-    user: PropTypes.object.isRequired
+    user: PropTypes.shape({
+      ID: PropTypes.number.isRequired,
+      IsEnabled: PropTypes.bool.isRequired,
+      Username: PropTypes.string.isRequired,
+      CreatedAt: PropTypes.string.isRequired,
+      RoleID: PropTypes.number.isRequired,
+      Attitude: PropTypes.number.isRequired,
+      Role: PropTypes.shape({
+        Name: PropTypes.string.isRequired
+      }).isRequired,
+    }).isRequired
   };
 
   static getBadge = (status) => {
@@ -38,6 +48,12 @@ class UserRow extends Component {
           <Link to={userLink}>{user.Username}</Link>
         </td>
         <td>{moment(user.CreatedAt).format('DD-MM-YYYY [at] k:mm')}</td>
+        <td>
+          <h2 className="attitude">
+            <i
+              className={`${attitudes[user.Attitude]} active`}/>
+          </h2>
+        </td>
         <td>{roles[user.RoleID]}</td>
         <td>
           <Link to={userLink}>

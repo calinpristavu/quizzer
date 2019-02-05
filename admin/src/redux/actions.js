@@ -160,12 +160,12 @@ export function setUserComments(id, comments) {
   }
 }
 
-export function setUserFeeling(id, feeling) {
+export function setUserAttitude(id, attitude) {
   return dispatch => {
     return fetch(`/users/${id}`, {
       method: "PATCH",
       body: JSON.stringify({
-        Feeling: feeling
+        Attitude: attitude
       })
     })
       .then(r => dispatch({

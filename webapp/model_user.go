@@ -16,7 +16,7 @@ type User struct {
 	CurrentQuizID *uint
 	CurrentQuiz   *Quiz
 	Comments      string `sql:"type:longtext"`
-	Feeling       int    `sql:"DEFAULT:3"`
+	Attitude      int    `sql:"DEFAULT:3"`
 }
 
 var LoggedIn map[string]*User
