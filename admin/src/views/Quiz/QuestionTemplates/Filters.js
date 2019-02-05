@@ -3,13 +3,14 @@ import Select from "react-select";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {questionTypes} from "./QuestionTemplates";
+import {Map} from 'immutable';
 var nestedProp = require('nested-property');
 
 class Filters extends Component {
   static propTypes = {
     addFilter: PropTypes.func.isRequired,
     clearFilter: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf(PropTypes.object).isRequired,
+    items: PropTypes.instanceOf(Map),
   };
 
   static buildTypeOptions = (quizzes) => {

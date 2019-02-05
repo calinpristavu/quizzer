@@ -3,9 +3,10 @@ import {
   REMOVE_QUESTION_TEMPLATE, SET_QUESTION_TEMPLATE_CREATE,
   SET_QUESTION_TEMPLATES
 } from "../actionTypes";
+import {Map} from 'immutable';
 
 const initialState = {
-  list: [],
+  list: Map(),
   viewedItem: null,
   createQuestionTemplate: true,
 };
@@ -15,22 +16,33 @@ export default function(state = initialState, action) {
     case SET_QUESTION_TEMPLATES: {
       return {
         ...state,
-        list: action.payload
+        list: Map(action.payload.map(e => [e.ID, e])).sort((a, b) =>
+          // sort DESC
+          a.ID > b.ID ? -1
+            : a.ID === b.ID ? 0
+            : 1
+        )
       }
     }
     case REMOVE_QUESTION_TEMPLATE: {
       return {
         ...state,
-        list: state.list.filter(e => e.ID !== action.payload)
+        list: state.list.remove(action.payload)
       }
     }
     case APPEND_QUESTION_TEMPLATE: {
       return {
         ...state,
-        list: [
-          action.payload,
-          ...state.list
-        ]
+        list: state.list
+          .asMutable()
+          .set(action.payload.ID, action.payload)
+          .sort((a, b) =>
+            // sort DESC
+            a.ID > b.ID ? -1
+              : a.ID === b.ID ? 0
+              : 1
+          )
+          .asImmutable(),
       }
     }
     case OPEN_QUESTION_TEMPLATE_VIEW: {

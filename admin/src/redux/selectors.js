@@ -9,14 +9,8 @@ export function selectStatBestResult(state) {
 }
 
 export function selectQuestionTemplatesWithUsage (state) {
-  return state.questionTemplate.list.map((qt) => {
-    qt.usage = state.quiz.list.reduce((count, q) => {
-      if (q.Questions.some(e => e.QuestionTemplateID === qt.ID)) {
-        count ++;
-      }
-
-      return count;
-    }, 0) * 100 / state.quiz.list.length;
+  return state.questionTemplate.list.map(qt => {
+    qt.usage = qt.Usages.length * 100 / state.quiz.list.size;
 
     return qt;
   })

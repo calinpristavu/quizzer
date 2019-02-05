@@ -6,10 +6,11 @@ import {
   SET_USERS_ONLINE,
   SET_VIEWED_USER
 } from "../actionTypes";
+import {Map} from 'immutable';
 
 const initialState = {
-  all: [],
-  online: [],
+  all: Map(),
+  online: Map(),
   viewUser: null,
   createUser: true,
   token: localStorage.getItem('token')
@@ -38,22 +39,19 @@ export default function(state = initialState, action) {
     case SET_USERS: {
       return {
         ...state,
-        all: action.payload
+        all: Map(action.payload.map(u => [u.ID, u])),
       }
     }
     case SET_USERS_ONLINE: {
       return {
         ...state,
-        online: action.payload
+        online: Map(action.payload.map(u => [u.ID, u])),
       }
     }
     case APPEND_USER: {
       return {
         ...state,
-        all: [
-          action.payload,
-          ...state.all
-        ]
+        all: state.all.set(action.payload.ID, action.payload)
       }
     }
     case SET_USER_CREATE: {

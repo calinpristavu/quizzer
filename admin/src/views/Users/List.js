@@ -24,18 +24,18 @@ class UserList extends Component {
         <CardBody>
           <Table responsive hover>
             <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Registered</th>
-              <th scope="col">Attitude</th>
-              <th scope="col">Role</th>
-              <th scope="col">Status</th>
-            </tr>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Registered</th>
+                <th scope="col">Attitude</th>
+                <th scope="col">Role</th>
+                <th scope="col">Status</th>
+              </tr>
             </thead>
             <tbody>
-              {this.props.list.map((user, index) =>
-                <UserRow key={index} user={user}/>
+              {this.props.list.valueSeq().map(e =>
+                <UserRow key={e.ID} user={e}/>
               )}
             </tbody>
           </Table>

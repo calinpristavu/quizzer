@@ -23,10 +23,8 @@ class List extends Component {
 
     return Filters
       .apply(this.props.list, this.state.filters)
-      .slice(
-        firstPosition,
-        firstPosition + this.state.perPage
-      );
+      .slice(firstPosition, firstPosition + this.state.perPage)
+      .valueSeq();
   };
 
   static computePercentCompleted(questions) {
@@ -134,7 +132,7 @@ class List extends Component {
         <CardFooter>
           <Pager
             noPages={Math.ceil(
-              Filters.apply(this.props.list, this.state.filters).length / this.state.perPage
+              Filters.apply(this.props.list, this.state.filters).size / this.state.perPage
             )}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}

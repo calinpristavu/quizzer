@@ -1,7 +1,8 @@
 import {OPEN_QUIZ_VIEW, SET_QUESTION_NOTE, SET_QUESTION_SCORE, SET_QUIZZES} from "../actionTypes";
+import {Map} from 'immutable';
 
 const initialState = {
-  list: [],
+  list: Map(),
   viewedItem: null,
 };
 
@@ -10,7 +11,12 @@ export default function(state = initialState, action) {
     case SET_QUIZZES: {
       return {
         ...state,
-        list: action.payload
+        list: Map(action.payload.map(e => [e.ID, e])).sort((a, b) =>
+          // sort DESC
+          a.ID > b.ID ? -1
+            : a.ID === b.ID ? 0
+            : 1
+        ),
       }
     }
     case OPEN_QUIZ_VIEW: {
@@ -30,9 +36,7 @@ export default function(state = initialState, action) {
           ...state.viewedItem,
           Questions: [...Questions]
         },
-        list: [
-          ...state.list
-        ]
+        list: state.list.set(state.viewedItem.ID, state.viewedItem)
       }
     }
     case SET_QUESTION_NOTE: {
@@ -46,9 +50,7 @@ export default function(state = initialState, action) {
           ...state.viewedItem,
           Questions: [...Questions]
         },
-        list: [
-          ...state.list
-        ]
+        list: state.list.update(action.payload.question.ID, Questions[Questions.indexOf(action.payload.question)])
       }
     }
 

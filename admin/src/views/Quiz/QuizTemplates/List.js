@@ -25,10 +25,9 @@ class List extends Component {
   getVisibleItems = () => {
     const firstPosition = this.state.perPage * this.state.currentPage;
 
-    return this.props.list.slice(
-      firstPosition,
-      firstPosition + this.state.perPage
-    );
+    return this.props.list
+      .slice(firstPosition, firstPosition + this.state.perPage)
+      .valueSeq();
   };
 
   delete = (e, qId) => {
@@ -58,8 +57,8 @@ class List extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.getVisibleItems().map((q, k) =>
-              <tr key={k} onClick={() => this.props.openEdit(q)}>
+            {this.getVisibleItems().map(q =>
+              <tr key={q.ID} onClick={() => this.props.openEdit(q)}>
                 <td>{q.Name}</td>
                 <td>{q.QuizQuestions !== null ? q.QuizQuestions.length : 0}</td>
                 <td>
@@ -72,7 +71,7 @@ class List extends Component {
         </CardBody>
         <CardFooter>
           <Pager
-            noPages={Math.ceil(this.props.list.length / this.state.perPage)}
+            noPages={Math.ceil(this.props.list.size / this.state.perPage)}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}
             toPage={(pageNo) => this.setState({currentPage: pageNo})}
