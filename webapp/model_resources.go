@@ -1,11 +1,14 @@
 package webapp
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type QuizTemplate struct {
 	gorm.Model
 	Name          string
 	QuizQuestions []*QuizQuestionTemplate `gorm:"foreignkey:QuizID"`
+	Duration      Duration                `sql:"type:VARCHAR(50)"`
 }
 
 type QuestionTemplate struct {

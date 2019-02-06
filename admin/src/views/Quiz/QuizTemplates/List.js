@@ -4,6 +4,7 @@ import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import {connect} from "react-redux";
 import {deleteQuizTemplate, getQuizTemplates} from "../../../redux/actions";
+import {Map} from 'immutable';
 
 class List extends Component {
   state = {
@@ -15,7 +16,7 @@ class List extends Component {
     openEdit: PropTypes.func,
     openCreate: PropTypes.func,
     delete: PropTypes.func,
-    quizzes: PropTypes.arrayOf(PropTypes.object),
+    list: PropTypes.instanceOf(Map),
   };
 
   componentDidMount() {
@@ -53,19 +54,21 @@ class List extends Component {
             <tr>
               <th>Name</th>
               <th>#noQuestions</th>
+              <th>Time limit</th>
               <th>?</th>
             </tr>
             </thead>
             <tbody>
-            {this.getVisibleItems().map(q =>
-              <tr key={q.ID} onClick={() => this.props.openEdit(q)}>
-                <td>{q.Name}</td>
-                <td>{q.QuizQuestions !== null ? q.QuizQuestions.length : 0}</td>
-                <td>
-                  <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle"/>
-                </td>
-              </tr>
-            )}
+              {this.getVisibleItems().map(q =>
+                <tr key={q.ID} onClick={() => this.props.openEdit(q)}>
+                  <td>{q.Name}</td>
+                  <td>{q.QuizQuestions !== null ? q.QuizQuestions.length : 0}</td>
+                  <td>{q.Duration}</td>
+                  <td>
+                    <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle"/>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </Table>
         </CardBody>

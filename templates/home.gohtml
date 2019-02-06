@@ -14,6 +14,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Title</th>
                         <th scope="col"># Questions</th>
+                        <th scope="col">Time limit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,6 +27,7 @@
                             <a href="/start/{{.ID}}">{{.Name}}</a>
                         </td>
                         <td>{{len .QuizQuestions}}</td>
+                        <td>{{if ne (printf "%s" .Duration) "0s"}}{{.Duration}}{{else}}-{{end}}</td>
                     </tr>
                 {{end}}
                 </tbody>
