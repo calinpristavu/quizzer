@@ -68,7 +68,12 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 	question := u.CurrentQuiz.Questions[qIdx]
 
-	deadline := u.CurrentQuiz.CreatedAt.Add(time.Duration(u.CurrentQuiz.Duration.Nanoseconds()))
+	deadline := ""
+	if u.CurrentQuiz.Duration.Duration.Nanoseconds() != 0 {
+		deadline = u.CurrentQuiz.CreatedAt.
+			Add(time.Duration(u.CurrentQuiz.Duration.Nanoseconds())).
+			Format(time.RFC3339)
+	}
 
 	if r.Method == http.MethodGet {
 		err := getTemplateForQuestion(question).Execute(w, struct {
@@ -84,7 +89,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 			User:         u,
 			Qidx:         qIdx,
 			PrevIdx:      qIdx - 1,
-			Deadline:     deadline.Format(time.RFC3339),
+			Deadline:     deadline,
 		})
 		if err != nil {
 			http.Error(w, "could not render template for question", http.StatusInternalServerError)

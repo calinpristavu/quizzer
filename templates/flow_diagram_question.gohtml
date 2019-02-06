@@ -1,4 +1,8 @@
-{{ template "countdown" .Deadline }}
+{{if ne .Deadline ""}}
+    {{ template "countdown" .Deadline }}
+{{else}}
+    {{ template "header" .User }}
+{{end}}
 
 <!--suppress ALL -->
 <div class="page-wrapper">
