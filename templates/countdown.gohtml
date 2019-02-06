@@ -1,0 +1,213 @@
+{{ define "countdown" }}
+
+<!doctype html>
+<!--suppress HtmlUnknownTarget -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Home</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Domine|Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <style>
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Domine', serif;
+        }
+
+        p, pre, .navbar {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        textarea {
+            margin-top: 20px;
+            height: 200px;
+            width: 80%;
+        }
+
+        a:hover {
+            text-decoration: none;
+            opacity: 0.5
+        }
+
+        body {
+            background-color: #eee;
+        }
+
+        .navbar {
+            background-color: #00aeef;
+        }
+
+        .section {
+            margin-top: 30px;
+            background-color: #fff;
+        }
+
+        .section-content {
+            padding: 40px 10px 40px 10px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            background-color: #1f2858;
+            color: #fff;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .btn:hover, .btn:focus, .btn:active {
+            background-color: #1f2858;
+            color: #fff;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn:disabled, .btn[disabled] {
+            background-color: #bbb;
+            border: 1px solid grey;
+            box-shadow: none;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        .form-check .form-check-label {
+            position: relative;
+            padding-left: 35px;
+        }
+
+        .form-check .form-check-label::before,
+        .form-check .form-check-label::after {
+            position: absolute;
+            left: 0;
+            top: 0;
+            border: 2px solid #1f2858;
+            border-radius: 3px;
+            content: "";
+            width: 20px;
+            height: 20px;
+        }
+
+        .form-check .form-check-label::after {
+            display: none;
+            font-size: 16px;
+            padding-left: 2px;
+            content:'\2713';
+            color: #00aeef;
+            font-weight: 900;
+        }
+
+        input[type="checkbox"]:checked + .form-check-label::after {
+            display: block;
+        }
+
+        .page-wrapper {
+            display: flex;
+            height: 100vh;
+        }
+
+        .all-questions {
+            background-color: #fff;
+        }
+
+        .all-questions ul {
+            list-style: none;
+            padding: 0px;
+        }
+
+        .all-questions li {
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            min-width: 180px;
+            padding: 10px 40px;
+        }
+
+        .all-questions li::before {
+            content: '\25E6';
+            font-size: 50px;
+            opacity: 0.2;
+            color: #696969;
+            position: relative;
+            top: 12px;
+            left: -10px;
+            line-height: 0.5;
+        }
+
+        .all-questions li a {
+            color: #696969;
+        }
+
+        .all-questions li.completed {
+            background-color: #eee;
+        }
+
+        .all-questions li.completed::before {
+            content: '\2022';
+            color: #00aeef;
+            opacity: 1;
+        }
+
+        .all-questions li.completed a {
+            opacity: 0.5;
+        }
+
+        .all-questions li.active {
+            background-color: #eef7fa;
+        }
+
+        .all-questions li.active a {
+            color: #00aeef;
+        }
+
+        .center-block {
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-md navbar-dark">
+    <div class="container">
+        <div id="remainig-time" class="row center-block text-white"></div>
+    </div>
+</nav>
+
+<script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("{{.}}").getTime();
+
+    computeRemaining();
+
+    // Update the count down every 1 second
+    var x = setInterval(computeRemaining, 1000);
+
+    function computeRemaining() {
+        // Get todays date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="demo"
+        document.getElementById("remainig-time").innerHTML = hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("remainig-time").innerHTML = "Time's up. Save the question!";
+        }
+    }
+</script>
+
+{{end}}

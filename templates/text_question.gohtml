@@ -1,4 +1,4 @@
-{{ template "header" .User }}
+{{ template "countdown" .Deadline }}
 <style>
     .form-check-label {
         width: 100%;
@@ -57,9 +57,6 @@
         if (event.keyCode === 9) {
             return handleTab(event);
         }
-        if (event.keyCode === 8) {
-            return handleBackspace(event);
-        }
     }
 
     function handleTab(event) {
@@ -77,10 +74,6 @@
         range.setEndAfter(tabNode);
         sel.removeAllRanges();
         sel.addRange(range);
-    }
-
-    function handleBackspace(event) {
-
     }
 </script>
 

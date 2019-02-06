@@ -57,6 +57,7 @@ func (qt QuizTemplate) start(u *User) *Quiz {
 		Name:           qt.Name,
 		Active:         true,
 		QuizTemplateID: qt.ID,
+		Duration:       qt.Duration,
 	}
 
 	g.db.Save(&q)

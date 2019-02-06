@@ -19,6 +19,7 @@ type Quiz struct {
 	Active         bool
 	Score          uint
 	QuizTemplateID uint
+	Duration       Duration `sql:"type:VARCHAR(50)"`
 }
 
 type Question struct {
