@@ -10,17 +10,19 @@ class Create extends Component {
     step: 1,
     quiz: {
       Name: '',
+      Duration: '',
       QuizQuestions: []
     }
   };
 
   state = this.defaultState;
 
-  advanceToStep2 = (text) => {
+  advanceToStep2 = (state) => {
     this.setState({
       step: 2,
       quiz: {
-        Name: text,
+        Name: state.Name,
+        Duration: state.Duration,
         QuizQuestions: []
       }
     })

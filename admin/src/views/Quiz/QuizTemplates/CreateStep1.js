@@ -1,9 +1,29 @@
-import {CardBody, CardFooter, Col, FormGroup, Input, Label, Row} from "reactstrap";
+import {
+  CardBody,
+  CardFooter,
+  Col,
+  FormGroup,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Label,
+  Row
+} from "reactstrap";
 import React, {Component} from "react";
 
 class CreateStep1 extends Component {
   state = {
-    Name: ''
+    Name: '',
+    Duration: null
+  };
+
+  setDuration = (e) => {
+    if (e.target.value === "") {
+      return this.setState({Duration: null});
+    }
+
+    this.setState({Duration: e.target.value.replace(":", "h") + 'm0s'})
   };
 
   render() {
@@ -18,8 +38,7 @@ class CreateStep1 extends Component {
                     <Label>Name</Label>
                     <Input
                       type="text"
-                      value={this.state.Name}
-                      onChange={(e) => this.setState({Name: e.target.value})}
+                      onBlur={(e) => this.setState({Name: e.target.value})}
                       placeholder="Type in the quiz name"
                       required />
                   </FormGroup>
@@ -27,28 +46,29 @@ class CreateStep1 extends Component {
               </Row>
               <Row>
                 <Col xs="12">
-                  <Label>Quiz Presets (WIP)</Label>
-                  <div>
-                    <FormGroup check inline>
-                      <Input className="form-check-input" type="radio" id="quiz-type-1" name="inline-radios" value="option1" />
-                      <Label className="form-check-label" check htmlFor="quiz-type-1">One</Label>
-                    </FormGroup>
-                    <FormGroup check inline>
-                      <Input className="form-check-input" type="radio" id="quiz-type-2" name="inline-radios" value="option2" />
-                      <Label className="form-check-label" check htmlFor="quiz-type-2">Two</Label>
-                    </FormGroup>
-                    <FormGroup check inline>
-                      <Input className="form-check-input" type="radio" id="quiz-type-3" name="inline-radios" value="option3" />
-                      <Label className="form-check-label" check htmlFor="quiz-type-3">Three</Label>
-                    </FormGroup>
-                  </div>
+                  <FormGroup>
+                    <Label>Time limit</Label>
+                    <InputGroup className="float-left">
+                      <Input
+                        type="time"
+                        min="00:00"
+                        max="06:00"
+                        style={{maxWidth: "100px", minWidth: "100px"}}
+                        step={600}
+                        onBlur={this.setDuration}
+                        />
+                      <InputGroupAddon addonType="append">
+                        <InputGroupText>hh:mm</InputGroupText>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </FormGroup>
                 </Col>
               </Row>
             </Col>
           </FormGroup>
         </CardBody>
         <CardFooter>
-          <button onClick={() => this.props.advance(this.state.Name)}>Next ></button>
+          <button onClick={() => this.props.advance(this.state)}>Next ></button>
         </CardFooter>
       </div>
     );

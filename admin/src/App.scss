@@ -73,3 +73,15 @@ pre > code {
     }
   }
 }
+
+input[type="time"] {
+  &::-webkit-datetime-edit-ampm-field {
+    display: none;
+  }
+  &::-moz-datetime-edit-ampm-field {
+    display: none;
+  }
+  &::-o-datetime-edit-ampm-field {
+    display: none;
+  }
+}
