@@ -126,8 +126,8 @@ export class QuestionsList extends Component {
                     value={q.usage} />
                 </td>
                 <td>
-                  <i onClick={() => {this.props.openQuestionTemplateView(q)}} className="fa fa-eye"/>
-                  <i onClick={() => {this.props.openEditView(q)}} className="fa fa-edit text-warning"/>
+                  <i onClick={() => {this.props.openQuestionTemplateView(q.ID)}} className="fa fa-eye"/>
+                  <i onClick={() => {this.props.openEditView(q.ID)}} className="fa fa-edit text-warning"/>
                   <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle text-danger"/>
                 </td>
               </tr>
@@ -154,5 +154,11 @@ export default connect(
   state => ({
     list: selectQuestionTemplatesWithUsage(state)
   }),
-  {getQuestionTemplates, deleteQuestionTemplate, getQuizzes, openQuestionTemplateView, setQuestionTemplateCreate}
+  {
+    getQuestionTemplates,
+    getQuizzes,
+    openQuestionTemplateView,
+    deleteQuestionTemplate,
+    setQuestionTemplateCreate
+  }
 )(QuestionsList);

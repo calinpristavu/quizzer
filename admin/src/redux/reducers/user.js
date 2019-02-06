@@ -4,7 +4,7 @@ import {
   LOGOUT, SET_USER_CREATE,
   SET_USERS,
   SET_USERS_ONLINE,
-  SET_VIEWED_USER
+  SET_VIEWED_USER, UPDATE_USER
 } from "../actionTypes";
 import {Map} from 'immutable';
 
@@ -49,6 +49,12 @@ export default function(state = initialState, action) {
       }
     }
     case APPEND_USER: {
+      return {
+        ...state,
+        all: state.all.set(action.payload.ID, action.payload)
+      }
+    }
+    case UPDATE_USER: {
       return {
         ...state,
         all: state.all.set(action.payload.ID, action.payload)

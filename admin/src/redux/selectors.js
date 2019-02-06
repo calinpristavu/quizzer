@@ -20,6 +20,30 @@ export function selectInProgressQuizzes (state) {
   return state.quiz.list.filter(q => q.Active)
 }
 
+export function viewedQuestionTemplate(state) {
+  if (null === state.questionTemplate.viewedItem) {
+    return null;
+  }
+
+  return state.questionTemplate.list.get(state.questionTemplate.viewedItem)
+}
+
+export function viewedQuizResult(state) {
+  if (null === state.quiz.viewedItem) {
+    return null;
+  }
+
+  return state.quiz.list.get(state.quiz.viewedItem)
+}
+
+export function viewedUser(state) {
+  if (null === state.user.viewUser) {
+    return null;
+  }
+
+  return state.user.all.get(state.user.viewUser)
+}
+
 function findStatFrom(data, from) {
   const values = [];
 

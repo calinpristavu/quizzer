@@ -8,6 +8,7 @@ import React, {Component} from "react";
 import {Pie} from "react-chartjs-2";
 import {connect} from "react-redux";
 import {openQuestionTemplateView} from "../../../redux/actions";
+import {viewedQuestionTemplate} from "../../../redux/selectors";
 
 class View extends Component {
   static propTypes = {
@@ -45,7 +46,6 @@ class View extends Component {
 
             carry[0]++;
             return carry;
-
           }, [0, 0, 0]),
           backgroundColor: [
             '#36A2EB',
@@ -88,7 +88,7 @@ class View extends Component {
 
 export default connect(
   state => ({
-    question: state.questionTemplate.viewedItem
+    question: viewedQuestionTemplate(state)
   }),
   {openQuestionTemplateView}
 )(View);

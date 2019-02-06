@@ -7,6 +7,7 @@ import TextQuestion from "./TextQuestion";
 import CheckboxQuestion from "./CheckboxQuestion";
 import FlowDiagramQuestion from "./FlowDiagramQuestion";
 import RadioQuestion from "./RadioQuestion";
+import {viewedQuizResult} from "../../../redux/selectors";
 
 class View extends Component {
   static propTypes = {
@@ -80,7 +81,7 @@ class View extends Component {
 
 export default connect(
   state => ({
-    quiz: state.quiz.viewedItem
+    quiz: viewedQuizResult(state)
   }),
   {openQuizView, saveScores}
 )(View);

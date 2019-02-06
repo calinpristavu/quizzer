@@ -3,7 +3,6 @@ import {Card, CardBody, CardHeader} from "reactstrap";
 import React, {Component} from "react";
 
 class Edit extends Component {
-
   static propTypes = {
     quiz: PropTypes.object
   };

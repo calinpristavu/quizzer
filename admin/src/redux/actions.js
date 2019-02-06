@@ -19,7 +19,7 @@ import {
   SET_VIEWED_USER,
   SET_QUESTION_SCORE,
   SET_QUESTION_TEMPLATE_CREATE,
-  SET_QUESTION_NOTE
+  SET_QUESTION_NOTE, UPDATE_USER
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -150,13 +150,17 @@ export function createUser(u) {
 }
 
 export function setUserComments(id, comments) {
-  return () => {
+  return dispatch => {
     return fetch(`/users/${id}`, {
       method: "PATCH",
       body: JSON.stringify({
         Comments: comments
       })
     })
+      .then(r => dispatch({
+        type: UPDATE_USER,
+        payload: r
+      }))
   }
 }
 
@@ -169,7 +173,7 @@ export function setUserAttitude(id, attitude) {
       })
     })
       .then(r => dispatch({
-        type: SET_VIEWED_USER,
+        type: UPDATE_USER,
         payload: r
       }))
   }
@@ -180,7 +184,7 @@ export function getUser(id) {
     return fetch("/users/" + id)
       .then(r => dispatch({
         type: SET_VIEWED_USER,
-        payload: r
+        payload: r.ID
       }))
   }
 }

@@ -10,12 +10,13 @@ import {
   Table
 } from 'reactstrap';
 import {connect} from "react-redux";
-import {getUser, setUserComments, setUserAttitude} from "../../redux/actions";
+import {getUser, setUserComments, setUserAttitude, getUsers} from "../../redux/actions";
 import PropTypes from 'prop-types';
+import {viewedUser} from "../../redux/selectors";
 
 class User extends Component {
   static propTypes = {
-    viewUser: PropTypes.shape({
+    user: PropTypes.shape({
       ID: PropTypes.number.isRequired,
       Username: PropTypes.string.isRequired,
       Role: PropTypes.shape({
@@ -31,32 +32,39 @@ class User extends Component {
   };
 
   state = {
-    shouldSave: false
+    shouldSave: false,
+    Comments: "",
   };
 
   commentsRef = React.createRef();
 
   componentDidMount() {
-    this.props.getUser(this.props.match.params.id)
+    this.props.getUsers()
+      .then(() => {
+        this.props.getUser(this.props.match.params.id)
+          .then(() => {
+            this.setState({Comments: this.props.user.Comments})
+          });
+      });
   }
 
   saveComments = () => {
     this.setState({shouldSave: false});
     this.props.setUserComments(
-      this.props.viewUser.ID,
+      this.props.user.ID,
       this.commentsRef.current.value
     );
   };
 
   saveAttitude = (attitude) => {
-    if (this.props.viewUser.Attitude === attitude) {
+    if (this.props.user.Attitude === attitude) {
       return;
     }
-    this.props.setUserAttitude(this.props.viewUser.ID, attitude);
+    this.props.setUserAttitude(this.props.user.ID, attitude);
   };
 
   render() {
-    const user = this.props.viewUser;
+    const user = this.props.user;
 
     if (null === user) {
       return null;
@@ -118,8 +126,8 @@ class User extends Component {
                           innerRef={this.commentsRef}
                           type="textarea"
                           rows="9"
-                          defaultValue={user.Comments}
-                          onChange={() => this.setState({shouldSave: true})}
+                          value={this.state.Comments}
+                          onChange={(e) => this.setState({shouldSave: true, Comments: e.target.value})}
                           placeholder="Content..." />
 
                         {this.state.shouldSave &&
@@ -167,7 +175,7 @@ class User extends Component {
 
 export default connect(
   state => ({
-    viewUser: state.user.viewUser
+    user: viewedUser(state)
   }),
-  {getUser, setUserComments, setUserAttitude}
+  {getUser, getUsers, setUserComments, setUserAttitude}
 )(User);

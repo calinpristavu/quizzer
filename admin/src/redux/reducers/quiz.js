@@ -26,31 +26,25 @@ export default function(state = initialState, action) {
       }
     }
     case SET_QUESTION_SCORE: {
-      const Questions = state.viewedItem.Questions;
-
-      Questions[Questions.indexOf(action.payload.question)].Score = action.payload.score;
-
       return {
         ...state,
-        viewedItem: {
-          ...state.viewedItem,
-          Questions: [...Questions]
-        },
-        list: state.list.set(state.viewedItem.ID, state.viewedItem)
+        list: state.list.setIn([
+          state.viewedItem,
+          "Questions",
+          state.list.get(state.viewedItem).Questions.indexOf(action.payload.question),
+          "Score"
+        ], action.payload.score),
       }
     }
     case SET_QUESTION_NOTE: {
-      const Questions = state.viewedItem.Questions;
-
-      Questions[Questions.indexOf(action.payload.question)].Notes = action.payload.note;
-
       return {
         ...state,
-        viewedItem: {
-          ...state.viewedItem,
-          Questions: [...Questions]
-        },
-        list: state.list.update(action.payload.question.ID, Questions[Questions.indexOf(action.payload.question)])
+        list: state.list.setIn([
+          state.viewedItem,
+          "Questions",
+          state.list.get(state.viewedItem).Questions.indexOf(action.payload.question),
+          "Notes"
+        ], action.payload.note),
       }
     }
 

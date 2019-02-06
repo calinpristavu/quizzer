@@ -122,7 +122,7 @@ class List extends Component {
                   : <span>{List.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}</span>
                 }</td>
                 <td>
-                  {!q.Active && <i className="fa fa-eye" onClick={() => this.props.openQuizView(q)}/>}
+                  {!q.Active && <i className="fa fa-eye" onClick={() => this.props.openQuizView(q.ID)}/>}
                 </td>
               </tr>
             )}
@@ -148,5 +148,5 @@ export default connect(
   state => ({
     list: state.quiz.list
   }),
-  { getQuizzes, openQuizView}
+  {getQuizzes, openQuizView}
 )(List);
