@@ -4,7 +4,6 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
 )
 
@@ -21,15 +20,9 @@ func (d *Duration) Scan(dbValue interface{}) error {
 		return nil
 	}
 
-	fmt.Printf("%T %+v\n", dbValue, dbValue)
+	asString := string(dbValue.([]uint8))
 
-	asInt := string(dbValue.([]uint8))
-
-	fmt.Printf("%T %+v\n", asInt, asInt)
-
-	newD, _ := time.ParseDuration(asInt)
-
-	fmt.Printf("%T %+v\n", newD, newD)
+	newD, _ := time.ParseDuration(asString)
 
 	*d = Duration{newD}
 
@@ -37,6 +30,10 @@ func (d *Duration) Scan(dbValue interface{}) error {
 }
 
 func (d Duration) MarshalJSON() ([]byte, error) {
+	if d.Duration.Nanoseconds() == 0 {
+		return json.Marshal(nil)
+	}
+
 	return json.Marshal(d.String())
 }
 
@@ -45,6 +42,11 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &v); err != nil {
 		return err
 	}
+
+	if v == nil {
+		return nil
+	}
+
 	switch value := v.(type) {
 	case float64:
 		d.Duration = time.Duration(value)
