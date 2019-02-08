@@ -116,6 +116,7 @@ func findAllFinishedForUser(u *User) []Quiz {
 		Preload("Questions.RadioAnswers").
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
+		Preload("Questions.Feedback").
 		Where("user_id = ?", u.ID).
 		Where("active = 0").
 		Order("id desc").

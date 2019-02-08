@@ -35,6 +35,7 @@ func FindByUsername(uname string) (*User, error) {
 		Preload("CurrentQuiz.Questions.RadioAnswers").
 		Preload("CurrentQuiz.Questions.TextAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
+		Preload("CurrentQuiz.Questions.Feedback").
 		First(&u)
 	if res.RecordNotFound() {
 		return nil, fmt.Errorf("No user with username %s\n", uname)
@@ -59,6 +60,7 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 		Preload("CurrentQuiz.Questions.RadioAnswers").
 		Preload("CurrentQuiz.Questions.TextAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
+		Preload("CurrentQuiz.Questions.Feedback").
 		Where("Username = ?", uname).
 		First(&u)
 

@@ -359,4 +359,6 @@ func addQuestionFeedback(w http.ResponseWriter, r *http.Request) {
 		log.Printf("could not save feedback: %v\n", err)
 		return
 	}
+
+	jsonResponse(w, question.Feedback[len(question.Feedback)-1], http.StatusCreated)
 }

@@ -17,7 +17,19 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-            });
+            })
+                .then(function (r) {
+                    let commentBox = $('.comment-box').last();
+                    commentBox.before('<div class="media comment-box">\n' +
+                        '            <div class="media-left">\n' +
+                        '                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="me">\n' +
+                        '            </div>\n' +
+                        '            <div class="media-body">\n' +
+                        '                <h4 class="media-heading">'+ commentBox.find('.media-heading span').text() +'</h4>\n' +
+                        '                <p>' + r.Text + '</p>\n' +
+                        '            </div>\n' +
+                        '        </div>');
+                });
 
             e.preventDefault();
             return false;

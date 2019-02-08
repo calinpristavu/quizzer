@@ -319,6 +319,7 @@ func getQuizzes(w http.ResponseWriter, _ *http.Request) {
 		Preload("Questions.RadioAnswers").
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
+		Preload("Questions.Feedback").
 		Preload("User").
 		Order("id desc").
 		Find(&qs)
