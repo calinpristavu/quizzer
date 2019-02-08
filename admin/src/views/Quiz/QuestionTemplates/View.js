@@ -18,6 +18,9 @@ class View extends Component {
       Usages: PropTypes.arrayOf(PropTypes.shape({
         IsAnswered: PropTypes.bool.isRequired,
         IsCorrect: PropTypes.bool.isRequired,
+        Feedback: PropTypes.arrayOf(PropTypes.shape({
+          Text: PropTypes.string.isRequired
+        })).isRequired,
       })),
     }),
   };
@@ -75,11 +78,19 @@ class View extends Component {
           <small> Overview</small>
         </CardHeader>
         <CardBody>
-          <h2>Total number of answers: {this.props.question.Usages.length}</h2>
-          <h3>Out of which:</h3>
+          <h3>Total number of answers: {this.props.question.Usages.length}</h3>
+          <h4>Out of which:</h4>
           <div className="chart-wrapper">
             <Pie data={this.getChartData()} />
           </div>
+          <h4>Reviewer feedback:</h4>
+          {this.props.question.Usages.map((q, k) => (
+            <div key={k}>
+              {q.Feedback.map((f, j) => (
+                <div key={j}>{f.Text}</div>
+              ))}
+            </div>
+          ))}
         </CardBody>
       </Card>
     );

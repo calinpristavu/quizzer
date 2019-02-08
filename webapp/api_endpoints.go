@@ -115,6 +115,7 @@ func getQuestionTemplates(w http.ResponseWriter, _ *http.Request) {
 		Preload("RadioAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
 		Preload("Usages").
+		Preload("Usages.Feedback").
 		Order("id desc").
 		Find(&qts)
 
