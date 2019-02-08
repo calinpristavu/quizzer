@@ -325,3 +325,36 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 
 	login(w, r)
 }
+
+func addQuestionFeedback(w http.ResponseWriter, r *http.Request) {
+	feedback := r.FormValue("feedback")
+	if feedback == "" {
+		return
+	}
+
+	u := r.Context().Value("user").(*User)
+
+	if u.CurrentQuiz == nil {
+		log.Printf("no active quiz for user %s\n", u.Username)
+		http.Redirect(w, r, "/", http.StatusFound)
+
+		return
+	}
+
+	qIdx, err := strconv.Atoi(mux.Vars(r)["idx"])
+	if err != nil {
+		log.Printf("invalid question index\n")
+		http.Error(w, "Invalid question index", http.StatusNotFound)
+
+		return
+	}
+
+	if qIdx > len(u.CurrentQuiz.Questions)-1 {
+		return
+	}
+
+	question := u.CurrentQuiz.Questions[qIdx]
+
+	question.Feedback = feedback
+	g.db.Save(&question)
+}

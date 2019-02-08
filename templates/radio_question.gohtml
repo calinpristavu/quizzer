@@ -4,7 +4,7 @@
     {{ template "header" .User }}
 {{end}}
 <style>
-    form {
+    .section-content form {
         margin-top: 40px;
         display: inline-block;
         max-width: 60%;
@@ -45,6 +45,7 @@
                 </ul>
             </div>
         </div>
+        {{template "question_feedback_form" .}}
     </div>
 </div>
 {{ template "footer" }}

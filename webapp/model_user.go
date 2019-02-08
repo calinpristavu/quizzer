@@ -90,10 +90,11 @@ type Role struct {
 
 // Roles
 var (
-	roleDumb  = Role{ID: 999, Name: "dumb", Children: []Role{}}
-	roleAdmin = Role{ID: 1, Name: "admin_only", Children: []Role{}}
-	roleUser  = Role{ID: 2, Name: "user", Children: []Role{roleDumb}}
-	roleRoot  = Role{
+	roleDumb    = Role{ID: 999, Name: "dumb", Children: []Role{}}
+	roleAdmin   = Role{ID: 1, Name: "admin_only", Children: []Role{}}
+	roleUser    = Role{ID: 2, Name: "user", Children: []Role{roleContrib, roleDumb}}
+	roleContrib = Role{ID: 998, Name: "contrib", Children: []Role{}}
+	roleRoot    = Role{
 		ID:   0,
 		Name: "root",
 		Children: []Role{

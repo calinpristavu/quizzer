@@ -29,6 +29,11 @@ func registerTemplates() {
 		"raw": func(s string) template.HTML {
 			return template.HTML(s)
 		},
+		"isGranted": func(u *User, roleId int) bool {
+			_, err := u.Role.findChildWithId(roleId)
+
+			return err == nil
+		},
 	}
 
 	g.templating = template.Must(
@@ -64,6 +69,7 @@ func registerRoutes(public *mux.Router) {
 	quiz := public.NewRoute().Subrouter()
 	quiz.Use(UserSession)
 	quiz.HandleFunc("/question/{idx}", question)
+	quiz.HandleFunc("/question/{idx}/feedback", addQuestionFeedback)
 	quiz.HandleFunc("/finished", finished)
 	quiz.HandleFunc("/quiz-history", history)
 	quiz.HandleFunc("/quiz-history/{id}", viewQuiz)

@@ -32,6 +32,7 @@ type Question struct {
 	Score              uint   `sql:"default:0"`
 	Weight             uint   `sql:"default:1"`
 	Notes              string `sql:"type:longtext"`
+	Feedback           string `sql:"type:longtext"`
 	CheckboxAnswers    []*CheckboxAnswer
 	RadioAnswers       []*RadioAnswer
 	TextAnswer         *TextAnswer
