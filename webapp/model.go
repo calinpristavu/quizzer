@@ -32,12 +32,19 @@ type Question struct {
 	Score              uint   `sql:"default:0"`
 	Weight             uint   `sql:"default:1"`
 	Notes              string `sql:"type:longtext"`
-	Feedback           string `sql:"type:longtext"`
+	Feedback           []*QuestionFeedback
 	CheckboxAnswers    []*CheckboxAnswer
 	RadioAnswers       []*RadioAnswer
 	TextAnswer         *TextAnswer
 	FlowDiagramAnswer  *FlowDiagramAnswer
 	QuestionTemplateID uint
+}
+
+type QuestionFeedback struct {
+	gorm.Model
+	QuestionID uint
+	Question   *Question `gorm:"association_autoupdate:false;association_autocreate:false"`
+	Text       string    `sql:"type:longtext"`
 }
 
 type CheckboxAnswer struct {
@@ -126,6 +133,7 @@ func find(id int) Quiz {
 		Preload("Questions.RadioAnswers").
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
+		Preload("Questions.Feedback").
 		First(&q, id)
 
 	return q
@@ -211,6 +219,18 @@ func (q *Question) saveFlowDiagram(json string, svg string) error {
 	q.FlowDiagramAnswer.SVG = svg
 	q.IsAnswered = true
 	g.db.Save(q)
+
+	return nil
+}
+
+func (q *Question) addFeedback(text string) error {
+	qf := &QuestionFeedback{
+		QuestionID: q.ID,
+		Text:       text,
+	}
+	g.db.Save(&qf)
+
+	q.Feedback = append(q.Feedback, qf)
 
 	return nil
 }

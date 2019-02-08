@@ -9,7 +9,7 @@
         $('#feedback-form').on("submit", function(e) {
             var form = $(this);
             var formData = new FormData();
-            formData.append('feedback', form.children('#feedback').eq(0).val());
+            formData.append('feedback', $('#feedback').val());
 
             $.post({
                 type: form.attr('method'),

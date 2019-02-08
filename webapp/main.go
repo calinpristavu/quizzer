@@ -49,6 +49,7 @@ func migrateDb() *gorm.DB {
 		&User{},
 		&Quiz{},
 		&Question{},
+		&QuestionFeedback{},
 		&CheckboxAnswer{},
 		&RadioAnswer{},
 		&TextAnswer{},

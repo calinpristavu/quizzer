@@ -336,25 +336,27 @@ func addQuestionFeedback(w http.ResponseWriter, r *http.Request) {
 
 	if u.CurrentQuiz == nil {
 		log.Printf("no active quiz for user %s\n", u.Username)
-		http.Redirect(w, r, "/", http.StatusFound)
 
 		return
 	}
 
 	qIdx, err := strconv.Atoi(mux.Vars(r)["idx"])
 	if err != nil {
-		log.Printf("invalid question index\n")
-		http.Error(w, "Invalid question index", http.StatusNotFound)
+		log.Printf("invalid question index: %v\n", err)
 
 		return
 	}
 
 	if qIdx > len(u.CurrentQuiz.Questions)-1 {
+		log.Printf("invalid question index: %d\n", qIdx)
 		return
 	}
 
 	question := u.CurrentQuiz.Questions[qIdx]
 
-	question.Feedback = feedback
-	g.db.Save(&question)
+	err = question.addFeedback(feedback)
+	if err != nil {
+		log.Printf("could not save feedback: %v\n", err)
+		return
+	}
 }

@@ -43,15 +43,18 @@
 
 {{if isGranted .User 998}}
     <h4>Question review</h4>
-    <div class="media comment-box">
-        <div class="media-left">
-            <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="me">
+    {{$username := .User.Username}}
+    {{range .Question.Feedback}}
+        <div class="media comment-box">
+            <div class="media-left">
+                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="me">
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">{{$username}}</h4>
+                <p>{{.Text}}</p>
+            </div>
         </div>
-        <div class="media-body">
-            <h4 class="media-heading">{{.User.Username}}</h4>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-        </div>
-    </div>
+    {{end}}
 
     <form action="/question/{{.Qidx}}/feedback" method="POST" id="feedback-form">
         <div class="media comment-box">
@@ -59,14 +62,14 @@
                 <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="me">
             </div>
             <div class="media-body">
-                <h4 class="media-heading">{{.User.Username}} <button class="btn-success btn-sm" type="submit">Save</button></h4>
+                <h4 class="media-heading">{{$username}} <button class="btn-success btn-sm" type="submit">Save</button></h4>
                     <textarea
                         name="feedback"
                         class="form-control"
                         id="feedback"
                         rows="4"
                         style="width: 100%;"
-                    >{{.Question.Feedback}}</textarea>
+                    ></textarea>
             </div>
         </div>
     </form>
