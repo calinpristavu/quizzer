@@ -15,6 +15,7 @@ type User struct {
 	IsEnabled     bool   `sql:"DEFAULT:0"`
 	CurrentQuizID *uint
 	CurrentQuiz   *Quiz
+	ShouldStartID *uint
 	Comments      string `sql:"type:longtext"`
 	Attitude      int    `sql:"DEFAULT:3"`
 }

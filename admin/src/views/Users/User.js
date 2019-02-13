@@ -10,7 +10,7 @@ import {
   Table
 } from 'reactstrap';
 import {connect} from "react-redux";
-import {getUser, setUserComments, setUserAttitude, getUsers} from "../../redux/actions";
+import {getUser, getUsers, updateUser} from "../../redux/actions";
 import PropTypes from 'prop-types';
 import {viewedUser} from "../../redux/selectors";
 
@@ -50,9 +50,11 @@ class User extends Component {
 
   saveComments = () => {
     this.setState({shouldSave: false});
-    this.props.setUserComments(
+    this.props.updateUser(
       this.props.user.ID,
-      this.commentsRef.current.value
+      {
+        Comments: this.commentsRef.current.value
+      }
     );
   };
 
@@ -60,7 +62,9 @@ class User extends Component {
     if (this.props.user.Attitude === attitude) {
       return;
     }
-    this.props.setUserAttitude(this.props.user.ID, attitude);
+    this.props.updateUser(this.props.user.ID, {
+      Attitude: attitude
+    });
   };
 
   render() {
@@ -177,5 +181,5 @@ export default connect(
   state => ({
     user: viewedUser(state)
   }),
-  {getUser, getUsers, setUserComments, setUserAttitude}
+  {getUser, getUsers, updateUser}
 )(User);

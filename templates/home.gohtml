@@ -4,10 +4,14 @@
 <div class="container">
     <main role="main" class="section col-md-8 offset-md-2 text-center">
         <div class="section-content">
-            <p>
-                <a href="/start" class="btn btn-success">Start a new random quiz</a>
-            </p>
-            <h2>Or try a prebuilt one</h2>
+            {{if .CanGenerate}}
+                <p>
+                    <a href="/start" class="btn btn-success">Start a new random quiz</a>
+                </p>
+                <h2>Or try a prebuilt one</h2>
+            {{else}}
+                <h2>Click a quiz name to start it</h2>
+            {{end}}
             <table class="table table-hover">
                 <thead>
                     <tr>

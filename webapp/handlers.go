@@ -199,16 +199,26 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var qts []QuizTemplate
-	g.db.
+	queryBuilder := g.db.
 		Model(&qts).
 		Preload("QuizQuestions").
-		Order("id desc").
-		Find(&qts)
+		Order("id desc")
+
+	if u.ShouldStartID != nil {
+		queryBuilder = queryBuilder.Where("id = ?", u.ShouldStartID)
+	}
+
+	queryBuilder.Find(&qts)
 
 	err := g.templating.Lookup("home.gohtml").Execute(w, struct {
-		User    User
-		Quizzes []QuizTemplate
-	}{User: *u, Quizzes: qts})
+		User        User
+		Quizzes     []QuizTemplate
+		CanGenerate bool
+	}{
+		User:        *u,
+		Quizzes:     qts,
+		CanGenerate: u.ShouldStartID == nil,
+	})
 
 	if err != nil {
 		log.Printf("could not render template: %v", err)

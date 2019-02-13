@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {Button, Card, CardBody, CardHeader} from "reactstrap";
+import Select from "react-select";
+import {Button, Card, CardBody, CardHeader, Col, FormGroup, Row} from "reactstrap";
 import {connect} from "react-redux";
-import {createUser, getCandidates, getUsers} from "../../redux/actions";
+import {createUser, getCandidates, getQuizTemplates, getUsers, updateUser} from "../../redux/actions";
+import {newCandidates} from "../../redux/selectors";
 import {Set, Map} from "immutable";
 import PropTypes from 'prop-types';
-import {newCandidates} from "../../redux/selectors";
 
 class Recruitee extends Component {
   static propTypes = {
@@ -14,8 +15,13 @@ class Recruitee extends Component {
     getCandidates: PropTypes.func.isRequired,
   };
 
+  state = {
+    ShouldStartID: null
+  };
+
   componentDidMount() {
     this.props.getUsers();
+    this.props.getQuizTemplates();
   }
 
   createUserFromCandidateButton = (c) => {
@@ -32,23 +38,78 @@ class Recruitee extends Component {
           onClick={() => this.props.createUser({
             Username: c.username,
             RoleID: 2,
+            ShouldStartID: this.state.ShouldStartID
           })}/>
       </span>
     );
   };
 
   createAll = () => {
-    this.props.candidates.forEach(c => this.props.createUser({
-      Username: c.username,
-      RoleID: 2,
-    }))
+    this.props.candidates.forEach(c => {
+      if (c.User !== undefined) {
+        this.props.updateUser(c.User.ID, {
+          ShouldStartID: this.state.ShouldStartID
+        });
+
+        return;
+      }
+
+      this.props.createUser({
+        Username: c.username,
+        RoleID: 2,
+        ShouldStartID: this.state.ShouldStartID
+      })
+    })
   };
 
-  renderCandidate = (c, k) => {
+  optionsFromQTs = () => {
+    const opts = [];
+    this.props.quizTemplates.forEach(qt => opts.push({
+      label: qt.Name,
+      value: qt.ID,
+    }));
+
+    return opts;
+  };
+
+  renderCandidate = (c) => {
     return (
-      <div key={k} className={c.User === undefined && 'text-success'}>
+      <div key={c.username} className={c.User === undefined ? 'text-success' : undefined}>
         {c.name} ({c.username}) {this.createUserFromCandidateButton(c)}
       </div>
+    );
+  };
+
+  renderCandidateActions = () => {
+    if (this.props.candidates.size <= 0) {
+      return null;
+    }
+
+    return (
+      <Row>
+        <Col md={12}>
+          <p>
+            If you select a quiz from the list, all users (regardless if they are already created or not) in the list
+            below will be assigned the selected quiz when you hit <span className="text-success">Create all</span>.
+          </p>
+        </Col>
+        <Col xs="4">
+          <FormGroup>
+            <Select
+              placeholder="Select a quiz..."
+              onChange={(opt) => this.setState({ShouldStartID: opt.value})}
+              options={this.optionsFromQTs()}/>
+          </FormGroup>
+        </Col>
+        <Col xs="4">
+          <FormGroup>
+            <Button
+              color="success"
+              onClick={this.createAll}
+            >Create all</Button>
+          </FormGroup>
+        </Col>
+      </Row>
     );
   };
 
@@ -66,13 +127,8 @@ class Recruitee extends Component {
           </span>
         </CardHeader>
         <CardBody>
-          {this.props.candidates.size > 0 &&
-            <Button
-              color="success"
-              onClick={this.createAll}
-            >Create all</Button>
-          }
-          {this.props.candidates.map((c, k) => this.renderCandidate(c, k))}
+          {this.renderCandidateActions()}
+          {this.props.candidates.map(this.renderCandidate)}
         </CardBody>
       </Card>
     );
@@ -82,7 +138,8 @@ class Recruitee extends Component {
 export default connect(
   state => ({
     candidates: newCandidates(state),
+    quizTemplates: state.quizTemplate.list,
     all: state.user.all
   }),
-  {getCandidates, getUsers, createUser}
+  {getCandidates, getUsers, createUser, updateUser, getQuizTemplates}
 )(Recruitee);

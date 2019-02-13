@@ -15,7 +15,6 @@ import {
   SET_STAT_AVG_RESULT,
   SET_STAT_BEST_RESULT,
   SET_USERS,
-  SET_USERS_ONLINE,
   SET_VIEWED_USER,
   SET_QUESTION_SCORE,
   SET_QUESTION_TEMPLATE_CREATE,
@@ -34,7 +33,7 @@ export const logout = () => {
 export function getQuizTemplates() {
   return (dispatch, getState) => {
     if (getState().quizTemplate.list.size > 0) {
-      return;
+      return Promise.resolve();
     }
     return fetch("/quiz-templates")
       .then(r => dispatch({
@@ -72,7 +71,7 @@ export function createQuizTemplate(quizTemplate) {
 export function getQuestionTemplates() {
   return (dispatch, getState) => {
     if (getState().questionTemplate.list.size > 0) {
-      return;
+      return Promise.resolve();
     }
 
     return fetch("/question-templates")
@@ -125,7 +124,7 @@ export function getQuizzes() {
 export function getUsers() {
   return (dispatch, getState) => {
     if (getState().user.all.size > 0) {
-      return;
+      return Promise.resolve();
     }
 
     return fetch("/users")
@@ -138,22 +137,8 @@ export function getUsers() {
 
 export function getCandidates() {
   return (dispatch, getState) => {
-    dispatch({
-      type: SET_CANDIDATES,
-      payload: [
-        {emails: ["candidate1"]},
-        {emails: ["candidate2"]},
-        {emails: ["candidate3"]},
-        {emails: ["candidate4"]},
-        {emails: ["candidate5"]},
-        {emails: ["candidate6"]},
-      ],
-    });
-
-    return;
-
     if (getState().user.candidates.size > 0) {
-      return;
+      return Promise.resolve();
     }
 
     return fetch("/recruitee/find-candidates")
@@ -177,28 +162,11 @@ export function createUser(u) {
   }
 }
 
-export function setUserComments(id, comments) {
+export function updateUser(id, changedFields) {
   return dispatch => {
     return fetch(`/users/${id}`, {
       method: "PATCH",
-      body: JSON.stringify({
-        Comments: comments
-      })
-    })
-      .then(r => dispatch({
-        type: UPDATE_USER,
-        payload: r
-      }))
-  }
-}
-
-export function setUserAttitude(id, attitude) {
-  return dispatch => {
-    return fetch(`/users/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        Attitude: attitude
-      })
+      body: JSON.stringify(changedFields)
     })
       .then(r => dispatch({
         type: UPDATE_USER,

@@ -258,7 +258,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, u, http.StatusOK)
 }
 
-func postUsers(w http.ResponseWriter, r *http.Request) {
+func postUser(w http.ResponseWriter, r *http.Request) {
 	var u User
 
 	err := json.NewDecoder(r.Body).Decode(&u)
