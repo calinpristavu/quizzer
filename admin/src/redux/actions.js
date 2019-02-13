@@ -19,7 +19,7 @@ import {
   SET_VIEWED_USER,
   SET_QUESTION_SCORE,
   SET_QUESTION_TEMPLATE_CREATE,
-  SET_QUESTION_NOTE, UPDATE_USER
+  SET_QUESTION_NOTE, UPDATE_USER, SET_CANDIDATES
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -33,7 +33,7 @@ export const logout = () => {
 
 export function getQuizTemplates() {
   return (dispatch, getState) => {
-    if (getState().quizTemplate.list.length > 0) {
+    if (getState().quizTemplate.list.size > 0) {
       return;
     }
     return fetch("/quiz-templates")
@@ -71,7 +71,7 @@ export function createQuizTemplate(quizTemplate) {
 
 export function getQuestionTemplates() {
   return (dispatch, getState) => {
-    if (getState().questionTemplate.list.length > 0) {
+    if (getState().questionTemplate.list.size > 0) {
       return;
     }
 
@@ -124,13 +124,41 @@ export function getQuizzes() {
 
 export function getUsers() {
   return (dispatch, getState) => {
-    if (getState().user.all.length > 0) {
+    if (getState().user.all.size > 0) {
       return;
     }
 
     return fetch("/users")
       .then(r => dispatch({
         type: SET_USERS,
+        payload: r
+      }))
+  }
+}
+
+export function getCandidates() {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SET_CANDIDATES,
+      payload: [
+        {emails: ["candidate1"]},
+        {emails: ["candidate2"]},
+        {emails: ["candidate3"]},
+        {emails: ["candidate4"]},
+        {emails: ["candidate5"]},
+        {emails: ["candidate6"]},
+      ],
+    });
+
+    return;
+
+    if (getState().user.candidates.size > 0) {
+      return;
+    }
+
+    return fetch("/recruitee/find-candidates")
+      .then(r => dispatch({
+        type: SET_CANDIDATES,
         payload: r
       }))
   }
@@ -191,20 +219,6 @@ export function getUser(id) {
 
 export function setUserCreate(val) {
   return dispatch => dispatch({type: SET_USER_CREATE, payload: val})
-}
-
-export function getUsersOnline() {
-  return dispatch => {
-    return fetch("/users-logged-in")
-      .then(r => {
-        if (null !== r) {
-          dispatch({
-            type: SET_USERS_ONLINE,
-            payload: r
-          })
-        }
-      })
-  }
 }
 
 export function getToken(username, password) {

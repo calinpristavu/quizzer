@@ -438,6 +438,10 @@ GROUP BY DATE(updated_at)
 	jsonResponse(w, stats, http.StatusOK)
 }
 
+func getCandidatesFromRecruitee(w http.ResponseWriter, _ *http.Request) {
+	jsonResponse(w, findInRecruitee(), http.StatusOK)
+}
+
 // Helper to send json responses
 func jsonResponse(w http.ResponseWriter, payload interface{}, status int) {
 	w.Header().Set("Content-Type", "application/json")

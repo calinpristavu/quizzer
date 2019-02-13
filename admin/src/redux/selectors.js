@@ -44,6 +44,15 @@ export function viewedUser(state) {
   return state.user.all.get(state.user.viewUser)
 }
 
+export function newCandidates(state) {
+  return state.user.candidates.map(
+    c => ({
+      ...c,
+      User: state.user.all.find(u => u.Username === c.username)
+    })
+  )
+}
+
 function findStatFrom(data, from) {
   const values = [];
 

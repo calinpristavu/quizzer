@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Col, Row} from 'reactstrap';
 import UserList from "./List";
 import Create from "./Create";
+import Recruitee from "./Recruitee";
 
 export const roles = {
   0: "Root",
@@ -27,6 +28,7 @@ class Users extends Component {
           </Col>
           <Col xl={6}>
             <Create/>
+            <Recruitee/>
           </Col>
         </Row>
       </div>

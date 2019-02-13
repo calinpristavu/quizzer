@@ -15,6 +15,7 @@ export const SET_QUESTION_NOTE = "SET_QUESTION_NOTE";
 
 export const SET_VIEWED_USER = "SET_VIEWED_USER";
 export const SET_USERS = "SET_USERS";
+export const SET_CANDIDATES = "SET_CANDIDATES";
 export const APPEND_USER = "APPEND_USER";
 export const UPDATE_USER = "UPDATE_USER";
 export const SET_USERS_ONLINE = "SET_USERS_ONLINE";

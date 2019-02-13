@@ -1,16 +1,17 @@
 import {
   APPEND_USER,
   LOGIN,
-  LOGOUT, SET_USER_CREATE,
+  LOGOUT, SET_CANDIDATES, SET_USER_CREATE,
   SET_USERS,
   SET_USERS_ONLINE,
   SET_VIEWED_USER, UPDATE_USER
 } from "../actionTypes";
-import {Map} from 'immutable';
+import {Set, Map} from 'immutable';
 
 const initialState = {
   all: Map(),
   online: Map(),
+  candidates: Set(),
   viewUser: null,
   createUser: true,
   token: localStorage.getItem('token')
@@ -40,6 +41,15 @@ export default function(state = initialState, action) {
       return {
         ...state,
         all: Map(action.payload.map(u => [u.ID, u])),
+      }
+    }
+    case SET_CANDIDATES: {
+      return {
+        ...state,
+        candidates: Set(action.payload.map(c => ({
+          name: c.emails[0],
+          username: c.emails[0].toLowerCase().trim().replace(" ", ".")
+        }))),
       }
     }
     case SET_USERS_ONLINE: {

@@ -109,4 +109,6 @@ func registerRoutes(public *mux.Router) {
 	api.Path("/new-api/stats/quizzes-per-day").Methods("GET").HandlerFunc(statsTotalAttempts)
 	api.Path("/new-api/stats/avg-result").Methods("GET").HandlerFunc(statsAvgResult)
 	api.Path("/new-api/stats/best-result").Methods("GET").HandlerFunc(statsBestResult)
+
+	api.Path("/new-api/recruitee/find-candidates").Methods("GET").HandlerFunc(getCandidatesFromRecruitee)
 }
