@@ -347,7 +347,8 @@ func saveScores(w http.ResponseWriter, r *http.Request) {
 	quiz.UpdateScore()
 	g.db.Model(&quiz).
 		Set("gorm:association_autoupdate", false).
-		Update("score", quiz.Score)
+		Update("score", quiz.Score).
+		Update("corrected", true)
 
 	jsonResponse(w, "Scores updated.", http.StatusOK)
 }

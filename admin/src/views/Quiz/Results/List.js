@@ -78,6 +78,23 @@ class List extends Component {
     return moment.duration(mEnd.diff(mStart)).humanize()
   }
 
+  static renderRecruiteeLink(q) {
+    if (!q.Corrected) {
+      return null;
+    }
+
+    if (q.User.RecruiteeID === null) {
+      return <small>user not imported from Recruitee</small>;
+    }
+
+    return <a
+      href={`${process.env.REACT_APP_RECRUITEE_BASE_URL}/#/offers/php-internship-test/pipeline?candidate=${q.User.RecruiteeID}`}
+      target="_blank"
+      rel="noopener noreferrer">
+      See candidate
+    </a>;
+  }
+
   renderQuizTemplateCell = (name) => {
     return name === 'Generated'
       ? name
@@ -117,7 +134,7 @@ class List extends Component {
                 <td>{this.renderQuizTemplateCell(q.Name)}</td>
                 <td>{List.computePercentCompleted(q.Questions).toFixed(0)}<small className="text-muted">%</small></td>
                 <td>{List.computeScore(q.Questions).toFixed(0)}<small>%</small></td>
-                <td><a href="https://app.recruitee.com/#/offers/php-internship-test/pipeline?candidate=8416286&offerId=204671" target="_blank">See candidate</a></td>
+                <td>{List.renderRecruiteeLink(q)}</td>
                 <td>{q.Active ? 'In Progress' : 'Finished'}</td>
                 <td>{q.Active
                   ? '-'

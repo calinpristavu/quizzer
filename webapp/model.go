@@ -20,6 +20,7 @@ type Quiz struct {
 	Score          uint
 	QuizTemplateID uint
 	Duration       Duration `sql:"type:VARCHAR(50)"`
+	Corrected      bool     `gorm:"not null";sql:"DEFAULT:0"`
 }
 
 type Question struct {
