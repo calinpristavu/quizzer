@@ -47,6 +47,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         candidates: Set(action.payload.map(c => ({
+          id: c.id,
           name: c.emails[0],
           username: c.emails[0].toLowerCase().trim().replace(" ", ".")
         }))),

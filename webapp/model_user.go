@@ -18,6 +18,7 @@ type User struct {
 	ShouldStartID *uint
 	Comments      string `sql:"type:longtext"`
 	Attitude      int    `sql:"DEFAULT:3"`
+	RecruiteeID   *int
 }
 
 var LoggedIn map[string]*User

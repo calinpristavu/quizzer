@@ -48,7 +48,8 @@ class Recruitee extends Component {
     this.props.candidates.forEach(c => {
       if (c.User !== undefined) {
         this.props.updateUser(c.User.ID, {
-          ShouldStartID: this.state.ShouldStartID
+          ShouldStartID: this.state.ShouldStartID,
+          RecruiteeID: c.id
         });
 
         return;
@@ -57,7 +58,8 @@ class Recruitee extends Component {
       this.props.createUser({
         Username: c.username,
         RoleID: 2,
-        ShouldStartID: this.state.ShouldStartID
+        ShouldStartID: this.state.ShouldStartID,
+        RecruiteeID: c.id
       })
     })
   };
