@@ -15,6 +15,7 @@ type CandidatesResponse struct {
 
 type Candidate struct {
 	Emails []string `json:"emails"`
+	ID     int      `json:"id"`
 }
 
 func findInRecruitee() []Candidate {
