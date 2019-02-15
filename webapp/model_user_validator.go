@@ -28,21 +28,21 @@ func (validator *Validator) hasErrors() bool {
 
 func usernameValidator(username string) error {
 	if len(username) < 3 || len(username) > 255 {
-		return errors.New("The username must have at least 3 and not more than 255 characters")
+		return errors.New("the username must have at least 3 and not more than 255 characters")
 	}
 	return nil
 }
 
 func passwordValidator(password string) error {
 	if len(password) < 3 || len(password) > 255 {
-		return errors.New("The password must have at least 3 and not more than 255 characters")
+		return errors.New("the password must have at least 3 and not more than 255 characters")
 	}
 	return nil
 }
 
 func samePassword(password, repeated string) error {
 	if password != repeated {
-		return errors.New("The passwords must be the same")
+		return errors.New("the passwords must be the same")
 	}
 	return nil
 }
@@ -52,7 +52,7 @@ func ChangeUsernameFormValidator(form url.Values) (map[string]interface{}, error
 	if validator.err != nil {
 		validator.setErrorMessage("username")
 
-		return validator.validationErrors, errors.New("Username validation error")
+		return validator.validationErrors, errors.New("username validation error")
 	}
 
 	return validator.validationErrors, nil
@@ -64,14 +64,14 @@ func ChangePasswordFormValidator(form url.Values) (map[string]interface{}, error
 	if validator.err != nil {
 		validator.setErrorMessage("password")
 
-		return validator.validationErrors, errors.New("Password validation error")
+		return validator.validationErrors, errors.New("password validation error")
 	}
 
 	validator.err = passwordValidator(form.Get("password"))
 	if validator.err != nil {
 		validator.setErrorMessage("password")
 
-		return validator.validationErrors, errors.New("Password validation error")
+		return validator.validationErrors, errors.New("password validation error")
 	}
 
 	return validator.validationErrors, nil

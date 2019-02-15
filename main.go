@@ -7,16 +7,16 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/calinpristavu/quizzer/webapp"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
 	"github.com/rs/cors"
+
+	"github.com/calinpristavu/quizzer/webapp"
 )
 
 func main() {
-	// load from .env
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
