@@ -40,7 +40,12 @@ export default function(state = initialState, action) {
     case SET_USERS: {
       return {
         ...state,
-        all: Map(action.payload.map(u => [u.ID, u])),
+        all: Map(action.payload.map(u => [u.ID, u])).sort((a, b) =>
+          // sort DESC
+          a.ID > b.ID ? -1
+            : a.ID === b.ID ? 0
+            : 1
+        ),
       }
     }
     case SET_CANDIDATES: {
@@ -62,7 +67,15 @@ export default function(state = initialState, action) {
     case APPEND_USER: {
       return {
         ...state,
-        all: state.all.set(action.payload.ID, action.payload)
+        all: state.all.asMutable()
+          .set(action.payload.ID, action.payload)
+          .sort((a, b) =>
+            // sort DESC
+            a.ID > b.ID ? -1
+              : a.ID === b.ID ? 0
+              : 1
+          )
+          .asImmutable()
       }
     }
     case UPDATE_USER: {

@@ -1,13 +1,27 @@
-import {Card, CardBody, CardHeader, Table} from "reactstrap";
+import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import UserRow from "./UserRow";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {getUsers, setUserCreate} from "../../redux/actions";
+import Pager from "../Base/Paginations/Pager";
 
 class UserList extends Component {
+  state = {
+    perPage: 5,
+    currentPage: 0,
+  };
+
   componentDidMount() {
     this.props.getUsers();
   }
+
+  getVisibleItems = () => {
+    const firstPosition = this.state.perPage * this.state.currentPage;
+
+    return this.props.list
+      .slice(firstPosition, firstPosition + this.state.perPage)
+      .valueSeq();
+  };
 
   render() {
     return (
@@ -34,12 +48,20 @@ class UserList extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.props.list.valueSeq().map(e =>
+              {this.getVisibleItems().map(e =>
                 <UserRow key={e.ID} user={e}/>
               )}
             </tbody>
           </Table>
         </CardBody>
+        <CardFooter>
+          <Pager
+            noPages={Math.ceil(this.props.list.size / this.state.perPage)}
+            currentPage={this.state.currentPage}
+            perPage={this.state.perPage}
+            toPage={(pageNo) => this.setState({currentPage: pageNo})}
+            setPerPage={(v) => this.setState({perPage: v})}/>
+        </CardFooter>
       </Card>
     );
   }
