@@ -60,11 +60,12 @@ class List extends Component {
             </thead>
             <tbody>
               {this.getVisibleItems().map(q =>
-                <tr key={q.ID} onClick={() => this.props.openEdit(q)}>
+                <tr key={q.ID}>
                   <td>{q.Name}</td>
                   <td>{q.QuizQuestions !== null ? q.QuizQuestions.length : 0}</td>
                   <td>{q.Duration}</td>
                   <td>
+                    <i onClick={() => this.props.openEdit(q)} className="fa fa-edit text-warning"/>
                     <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle"/>
                   </td>
                 </tr>
