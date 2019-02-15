@@ -72,7 +72,10 @@ export class QuestionsList extends Component {
       filter.values = val;
 
       filters.push(filter);
-      return {filters: filters}
+      return {
+        filters: filters,
+        currentPage: 0
+      }
     })
   };
 
@@ -81,7 +84,8 @@ export class QuestionsList extends Component {
       const filters = oldState.filters;
 
       return {
-        filters: filters.filter(f => f.propertyPath !== propertyPath)
+        filters: filters.filter(f => f.propertyPath !== propertyPath),
+        currentPage: 0
       }
     })
   };

@@ -3,6 +3,8 @@ import Select from "react-select";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {Map} from 'immutable';
+import {getQuizTemplates} from "../../../redux/actions";
+import {connect} from "react-redux";
 var nestedProp = require('nested-property');
 
 class Filters extends Component {
@@ -10,6 +12,17 @@ class Filters extends Component {
     addFilter: PropTypes.func.isRequired,
     clearFilter: PropTypes.func.isRequired,
     items: PropTypes.instanceOf(Map).isRequired,
+  };
+
+  componentDidMount() {
+    this.props.getQuizTemplates();
+  }
+
+  addFilter = (options, filterName) => {
+    if (options.length === 0) {
+      return this.props.clearFilter(filterName)
+    }
+    this.props.addFilter(filterName, options.map(o => o.value))
   };
 
   static buildUserOptions = (quizzes) => {
@@ -32,11 +45,18 @@ class Filters extends Component {
     ];
   };
 
-  addFilter = (options, filterName) => {
-    if (options.length === 0) {
-      return this.props.clearFilter(filterName)
-    }
-    this.props.addFilter(filterName, options.map(o => o.value))
+  buildQuizTemplateOptions = () => {
+    const options = [];
+    this.props.quizTemplates.forEach(qt => {
+      options.push({
+        label: qt.Name,
+        value: qt.ID,
+      })
+    });
+
+    console.log(options);
+
+    return options;
   };
 
   static apply = (list, filters) => {
@@ -69,9 +89,23 @@ class Filters extends Component {
               options={Filters.buildStatusOptions(this.props.items)}/>
           </FormGroup>
         </Col>
+        <Col xs="4">
+          <FormGroup>
+            <Select
+              isMulti
+              placeholder="Filter by quiz template"
+              onChange={(opt) => this.addFilter(opt, 'QuizTemplateID')}
+              options={this.buildQuizTemplateOptions()}/>
+          </FormGroup>
+        </Col>
       </Row>
     )
   }
 }
 
-export default Filters;
+export default connect(
+  state => ({
+    quizTemplates: state.quizTemplate.list
+  }),
+  {getQuizTemplates}
+)(Filters);
