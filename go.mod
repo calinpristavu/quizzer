@@ -27,4 +27,7 @@ require (
 	golang.org/x/crypto v0.0.0-20190103213133-ff983b9c42bc
 	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
 	google.golang.org/appengine v1.3.0 // indirect
+	golang.org/x/crypto/bcrypt
+	github.com/joho/godotenv
+	github.com/asaskevich/govalidator
 )

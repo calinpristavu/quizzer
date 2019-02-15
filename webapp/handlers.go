@@ -226,19 +226,40 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func myAccount(w http.ResponseWriter, r *http.Request) {
-	validationErrors := make(map[string]interface{}, 1)
-	u := r.Context().Value("user").(*User)
+	validationErrors := make(map[string]interface{}, 2)
+	var err, hashingErr error
+	user := r.Context().Value("user").(*User)
 
-	if r.FormValue("save") != "" {
-		u.Username = r.FormValue("username")
-		u.Save()
+	if r.FormValue("change-username") != "" {
+		validationErrors, err = ChangeUsernameFormValidator(r.Form)
+		if err == nil {
+			user.Username = r.FormValue("username")
+			user.Save()
+		}
 	}
 
-	err := g.templating.Lookup("my_account.gohtml").Execute(w, struct {
+	if r.FormValue("change-password") != "" {
+		validationErrors, err = ChangePasswordFormValidator(r.Form)
+
+		password := r.FormValue("password")
+		user.Password, hashingErr = HashPassword(password)
+		if hashingErr != nil {
+			http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
+			log.Printf("The password %s for user %s cannot be hashed", password, user.Username)
+
+			return
+		}
+
+		if err == nil {
+			user.Save()
+		}
+	}
+
+	err = g.templating.Lookup("my_account.gohtml").Execute(w, struct {
 		User   interface{}
 		Errors map[string]interface{}
 	}{
-		User:   u,
+		User:   user,
 		Errors: validationErrors,
 	})
 

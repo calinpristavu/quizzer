@@ -8,7 +8,7 @@ import (
 
 type User struct {
 	gorm.Model
-	Username      string `gorm:"unique_index"`
+	Username      string `gorm:"unique_index" valid:"length(3|255)~The username must have at least 3 and not more than 255 characters"`
 	Password      string `json:"-"`
 	RoleID        int    `sql:"DEFAULT:0"`
 	Role          Role   `sql:"-"`

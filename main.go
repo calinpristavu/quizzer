@@ -21,17 +21,11 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	dbHostEnv := os.Getenv("DB_HOST")
-	dbUserEnv := os.Getenv("DB_USER")
-	dbPassEnv := os.Getenv("DB_PASSWORD")
 
-	dbHost := flag.String("dbHost", dbHostEnv, "db host")
-	dbUser := flag.String("dbUser", dbUserEnv, "db user")
-	dbPass := flag.String("dbPass", dbPassEnv, "db password")
 	appPort := flag.String("appPort", "8000", "app port")
 	flag.Parse()
 
-	db := initDb(*dbHost, *dbUser, *dbPass)
+	db := initDb(os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"))
 
 	r := mux.NewRouter()
 

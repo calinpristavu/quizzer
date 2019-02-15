@@ -20,7 +20,33 @@
                     </small>
                 {{end}}
             </div>
-            <button type="submit" name="save" value="1" class="btn btn-primary">Save</button>
+            <button type="submit" name="change-username" value="1" class="btn btn-primary">Save</button>
+        </form>
+        <form action="/me" method="POST">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                        id="password"
+                        class="form-control {{- if index .Errors "password" }} is-invalid{{end}}"
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value="">
+                <label for="repeated">Repeat Password</label>
+                <input
+                        id="repeated"
+                        class="form-control {{- if index .Errors "password" }} is-invalid{{end}}"
+                        type="password"
+                        name="repeated"
+                        placeholder="Repeat Password"
+                        value="">
+                {{if index .Errors "password"}}
+                    <small id="emailHelp" class="form-text text-muted text-red">
+                        {{index .Errors "password"}}
+                    </small>
+                {{end}}
+            </div>
+            <button type="submit" name="change-password" value="1" class="btn btn-primary">Change Password</button>
         </form>
     </main>
 </div>
