@@ -340,15 +340,19 @@ func saveScores(w http.ResponseWriter, r *http.Request) {
 	for _, q := range quiz.Questions {
 		g.db.Model(&q).
 			Set("gorm:association_autoupdate", false).
-			Update("score", q.Score).
-			Update("notes", q.Notes)
+			UpdateColumns(&Question{
+				Score: q.Score,
+				Notes: q.Notes,
+			})
 	}
 
 	quiz.UpdateScore()
 	g.db.Model(&quiz).
 		Set("gorm:association_autoupdate", false).
-		Update("score", quiz.Score).
-		Update("corrected", true)
+		UpdateColumns(&Quiz{
+			Score:     quiz.Score,
+			Corrected: true,
+		})
 
 	jsonResponse(w, "Scores updated.", http.StatusOK)
 }
