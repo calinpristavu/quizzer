@@ -7,7 +7,7 @@ import Recruitee from "./Recruitee";
 export const roles = {
   0: "Root",
   1: "Admin",
-  2: "User",
+  2: "Candidate",
 };
 
 export const attitudes = {
