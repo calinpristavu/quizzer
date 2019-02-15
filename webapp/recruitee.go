@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 )
 
 const recruiteeApi = "https://api.recruitee.com/c/14378"
@@ -23,7 +24,7 @@ func findInRecruitee() []Candidate {
 	filterString := `[{%22field%22:%22stages%22,%22has_one_of%22:[%22Testing%20stage%22]},{%22field%22:%22jobs_ids%22,%22has_one_of%22:[204671]}]%0A`
 
 	// Create a Bearer string by appending string access token
-	var bearer = "Bearer Z3NhanpScFdSYW45Rmo2V3BhVTc5dz09"
+	var bearer = "Bearer " + os.Getenv("RECRUITEE_TOKEN")
 
 	// Create a new request using http
 	req, err := http.NewRequest("GET", recruiteeApi+endpoint+filterString, nil)
