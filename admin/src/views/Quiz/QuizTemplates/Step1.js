@@ -12,18 +12,27 @@ import {
 } from "reactstrap";
 import React, {Component} from "react";
 
-class CreateStep1 extends Component {
+class Step1 extends Component {
   state = {
     Name: '',
-    Duration: null
+    Duration: ""
   };
 
   setDuration = (e) => {
     if (e.target.value === "") {
-      return this.setState({Duration: null});
+      return this.setState({Duration: ""});
     }
 
-    this.setState({Duration: e.target.value.replace(":", "h") + 'm0s'})
+    this.setState({Duration: e.target.value})
+  };
+
+  save = () => {
+    this.props.advance({
+      Name: this.state.Name,
+      Duration: this.state.Duration === ""
+        ? null
+        : this.state.Duration.replace(":", "h") + 'm0s'
+    })
   };
 
   render() {
@@ -38,7 +47,8 @@ class CreateStep1 extends Component {
                     <Label>Name</Label>
                     <Input
                       type="text"
-                      onBlur={(e) => this.setState({Name: e.target.value})}
+                      onChange={(e) => this.setState({Name: e.target.value})}
+                      value={this.state.Name}
                       placeholder="Type in the quiz name"
                       required />
                   </FormGroup>
@@ -55,7 +65,8 @@ class CreateStep1 extends Component {
                         max="06:00"
                         style={{maxWidth: "100px", minWidth: "100px"}}
                         step={600}
-                        onBlur={this.setDuration}
+                        onChange={this.setDuration}
+                        value={this.state.Duration}
                         />
                       <InputGroupAddon addonType="append">
                         <InputGroupText>hh:mm</InputGroupText>
@@ -68,11 +79,11 @@ class CreateStep1 extends Component {
           </FormGroup>
         </CardBody>
         <CardFooter>
-          <button onClick={() => this.props.advance(this.state)}>Next ></button>
+          <button onClick={this.save}>Next ></button>
         </CardFooter>
       </div>
     );
   }
 }
 
-export default CreateStep1;
+export default Step1;

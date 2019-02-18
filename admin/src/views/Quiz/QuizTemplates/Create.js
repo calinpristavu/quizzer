@@ -1,7 +1,7 @@
 import {Card, CardHeader} from "reactstrap";
 import React, {Component} from "react";
-import CreateStep1 from "./CreateStep1";
-import CreateStep2 from "./CreateStep2";
+import Step1 from "./Step1";
+import Step2 from "./Step2";
 import {connect} from "react-redux";
 import {createQuizTemplate} from "../../../redux/actions";
 
@@ -47,11 +47,11 @@ class Create extends Component {
           <small> Wizzard</small>
         </CardHeader>
         {this.state.step === 1 &&
-        <CreateStep1
+        <Step1
           advance={this.advanceToStep2}/>
         }
         {this.state.step === 2 &&
-        <CreateStep2
+        <Step2
           back={() => this.setState({step: 1})}
           advance={this.stop}/>
         }

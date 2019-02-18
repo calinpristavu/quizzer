@@ -11,7 +11,7 @@ import React, {Component} from "react";
 
 const defaultWeight = 10;
 
-class CreateStep2 extends Component {
+class Step2 extends Component {
   state = {
     questions: null,
     selected: {}
@@ -114,4 +114,4 @@ class CreateStep2 extends Component {
   }
 }
 
-export default CreateStep2;
+export default Step2;
