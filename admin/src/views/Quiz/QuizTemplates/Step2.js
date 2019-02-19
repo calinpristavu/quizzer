@@ -8,34 +8,38 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
+import {Map} from 'immutable';
+import {connect} from "react-redux";
+import {getQuestionTemplates} from "../../../redux/actions";
 
 const defaultWeight = 10;
 
 class Step2 extends Component {
+  static propTypes = {
+    questionTemplates: PropTypes.instanceOf(Map).isRequired,
+    getQuestionTemplates: PropTypes.func.isRequired
+  };
+
   state = {
-    questions: null,
     selected: {}
   };
 
   componentDidMount() {
-    fetch("/question-templates")
-      .then((response) => {
-        const groupedQs = response.reduce((map, q) => {
-          map[q.ID] = q;
-          return map;
-        }, {});
-
-        this.setState({
-          questions: Object.entries(groupedQs).length === 0 ? null : groupedQs
-        })
-      })
+    this.props.getQuestionTemplates();
   };
 
   getOptions = () => {
-    return Object.values(this.state.questions).map((q) => ({
-      value: q.ID,
-      label: `# ${q.ID} ${q.Text.substr(0, 100)} ...`
-    }))
+    const opts = [];
+
+    this.props.questionTemplates.forEach(q => {
+      opts.push({
+        value: q.ID,
+        label: `# ${q.ID} ${q.Text.substr(0, 100)} ...`
+      })
+    });
+
+    return opts;
   };
 
   setSelected = (opt) => {
@@ -63,6 +67,12 @@ class Step2 extends Component {
   renderSelected = (qId) => {
     qId = parseInt(qId);
 
+    if (!this.props.questionTemplates.has(qId)) {
+      return null;
+    }
+
+    const questionTemplate = this.props.questionTemplates.get(qId);
+
     return (
       <div key={qId} className="clearfix" style={{
         padding: "20px",
@@ -83,13 +93,13 @@ class Step2 extends Component {
           </InputGroup>
         </div>
 
-        <div dangerouslySetInnerHTML={{__html: `#${this.state.questions[qId].ID} ${this.state.questions[qId].Text}`}}/>
+        <div dangerouslySetInnerHTML={{__html: `#${questionTemplate.ID} ${questionTemplate.Text}`}}/>
       </div>
     )
   };
 
   render() {
-    if (this.state.questions === null) {
+    if (this.props.questionTemplates.size < 1) {
       return null;
     }
 
@@ -115,4 +125,9 @@ class Step2 extends Component {
   }
 }
 
-export default Step2;
+export default connect(
+  state => ({
+    questionTemplates: state.questionTemplate.list
+  }),
+  {getQuestionTemplates}
+)(Step2);
