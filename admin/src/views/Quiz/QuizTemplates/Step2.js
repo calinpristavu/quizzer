@@ -107,6 +107,7 @@ class Step2 extends Component {
           </div>
         </CardBody>
         <CardFooter>
+          <button onClick={() => this.props.back()}>Back</button>
           <button onClick={() => this.props.advance(this.state.selected)}>Save</button>
         </CardFooter>
       </div>

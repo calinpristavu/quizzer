@@ -48,10 +48,12 @@ class Create extends Component {
         </CardHeader>
         {this.state.step === 1 &&
         <Step1
+          quiz={this.state.quiz}
           advance={this.advanceToStep2}/>
         }
         {this.state.step === 2 &&
         <Step2
+          quiz={this.state.quiz}
           back={() => this.setState({step: 1})}
           advance={this.stop}/>
         }

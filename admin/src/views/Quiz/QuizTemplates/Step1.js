@@ -11,28 +11,33 @@ import {
   Row
 } from "reactstrap";
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 
 class Step1 extends Component {
-  state = {
-    Name: '',
-    Duration: ""
+  static propTypes = {
+    advance: PropTypes.func.isRequired,
+    quiz: PropTypes.shape({
+      Name: PropTypes.string.isRequired,
+      Duration: PropTypes.string.isRequired,
+    }).isRequired
   };
 
-  setDuration = (e) => {
-    if (e.target.value === "") {
-      return this.setState({Duration: ""});
-    }
-
-    this.setState({Duration: e.target.value})
-  };
+  nameRef = React.createRef();
+  durationRef = React.createRef();
 
   save = () => {
     this.props.advance({
-      Name: this.state.Name,
-      Duration: this.state.Duration === ""
-        ? null
-        : this.state.Duration.replace(":", "h") + 'm0s'
+      Name: this.nameRef.current.value,
+      Duration: Step1.stringToGoDuration(this.durationRef.current.value)
     })
+  };
+
+  static stringToGoDuration = (string) => {
+    return string === "" ? null : string.replace(":", "h") + 'm0s'
+  };
+
+  static stringToHtmlDuration = (string) => {
+    return string === null ? '' : string.replace("h", ":").replace('m0s', '')
   };
 
   render() {
@@ -46,9 +51,9 @@ class Step1 extends Component {
                   <FormGroup>
                     <Label>Name</Label>
                     <Input
+                      innerRef={this.nameRef}
                       type="text"
-                      onChange={(e) => this.setState({Name: e.target.value})}
-                      value={this.state.Name}
+                      defaultValue={this.props.quiz.Name}
                       placeholder="Type in the quiz name"
                       required />
                   </FormGroup>
@@ -60,13 +65,13 @@ class Step1 extends Component {
                     <Label>Time limit</Label>
                     <InputGroup className="float-left">
                       <Input
+                        innerRef={this.durationRef}
                         type="time"
                         min="00:00"
                         max="06:00"
                         style={{maxWidth: "100px", minWidth: "100px"}}
                         step={600}
-                        onChange={this.setDuration}
-                        value={this.state.Duration}
+                        defaultValue={Step1.stringToHtmlDuration(this.props.quiz.Duration)}
                         />
                       <InputGroupAddon addonType="append">
                         <InputGroupText>hh:mm</InputGroupText>
