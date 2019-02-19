@@ -27,6 +27,7 @@ class CreateQuestion extends Component {
     CheckboxAnswerTemplates: [],
     RadioAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null,
+    uniqueIdx: new Date().getTime(),
   };
 
   state = this.defaultState;
@@ -48,6 +49,7 @@ class CreateQuestion extends Component {
         ...this.defaultState,
         CheckboxAnswerTemplates: [],
         RadioAnswerTemplates: [],
+        uniqueIdx: new Date().getTime(),
       }))
   };
 
@@ -103,7 +105,7 @@ class CreateQuestion extends Component {
 
     return (
       <Card>
-        <Form innerRef={this.createFormRef}>
+        <Form innerRef={this.createFormRef} key={this.state.uniqueIdx}>
           <CardHeader>
             <span className="float-right">
               <i
