@@ -25,7 +25,7 @@ class Step2 extends Component {
         Question: PropTypes.shape({
           ID: PropTypes.number.isRequired,
           Text: PropTypes.string.isRequired,
-        }).isRequired,
+        }),
         Weight: PropTypes.number.isRequired,
       })).isRequired
     }).isRequired

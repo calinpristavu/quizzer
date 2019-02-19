@@ -62,26 +62,19 @@ func getQuizTemplate(w http.ResponseWriter, r *http.Request) {
 func putQuizTemplate(w http.ResponseWriter, r *http.Request) {
 	var qt QuizTemplate
 
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
-
-	res := g.db.First(&qt, id)
-	if res.RecordNotFound() {
-		w.WriteHeader(404)
-
-		return
-	}
-
-	err = json.NewDecoder(r.Body).Decode(&qt)
+	err := json.NewDecoder(r.Body).Decode(&qt)
 	if err != nil {
 		w.WriteHeader(422)
 
 		return
 	}
 
-	qt.ID = uint(id)
-
-	res.Association("QuizQuestions").Replace(qt.QuizQuestions)
-	g.db.Save(&qt)
+	g.db.
+		Set("gorm:association_autoupdate", false).
+		Save(&qt)
+	g.db.Model(&qt).
+		Association("QuizQuestions").
+		Replace(qt.QuizQuestions)
 
 	jsonResponse(w, qt, http.StatusOK)
 }

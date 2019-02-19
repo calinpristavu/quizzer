@@ -70,6 +70,21 @@ export function createQuizTemplate(quizTemplate) {
   }
 }
 
+export function updateQuizTemplate(quizTemplate) {
+  return dispatch => {
+    return fetch("/quiz-templates/" + quizTemplate.ID, {
+      method: "PUT",
+      body: JSON.stringify(quizTemplate)
+    })
+      .then(r => {
+        dispatch({
+          type: APPEND_QUIZ_TEMPLATE,
+          payload: r
+        });
+      });
+  }
+}
+
 export function getQuestionTemplates() {
   return (dispatch, getState) => {
     if (getState().questionTemplate.list.size > 0) {

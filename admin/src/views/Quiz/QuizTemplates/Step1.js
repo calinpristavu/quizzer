@@ -18,7 +18,7 @@ class Step1 extends Component {
     advance: PropTypes.func.isRequired,
     quiz: PropTypes.shape({
       Name: PropTypes.string.isRequired,
-      Duration: PropTypes.string.isRequired,
+      Duration: PropTypes.string,
     }).isRequired
   };
 
@@ -37,7 +37,21 @@ class Step1 extends Component {
   };
 
   static stringToHtmlDuration = (string) => {
-    return string === null ? '' : string.replace("h", ":").replace('m0s', '')
+    if (string === null) {
+      return '';
+    }
+
+    let [hh, mm] = string.replace('m0s', '').split('h');
+
+    if (hh < 10) {
+      hh = '0' + hh
+    }
+
+    if (mm < 10) {
+      mm += '0'
+    }
+
+    return hh + ":" + mm
   };
 
   render() {
