@@ -18,21 +18,37 @@ const defaultWeight = 10;
 class Step2 extends Component {
   static propTypes = {
     questionTemplates: PropTypes.instanceOf(Map).isRequired,
-    getQuestionTemplates: PropTypes.func.isRequired
+    getQuestionTemplates: PropTypes.func.isRequired,
+    quiz: PropTypes.shape({
+      QuizQuestions: PropTypes.arrayOf(PropTypes.shape({
+        QuestionID: PropTypes.number.isRequired,
+        Question: PropTypes.shape({
+          ID: PropTypes.number.isRequired,
+          Text: PropTypes.string.isRequired,
+        }).isRequired,
+        Weight: PropTypes.number.isRequired,
+      })).isRequired
+    }).isRequired
   };
 
   state = {
-    selected: {}
+    qq: Map()
   };
 
   componentDidMount() {
     this.props.getQuestionTemplates();
+    this.setState({
+      qq: Map(this.props.quiz.QuizQuestions.map(qq => [qq.QuestionID, {
+        QuestionID: qq.QuestionID,
+        Weight: qq.Weight
+      }]))
+    })
   };
 
-  getOptions = () => {
+  static getOptions = (questionTemplates) => {
     const opts = [];
 
-    this.props.questionTemplates.forEach(q => {
+    questionTemplates.forEach(q => {
       opts.push({
         value: q.ID,
         label: `# ${q.ID} ${q.Text.substr(0, 100)} ...`
@@ -42,39 +58,47 @@ class Step2 extends Component {
     return opts;
   };
 
-  setSelected = (opt) => {
-    this.setState(oldState => {
-      opt.forEach((e) => {
-        oldState.selected[e.value] = defaultWeight;
-      });
+  setSelected = (opts) => {
+    let qqs = this.state.qq;
+    const selectedIds = opts.map(opt => opt.value);
 
-      return {
-        selected: {...oldState.selected}
+    // filter out deleted questions
+    const filteredQqs = qqs
+      .filter((qq, qId) => selectedIds.find(id => id === qId))
+      .asMutable();
+
+    // add new questions with defaultWeight
+    opts.forEach(opt => {
+      if (filteredQqs.has(opt.value)) {
+        return;
       }
+
+      filteredQqs.set(opt.value, {
+        QuestionID: opt.value,
+        Weight: defaultWeight
+      })
+    });
+
+    this.setState({
+      qq: filteredQqs.asImmutable()
     })
   };
 
   updateQuestionWeight = (qId, weight) => {
-    this.setState(oldState => {
-      oldState.selected[qId] = parseInt(weight);
-
-      return {
-        selected: {...oldState.selected}
-      }
-    })
+    this.setState(oldState => ({
+      qq: oldState.qq.updateIn([qId, 'Weight'], () => parseInt(weight))
+    }))
   };
 
-  renderSelected = (qId) => {
-    qId = parseInt(qId);
-
-    if (!this.props.questionTemplates.has(qId)) {
+  renderSelected = (qq) => {
+    if (!this.props.questionTemplates.has(qq.QuestionID)) {
       return null;
     }
 
-    const questionTemplate = this.props.questionTemplates.get(qId);
+    const questionTemplate = this.props.questionTemplates.get(qq.QuestionID);
 
     return (
-      <div key={qId} className="clearfix" style={{
+      <div key={questionTemplate.ID} className="clearfix" style={{
         padding: "20px",
         margin: "4px 0",
       }}>
@@ -84,8 +108,8 @@ class Step2 extends Component {
               min={0}
               max={50}
               style={{width: 80}}
-              defaultValue={this.state.selected[qId]}
-              onBlur={(e) => this.updateQuestionWeight(qId, e.target.value)}
+              defaultValue={qq.Weight}
+              onBlur={(e) => this.updateQuestionWeight(questionTemplate.ID, e.target.value)}
               type="number"/>
             <InputGroupAddon addonType="append">
               <InputGroupText>%</InputGroupText>
@@ -110,15 +134,16 @@ class Step2 extends Component {
             <Select
               isMulti
               onChange={this.setSelected}
-              options={this.getOptions()}/>
+              defaultValue={Step2.getOptions(this.props.quiz.QuizQuestions.map(qq => qq.Question))}
+              options={Step2.getOptions(this.props.questionTemplates)}/>
           </div>
           <div>
-            {Object.entries(this.state.selected).map(this.renderSelected)}
+            {this.state.qq.valueSeq().map(this.renderSelected)}
           </div>
         </CardBody>
         <CardFooter>
           <button onClick={() => this.props.back()}>Back</button>
-          <button onClick={() => this.props.advance(this.state.selected)}>Save</button>
+          <button onClick={() => this.props.advance(this.state.qq.valueSeq().toArray())}>Save</button>
         </CardFooter>
       </div>
     );
