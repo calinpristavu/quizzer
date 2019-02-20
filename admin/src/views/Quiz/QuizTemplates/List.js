@@ -15,6 +15,7 @@ class List extends Component {
   static propTypes = {
     openEdit: PropTypes.func,
     openCreate: PropTypes.func,
+    openClone: PropTypes.func,
     delete: PropTypes.func,
     list: PropTypes.instanceOf(Map),
   };
@@ -65,6 +66,7 @@ class List extends Component {
                   <td>{q.QuizQuestions !== null ? q.QuizQuestions.length : 0}</td>
                   <td>{q.Duration}</td>
                   <td>
+                    <i onClick={() => this.props.openClone(q.ID)} className="fa fa-copy text-success"/>
                     <i onClick={() => this.props.openEdit(q)} className="fa fa-edit text-warning"/>
                     <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle"/>
                   </td>

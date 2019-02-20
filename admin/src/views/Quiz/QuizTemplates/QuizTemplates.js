@@ -6,17 +6,37 @@ import {
 import List from "./List";
 import Create from "./Create";
 import Edit from "./Edit";
+import {connect} from "react-redux";
+import {getQuizTemplates} from "../../../redux/actions";
+import Clone from "./Clone";
 
 const views = {
   create: 1,
   edit: 2,
-  view: 3
+  view: 3,
+  clone: 4,
 };
 
 class QuizTemplates extends Component {
   state = {
     openedView: views.create,
-    editItem: null
+    editItem: null,
+    cloneItem: null,
+  };
+
+  componentDidMount() {
+    this.props.getQuizTemplates();
+  }
+
+  openClone = (qtId) => {
+    if (!this.props.quizTemplates.has(qtId)) {
+      return null;
+    }
+
+    this.setState({
+      openedView: views.clone,
+      cloneItem: JSON.parse(JSON.stringify(this.props.quizTemplates.get(qtId)))
+    })
   };
 
   render() {
@@ -27,6 +47,7 @@ class QuizTemplates extends Component {
             <List
               openEdit={(q) => this.setState({openedView: views.edit, editItem: q})}
               openCreate={() => this.setState({openedView: views.create})}
+              openClone={this.openClone}
               />
           </Col>
 
@@ -35,7 +56,10 @@ class QuizTemplates extends Component {
               <Create /> : null
             }
             {this.state.openedView === views.edit ?
-              <Edit quiz={this.state.editItem}/> : null
+              <Edit quiz={this.state.editItem} key={this.state.editItem.ID}/> : null
+            }
+            {this.state.openedView === views.clone ?
+              <Clone quiz={this.state.cloneItem} key={this.state.cloneItem.ID}/> : null
             }
           </Col>
         </Row>
@@ -44,4 +68,9 @@ class QuizTemplates extends Component {
   }
 }
 
-export default QuizTemplates;
+export default connect(
+  state => ({
+    quizTemplates: state.quizTemplate.list
+  }),
+  {getQuizTemplates}
+)(QuizTemplates);

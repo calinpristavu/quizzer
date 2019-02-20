@@ -6,12 +6,10 @@ import {connect} from "react-redux";
 import {updateQuizTemplate} from "../../../redux/actions";
 
 class Edit extends Component {
-  defaultState = {
+  state = {
     step: 1,
     quiz: null
   };
-
-  state = this.defaultState;
 
   advanceToStep2 = (state) => {
     this.setState(oldState => ({
@@ -29,7 +27,6 @@ class Edit extends Component {
     quiz.QuizQuestions = quizQuestions;
 
     this.props.updateQuizTemplate(quiz)
-      .then(() => this.setState(this.defaultState))
   };
 
   componentDidMount() {
@@ -48,7 +45,7 @@ class Edit extends Component {
     }
 
     return (
-      <Card key={this.state.quiz.ID}>
+      <Card>
         <CardHeader>
           <i className="fa fa-edit text-warning" />
           <strong>Editing quiz {this.state.quiz.ID}</strong>
