@@ -70,8 +70,8 @@ class CheckboxQuestion extends Component {
                 style={{color: a.IsCorrect ? "#4DBD74" : "inherit"}}
                 key={i}>
                 {a.IsSelected
-                  ? <i className="fa fa-check-square-o" />
-                  : <i className="fa fa-square-o" />
+                  ? <i className="far fa-check-square" />
+                  : <i className="far fa-square" />
                 }
                 {' ' + a.Text}
               </ListGroupItem>

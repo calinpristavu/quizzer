@@ -70,8 +70,8 @@ class RadioQuestion extends Component {
                 style={{color: a.IsCorrect ? "#4DBD74" : "inherit"}}
                 key={i}>
                 {a.IsSelected
-                  ? <i className="fa fa-check-circle-o" />
-                  : <i className="fa fa-circle-o" />
+                  ? <i className="far fa-check-circle" />
+                  : <i className="far fa-circle" />
                 }
                 {' ' + a.Text}
               </ListGroupItem>
