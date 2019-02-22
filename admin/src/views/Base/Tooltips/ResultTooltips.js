@@ -39,9 +39,9 @@ export class CheckboxTip extends Component {
         <UncontrolledTooltip placement="top" target={`text-${this.props.id}`}>
           <small><span style={{color: "#4DBD74"}}>GREEN</span> answers are the correct ones</small>
           <br/>
-          <small><i className="fa fa-check-square-o" /> answers are the ones the user selected</small>
+          <small><i className="far fa-check-square" /> answers are the ones the user selected</small>
           <br/>
-          <small><i className="fa fa-square-o" /> answers are the ones the user did not select</small>
+          <small><i className="far fa-square" /> answers are the ones the user did not select</small>
           <p>This quesiton is automatically evaluated.</p>
         </UncontrolledTooltip>
       </span>
@@ -57,9 +57,9 @@ export class RadioTip extends Component {
         <UncontrolledTooltip placement="top" target={`text-${this.props.id}`}>
           <small><span style={{color: "#4DBD74"}}>GREEN</span> answer is the correct one</small>
           <br/>
-          <small><i className="fa fa-check-circle-o" /> answer is the one the user selected</small>
+          <small><i className="far fa-check-circle" /> answer is the one the user selected</small>
           <br/>
-          <small><i className="fa fa-circle-o" /> answers are the ones the user did not select</small>
+          <small><i className="far fa-circle" /> answers are the ones the user did not select</small>
           <p>This quesiton is automatically evaluated.</p>
         </UncontrolledTooltip>
       </span>
