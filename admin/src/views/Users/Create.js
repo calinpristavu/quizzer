@@ -33,7 +33,7 @@ class Create extends Component {
                 style={{cursor: "pointer"}}/>
             </span>
             <i className="fa fa-plus-circle text-success" />
-            <strong>Register User</strong>
+            <strong>Create User</strong>
             <small> Form</small>
           </CardHeader>
           <CardBody>
