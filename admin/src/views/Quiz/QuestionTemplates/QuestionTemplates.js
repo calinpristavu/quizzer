@@ -8,12 +8,6 @@ import CreateQuestion from "./Create";
 import EditQuestion from "./Edit";
 import View from "./View";
 
-const views = {
-  create: 1,
-  edit: 2,
-  view: 3
-};
-
 export const questionTypes = {
   1: "Multiple answer",
   2: "Free text",
@@ -22,28 +16,17 @@ export const questionTypes = {
 };
 
 class QuestionTemplates extends Component{
-  state = {
-    editItem: {},
-    openedView: 1
-  };
-
   render() {
     return (
       <div className="animated fadeIn">
         <Row>
           <Col xs="12" lg="6">
-            <QuestionsList
-              openEditView={(item) => this.setState({
-                openedView: views.edit,
-                editItem: item
-              })}/>
+            <QuestionsList />
           </Col>
 
           <Col xs="12" lg="6">
             <CreateQuestion />
-            {this.state.openedView === views.edit ?
-              <EditQuestion question={this.state.editItem}/> : null
-            }
+            <EditQuestion />
             <View/>
           </Col>
         </Row>

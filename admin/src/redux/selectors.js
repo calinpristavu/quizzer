@@ -28,6 +28,14 @@ export function viewedQuestionTemplate(state) {
   return state.questionTemplate.list.get(state.questionTemplate.viewedItem)
 }
 
+export function editedQuestionTemplate(state) {
+  if (null === state.questionTemplate.editItem) {
+    return null;
+  }
+
+  return state.questionTemplate.list.get(state.questionTemplate.editItem)
+}
+
 export function viewedQuizResult(state) {
   if (null === state.quiz.viewedItem) {
     return null;

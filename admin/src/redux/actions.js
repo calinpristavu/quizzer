@@ -20,7 +20,7 @@ import {
   SET_QUESTION_TEMPLATE_CREATE,
   SET_QUESTION_NOTE,
   UPDATE_USER,
-  SET_CANDIDATES
+  SET_CANDIDATES, OPEN_QUESTION_TEMPLATE_EDIT
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -121,6 +121,25 @@ export function createQuestionTemplate(questionTemplate) {
         type: APPEND_QUESTION_TEMPLATE,
         payload: r
       }));
+  }
+}
+
+export function updateQuestionTemplate(questionTemplate) {
+  return dispatch => {
+    return fetch("/question-templates/" + questionTemplate.ID, {
+      method: "PUT",
+      body: JSON.stringify(questionTemplate)
+    })
+      .then(r => {
+        dispatch({
+          type: APPEND_QUESTION_TEMPLATE,
+          payload: r
+        });
+        dispatch({
+          type: OPEN_QUESTION_TEMPLATE_EDIT,
+          payload: null
+        })
+      });
   }
 }
 
@@ -249,6 +268,15 @@ export function openQuestionTemplateView(qt) {
   return dispatch => {
     return dispatch({
         type: OPEN_QUESTION_TEMPLATE_VIEW,
+        payload: qt
+      })
+  }
+}
+
+export function openQuestionTemplateEdit(qt) {
+  return dispatch => {
+    return dispatch({
+        type: OPEN_QUESTION_TEMPLATE_EDIT,
         payload: qt
       })
   }

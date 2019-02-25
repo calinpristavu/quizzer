@@ -143,44 +143,48 @@ class CreateQuestion extends Component {
               </Col>
               <Col md="12">
                 <FormGroup check inline>
-                  <Input
-                    className="form-check-input"
-                    type="radio"
-                    checked={this.state.Type === 1}
-                    onChange={() => this.setState({Type: 1})}
-                    id="question-type-1"
-                    name="Type"/>
-                  <Label className="form-check-label" check htmlFor="question-type-1">{questionTypes[1]}</Label>
+                  <Label className="form-check-label" check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      checked={this.state.Type === 1}
+                      onChange={() => this.setState({Type: 1})}
+                      name="Type"/>
+                    {questionTypes[1]}
+                  </Label>
                 </FormGroup>
                 <FormGroup check inline>
-                  <Input
-                    className="form-check-input"
-                    type="radio"
-                    checked={this.state.Type === 4}
-                    onChange={() => this.setState({Type: 4})}
-                    id="question-type-4"
-                    name="Type"/>
-                  <Label className="form-check-label" check htmlFor="question-type-4">{questionTypes[4]}</Label>
+                  <Label className="form-check-label" check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      checked={this.state.Type === 4}
+                      onChange={() => this.setState({Type: 4})}
+                      name="Type"/>
+                    {questionTypes[4]}
+                  </Label>
                 </FormGroup>
                 <FormGroup check inline>
-                  <Input
-                    className="form-check-input"
-                    type="radio"
-                    checked={this.state.Type === 2}
-                    onChange={() => this.setState({Type: 2})}
-                    id="question-type-2"
-                    name="Type" />
-                  <Label className="form-check-label" check htmlFor="question-type-2">{questionTypes[2]}</Label>
+                  <Label className="form-check-label" check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      checked={this.state.Type === 2}
+                      onChange={() => this.setState({Type: 2})}
+                      name="Type" />
+                    {questionTypes[2]}
+                  </Label>
                 </FormGroup>
                 <FormGroup check inline>
-                  <Input
-                    className="form-check-input"
-                    type="radio"
-                    checked={this.state.Type === 3}
-                    onChange={() => this.setState({Type: 3})}
-                    id="question-type-3"
-                    name="Type" />
-                  <Label className="form-check-label" check htmlFor="question-type-3">{questionTypes[3]}</Label>
+                  <Label className="form-check-label" check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      checked={this.state.Type === 3}
+                      onChange={() => this.setState({Type: 3})}
+                      name="Type" />
+                    {questionTypes[3]}
+                  </Label>
                 </FormGroup>
               </Col>
             </FormGroup>
