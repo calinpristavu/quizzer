@@ -339,22 +339,24 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if u.Password == "" {
-		u.Password, err = HashPassword(pass)
-		if err != nil {
-			http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
-			log.Printf("The password %s for user %s cannot be hashed", pass, uname)
+	if u.Password != "" {
+		errors["registration"] = "You already have a password set, please sign in."
+		renderLoginTemplate(w, errors, uname)
 
-			return
-		}
-		u.IsEnabled = true
-		u.Save()
-
-		login(w, r)
+		return
 	}
 
-	errors["registration"] = "You already have a password set, please sign in."
-	renderLoginTemplate(w, errors, uname)
+	u.Password, err = HashPassword(pass)
+	if err != nil {
+		http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
+		log.Printf("The password %s for user %s cannot be hashed", pass, uname)
+
+		return
+	}
+	u.IsEnabled = true
+	u.Save()
+
+	login(w, r)
 }
 
 func addQuestionFeedback(w http.ResponseWriter, r *http.Request) {
