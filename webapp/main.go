@@ -2,26 +2,26 @@ package webapp
 
 import (
 	"html/template"
+	"log"
 
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
+
+	"github.com/calinpristavu/quizzer/model"
 )
 
-type globals struct {
-	db         *gorm.DB
+var LoggedIn map[string]*model.User
+
+var g struct {
 	templating *template.Template
 }
 
-var g *globals
-
-func Init(db *gorm.DB, r *mux.Router) {
-	g = &globals{
-		db: db,
-	}
-
-	registerRoutes(r)
-	migrateDb()
+func init() {
+	LoggedIn = make(map[string]*model.User, 5)
 	registerTemplates()
+}
+
+func Init(r *mux.Router) {
+	registerRoutes(r)
 }
 
 func registerTemplates() {
@@ -29,38 +29,21 @@ func registerTemplates() {
 		"raw": func(s string) template.HTML {
 			return template.HTML(s)
 		},
-		"isGranted": func(u *User, roleId int) bool {
-			_, err := u.Role.findChildWithId(roleId)
+		"isGranted": func(u *model.User, roleId int) bool {
+			_, err := u.Role.FindChildWithId(roleId)
 
 			return err == nil
 		},
 	}
 
-	g.templating = template.Must(
-		template.
-			New("all").
-			Funcs(customFunctions).
-			ParseGlob("./templates/*.gohtml"),
-	)
-}
-
-func migrateDb() *gorm.DB {
-	return g.db.AutoMigrate(
-		&User{},
-		&Quiz{},
-		&Question{},
-		&QuestionFeedback{},
-		&CheckboxAnswer{},
-		&RadioAnswer{},
-		&TextAnswer{},
-		&FlowDiagramAnswer{},
-		&QuizTemplate{},
-		&QuestionTemplate{},
-		&QuizQuestionTemplate{},
-		&CheckboxAnswerTemplate{},
-		&RadioAnswerTemplate{},
-		&FlowDiagramAnswerTemplate{},
-	)
+	var err error
+	g.templating, _ = template.
+		New("all").
+		Funcs(customFunctions).
+		ParseGlob("./templates/*.gohtml")
+	if err != nil {
+		log.Fatalf("could not load templates: %v", err)
+	}
 }
 
 func registerRoutes(public *mux.Router) {

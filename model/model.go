@@ -1,14 +1,13 @@
-package webapp
+package model
 
 import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
-
-const questionsPerQuiz = 10
 
 type Quiz struct {
 	gorm.Model
@@ -20,7 +19,7 @@ type Quiz struct {
 	Score          uint
 	QuizTemplateID uint
 	Duration       Duration `sql:"type:VARCHAR(50)"`
-	Corrected      bool     `gorm:"not null";sql:"DEFAULT:0"`
+	Corrected      bool     `sql:"DEFAULT:0"`
 }
 
 type Question struct {
@@ -79,18 +78,19 @@ type FlowDiagramAnswer struct {
 	IsCorrect  bool
 }
 
-func newQuiz(u *User, noQ int) *Quiz {
+func NewQuiz(u *User, noQ int) *Quiz {
 	q := &Quiz{
-		UserID: u.ID,
-		Name:   "Generated",
-		Active: true,
+		UserID:    u.ID,
+		Name:      "Generated",
+		Active:    true,
+		Corrected: false,
 	}
 
-	g.db.Save(&q)
+	db.Save(&q)
 
 	var qts []QuestionTemplate
 
-	g.db.
+	db.
 		Model(&QuestionTemplate{}).
 		Preload("QuizQuestions").
 		Preload("QuizQuestions.Quiz").
@@ -108,27 +108,9 @@ func newQuiz(u *User, noQ int) *Quiz {
 	return q
 }
 
-func findAllFinishedForUser(u *User) []Quiz {
-	var qs []Quiz
-
-	g.db.Model(&Quiz{}).
-		Preload("Questions").
-		Preload("Questions.CheckboxAnswers").
-		Preload("Questions.RadioAnswers").
-		Preload("Questions.TextAnswer").
-		Preload("Questions.FlowDiagramAnswer").
-		Preload("Questions.Feedback").
-		Where("user_id = ?", u.ID).
-		Where("active = 0").
-		Order("id desc").
-		Find(&qs)
-
-	return qs
-}
-
-func find(id int) Quiz {
+func FindQuiz(id int) Quiz {
 	var q Quiz
-	g.db.
+	db.
 		Model(Quiz{}).
 		Preload("Questions").
 		Preload("Questions.CheckboxAnswers").
@@ -139,6 +121,23 @@ func find(id int) Quiz {
 		First(&q, id)
 
 	return q
+}
+
+func FindQuizzes() []Quiz {
+	var qs []Quiz
+	db.
+		Model(Quiz{}).
+		Preload("Questions").
+		Preload("Questions.CheckboxAnswers").
+		Preload("Questions.RadioAnswers").
+		Preload("Questions.TextAnswer").
+		Preload("Questions.FlowDiagramAnswer").
+		Preload("Questions.Feedback").
+		Preload("User").
+		Order("id desc").
+		Find(&qs)
+
+	return qs
 }
 
 func (q *Question) markCheckboxesAsSelected(ids []string) error {
@@ -175,7 +174,7 @@ func (q *Question) saveCheckboxes(answerIds []string) error {
 		q.Score = 100
 	}
 	q.IsAnswered = true
-	g.db.Save(q)
+	db.Save(q)
 
 	return nil
 }
@@ -192,7 +191,7 @@ func (q *Question) saveRadios(answerId string) error {
 		if a.ID == uint(id) {
 			a.IsSelected = true
 		}
-		g.db.Save(&a)
+		db.Save(&a)
 
 		if a.IsCorrect != a.IsSelected {
 			correct = false
@@ -203,7 +202,7 @@ func (q *Question) saveRadios(answerId string) error {
 		q.Score = 100
 	}
 	q.IsAnswered = true
-	g.db.Save(q)
+	db.Save(q)
 
 	return nil
 }
@@ -211,7 +210,7 @@ func (q *Question) saveRadios(answerId string) error {
 func (q *Question) saveText(text string) error {
 	q.TextAnswer.Text = text
 	q.IsAnswered = true
-	g.db.Save(q)
+	db.Save(q)
 
 	return nil
 }
@@ -220,17 +219,17 @@ func (q *Question) saveFlowDiagram(json string, svg string) error {
 	q.FlowDiagramAnswer.Text = json
 	q.FlowDiagramAnswer.SVG = svg
 	q.IsAnswered = true
-	g.db.Save(q)
+	db.Save(q)
 
 	return nil
 }
 
-func (q *Question) addFeedback(text string) error {
+func (q *Question) AddFeedback(text string) error {
 	qf := &QuestionFeedback{
 		QuestionID: q.ID,
 		Text:       text,
 	}
-	g.db.Save(&qf)
+	db.Save(&qf)
 
 	q.Feedback = append(q.Feedback, qf)
 
@@ -256,6 +255,12 @@ func (q *Question) SaveAnswer(r *http.Request) error {
 	return err
 }
 
+func (q *Question) SaveFields(fields Question) {
+	db.Model(&q).
+		Set("gorm:association_autoupdate", false).
+		UpdateColumns(fields)
+}
+
 func (q *Quiz) UpdateScore() {
 	totalWeight := uint(0)
 	weightedScore := uint(0)
@@ -263,16 +268,65 @@ func (q *Quiz) UpdateScore() {
 		weightedScore += q.Score * q.Weight
 		totalWeight += q.Weight
 	}
+
 	q.Score = weightedScore / totalWeight
+	db.Model(q).
+		Set("gorm:association_autoupdate", false).
+		UpdateColumns(Quiz{
+			Score:     q.Score,
+			Corrected: true,
+		})
 }
 
-func (u *User) finishQuiz() {
-	u.CurrentQuiz.Active = false
-	u.CurrentQuiz.UpdateScore()
+func FindStatsTotalAttempts() interface{} {
+	var stats []struct {
+		Date   time.Time
+		Number int
+	}
 
-	g.db.Save(&u.CurrentQuiz)
+	db.Raw(`
+SELECT 
+	COUNT(*) as number,
+	DATE(updated_at) as date
+FROM quizzes
+GROUP BY DATE(updated_at)
+`).Scan(&stats)
 
-	u.CurrentQuiz = nil
-	u.CurrentQuizID = nil
-	g.db.Save(&u)
+	return stats
+}
+
+func FindStatsAvgResult() interface{} {
+	var stats []struct {
+		Date   time.Time
+		Number float32
+	}
+
+	db.Raw(`
+SELECT 
+	AVG(score) as number,
+	DATE(updated_at) as date
+FROM quizzes
+WHERE score IS NOT NULL
+GROUP BY DATE(updated_at)
+`).Scan(&stats)
+
+	return stats
+}
+
+func FindStatsBestResult() interface{} {
+	var stats []struct {
+		Date   time.Time
+		Number float32
+	}
+
+	db.Raw(`
+SELECT 
+	MAX(score) as number,
+	DATE(updated_at) as date
+FROM quizzes
+WHERE score IS NOT NULL
+GROUP BY DATE(updated_at)
+`).Scan(&stats)
+
+	return stats
 }

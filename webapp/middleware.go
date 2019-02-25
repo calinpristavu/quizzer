@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 	"net/http"
+
+	"github.com/calinpristavu/quizzer/model"
 )
 
 func UserSession(next http.Handler) http.Handler {
@@ -19,7 +21,7 @@ func UserSession(next http.Handler) http.Handler {
 		username := cookie.Value
 
 		if _, ok := LoggedIn[username]; !ok {
-			LoggedIn[username], err = FindByUsername(username)
+			LoggedIn[username], err = model.FindByUsername(username)
 			if err != nil {
 				log.Printf("could not find user for username %s", username)
 				http.Redirect(w, r, "/login", http.StatusSeeOther)
@@ -28,7 +30,7 @@ func UserSession(next http.Handler) http.Handler {
 			}
 		}
 
-		if !LoggedIn[username].IsGranted(roleUser) {
+		if !LoggedIn[username].IsGranted(model.RoleUser) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 
 			return

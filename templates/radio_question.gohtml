@@ -27,7 +27,8 @@
                                 type="radio"
                                 name="answer"
                                 {{if .IsSelected}}checked="checked"{{end}}
-                                value="{{.ID}}">
+                                value="{{.ID}}"
+                                required>
                             <label
                                 for="answer-{{.ID}}">
                                 {{.Text}}

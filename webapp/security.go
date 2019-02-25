@@ -10,6 +10,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/calinpristavu/quizzer/model"
 )
 
 const (
@@ -45,7 +47,7 @@ type TokenClaims struct {
 	jwt.StandardClaims
 }
 
-func newToken(user *User) (string, error) {
+func newToken(user *model.User) (string, error) {
 	claims := TokenClaims{
 		user.ID,
 		jwt.StandardClaims{
@@ -94,10 +96,4 @@ func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
 	return string(bytes), err
-}
-
-func CheckPassword(expectedPasswordHashed, password string) bool {
-	check := bcrypt.CompareHashAndPassword([]byte((expectedPasswordHashed)), []byte(password))
-
-	return check == nil
 }

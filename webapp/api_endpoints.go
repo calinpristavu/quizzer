@@ -5,27 +5,21 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gorilla/mux"
+
+	"github.com/calinpristavu/quizzer/model"
 )
 
 func getQuizTemplates(w http.ResponseWriter, _ *http.Request) {
-	var qts []QuizTemplate
-	g.db.
-		Model(&qts).
-		Preload("QuizQuestions").
-		Preload("QuizQuestions.Question").
-		Order("id desc").
-		Find(&qts)
+	qts := model.FindQuizTemplates()
 
 	jsonResponse(w, qts, http.StatusOK)
 }
 
 func postQuizTemplates(w http.ResponseWriter, r *http.Request) {
-	var qt QuizTemplate
+	var qt model.QuizTemplate
 	err := json.NewDecoder(r.Body).Decode(&qt)
-	qt.CreatedAt = time.Now()
 
 	if err != nil {
 		log.Printf("could not decode QT: %v", err)
@@ -34,14 +28,12 @@ func postQuizTemplates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	g.db.Create(&qt)
+	qt.Create()
 
 	jsonResponse(w, qt, http.StatusCreated)
 }
 
 func getQuizTemplate(w http.ResponseWriter, r *http.Request) {
-	var qt QuizTemplate
-
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		w.WriteHeader(404)
@@ -49,8 +41,8 @@ func getQuizTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := g.db.Preload("Questions").First(&qt, id)
-	if res.RecordNotFound() {
+	qt, ok := model.FindQuizTemplate(id)
+	if !ok {
 		w.WriteHeader(404)
 
 		return
@@ -60,7 +52,7 @@ func getQuizTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func putQuizTemplate(w http.ResponseWriter, r *http.Request) {
-	var qt QuizTemplate
+	var qt model.QuizTemplate
 
 	err := json.NewDecoder(r.Body).Decode(&qt)
 	if err != nil {
@@ -69,19 +61,10 @@ func putQuizTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	g.db.
-		Set("gorm:association_autoupdate", false).
-		Save(&qt)
-	g.db.Model(&qt).
-		Association("QuizQuestions").
-		Replace(qt.QuizQuestions)
-
-	jsonResponse(w, qt, http.StatusOK)
+	qt.Save()
 }
 
 func deleteQuizTemplate(w http.ResponseWriter, r *http.Request) {
-	var qt QuizTemplate
-
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		w.WriteHeader(404)
@@ -89,36 +72,26 @@ func deleteQuizTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := g.db.Delete(&qt, id)
-	if res.RowsAffected == 0 {
+	qt, ok := model.FindQuizTemplate(id)
+	if !ok {
 		w.WriteHeader(404)
 
 		return
 	}
+	qt.Delete()
 
 	w.WriteHeader(http.StatusNoContent)
 }
 
 func getQuestionTemplates(w http.ResponseWriter, _ *http.Request) {
-	var qts []QuestionTemplate
-	g.db.
-		Preload("QuizQuestions").
-		Preload("QuizQuestions.Quiz").
-		Preload("CheckboxAnswerTemplates").
-		Preload("RadioAnswerTemplates").
-		Preload("FlowDiagramAnswerTemplate").
-		Preload("Usages").
-		Preload("Usages.Feedback").
-		Order("id desc").
-		Find(&qts)
+	qts := model.FindQuestionTemplates()
 
 	jsonResponse(w, qts, http.StatusOK)
 }
 
 func postQuestionTemplates(w http.ResponseWriter, r *http.Request) {
-	var qt QuestionTemplate
+	var qt model.QuestionTemplate
 	err := json.NewDecoder(r.Body).Decode(&qt)
-	qt.CreatedAt = time.Now()
 
 	if err != nil {
 		w.WriteHeader(422)
@@ -126,22 +99,17 @@ func postQuestionTemplates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	g.db.Create(&qt)
+	qt.Create()
 
-	g.db.
-		Model(&qt).
-		Preload("CheckboxAnswerTemplates").
-		Preload("RadioAnswerTemplates").
-		Preload("FlowDiagramAnswerTemplate").
-		Preload("Usages").
-		First(&qt)
+	qt, ok := model.FindQuestionTemplate(qt.ID)
+	if !ok {
+		jsonResponse(w, nil, http.StatusNotFound)
+	}
 
 	jsonResponse(w, qt, http.StatusCreated)
 }
 
 func getQuestionTemplate(w http.ResponseWriter, r *http.Request) {
-	var qt QuestionTemplate
-
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		w.WriteHeader(404)
@@ -149,12 +117,8 @@ func getQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := g.db.
-		Preload("CheckboxAnswerTemplates").
-		Preload("RadioAnswerTemplates").
-		Preload("FlowDiagramAnswerTemplate").
-		First(&qt, id)
-	if res.RecordNotFound() {
+	qt, ok := model.FindQuestionTemplate(uint(id))
+	if !ok {
 		w.WriteHeader(404)
 
 		return
@@ -164,37 +128,21 @@ func getQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func putQuestionTemplate(w http.ResponseWriter, r *http.Request) {
-	var qt QuestionTemplate
+	var qt model.QuestionTemplate
 
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
-
-	res := g.db.First(&qt, id)
-	if res.RecordNotFound() {
-		w.WriteHeader(404)
-
-		return
-	}
-
-	err = json.NewDecoder(r.Body).Decode(&qt)
+	err := json.NewDecoder(r.Body).Decode(&qt)
 	if err != nil {
 		w.WriteHeader(422)
 
 		return
 	}
 
-	qt.ID = uint(id)
-
-	res.Association("CheckboxAnswerTemplates").Replace(qt.CheckboxAnswerTemplates)
-	res.Association("RadioAnswerTemplates").Replace(qt.RadioAnswerTemplates)
-	res.Association("FlowDiagramAnswerTemplate").Replace(qt.FlowDiagramAnswerTemplate)
-	g.db.Save(&qt)
+	qt.Save()
 
 	jsonResponse(w, qt, http.StatusOK)
 }
 
 func deleteQuestionTemplate(w http.ResponseWriter, r *http.Request) {
-	var qt QuestionTemplate
-
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		w.WriteHeader(404)
@@ -202,26 +150,26 @@ func deleteQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := g.db.Delete(&qt, id)
-	if res.RowsAffected == 0 {
+	qt, ok := model.FindQuestionTemplate(uint(id))
+	if !ok {
 		w.WriteHeader(404)
 
 		return
 	}
 
+	qt.Delete()
+
 	w.WriteHeader(http.StatusNoContent)
 }
 
 func getUsers(w http.ResponseWriter, _ *http.Request) {
-	var us []User
-	g.db.
-		Find(&us)
+	us := model.FindUsers()
 
 	jsonResponse(w, us, http.StatusOK)
 }
 
 func getUsersLoggedIn(w http.ResponseWriter, _ *http.Request) {
-	var us []User
+	var us []model.User
 
 	for _, u := range LoggedIn {
 		us = append(us, *u)
@@ -231,7 +179,7 @@ func getUsersLoggedIn(w http.ResponseWriter, _ *http.Request) {
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
-	var u User
+	var u model.User
 
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
@@ -240,9 +188,8 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := g.db.
-		First(&u, id)
-	if res.RecordNotFound() {
+	u, ok := model.FindUser(uint(id))
+	if !ok {
 		w.WriteHeader(404)
 
 		return
@@ -252,7 +199,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func postUser(w http.ResponseWriter, r *http.Request) {
-	var u User
+	var u model.User
 
 	err := json.NewDecoder(r.Body).Decode(&u)
 	if err != nil {
@@ -261,10 +208,8 @@ func postUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u.CreatedAt = time.Now()
-
-	res := g.db.Create(&u)
-	if res.Error != nil {
+	res := u.Create()
+	if res != nil {
 		jsonResponse(w, "Username already exists", http.StatusUnprocessableEntity)
 
 		return
@@ -274,8 +219,6 @@ func postUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func patchUser(w http.ResponseWriter, r *http.Request) {
-	var u User
-
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		w.WriteHeader(404)
@@ -283,9 +226,8 @@ func patchUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := g.db.
-		First(&u, id)
-	if res.RecordNotFound() {
+	u, ok := model.FindUser(uint(id))
+	if !ok {
 		w.WriteHeader(404)
 
 		return
@@ -298,31 +240,19 @@ func patchUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u.UpdatedAt = time.Now()
-
-	g.db.Save(&u)
+	u.Save()
 
 	jsonResponse(w, u, http.StatusOK)
 }
 
 func getQuizzes(w http.ResponseWriter, _ *http.Request) {
-	var qs []Quiz
-	g.db.
-		Preload("Questions").
-		Preload("Questions.CheckboxAnswers").
-		Preload("Questions.RadioAnswers").
-		Preload("Questions.TextAnswer").
-		Preload("Questions.FlowDiagramAnswer").
-		Preload("Questions.Feedback").
-		Preload("User").
-		Order("id desc").
-		Find(&qs)
+	qs := model.FindQuizzes()
 
 	jsonResponse(w, qs, http.StatusOK)
 }
 
 func saveScores(w http.ResponseWriter, r *http.Request) {
-	var quiz Quiz
+	var quiz model.Quiz
 
 	err := json.NewDecoder(r.Body).Decode(&quiz)
 	if err != nil {
@@ -331,22 +261,13 @@ func saveScores(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, q := range quiz.Questions {
-		g.db.Model(&q).
-			Set("gorm:association_autoupdate", false).
-			UpdateColumns(&Question{
-				Score: q.Score,
-				Notes: q.Notes,
-			})
+		q.SaveFields(model.Question{
+			Score: q.Score,
+			Notes: q.Notes,
+		})
 	}
 
 	quiz.UpdateScore()
-	g.db.Model(&quiz).
-		Set("gorm:association_autoupdate", false).
-		UpdateColumns(&Quiz{
-			Score:     quiz.Score,
-			Corrected: true,
-		})
-
 	jsonResponse(w, "Scores updated.", http.StatusOK)
 }
 
@@ -362,7 +283,7 @@ func postToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := FindByUsernameAndPassword(postData.Username, postData.Password)
+	user, err := model.FindByUsernameAndPassword(postData.Username, postData.Password)
 	if err != nil {
 		jsonResponse(w, "Invalid credentials", http.StatusForbidden)
 		return
@@ -384,54 +305,19 @@ func postToken(w http.ResponseWriter, r *http.Request) {
 }
 
 func statsTotalAttempts(w http.ResponseWriter, _ *http.Request) {
-	var stats []struct {
-		Date   time.Time
-		Number int
-	}
-
-	g.db.Raw(`
-SELECT 
-	COUNT(*) as number,
-	DATE(updated_at) as date
-FROM quizzes
-GROUP BY DATE(updated_at)
-`).Scan(&stats)
+	stats := model.FindStatsTotalAttempts()
 
 	jsonResponse(w, stats, http.StatusOK)
 }
 
 func statsAvgResult(w http.ResponseWriter, _ *http.Request) {
-	var stats []struct {
-		Date   time.Time
-		Number float32
-	}
-
-	g.db.Raw(`
-SELECT 
-	AVG(score) as number,
-	DATE(updated_at) as date
-FROM quizzes
-WHERE score IS NOT NULL
-GROUP BY DATE(updated_at)
-`).Scan(&stats)
+	stats := model.FindStatsAvgResult()
 
 	jsonResponse(w, stats, http.StatusOK)
 }
 
 func statsBestResult(w http.ResponseWriter, _ *http.Request) {
-	var stats []struct {
-		Date   time.Time
-		Number float32
-	}
-
-	g.db.Raw(`
-SELECT 
-	MAX(score) as number,
-	DATE(updated_at) as date
-FROM quizzes
-WHERE score IS NOT NULL
-GROUP BY DATE(updated_at)
-`).Scan(&stats)
+	stats := model.FindStatsBestResult()
 
 	jsonResponse(w, stats, http.StatusOK)
 }

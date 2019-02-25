@@ -9,10 +9,14 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+
+	"github.com/calinpristavu/quizzer/model"
 )
 
+const questionsPerQuiz = 10
+
 func startQuiz(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user").(*User)
+	u := r.Context().Value("user").(*model.User)
 
 	if id, ok := mux.Vars(r)["id"]; ok {
 		intId, err := strconv.Atoi(id)
@@ -20,32 +24,28 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 			log.Fatalf("cannot interpret %s as int: %v", id, err)
 		}
 
-		var qt QuizTemplate
+		qt, ok := model.FindQuizTemplate(intId)
+		if !ok {
+			http.Redirect(w, r, "/", http.StatusFound)
 
-		g.db.
-			Preload("QuizQuestions").
-			Preload("QuizQuestions.Question").
-			Preload("QuizQuestions.Question").
-			Preload("QuizQuestions.Question.CheckboxAnswerTemplates").
-			Preload("QuizQuestions.Question.RadioAnswerTemplates").
-			Preload("QuizQuestions.Question.FlowDiagramAnswerTemplate").
-			First(&qt, intId)
+			return
+		}
 
-		u.CurrentQuiz = qt.start(u)
+		u.CurrentQuiz = qt.Start(u)
 	} else {
-		u.CurrentQuiz = newQuiz(u, questionsPerQuiz)
+		u.CurrentQuiz = model.NewQuiz(u, questionsPerQuiz)
 	}
 
 	u.CurrentQuizID = &u.CurrentQuiz.ID
-	g.db.Save(&u)
+	u.Save()
 
 	http.Redirect(w, r, "/question/0", http.StatusFound)
 }
 
 func question(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user").(*User)
+	u := r.Context().Value("user").(*model.User)
 
-	if u.CurrentQuiz == nil {
+	if u.CurrentQuizID == nil {
 		log.Printf("no active quiz for user %s\n", u.Username)
 		http.Redirect(w, r, "/", http.StatusFound)
 
@@ -77,8 +77,8 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodGet {
 		err := getTemplateForQuestion(question).Execute(w, struct {
-			Question     Question
-			AllQuestions []*Question
+			Question     model.Question
+			AllQuestions []*model.Question
 			User         interface{}
 			Qidx         int
 			PrevIdx      int
@@ -114,7 +114,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getTemplateForQuestion(question *Question) *template.Template {
+func getTemplateForQuestion(question *model.Question) *template.Template {
 	switch question.Type {
 	case 1:
 		return g.templating.Lookup("checkbox_question.gohtml")
@@ -132,19 +132,19 @@ func getTemplateForQuestion(question *Question) *template.Template {
 }
 
 func finished(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user").(*User)
+	u := r.Context().Value("user").(*model.User)
 
 	quiz := u.CurrentQuiz
 
 	if r.Method == http.MethodPost {
-		u.finishQuiz()
+		u.FinishQuiz()
 
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
 	err := g.templating.Lookup("finished.gohtml").Execute(w, struct {
-		Quiz Quiz
+		Quiz model.Quiz
 		User interface{}
 	}{Quiz: *quiz, User: u})
 	if err != nil {
@@ -155,11 +155,11 @@ func finished(w http.ResponseWriter, r *http.Request) {
 func history(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user")
 
-	qs := findAllFinishedForUser(u.(*User))
+	qs := u.(*model.User).FindFinishedQuizzes()
 
 	err := g.templating.Lookup("history.gohtml").Execute(w, struct {
-		Quizzes []Quiz
-		Current *Quiz
+		Quizzes []model.Quiz
+		Current *model.Quiz
 		User    interface{}
 	}{Quizzes: qs, User: u, Current: nil})
 	if err != nil {
@@ -168,17 +168,17 @@ func history(w http.ResponseWriter, r *http.Request) {
 }
 
 func viewQuiz(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user").(*User)
+	u := r.Context().Value("user").(*model.User)
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 
-	qs := findAllFinishedForUser(u)
+	qs := u.FindFinishedQuizzes()
 
-	current := find(id)
+	current := model.FindQuiz(id)
 	err := g.templating.Lookup("history.gohtml").Execute(w, struct {
-		Quizzes []Quiz
-		Current *Quiz
-		User    User
+		Quizzes []model.Quiz
+		Current *model.Quiz
+		User    model.User
 	}{
 		Quizzes: qs,
 		Current: &current,
@@ -190,7 +190,7 @@ func viewQuiz(w http.ResponseWriter, r *http.Request) {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	u := r.Context().Value("user").(*User)
+	u := r.Context().Value("user").(*model.User)
 
 	if u.CurrentQuizID != nil {
 		http.Redirect(w, r, "/question/0", http.StatusFound)
@@ -198,21 +198,21 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var qts []QuizTemplate
-	queryBuilder := g.db.
-		Model(&qts).
-		Preload("QuizQuestions").
-		Order("id desc")
+	var qts []model.QuizTemplate
 
 	if u.ShouldStartID != nil {
-		queryBuilder = queryBuilder.Where("id = ?", u.ShouldStartID)
+		qt, ok := model.FindQuizTemplate(int(*u.ShouldStartID))
+		if !ok {
+			log.Fatalf("could not find quiz template: %d", *u.ShouldStartID)
+		}
+		qts = []model.QuizTemplate{qt}
+	} else {
+		qts = model.FindQuizTemplates()
 	}
 
-	queryBuilder.Find(&qts)
-
 	err := g.templating.Lookup("home.gohtml").Execute(w, struct {
-		User        User
-		Quizzes     []QuizTemplate
+		User        model.User
+		Quizzes     []model.QuizTemplate
 		CanGenerate bool
 	}{
 		User:        *u,
@@ -228,10 +228,10 @@ func home(w http.ResponseWriter, r *http.Request) {
 func myAccount(w http.ResponseWriter, r *http.Request) {
 	validationErrors := make(map[string]interface{}, 2)
 	var err, hashingErr error
-	user := r.Context().Value("user").(*User)
+	user := r.Context().Value("user").(*model.User)
 
 	if r.FormValue("change-username") != "" {
-		validationErrors, err = ChangeUsernameFormValidator(r.Form)
+		validationErrors, err = model.ChangeUsernameFormValidator(r.Form)
 		if err == nil {
 			user.Username = r.FormValue("username")
 			user.Save()
@@ -239,7 +239,7 @@ func myAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.FormValue("change-password") != "" {
-		validationErrors, err = ChangePasswordFormValidator(r.Form)
+		validationErrors, err = model.ChangePasswordFormValidator(r.Form)
 
 		password := r.FormValue("password")
 		user.Password, hashingErr = HashPassword(password)
@@ -290,7 +290,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	if uname != "" {
 		pass := r.FormValue("password")
 
-		u, err := FindByUsernameAndPassword(uname, pass)
+		u, err := model.FindByUsernameAndPassword(uname, pass)
 		if err == nil {
 			LoggedIn[uname] = u
 
@@ -337,7 +337,7 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u, err := FindByUsername(uname)
+	u, err := model.FindByUsername(uname)
 	if err != nil {
 		http.Error(w, "No user with that username", http.StatusNotFound)
 
@@ -352,7 +352,7 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	u.IsEnabled = true
-	g.db.Save(u)
+	u.Save()
 
 	login(w, r)
 }
@@ -363,7 +363,7 @@ func addQuestionFeedback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u := r.Context().Value("user").(*User)
+	u := r.Context().Value("user").(*model.User)
 
 	if u.CurrentQuiz == nil {
 		log.Printf("no active quiz for user %s\n", u.Username)
@@ -385,7 +385,7 @@ func addQuestionFeedback(w http.ResponseWriter, r *http.Request) {
 
 	question := u.CurrentQuiz.Questions[qIdx]
 
-	err = question.addFeedback(feedback)
+	err = question.AddFeedback(feedback)
 	if err != nil {
 		log.Printf("could not save feedback: %v\n", err)
 		return

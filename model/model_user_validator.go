@@ -1,4 +1,4 @@
-package webapp
+package model
 
 import (
 	"errors"
