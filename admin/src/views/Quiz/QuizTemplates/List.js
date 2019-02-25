@@ -41,7 +41,7 @@ class List extends Component {
     return (
       <Card>
         <CardHeader>
-          <i className="fa fa-align-justify" /> Quiz Templates
+          <i className="fa fa-align-justify" /> Quizzes
           <span className="float-right">
             <i
               onClick={this.props.openCreate}

@@ -93,7 +93,7 @@ class Filters extends Component {
           <FormGroup>
             <Select
               isMulti
-              placeholder="Filter by quiz template"
+              placeholder="Filter by quiz"
               onChange={(opt) => this.addFilter(opt, 'QuizTemplateID')}
               options={this.buildQuizTemplateOptions()}/>
           </FormGroup>

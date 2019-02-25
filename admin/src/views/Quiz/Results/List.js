@@ -121,7 +121,7 @@ class List extends Component {
             <tr>
               <th>#</th>
               <th>User</th>
-              <th>Quiz Template</th>
+              <th>Quiz</th>
               <th>% Completed</th>
               <th>Score</th>
               <th>Recruitee</th>

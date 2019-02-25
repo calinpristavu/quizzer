@@ -100,7 +100,7 @@ export class QuestionsList extends Component {
               className="fa fa-plus-circle text-success"
               style={{cursor: "pointer"}}/>
           </span>
-          <i className="fa fa-align-justify" /> Question Templates
+          <i className="fa fa-align-justify" /> Questions
           <Filters
             addFilter={this.addFilter}
             clearFilter={this.clearFilter}

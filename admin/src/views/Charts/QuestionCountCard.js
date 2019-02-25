@@ -47,7 +47,7 @@ class QuestionCountCard extends Component {
       <Card className="text-white bg-primary">
         <CardBody className="pb-0">
           <div className="text-value">{this.props.questionTemplates.length}</div>
-          <div>Question Templates</div>
+          <div>Questions</div>
         </CardBody>
         <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
           <Line

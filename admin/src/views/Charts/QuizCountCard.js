@@ -33,7 +33,7 @@ class QuizCountCard extends Component {
       labels: Object.keys(groupedByDateCreated),
       datasets: [
         {
-          label: 'Quiz Templates',
+          label: 'Quizzes',
           backgroundColor: brandInfo,
           borderColor: 'rgba(255,255,255,.55)',
           data: Object.values(groupedByDateCreated),
@@ -47,7 +47,7 @@ class QuizCountCard extends Component {
       <Card className="text-white bg-info">
         <CardBody className="pb-0">
           <div className="text-value">{this.props.quizTemplates.length}</div>
-          <div>Quiz Templates</div>
+          <div>Quizzes</div>
         </CardBody>
         <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
           <Line

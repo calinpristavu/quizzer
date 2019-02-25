@@ -18,12 +18,12 @@ export default {
           },
       },
       {
-          name: 'Question templates',
+          name: 'Questions',
           url: '/quiz/question-templates',
           icon: 'icon-puzzle',
       },
       {
-          name: 'Quiz templates',
+          name: 'Quizzes',
           url: '/quiz/quiz-templates',
           icon: 'icon-calculator',
       },
