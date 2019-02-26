@@ -283,7 +283,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	var errors []string
+	var errors = make(map[string]interface{})
 
 	uname := r.FormValue("username")
 
@@ -304,22 +304,15 @@ func login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		errors = append(errors, "Invalid username or password.")
+		errors["login"] = "Invalid username or password."
 	}
 
-	err := g.templating.Lookup("login.gohtml").Execute(w, struct {
-		Errors   []string
-		PrevData struct {
-			Username string
-		}
-	}{Errors: errors, PrevData: struct{ Username string }{Username: uname}})
-
-	if err != nil {
-		log.Fatalf("could not exec template login: %v", err)
-	}
+	renderLoginTemplate(w, errors, uname)
 }
 
 func completeRegistration(w http.ResponseWriter, r *http.Request) {
+	var errors = make(map[string]interface{}, 1)
+
 	uname := r.FormValue("username")
 
 	if uname == "" {
@@ -332,14 +325,23 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 	repeated := r.FormValue("repeated")
 
 	if pass == "" || pass != repeated {
-		http.Error(w, "Passwords do not match or are invalid", http.StatusBadRequest)
+		errors["registration"] = "Passwords do not match or are invalid."
+		renderLoginTemplate(w, errors, uname)
 
 		return
 	}
 
 	u, err := model.FindByUsername(uname)
 	if err != nil {
-		http.Error(w, "No user with that username", http.StatusNotFound)
+		errors["registration"] = "No user with that username."
+		renderLoginTemplate(w, errors, uname)
+
+		return
+	}
+
+	if u.Password != "" {
+		errors["registration"] = "You already have a password set, please sign in."
+		renderLoginTemplate(w, errors, uname)
 
 		return
 	}
@@ -392,4 +394,17 @@ func addQuestionFeedback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonResponse(w, question.Feedback[len(question.Feedback)-1], http.StatusCreated)
+}
+
+func renderLoginTemplate(w http.ResponseWriter, errors map[string]interface{}, username string) {
+	err := g.templating.Lookup("login.gohtml").Execute(w, struct {
+		Errors   map[string]interface{}
+		PrevData struct {
+			Username string
+		}
+	}{Errors: errors, PrevData: struct{ Username string }{Username: username}})
+
+	if err != nil {
+		log.Fatalf("could not exec template login: %v", err)
+	}
 }

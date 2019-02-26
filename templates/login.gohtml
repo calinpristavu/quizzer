@@ -104,7 +104,7 @@
                         type="text"
                         name="username"
                         id="username"
-                        class="form-control {{- if .Errors }} is-invalid{{end}}"
+                        class="form-control {{- if index .Errors "login" }} is-invalid{{end}}"
                         placeholder="Username"
                         {{if .PrevData.Username}}value="{{.PrevData.Username}}" {{end}}
                         required
@@ -114,13 +114,13 @@
                         type="password"
                         id="password"
                         name="password"
-                        class="form-control {{- if .Errors }} is-invalid{{end}}"
+                        class="form-control {{- if index .Errors "login" }} is-invalid{{end}}"
                         placeholder="Password"
                         required>
 
-                {{ range .Errors }}
+                {{if index .Errors "login"}}
                     <div class="alert alert-danger" role="alert">
-                        {{.}}
+                        {{index .Errors "login"}}
                     </div>
                 {{ end }}
                 <button class="btn btn-lg btn-block" type="submit" name="login">Enter</button>
@@ -152,6 +152,11 @@
                     class="form-control"
                     placeholder="Repeat password"
                     required>
+            {{if index .Errors "registration"}}
+                <div class="alert alert-danger" role="alert">
+                {{index .Errors "registration"}}
+                </div>
+            {{ end }}
             <button class="btn btn-lg btn-block" type="submit" name="login">Register</button>
         </form>
         </div>
