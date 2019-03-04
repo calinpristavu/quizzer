@@ -137,7 +137,6 @@ func CreateGuest() (*User, error) {
 	uname := strings.Join([]string{guestUsername[rand.Intn(len(guestUsername)-1)], strconv.Itoa(rand.Int())}, " ")
 	u.Username = uname
 	u.CreatedAt = time.Now()
-	//u.UpdatedAt = time.Now()
 	u.RoleID = RoleGuest.ID
 
 	r, err := RoleGuest.FindChildWithId(u.RoleID)
@@ -160,21 +159,17 @@ type Role struct {
 
 // Roles
 var (
-	RoleDumb    = Role{ID: 999, Name: "dumb", Children: []Role{}}
-	RoleAdmin   = Role{ID: 1, Name: "admin_only", Children: []Role{}}
-	RoleUser    = Role{ID: 2, Name: "user", Children: []Role{RoleContrib, RoleDumb}}
-	RoleContrib = Role{ID: 998, Name: "contrib", Children: []Role{}}
-	RoleRoot    = Role{
+	RoleRoot        = Role{
 		ID:   0,
 		Name: "root",
 		Children: []Role{
 			RoleAdmin,
-			RoleUser,
 		},
 	}
-	RoleGuest = Role{ID: 3, Name: "guest", Children: []Role{
-		RoleUser,
-	}}
+	RoleAdmin       = Role{ID: 1, Name: "admin_only", Children: []Role{RoleGuest}}
+	RoleGuest       = Role{ID: 2, Name: "guest", Children: []Role{RoleContributor}}
+	RoleContributor = Role{ID: 3, Name: "contrib", Children: []Role{RoleUser}}
+	RoleUser        = Role{ID: 4, Name: "user", Children: []Role{}}
 )
 
 func (u User) IsGranted(r Role) bool {

@@ -29,10 +29,16 @@ func registerTemplates() {
 		"raw": func(s string) template.HTML {
 			return template.HTML(s)
 		},
-		"isGranted": func(u *model.User, roleId int) bool {
+		"isGranted": func(u model.User, roleId int) bool {
 			_, err := u.Role.FindChildWithId(roleId)
 
 			return err == nil
+		},
+		"isGuest": func(u model.User) bool {
+			if u.RoleID == model.RoleGuest.ID {
+				return true
+			}
+			return false
 		},
 	}
 

@@ -41,7 +41,7 @@
     }
 </style>
 
-{{if isGranted .User 998}}
+{{if isGranted .User 3}}
     <h4>Question review</h4>
     {{$username := .User.Username}}
     {{range .Question.Feedback}}
