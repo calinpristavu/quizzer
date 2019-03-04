@@ -26,27 +26,13 @@ type User struct {
 	RecruiteeID   *int
 }
 
-var guestUsername = [20]string{
-	"Algorithm Hamster",
-	"Ape State Machine",
-	"Bald Eagle Eye",
-	"Cobol Starfish",
-	"Ibex Loop",
-	"Cow Elixir",
-	"Tapir TeX",
-	"Dog IDE",
-	"Addax CamelCase",
-	"Mongoose DB",
-	"Groovy Impala",
-	"Prolog Squirrel",
-	"Shrew Sugar",
-	"Jackal Hex",
-	"Armadillo Erlang",
-	"Ruby Baboon",
-	"Skunk The Pascal",
-	"Kotlin Ox",
-	"Visual Basic",
-	"Assembly Rooster",
+var animals = [20]string{
+	"Hamster", "Ape", "Bald", "Eagle Eye", "Starfish", "Ibex", "Cow", "Tapir", "Dog", "Addax",
+	"Impala", "Squirrel", "Shrew", "Sugar", "Jackal", "Armadillo", "Baboon", "Skunk", "Ox", "Rooster",
+}
+var programmingJargon = [20]string{
+	"Algorithm", "State Machine", "Cobol", "Loop", "Elixir", "TeX", "IDE", "CamelCase", "Mongoose", "DB",
+	"Groovy", "Prolog", "Hex", "Erlang", "Ruby", "The Pascal", "Kotlin", "Basic", "Assembly", "Visual",
 }
 
 func FindByUsername(uname string) (*User, error) {
@@ -134,7 +120,11 @@ func (u *User) Create() error {
 func CreateGuest() (*User, error) {
 	var u User
 	rand.Seed(time.Now().UnixNano())
-	uname := strings.Join([]string{guestUsername[rand.Intn(len(guestUsername)-1)], strconv.Itoa(rand.Int())}, " ")
+	uname := strings.Join([]string{
+		animals[rand.Intn(len(animals)-1)],
+		programmingJargon[rand.Intn(len(programmingJargon)-1)],
+		strconv.Itoa(rand.Intn(999))},
+		" ")
 	u.Username = uname
 	u.CreatedAt = time.Now()
 	u.RoleID = RoleGuest.ID
@@ -159,7 +149,7 @@ type Role struct {
 
 // Roles
 var (
-	RoleRoot        = Role{
+	RoleRoot = Role{
 		ID:   0,
 		Name: "root",
 		Children: []Role{
