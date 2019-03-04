@@ -48,6 +48,7 @@ func registerTemplates() {
 
 func registerRoutes(public *mux.Router) {
 	public.HandleFunc("/login", login)
+	public.HandleFunc("/login-guest", loginGuest)
 	public.HandleFunc("/complete-registration", completeRegistration)
 
 	quiz := public.NewRoute().Subrouter()

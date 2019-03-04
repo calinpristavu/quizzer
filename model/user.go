@@ -2,6 +2,9 @@ package model
 
 import (
 	"fmt"
+	"math/rand"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -21,6 +24,29 @@ type User struct {
 	Comments      string `sql:"type:longtext"`
 	Attitude      int    `sql:"DEFAULT:3"`
 	RecruiteeID   *int
+}
+
+var guestUsername = [20]string{
+	"Algorithm Hamster",
+	"Ape State Machine",
+	"Bald Eagle Eye",
+	"Cobol Starfish",
+	"Ibex Loop",
+	"Cow Elixir",
+	"Tapir TeX",
+	"Dog IDE",
+	"Addax CamelCase",
+	"Mongoose DB",
+	"Groovy Impala",
+	"Prolog Squirrel",
+	"Shrew Sugar",
+	"Jackal Hex",
+	"Armadillo Erlang",
+	"Ruby Baboon",
+	"Skunk The Pascal",
+	"Kotlin Ox",
+	"Visual Basic",
+	"Assembly Rooster",
 }
 
 func FindByUsername(uname string) (*User, error) {
@@ -105,6 +131,27 @@ func (u *User) Create() error {
 	return res.Error
 }
 
+func CreateGuest() (*User, error) {
+	var u User
+	rand.Seed(time.Now().UnixNano())
+	uname := strings.Join([]string{guestUsername[rand.Intn(len(guestUsername)-1)], strconv.Itoa(rand.Int())}, " ")
+	u.Username = uname
+	u.CreatedAt = time.Now()
+	//u.UpdatedAt = time.Now()
+	u.RoleID = RoleGuest.ID
+
+	r, err := RoleGuest.FindChildWithId(u.RoleID)
+	if err != nil {
+		return nil, fmt.Errorf("could not assign role to user %d: %v", u.ID, err)
+	}
+
+	u.Role = r
+
+	res := db.Save(&u)
+
+	return &u, res.Error
+}
+
 type Role struct {
 	ID       int
 	Name     string
@@ -125,6 +172,9 @@ var (
 			RoleUser,
 		},
 	}
+	RoleGuest = Role{ID: 3, Name: "guest", Children: []Role{
+		RoleUser,
+	}}
 )
 
 func (u User) IsGranted(r Role) bool {

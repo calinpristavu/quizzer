@@ -125,6 +125,14 @@
                 {{ end }}
                 <button class="btn btn-lg btn-block" type="submit" name="login">Enter</button>
             </form>
+            <form action="/login-guest" method="post" class="form-signin">
+            {{if index .Errors "login-guest"}}
+                <div class="alert alert-danger" role="alert">
+                {{index .Errors "login-guest"}}
+                </div>
+            {{ end }}
+                <button class="btn btn-lg btn-block" type="submit" name="login">Enter as Guest</button>
+            </form>
         </div>
 
         <div class="right">
