@@ -123,7 +123,8 @@ func CreateGuest() (*User, error) {
 	uname := strings.Join([]string{
 		animals[rand.Intn(len(animals)-1)],
 		programmingJargon[rand.Intn(len(programmingJargon)-1)],
-		strconv.Itoa(rand.Intn(999))},
+		strconv.Itoa(rand.Intn(999)),
+	},
 		" ")
 	u.Username = uname
 	u.CreatedAt = time.Now()
@@ -168,13 +169,13 @@ func (u User) IsAdmin() bool {
 	return err == nil
 }
 
-func (u User) IsGuest() bool  {
+func (u User) IsGuest() bool {
 	_, err := u.Role.FindChildWithId(RoleGuest.ID)
 
 	return err == nil
 }
 
-func (u User) IsContributor() bool  {
+func (u User) IsContributor() bool {
 	_, err := u.Role.FindChildWithId(RoleContributor.ID)
 
 	return err == nil
