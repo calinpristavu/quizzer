@@ -156,11 +156,29 @@ var (
 			RoleAdmin,
 		},
 	}
-	RoleAdmin       = Role{ID: 1, Name: "admin_only", Children: []Role{RoleGuest}}
-	RoleGuest       = Role{ID: 2, Name: "guest", Children: []Role{RoleContributor}}
-	RoleContributor = Role{ID: 3, Name: "contrib", Children: []Role{RoleUser}}
-	RoleUser        = Role{ID: 4, Name: "user", Children: []Role{}}
+	RoleAdmin       = Role{ID: 1, Name: "admin_only", Children: []Role{RoleContributor}}
+	RoleGuest       = Role{ID: 997, Name: "guest", Children: []Role{RoleContributor}}
+	RoleContributor = Role{ID: 998, Name: "contrib", Children: []Role{RoleUser}}
+	RoleUser        = Role{ID: 2, Name: "user", Children: []Role{}}
 )
+
+func (u User) IsAdmin() bool {
+	_, err := u.Role.FindChildWithId(RoleAdmin.ID)
+
+	return err == nil
+}
+
+func (u User) IsGuest() bool  {
+	_, err := u.Role.FindChildWithId(RoleGuest.ID)
+
+	return err == nil
+}
+
+func (u User) IsContributor() bool  {
+	_, err := u.Role.FindChildWithId(RoleContributor.ID)
+
+	return err == nil
+}
 
 func (u User) IsGranted(r Role) bool {
 	_, err := u.Role.FindChildWithId(r.ID)
