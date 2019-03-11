@@ -118,7 +118,6 @@ func (u *User) Create() error {
 }
 
 func CreateGuest() (*User, error) {
-	var u User
 	rand.Seed(time.Now().UnixNano())
 	uname := strings.Join([]string{
 		animals[rand.Intn(len(animals)-1)],
@@ -126,20 +125,17 @@ func CreateGuest() (*User, error) {
 		strconv.Itoa(rand.Intn(999)),
 	},
 		" ")
-	u.Username = uname
-	u.CreatedAt = time.Now()
-	u.RoleID = RoleGuest.ID
 
-	r, err := RoleGuest.FindChildWithId(u.RoleID)
+
+	r, err := RoleGuest.FindChildWithId(RoleGuest.ID)
 	if err != nil {
-		return nil, fmt.Errorf("could not assign role to user %d: %v", u.ID, err)
+		return nil, fmt.Errorf("could not assign role to user %d: %v", RoleGuest.ID, err)
 	}
 
-	u.Role = r
+	u := &User{Username:uname, RoleID: RoleGuest.ID, Role: r}
+	res := db.Save(u)
 
-	res := db.Save(&u)
-
-	return &u, res.Error
+	return u, res.Error
 }
 
 type Role struct {
