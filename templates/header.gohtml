@@ -169,14 +169,15 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/me">My profile <span class="sr-only">(current)</span></a>
-                </li>
-            </ul>
-        </div>
+        {{if not (.IsGuest) }}
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/me">My profile <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </div>
+        {{ end }}
         <div class="my-2 my-lg-0 text-white">
             Welcome {{.Username}}
             <a class="text-white" href="/logout"><i class="fa fa-sign-out-alt"></i></a>

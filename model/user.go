@@ -2,6 +2,9 @@ package model
 
 import (
 	"fmt"
+	"math/rand"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -21,6 +24,15 @@ type User struct {
 	Comments      string `sql:"type:longtext"`
 	Attitude      int    `sql:"DEFAULT:3"`
 	RecruiteeID   *int
+}
+
+var animals = [20]string{
+	"Hamster", "Ape", "Bald", "Eagle Eye", "Starfish", "Ibex", "Cow", "Tapir", "Dog", "Addax",
+	"Impala", "Squirrel", "Shrew", "Sugar", "Jackal", "Armadillo", "Baboon", "Skunk", "Ox", "Rooster",
+}
+var programmingJargon = [20]string{
+	"Algorithm", "State Machine", "Cobol", "Loop", "Elixir", "TeX", "IDE", "CamelCase", "Mongoose", "DB",
+	"Groovy", "Prolog", "Hex", "Erlang", "Ruby", "The Pascal", "Kotlin", "Basic", "Assembly", "Visual",
 }
 
 func FindByUsername(uname string) (*User, error) {
@@ -105,6 +117,27 @@ func (u *User) Create() error {
 	return res.Error
 }
 
+func CreateGuest() (*User, error) {
+	rand.Seed(time.Now().UnixNano())
+	uname := strings.Join([]string{
+		animals[rand.Intn(len(animals)-1)],
+		programmingJargon[rand.Intn(len(programmingJargon)-1)],
+		strconv.Itoa(rand.Intn(999)),
+	},
+		" ")
+
+
+	r, err := RoleGuest.FindChildWithId(RoleGuest.ID)
+	if err != nil {
+		return nil, fmt.Errorf("could not assign role to user %d: %v", RoleGuest.ID, err)
+	}
+
+	u := &User{Username:uname, RoleID: RoleGuest.ID, Role: r}
+	res := db.Save(u)
+
+	return u, res.Error
+}
+
 type Role struct {
 	ID       int
 	Name     string
@@ -113,19 +146,36 @@ type Role struct {
 
 // Roles
 var (
-	RoleDumb    = Role{ID: 999, Name: "dumb", Children: []Role{}}
-	RoleAdmin   = Role{ID: 1, Name: "admin_only", Children: []Role{}}
-	RoleUser    = Role{ID: 2, Name: "user", Children: []Role{RoleContrib, RoleDumb}}
-	RoleContrib = Role{ID: 998, Name: "contrib", Children: []Role{}}
-	RoleRoot    = Role{
+	RoleRoot = Role{
 		ID:   0,
 		Name: "root",
 		Children: []Role{
 			RoleAdmin,
-			RoleUser,
 		},
 	}
+	RoleAdmin       = Role{ID: 1, Name: "admin_only", Children: []Role{RoleContributor}}
+	RoleGuest       = Role{ID: 997, Name: "guest", Children: []Role{RoleContributor}}
+	RoleContributor = Role{ID: 998, Name: "contrib", Children: []Role{RoleUser}}
+	RoleUser        = Role{ID: 2, Name: "user", Children: []Role{}}
 )
+
+func (u User) IsAdmin() bool {
+	_, err := u.Role.FindChildWithId(RoleAdmin.ID)
+
+	return err == nil
+}
+
+func (u User) IsGuest() bool {
+	_, err := u.Role.FindChildWithId(RoleGuest.ID)
+
+	return err == nil
+}
+
+func (u User) IsContributor() bool {
+	_, err := u.Role.FindChildWithId(RoleContributor.ID)
+
+	return err == nil
+}
 
 func (u User) IsGranted(r Role) bool {
 	_, err := u.Role.FindChildWithId(r.ID)

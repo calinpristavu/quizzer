@@ -29,11 +29,6 @@ func registerTemplates() {
 		"raw": func(s string) template.HTML {
 			return template.HTML(s)
 		},
-		"isGranted": func(u *model.User, roleId int) bool {
-			_, err := u.Role.FindChildWithId(roleId)
-
-			return err == nil
-		},
 	}
 
 	var err error
@@ -48,6 +43,7 @@ func registerTemplates() {
 
 func registerRoutes(public *mux.Router) {
 	public.HandleFunc("/login", login)
+	public.HandleFunc("/login-guest", loginGuest)
 	public.HandleFunc("/complete-registration", completeRegistration)
 
 	quiz := public.NewRoute().Subrouter()

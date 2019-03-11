@@ -310,6 +310,25 @@ func login(w http.ResponseWriter, r *http.Request) {
 	renderLoginTemplate(w, errors, uname)
 }
 
+func loginGuest(w http.ResponseWriter, r *http.Request) {
+	var errors = make(map[string]interface{})
+	u, err := model.CreateGuest()
+	if err == nil {
+		LoggedIn[u.Username] = u
+		cookie := &http.Cookie{
+			Name:  "user",
+			Value: u.Username,
+		}
+		http.SetCookie(w, cookie)
+
+		http.Redirect(w, r, "/", http.StatusFound)
+
+		return
+	}
+	errors["login-guest"] = "Something broke. Please try again and if is not working, contact the platform administrator."
+	renderLoginTemplate(w, errors, "")
+}
+
 func completeRegistration(w http.ResponseWriter, r *http.Request) {
 	var errors = make(map[string]interface{}, 1)
 
