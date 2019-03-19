@@ -32,11 +32,11 @@
 
 <!--suppress HtmlUnknownTarget, JSUnresolvedVariable, JSUnresolvedFunction -->
 <div class="container">
-    <div class="section col-md-12 text-center">
+    <div class="section col-md-12">
         <div class="section-content">
             <h1>Congratz!!! you have finished quiz: {{.Quiz.ID}}</h1>
-            <p>the questions were:</p>
-            <table class="table">
+            <br>
+            <table class="table table-responsive">
                 <thead>
                     <tr>
                         <th>Question</th>
@@ -48,11 +48,11 @@
                     {{range .Quiz.Questions}}
                         <tr>
                             <td>{{raw .Text}}</td>
-                            <td class="text-left">
+                            <td>
                                 {{if eq .Type 1}}
                                     <ul>
                                         {{range .CheckboxAnswers}}
-                                            <li class="text-left">
+                                            <li>
                                                 {{ if .IsSelected }}
                                                     <i class="far fa-check-square"></i>
                                                 {{else}}
@@ -66,12 +66,29 @@
                                     <div><pre><code>{{raw .TextAnswer.Text}}</code></pre></div>
                                 {{else if eq .Type 3}}
                                     <div class="flow-diagram">
-                                        {{raw .FlowDiagramAnswer.SVG}}
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#diag-{{.FlowDiagramAnswer.ID}}">
+                                            View diagram
+                                        </button>
+                                        <div class="modal fade" id="diag-{{.FlowDiagramAnswer.ID}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Diagram</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{raw .FlowDiagramAnswer.SVG}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 {{else if eq .Type 4}}
                                     <ul>
                                         {{range .RadioAnswers}}
-                                            <li class="text-left">
+                                            <li>
                                                 {{ if .IsSelected }}
                                                     <i class="far fa-check-circle"></i>
                                                 {{else}}
@@ -87,10 +104,15 @@
                     {{end}}
                 </tbody>
             </table>
-            <div class="text-center">
-                <form action="/finished" method="POST">
-                    <button type="submit" class="btn btn-success">Back home</button>
-                </form>
+            <div class="row text-center">
+                <div class="offset-4 col-1">
+                    <a href="{{.Referer}}" class="btn btn-default"><- Back</a>
+                </div>
+                <div class="offset-1 col-1">
+                    <form action="/finished" method="POST">
+                        <button type="submit" class="btn btn-success">Submit Quiz</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

@@ -23,7 +23,7 @@
                     {{if ge .PrevIdx 0 }}
                         <a href="/question/{{.PrevIdx}}" class="btn">< Back</a>
                     {{end}}
-                    <button type="submit" id="save-button" class="btn btn-primary" disabled>Next ></button>
+                    <button type="submit" id="save-button" class="btn btn-primary">Next ></button>
                 </form>
                 <ul>
                 </ul>
@@ -38,18 +38,6 @@
 <script>
     var myDiagram = initDiagram("diagram");
     setDiagramStyles(myDiagram);
-
-    // when the document is modified, add a "*" to the title and enable the "Save" button
-    myDiagram.addDiagramListener("Modified", function(e) {
-        var button = document.getElementById("save-button");
-        if (button) button.disabled = !myDiagram.isModified;
-        var idx = document.title.indexOf("*");
-        if (myDiagram.isModified) {
-            if (idx < 0) document.title += "*";
-        } else {
-            if (idx >= 0) document.title = document.title.substr(0, idx);
-        }
-    });
 
     // temporary links used by LinkingTool and RelinkingTool are also orthogonal:
     myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;

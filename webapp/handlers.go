@@ -143,10 +143,13 @@ func finished(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	referer := r.Header.Get("Referer")
+
 	err := g.templating.Lookup("finished.gohtml").Execute(w, struct {
-		Quiz model.Quiz
-		User interface{}
-	}{Quiz: *quiz, User: u})
+		Quiz    model.Quiz
+		User    interface{}
+		Referer string
+	}{Quiz: *quiz, User: u, Referer: referer})
 	if err != nil {
 		log.Fatalf("could not execute template: %v", err)
 	}
