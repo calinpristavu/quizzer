@@ -9,10 +9,10 @@ import EditQuestion from "./Edit";
 import View from "./View";
 
 export const questionTypes = {
-  1: "Multiple answer",
+  1: "Multiple choice",
   2: "Free text",
   3: "Flow Diagram",
-  4: "Single answer",
+  4: "Single choice",
 };
 
 class QuestionTemplates extends Component{
