@@ -43,6 +43,34 @@ class CheckboxQuestion extends Component {
     });
   };
 
+  renderChoice = (a, i) => {
+    var color = "inherit";
+
+    if (a.IsCorrect && a.IsSelected) {
+      color = "#4DBD74"
+    }
+
+    if (a.IsCorrect && !a.IsSelected) {
+      color = "#4DBD74"
+    }
+
+    if (!a.IsCorrect && a.IsSelected) {
+      color = "#FF0000"
+    }
+
+    return (
+      <ListGroupItem
+        style={{color: color}}
+        key={i}>
+        {a.IsSelected
+          ? <i className="far fa-check-square" />
+          : <i className="far fa-square" />
+        }
+        {' ' + a.Text}
+      </ListGroupItem>
+    );
+  };
+
   render() {
     return (
       <div>
@@ -65,17 +93,7 @@ class CheckboxQuestion extends Component {
         </div>
         <div>
           <ListGroup>
-            {this.props.question.CheckboxAnswers.map((a, i) => (
-              <ListGroupItem
-                style={{color: a.IsCorrect ? "#4DBD74" : "inherit"}}
-                key={i}>
-                {a.IsSelected
-                  ? <i className="far fa-check-square" />
-                  : <i className="far fa-square" />
-                }
-                {' ' + a.Text}
-              </ListGroupItem>
-            ))}
+            {this.props.question.CheckboxAnswers.map(this.renderChoice)}
           </ListGroup>
         </div>
       </div>

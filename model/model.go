@@ -158,8 +158,9 @@ func FindQuizzes() []Quiz {
 }
 
 func (q *Question) markCheckboxesAsSelected(ids []string) error {
-	for _, aID := range ids {
-		for _, a := range q.CheckboxAnswers {
+	for _, a := range q.CheckboxAnswers {
+		a.IsSelected = false
+		for _, aID := range ids {
 			id, err := strconv.Atoi(aID)
 			if err != nil {
 				return fmt.Errorf("invalid answer id given %v: %v", aID, err)
@@ -167,8 +168,6 @@ func (q *Question) markCheckboxesAsSelected(ids []string) error {
 
 			if a.ID == uint(id) {
 				a.IsSelected = true
-			} else {
-				a.IsSelected = false
 			}
 		}
 	}

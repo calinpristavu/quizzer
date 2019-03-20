@@ -43,6 +43,34 @@ class RadioQuestion extends Component {
     });
   };
 
+  renderChoice = (a, i) => {
+    var color = "inherit";
+
+    if (a.IsCorrect && a.IsSelected) {
+      color = "#4DBD74"
+    }
+
+    if (a.IsCorrect && !a.IsSelected) {
+      color = "#4DBD74"
+    }
+
+    if (!a.IsCorrect && a.IsSelected) {
+      color = "#FF0000"
+    }
+
+    return (
+      <ListGroupItem
+        style={{color: color}}
+        key={i}>
+        {a.IsSelected
+          ? <i className="far fa-check-circle" />
+          : <i className="far fa-circle" />
+        }
+        {' ' + a.Text}
+      </ListGroupItem>
+    );
+  };
+
   render() {
     return (
       <div>
@@ -65,17 +93,7 @@ class RadioQuestion extends Component {
         </div>
         <div>
           <ListGroup>
-            {this.props.question.RadioAnswers.map((a, i) => (
-              <ListGroupItem
-                style={{color: a.IsCorrect ? "#4DBD74" : "inherit"}}
-                key={i}>
-                {a.IsSelected
-                  ? <i className="far fa-check-circle" />
-                  : <i className="far fa-circle" />
-                }
-                {' ' + a.Text}
-              </ListGroupItem>
-            ))}
+            {this.props.question.RadioAnswers.map(this.renderChoice)}
           </ListGroup>
         </div>
       </div>
