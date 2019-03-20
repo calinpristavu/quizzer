@@ -177,7 +177,7 @@ func viewQuiz(w http.ResponseWriter, r *http.Request) {
 
 	qs := u.FindFinishedQuizzes()
 
-	current := model.FindQuiz(id)
+	current := u.FindQuiz(uint(id))
 	err := g.templating.Lookup("history.gohtml").Execute(w, struct {
 		Quizzes []model.Quiz
 		Current *model.Quiz

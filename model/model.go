@@ -108,6 +108,23 @@ func NewQuiz(u *User, noQ int) *Quiz {
 	return q
 }
 
+func FindQuizByCriteria(qID, userID uint) Quiz {
+	var q Quiz
+	db.
+		Model(Quiz{}).
+		Preload("Questions").
+		Preload("Questions.CheckboxAnswers").
+		Preload("Questions.RadioAnswers").
+		Preload("Questions.TextAnswer").
+		Preload("Questions.FlowDiagramAnswer").
+		Preload("Questions.Feedback").
+		Where("id = ?", qID).
+		Where("user_id = ?", userID).
+		First(&q)
+
+	return q
+}
+
 func FindQuiz(id int) Quiz {
 	var q Quiz
 	db.

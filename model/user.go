@@ -123,16 +123,14 @@ func CreateGuest() (*User, error) {
 		animals[rand.Intn(len(animals)-1)],
 		programmingJargon[rand.Intn(len(programmingJargon)-1)],
 		strconv.Itoa(rand.Intn(999)),
-	},
-		" ")
-
+	}, " ")
 
 	r, err := RoleGuest.FindChildWithId(RoleGuest.ID)
 	if err != nil {
 		return nil, fmt.Errorf("could not assign role to user %d: %v", RoleGuest.ID, err)
 	}
 
-	u := &User{Username:uname, RoleID: RoleGuest.ID, Role: r}
+	u := &User{Username: uname, RoleID: RoleGuest.ID, Role: r}
 	res := db.Save(u)
 
 	return u, res.Error
@@ -226,6 +224,10 @@ func (u *User) FindFinishedQuizzes() []Quiz {
 		Find(&qs)
 
 	return qs
+}
+
+func (u *User) FindQuiz(qID uint) Quiz {
+	return FindQuizByCriteria(qID, u.ID)
 }
 
 func CheckPassword(expectedPasswordHashed, password string) bool {
