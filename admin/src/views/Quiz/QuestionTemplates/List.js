@@ -113,7 +113,7 @@ export class QuestionsList extends Component {
               <th>Text</th>
               <th>Type</th>
               <th>Usage rate</th>
-              <th />
+              <th>Actions</th>
             </tr>
             </thead>
             <tbody>

@@ -127,7 +127,7 @@ class List extends Component {
               <th>Recruitee</th>
               <th>Status</th>
               <th>Time spent</th>
-              <th />
+              <th>Actions</th>
             </tr>
             </thead>
             <tbody>

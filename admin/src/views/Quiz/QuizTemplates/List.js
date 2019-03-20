@@ -56,7 +56,7 @@ class List extends Component {
               <th>Name</th>
               <th>#noQuestions</th>
               <th>Time limit</th>
-              <th />
+              <th>Actions</th>
             </tr>
             </thead>
             <tbody>
