@@ -150,6 +150,8 @@ func (q *Question) markCheckboxesAsSelected(ids []string) error {
 
 			if a.ID == uint(id) {
 				a.IsSelected = true
+			} else {
+				a.IsSelected = false
 			}
 		}
 	}
