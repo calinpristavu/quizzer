@@ -41,7 +41,7 @@ class View extends Component {
     }
 
     return (
-      <Card>
+      <Card key={this.props.quiz.ID}>
         <CardHeader>
           <span className="float-right">
             <i
