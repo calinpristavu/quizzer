@@ -12,6 +12,7 @@ class List extends Component {
     perPage: 5,
     currentPage: 0,
     filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
+    scoreSorting: 0
   };
 
   componentDidMount() {
@@ -21,10 +22,24 @@ class List extends Component {
   getVisibleItems = () => {
     const firstPosition = this.state.perPage * this.state.currentPage;
 
-    return Filters
-      .apply(this.props.list, this.state.filters)
-      .slice(firstPosition, firstPosition + this.state.perPage)
-      .valueSeq();
+    const filtered = Filters.apply(this.props.list, this.state.filters);
+    const sorted = this.applySorting(filtered);
+    const paginated = sorted.slice(firstPosition, firstPosition + this.state.perPage);
+
+    return paginated.valueSeq();
+  };
+
+  applySorting = (elements) => {
+    return elements.sort((a, b) => {
+      const aScore = List.computeScore(a.Questions);
+      const bScore = List.computeScore(b.Questions);
+
+      if (aScore < bScore) { return this.state.scoreSorting }
+
+      if (aScore > bScore) { return -this.state.scoreSorting }
+
+      return 0
+    })
   };
 
   static computePercentCompleted(questions) {
@@ -63,6 +78,15 @@ class List extends Component {
         currentPage: 0
       }
     })
+  };
+
+  /**
+   * Cycle score from -1 to 1
+   */
+  sort = () => {
+    this.setState((oldState) => ({
+      scoreSorting: (oldState.scoreSorting + 2) % 3 - 1
+    }))
   };
 
   /**
@@ -106,6 +130,10 @@ class List extends Component {
   };
 
   render() {
+    var sortClass = this.state.scoreSorting === -1
+      ? 'fa-sort-down'
+      : this.state.scoreSorting === 0 ? 'fa-sort' : 'fa-sort-up';
+
     return (
       <Card>
         <CardHeader>
@@ -123,7 +151,11 @@ class List extends Component {
               <th>User</th>
               <th>Quiz</th>
               <th>% Completed</th>
-              <th>Score</th>
+              <th><i
+                onClick={this.sort}
+                className={`fa ${sortClass}`}/>
+                {' '} Score
+              </th>
               <th>Recruitee</th>
               <th>Status</th>
               <th>Time spent</th>

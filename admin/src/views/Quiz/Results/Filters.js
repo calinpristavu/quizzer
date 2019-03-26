@@ -54,8 +54,6 @@ class Filters extends Component {
       })
     });
 
-    console.log(options);
-
     return options;
   };
 
