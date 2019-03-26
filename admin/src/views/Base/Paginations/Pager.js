@@ -27,6 +27,25 @@ class Pager extends Component {
     this.props.toPage(pageNo);
   };
 
+  renderItem = (item) => {
+    if (item < 0) {
+      return null;
+    }
+
+    if (item >= this.props.noPages) {
+      return null;
+    }
+
+    return (
+      <PaginationItem
+        onClick={() => this.toPage(item)}
+        key={item}
+        active={item === this.props.currentPage}>
+        <PaginationLink tag="button">{item + 1}</PaginationLink>
+      </PaginationItem>
+    );
+  };
+
   renderPagination = () => {
     if (this.props.noPages < 2) {
       return null;
@@ -40,14 +59,11 @@ class Pager extends Component {
           <PaginationLink previous tag="button">Prev</PaginationLink>
         </PaginationItem>
 
-        {[...Array(this.props.noPages).keys()].map((p) => (
-          <PaginationItem
-            onClick={() => this.toPage(p)}
-            key={p}
-            active={p === this.props.currentPage}>
-            <PaginationLink tag="button">{p + 1}</PaginationLink>
-          </PaginationItem>
-        ))}
+        {this.renderItem(this.props.currentPage - 2)}
+        {this.renderItem(this.props.currentPage - 1)}
+        {this.renderItem(this.props.currentPage)}
+        {this.renderItem(this.props.currentPage + 1)}
+        {this.renderItem(this.props.currentPage + 2)}
 
         <PaginationItem
           disabled={this.props.currentPage >= this.props.noPages - 1}
