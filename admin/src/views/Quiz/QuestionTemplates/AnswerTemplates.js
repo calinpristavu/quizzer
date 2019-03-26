@@ -65,7 +65,7 @@ export class CheckboxAnswerTemplates extends Component {
                     autoFocus={true}
                     onChange={(e) => this.setState({Text: e.target.value})}
                     onKeyPress={this.addOption}
-                    placeholder="Type in the question text"
+                    placeholder="Type in the answer text"
                     required />
                 </Label>
               </FormGroup>
@@ -164,7 +164,7 @@ export class RadioAnswerTemplates extends Component {
                     onBlur={(e) => this.setState({Text: e.target.value})}
                     onKeyPress={this.addOption}
                     innerRef={this.optionTextRef}
-                    placeholder="Type in the option text"
+                    placeholder="Type in the answer text"
                     required />
                 </Label>
               </FormGroup>
