@@ -68,7 +68,9 @@ class List extends Component {
                   <td>
                     <i onClick={() => this.props.openClone(q.ID)} className="fa fa-copy text-success"/>
                     <i onClick={() => this.props.openEdit(q)} className="fa fa-edit text-warning"/>
-                    <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle"/>
+                    <i
+                      onClick={(e) => { if (window.confirm('Are you sure you wish to delete this Question?')) this.delete(e, q.ID) } }
+                      className="fa fa-minus-circle"/>
                   </td>
                 </tr>
               )}

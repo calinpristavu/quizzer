@@ -32,7 +32,7 @@ func registerTemplates() {
 	}
 
 	var err error
-	g.templating, _ = template.
+	g.templating, err = template.
 		New("all").
 		Funcs(customFunctions).
 		ParseGlob("./templates/*.gohtml")

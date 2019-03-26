@@ -132,7 +132,9 @@ export class QuestionsList extends Component {
                 <td>
                   <i onClick={() => {this.props.openQuestionTemplateView(q.ID)}} className="fa fa-eye"/>
                   <i onClick={() => {this.props.openQuestionTemplateEdit(q.ID)}} className="fa fa-edit text-warning"/>
-                  <i onClick={(e) => this.delete(e, q.ID)} className="fa fa-minus-circle text-danger"/>
+                  <i
+                    onClick={(e) => { if (window.confirm('Are you sure you wish to delete this Question?')) this.delete(e, q.ID) } }
+                    className="fa fa-minus-circle text-danger"/>
                 </td>
               </tr>
             )}
