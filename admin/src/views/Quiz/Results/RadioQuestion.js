@@ -83,6 +83,7 @@ class RadioQuestion extends Component {
               defaultChecked={this.props.question.Score === 100}
               onChange={this.setScore}
               label
+              size={'lg'}
               dataOn={'\u2713'}
               dataOff={'\u2715'} />
           </div>

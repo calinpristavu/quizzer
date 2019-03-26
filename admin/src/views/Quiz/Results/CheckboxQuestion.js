@@ -82,6 +82,7 @@ class CheckboxQuestion extends Component {
               outline={'alt'}
               defaultChecked={this.props.question.Score === 100}
               onChange={this.setScore}
+              size={'lg'}
               label
               dataOn={'\u2713'}
               dataOff={'\u2715'} />

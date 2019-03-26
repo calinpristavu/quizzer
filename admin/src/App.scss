@@ -85,3 +85,17 @@ input[type="time"] {
     display: none;
   }
 }
+
+.switch-slider {
+  &::before {
+    background-color: #FF0000;
+  }
+}
+
+.switch-label {
+  .switch-slider {
+    &::after {
+      color: #FF0000;
+    }
+  }
+}
