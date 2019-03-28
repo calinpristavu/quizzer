@@ -211,6 +211,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 		qts = []model.QuizTemplate{qt}
 	} else {
 		qts = model.FindQuizTemplates()
+
+		// remove empty quizzes
+		for i, qt := range qts {
+			if len(qt.QuizQuestions) == 0 {
+				qts = append(qts[:i], qts[i+1:]...)
+			}
+		}
 	}
 
 	err := g.templating.Lookup("home.gohtml").Execute(w, struct {
