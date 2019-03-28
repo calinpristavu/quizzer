@@ -183,6 +183,12 @@ func (qt *QuestionTemplate) Create() {
 }
 
 func (qt *QuestionTemplate) Delete() {
+	qt.PreloadQuizTemplates()
+
+	for _, qqt := range qt.QuizQuestions {
+		qqt.Delete()
+	}
+
 	db.Delete(qt, qt.ID)
 }
 
@@ -198,4 +204,15 @@ func (qt *QuestionTemplate) Save() {
 	db.Model(qt).Association("CheckboxAnswerTemplates").Replace(qt.CheckboxAnswerTemplates)
 	db.Model(qt).Association("RadioAnswerTemplates").Replace(qt.RadioAnswerTemplates)
 	db.Model(qt).Association("FlowDiagramAnswerTemplate").Replace(qt.FlowDiagramAnswerTemplate)
+}
+
+func (qt *QuestionTemplate) PreloadQuizTemplates() {
+	db.Model(qt.QuizQuestions).
+		Preload("Quiz").
+		Where("question_id = ?", qt.ID).
+		Find(&qt.QuizQuestions)
+}
+
+func (qqt *QuizQuestionTemplate) Delete() {
+	db.Delete(qqt)
 }
