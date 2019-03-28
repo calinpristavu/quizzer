@@ -74,9 +74,9 @@ class EditQuestion extends Component {
   removeCheckboxChoice = (choiceIndex) => {
     this.setState((oldState) => {
       const choices = oldState.CheckboxAnswerTemplates;
-      delete choices[choiceIndex];
+      choices.splice(choiceIndex, 1);
 
-      return {CheckboxAnswerTemplates: choices}
+      return {CheckboxAnswerTemplates: [...choices]}
     })
   };
 

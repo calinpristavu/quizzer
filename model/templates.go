@@ -200,7 +200,7 @@ func (qt *QuizTemplate) Save() {
 }
 
 func (qt *QuestionTemplate) Save() {
-	db.Set("gorm:association_autoupdate", false).Save(qt)
+	db.Set("gorm:association_autoupdate", false).Save(&qt)
 	db.Model(qt).Association("CheckboxAnswerTemplates").Replace(qt.CheckboxAnswerTemplates)
 	db.Model(qt).Association("RadioAnswerTemplates").Replace(qt.RadioAnswerTemplates)
 	db.Model(qt).Association("FlowDiagramAnswerTemplate").Replace(qt.FlowDiagramAnswerTemplate)
