@@ -8,6 +8,7 @@ export const roles = {
   0: "Root",
   1: "Admin",
   2: "Candidate",
+  997: "Guest"
 };
 
 export const attitudes = {

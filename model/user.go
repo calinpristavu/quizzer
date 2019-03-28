@@ -149,13 +149,21 @@ var (
 		Name: "root",
 		Children: []Role{
 			RoleAdmin,
+			RoleCandidate,
 		},
 	}
 	RoleAdmin       = Role{ID: 1, Name: "admin_only", Children: []Role{RoleContributor}}
 	RoleGuest       = Role{ID: 997, Name: "guest", Children: []Role{RoleContributor}}
 	RoleContributor = Role{ID: 998, Name: "contrib", Children: []Role{RoleUser}}
-	RoleUser        = Role{ID: 2, Name: "user", Children: []Role{}}
+	RoleCandidate   = Role{ID: 2, Name: "candidate", Children: []Role{RoleUser}}
+	RoleUser        = Role{ID: 999, Name: "user", Children: []Role{}}
 )
+
+func (u User) IsCandidate() bool {
+	_, err := u.Role.FindChildWithId(RoleCandidate.ID)
+
+	return err == nil
+}
 
 func (u User) IsAdmin() bool {
 	_, err := u.Role.FindChildWithId(RoleAdmin.ID)

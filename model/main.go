@@ -45,7 +45,7 @@ func initDb() *gorm.DB {
 	user := os.Getenv("DB_USER")
 	host := os.Getenv("DB_HOST")
 	pass := os.Getenv("DB_PASSWORD")
-	env := os.Getenv("DB_PASSWORD")
+	env := os.Getenv("APP_ENV")
 
 	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/quizzer?charset=utf8&parseTime=True", user, pass, host))
 
