@@ -215,6 +215,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		// remove empty quizzes
 		for i, qt := range qts {
 			if len(qt.QuizQuestions) == 0 {
+				log.Printf("quiz template #%d doesn't have questions. skipping ...", qt.ID)
 				qts = append(qts[:i], qts[i+1:]...)
 			}
 		}
