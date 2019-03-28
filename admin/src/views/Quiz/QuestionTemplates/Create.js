@@ -37,7 +37,7 @@ class CreateQuestion extends Component {
   create = () => {
     const question = this.state;
 
-    if (this.state.Type === questionTypes[4]) {
+    if (this.state.Type === 4) {
       const correctQIndex = parseInt(this.createFormRef.current['Answer'].value);
       question.RadioAnswerTemplates.forEach((a, k) => {
         question.RadioAnswerTemplates[k].IsCorrect = k === correctQIndex

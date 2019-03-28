@@ -47,7 +47,7 @@ class EditQuestion extends Component {
   create = () => {
     const question = this.state;
 
-    if (this.state.Type === questionTypes[4]) {
+    if (this.state.Type === 4) {
       const correctQIndex = parseInt(this.formRef.current['Answer'].value);
       question.RadioAnswerTemplates.forEach((a, k) => {
         question.RadioAnswerTemplates[k].IsCorrect = k === correctQIndex
@@ -92,9 +92,9 @@ class EditQuestion extends Component {
   removeRadioChoice = (choiceIndex) => {
     this.setState((oldState) => {
       const choices = oldState.RadioAnswerTemplates;
-      delete choices[choiceIndex];
+      choices.splice(choiceIndex, 1);
 
-      return {RadioAnswerTemplates: choices}
+      return {RadioAnswerTemplates: [...choices]}
     })
   };
 

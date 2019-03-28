@@ -193,10 +193,8 @@ func (qt *QuestionTemplate) Delete() {
 }
 
 func (qt *QuizTemplate) Save() {
-	db.Set("gorm:association_autoupdate", false).Save(qt)
-	db.Model(qt).
-		Association("QuizQuestions").
-		Replace(qt.QuizQuestions)
+	db.Set("gorm:association_autoupdate", false).Save(&qt)
+	db.Model(qt).Association("QuizQuestions").Replace(qt.QuizQuestions)
 }
 
 func (qt *QuestionTemplate) Save() {
