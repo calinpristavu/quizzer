@@ -61,7 +61,6 @@ func (qt QuizTemplate) Start(u *User) *Quiz {
 		Active:         true,
 		QuizTemplateID: qt.ID,
 		Duration:       qt.Duration,
-		Corrected:      false,
 	}
 
 	db.Save(&q)

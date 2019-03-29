@@ -50,7 +50,7 @@ type QuestionFeedback struct {
 type CheckboxAnswer struct {
 	gorm.Model
 	QuestionID uint
-	Text       string
+	Text       string `sql:"type:longtext"`
 	IsCorrect  bool
 	IsSelected bool
 }
@@ -58,7 +58,7 @@ type CheckboxAnswer struct {
 type RadioAnswer struct {
 	gorm.Model
 	QuestionID uint
-	Text       string
+	Text       string `sql:"type:longtext"`
 	IsCorrect  bool
 	IsSelected bool
 }
@@ -66,15 +66,15 @@ type RadioAnswer struct {
 type TextAnswer struct {
 	gorm.Model
 	QuestionID uint
-	Text       string `sql:"size:999999"`
+	Text       string `sql:"type:longtext"`
 	IsCorrect  bool
 }
 
 type FlowDiagramAnswer struct {
 	gorm.Model
 	QuestionID uint
-	Text       string `sql:"size:999999"`
-	SVG        string `sql:"size:999999"`
+	Text       string `sql:"type:longtext"`
+	SVG        string `sql:"type:longtext"`
 	IsCorrect  bool
 }
 
