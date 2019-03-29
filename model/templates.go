@@ -1,6 +1,7 @@
 package model
 
 import (
+	"log"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -68,6 +69,7 @@ func (qt QuizTemplate) Start(u *User) *Quiz {
 	for _, qq := range qt.QuizQuestions {
 		qq.Question.addToQuiz(q, qq.Weight)
 	}
+	log.Printf("created quiz: %v", q)
 
 	return q
 }

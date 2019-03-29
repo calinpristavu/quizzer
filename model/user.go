@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -206,6 +207,8 @@ func (u *User) FinishQuiz() {
 	u.CurrentQuiz = nil
 	u.CurrentQuizID = nil
 	db.Save(&u)
+
+	log.Printf("finished quiz: %v", u.CurrentQuiz)
 }
 
 func (u *User) FindFinishedQuizzes() []Quiz {
