@@ -36,21 +36,21 @@ type QuizQuestionTemplate struct {
 type CheckboxAnswerTemplate struct {
 	gorm.Model
 	QuestionTemplateID uint
-	Text               string
+	Text               string `sql:"type:longtext"`
 	IsCorrect          bool
 }
 
 type RadioAnswerTemplate struct {
 	gorm.Model
 	QuestionTemplateID uint
-	Text               string
+	Text               string `sql:"type:longtext"`
 	IsCorrect          bool
 }
 
 type FlowDiagramAnswerTemplate struct {
 	gorm.Model
 	QuestionTemplateID uint
-	Text               string
+	Text               string `sql:"type:longtext"`
 }
 
 func (qt QuizTemplate) Start(u *User) *Quiz {
