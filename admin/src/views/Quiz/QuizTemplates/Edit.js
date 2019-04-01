@@ -27,6 +27,7 @@ class Edit extends Component {
     quiz.QuizQuestions = quizQuestions;
 
     this.props.updateQuizTemplate(quiz)
+      .then(() => this.setState({step: 1}))
   };
 
   componentDidMount() {
@@ -40,12 +41,12 @@ class Edit extends Component {
   }
 
   render() {
-    if (this.state.quiz === null) {
+    if (!this.props.isOpen) {
       return null;
     }
 
     return (
-      <Card>
+      <Card key={this.state.quiz.ID}>
         <CardHeader>
           <i className="fa fa-edit text-warning" />
           <strong>Editing quiz {this.state.quiz.ID}</strong>
@@ -68,6 +69,9 @@ class Edit extends Component {
 }
 
 export default connect(
-  null,
+  state => ({
+    isOpen: state.quizTemplate.editItem !== null,
+    quiz: state.quizTemplate.editItem,
+  }),
   {updateQuizTemplate}
 )(Edit);

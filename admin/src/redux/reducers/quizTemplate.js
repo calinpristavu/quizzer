@@ -2,13 +2,14 @@ import {
   APPEND_QUIZ_TEMPLATE,
   SET_QUIZ_TEMPLATE_CREATE,
   REMOVE_QUIZ_TEMPLATE,
-  SET_QUIZ_TEMPLATES
+  SET_QUIZ_TEMPLATES, SET_QUIZ_TEMPLATE_EDIT
 } from "../actionTypes";
 import {Map} from 'immutable';
 
 const initialState = {
   list: Map(),
   createItem: null,
+  editItem: null,
 };
 
 export default function(state = initialState, action) {
@@ -49,6 +50,13 @@ export default function(state = initialState, action) {
       return {
         ...state,
         createItem: action.payload
+      }
+    }
+
+    case SET_QUIZ_TEMPLATE_EDIT: {
+      return {
+        ...state,
+        editItem: action.payload
       }
     }
 

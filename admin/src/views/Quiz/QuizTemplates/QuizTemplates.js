@@ -20,7 +20,6 @@ const views = {
 class QuizTemplates extends Component {
   state = {
     openedView: views.create,
-    editItem: null,
     cloneItem: null,
   };
 
@@ -52,10 +51,7 @@ class QuizTemplates extends Component {
 
           <Col xs="12" lg="6">
             <Create />
-
-            {this.state.openedView === views.edit ?
-              <Edit quiz={this.state.editItem} key={this.state.editItem.ID}/> : null
-            }
+            <Edit />
             {this.state.openedView === views.clone ?
               <Clone quiz={this.state.cloneItem} key={this.state.cloneItem.ID}/> : null
             }

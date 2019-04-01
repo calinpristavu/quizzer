@@ -62,6 +62,8 @@ func putQuizTemplate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	qt.Save()
+
+	jsonResponse(w, qt, http.StatusOK)
 }
 
 func deleteQuizTemplate(w http.ResponseWriter, r *http.Request) {
