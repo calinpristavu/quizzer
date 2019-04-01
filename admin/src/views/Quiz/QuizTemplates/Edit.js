@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import {connect} from "react-redux";
-import {updateQuizTemplate} from "../../../redux/actions";
+import {setQuizTemplateEdit, updateQuizTemplate} from "../../../redux/actions";
 
 class Edit extends Component {
   state = {
@@ -48,6 +48,12 @@ class Edit extends Component {
     return (
       <Card key={this.state.quiz.ID}>
         <CardHeader>
+          <span className="float-right">
+            <i
+              onClick={() => this.props.setQuizTemplateEdit(null)}
+              className="fa fa-minus-circle"
+              style={{cursor: "pointer"}}/>
+          </span>
           <i className="fa fa-edit text-warning" />
           <strong>Editing quiz {this.state.quiz.ID}</strong>
           <small> Form</small>
@@ -73,5 +79,5 @@ export default connect(
     isOpen: state.quizTemplate.editItem !== null,
     quiz: state.quizTemplate.editItem,
   }),
-  {updateQuizTemplate}
+  {updateQuizTemplate, setQuizTemplateEdit}
 )(Edit);

@@ -44,12 +44,12 @@ class Create extends Component {
     return (
       <Card>
         <CardHeader>
-            <span className="float-right">
-              <i
-                onClick={() => this.props.setQuizTemplateCreate(null)}
-                className="fa fa-minus-circle"
-                style={{cursor: "pointer"}}/>
-            </span>
+          <span className="float-right">
+            <i
+              onClick={() => this.props.setQuizTemplateCreate(null)}
+              className="fa fa-minus-circle"
+              style={{cursor: "pointer"}}/>
+          </span>
           <i className="fa fa-plus-circle text-success" />
           <strong>Create quiz</strong>
           <small> Wizzard</small>
