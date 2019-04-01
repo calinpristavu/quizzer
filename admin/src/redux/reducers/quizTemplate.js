@@ -1,8 +1,14 @@
-import {APPEND_QUIZ_TEMPLATE, REMOVE_QUIZ_TEMPLATE, SET_QUIZ_TEMPLATES} from "../actionTypes";
+import {
+  APPEND_QUIZ_TEMPLATE,
+  SET_QUIZ_TEMPLATE_CREATE,
+  REMOVE_QUIZ_TEMPLATE,
+  SET_QUIZ_TEMPLATES
+} from "../actionTypes";
 import {Map} from 'immutable';
 
 const initialState = {
   list: Map(),
+  createItem: null,
 };
 
 export default function(state = initialState, action) {
@@ -36,6 +42,13 @@ export default function(state = initialState, action) {
                 : 1
           )
           .asImmutable()
+      }
+    }
+
+    case SET_QUIZ_TEMPLATE_CREATE: {
+      return {
+        ...state,
+        createItem: action.payload
       }
     }
 

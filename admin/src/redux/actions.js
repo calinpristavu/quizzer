@@ -20,7 +20,7 @@ import {
   SET_QUESTION_TEMPLATE_CREATE,
   SET_QUESTION_NOTE,
   UPDATE_USER,
-  SET_CANDIDATES, OPEN_QUESTION_TEMPLATE_EDIT
+  SET_CANDIDATES, OPEN_QUESTION_TEMPLATE_EDIT, SET_QUIZ_TEMPLATE_CREATE
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -83,6 +83,13 @@ export function updateQuizTemplate(quizTemplate) {
         });
       });
   }
+}
+
+export function setQuizTemplateCreate(item) {
+  return dispatch => dispatch({
+    type: SET_QUIZ_TEMPLATE_CREATE,
+    payload: item
+  })
 }
 
 export function getQuestionTemplates() {

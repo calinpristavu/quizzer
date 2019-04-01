@@ -46,15 +46,13 @@ class QuizTemplates extends Component {
           <Col xs="12" lg="6">
             <List
               openEdit={(q) => this.setState({openedView: views.edit, editItem: q})}
-              openCreate={() => this.setState({openedView: views.create})}
               openClone={this.openClone}
               />
           </Col>
 
           <Col xs="12" lg="6">
-            {this.state.openedView === views.create ?
-              <Create /> : null
-            }
+            <Create />
+
             {this.state.openedView === views.edit ?
               <Edit quiz={this.state.editItem} key={this.state.editItem.ID}/> : null
             }

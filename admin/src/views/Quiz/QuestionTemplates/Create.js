@@ -110,7 +110,7 @@ class CreateQuestion extends Component {
             <span className="float-right">
               <i
                 onClick={() => this.props.setQuestionTemplateCreate(null)}
-                className="fa fa-close"
+                className="fa fa-minus-circle"
                 style={{cursor: "pointer"}}/>
             </span>
             <i className="fa fa-plus-circle text-success" />

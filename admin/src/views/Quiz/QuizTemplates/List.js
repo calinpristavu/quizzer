@@ -3,7 +3,7 @@ import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import {connect} from "react-redux";
-import {deleteQuizTemplate, getQuizTemplates} from "../../../redux/actions";
+import {deleteQuizTemplate, getQuizTemplates, setQuizTemplateCreate} from "../../../redux/actions";
 import {Map} from 'immutable';
 
 class List extends Component {
@@ -14,7 +14,6 @@ class List extends Component {
 
   static propTypes = {
     openEdit: PropTypes.func,
-    openCreate: PropTypes.func,
     openClone: PropTypes.func,
     delete: PropTypes.func,
     list: PropTypes.instanceOf(Map),
@@ -44,7 +43,7 @@ class List extends Component {
           <i className="fa fa-align-justify" /> Quizzes
           <span className="float-right">
             <i
-              onClick={this.props.openCreate}
+              onClick={() => this.props.setQuizTemplateCreate({})}
               className="fa fa-plus-circle text-success"
               style={{cursor: "pointer"}}/>
           </span>
@@ -94,5 +93,5 @@ export default connect(
   state => ({
     list: state.quizTemplate.list
   }),
-  {getQuizTemplates, deleteQuizTemplate}
+  {getQuizTemplates, deleteQuizTemplate, setQuizTemplateCreate}
 )(List);

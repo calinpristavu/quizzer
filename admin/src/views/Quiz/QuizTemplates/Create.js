@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import {connect} from "react-redux";
-import {createQuizTemplate} from "../../../redux/actions";
+import {createQuizTemplate, setQuizTemplateCreate} from "../../../redux/actions";
 
 class Create extends Component {
   defaultState = {
@@ -37,9 +37,19 @@ class Create extends Component {
   };
 
   render() {
+    if (!this.props.isOpen) {
+      return null;
+    }
+
     return (
       <Card>
         <CardHeader>
+            <span className="float-right">
+              <i
+                onClick={() => this.props.setQuizTemplateCreate(null)}
+                className="fa fa-minus-circle"
+                style={{cursor: "pointer"}}/>
+            </span>
           <i className="fa fa-plus-circle text-success" />
           <strong>Create quiz</strong>
           <small> Wizzard</small>
@@ -61,6 +71,8 @@ class Create extends Component {
 }
 
 export default connect(
-  null,
-  {createQuizTemplate}
+  state => ({
+    isOpen: state.quizTemplate.createItem !== null
+  }),
+  {createQuizTemplate, setQuizTemplateCreate}
 )(Create);
