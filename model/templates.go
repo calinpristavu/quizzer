@@ -172,6 +172,11 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz, weight uint) {
 func (qt *QuizTemplate) Create() {
 	qt.CreatedAt = time.Now()
 	db.Create(qt)
+
+	db.Model(qt).
+		Preload("QuizQuestions").
+		Preload("QuizQuestions.Question").
+		Find(&qt)
 }
 
 func (qt *QuizTemplate) Delete() {
