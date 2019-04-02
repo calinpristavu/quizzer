@@ -35,16 +35,26 @@
     <div class="section col-md-12">
         <div class="section-content">
             <h1>Congratz!!! you have finished quiz: {{.Quiz.ID}}</h1>
-            <br>
-            <table class="table table-responsive">
-                <thead>
+            <div class="row text-center">
+                <div class="offset-4 col-1">
+                    <a href="{{.Referer}}" class="btn btn-default"><- Back</a>
+                </div>
+                <div class="offset-1 col-1">
+                    <form action="/finished" method="POST">
+                        <button type="submit" class="btn btn-success">Submit Quiz</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-responsive">
+                    <thead>
                     <tr>
                         <th>Question</th>
                         <th>Answers</th>
                     </tr>
-                </thead>
+                    </thead>
 
-                <tbody>
+                    <tbody>
                     {{range .Quiz.Questions}}
                         <tr>
                             <td>{{raw .Text}}</td>
@@ -102,17 +112,8 @@
                             </td>
                         </tr>
                     {{end}}
-                </tbody>
-            </table>
-            <div class="row text-center">
-                <div class="offset-4 col-1">
-                    <a href="{{.Referer}}" class="btn btn-default"><- Back</a>
-                </div>
-                <div class="offset-1 col-1">
-                    <form action="/finished" method="POST">
-                        <button type="submit" class="btn btn-success">Submit Quiz</button>
-                    </form>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
