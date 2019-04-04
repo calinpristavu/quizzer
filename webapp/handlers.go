@@ -60,6 +60,12 @@ func question(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if u.CurrentQuiz == nil {
+		currentQuiz := model.FindQuiz(int(*u.CurrentQuizID))
+		u.CurrentQuiz = &currentQuiz
+		LoggedIn[u.Username] = u
+	}
+
 	if qIdx > len(u.CurrentQuiz.Questions)-1 {
 		http.Redirect(w, r, "/finished", http.StatusFound)
 
