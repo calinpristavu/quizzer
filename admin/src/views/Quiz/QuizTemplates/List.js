@@ -3,7 +3,13 @@ import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import {connect} from "react-redux";
-import {deleteQuizTemplate, getQuizTemplates, setQuizTemplateCreate, setQuizTemplateEdit} from "../../../redux/actions";
+import {
+  cloneQuizTemplate,
+  deleteQuizTemplate,
+  getQuizTemplates,
+  setQuizTemplateCreate,
+  setQuizTemplateEdit
+} from "../../../redux/actions";
 import {Map} from 'immutable';
 
 class List extends Component {
@@ -13,7 +19,6 @@ class List extends Component {
   };
 
   static propTypes = {
-    openClone: PropTypes.func,
     delete: PropTypes.func,
     list: PropTypes.instanceOf(Map),
   };
@@ -64,7 +69,7 @@ class List extends Component {
                   <td>{q.QuizQuestions !== null ? q.QuizQuestions.length : 0}</td>
                   <td>{q.Duration}</td>
                   <td>
-                    <i onClick={() => this.props.openClone(q.ID)} className="fa fa-copy text-success"/>
+                    <i onClick={() => this.props.cloneQuizTemplate(q)} className="fa fa-copy text-success"/>
                     <i onClick={() => this.props.setQuizTemplateEdit(q)} className="fa fa-edit text-warning"/>
                     <i
                       onClick={(e) => { if (window.confirm('Are you sure you wish to delete this Question?')) this.delete(e, q.ID) } }
@@ -92,5 +97,5 @@ export default connect(
   state => ({
     list: state.quizTemplate.list
   }),
-  {getQuizTemplates, deleteQuizTemplate, setQuizTemplateCreate, setQuizTemplateEdit}
+  {getQuizTemplates, deleteQuizTemplate, setQuizTemplateCreate, setQuizTemplateEdit, cloneQuizTemplate}
 )(List);

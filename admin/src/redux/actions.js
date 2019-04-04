@@ -103,6 +103,20 @@ export function setQuizTemplateEdit(item) {
   })
 }
 
+export function cloneQuizTemplate(qt) {
+  qt = JSON.parse(JSON.stringify(qt));
+  qt.Name = "(cloned - modify to your needs) " + qt.Name;
+  qt.ID = null;
+  qt.QuizQuestions.forEach(qq => {
+    qq.QuizID = null;
+  });
+
+  return dispatch => dispatch({
+    type: SET_QUIZ_TEMPLATE_EDIT,
+    payload: qt
+  })
+}
+
 export function getQuestionTemplates() {
   return (dispatch, getState) => {
     if (getState().questionTemplate.list.size > 0) {
