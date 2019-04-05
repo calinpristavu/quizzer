@@ -87,16 +87,6 @@ func FindQuizTemplate(id int) (QuizTemplate, bool) {
 	return qt, !res.RecordNotFound()
 }
 
-func FindQuizTemplatesNoQuestions() []QuizTemplate {
-	var qts []QuizTemplate
-	db.
-		Model(&qts).
-		Preload("QuizQuestions").
-		Find(&qts)
-
-	return qts
-}
-
 func FindQuizTemplates() []QuizTemplate {
 	var qts []QuizTemplate
 	db.

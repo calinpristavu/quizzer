@@ -12,7 +12,7 @@ import (
 )
 
 func getQuizTemplates(w http.ResponseWriter, _ *http.Request) {
-	qts := model.FindQuizTemplatesNoQuestions()
+	qts := model.FindQuizTemplates()
 
 	jsonResponse(w, qts, http.StatusOK)
 }

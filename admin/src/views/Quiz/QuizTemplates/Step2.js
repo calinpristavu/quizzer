@@ -49,9 +49,13 @@ class Step2 extends Component {
     const opts = [];
 
     questionTemplates.forEach(q => {
+      const label = q.Text
+        .replace(/(<([^>]+)>)/ig,"")
+        .substr(0, 100);
+
       opts.push({
         value: q.ID,
-        label: `# ${q.ID} ${q.Text.substr(0, 100)} ...`
+        label: `# ${q.ID} ${label} ...`
       })
     });
 
