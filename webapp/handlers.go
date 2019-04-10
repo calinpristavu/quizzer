@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 
@@ -62,6 +63,9 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 	if u.CurrentQuiz == nil {
 		currentQuiz := model.FindQuiz(int(*u.CurrentQuizID))
+
+		sort.Sort(model.QuestionsByOrder(currentQuiz.Questions))
+
 		u.CurrentQuiz = &currentQuiz
 		LoggedIn[u.Username] = u
 	}

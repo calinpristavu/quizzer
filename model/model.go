@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 
@@ -24,14 +25,16 @@ type Quiz struct {
 
 type Question struct {
 	gorm.Model
-	QuizID             uint
-	Text               string `sql:"type:longtext"`
-	Type               uint
-	IsAnswered         bool   `gorm:"not null";sql:"DEFAULT:0"`
-	IsCorrect          bool   `gorm:"not null";sql:"DEFAULT:0"`
-	Score              uint   `sql:"default:0"`
-	Weight             uint   `sql:"default:1"`
-	Notes              string `sql:"type:longtext"`
+	QuizID     uint
+	Text       string `sql:"type:longtext"`
+	Type       uint
+	IsAnswered bool   `gorm:"not null";sql:"DEFAULT:0"`
+	IsCorrect  bool   `gorm:"not null";sql:"DEFAULT:0"`
+	Score      uint   `sql:"default:0"`
+	Weight     uint   `sql:"default:1"`
+	Notes      string `sql:"type:longtext"`
+	Order      int    `sql:"default:1"`
+
 	Feedback           []*QuestionFeedback
 	CheckboxAnswers    []*CheckboxAnswer
 	RadioAnswers       []*RadioAnswer
@@ -104,6 +107,8 @@ func NewQuiz(u *User, noQ int) *Quiz {
 	for _, qt := range qts {
 		qt.addToQuiz(q, averageWeight)
 	}
+
+	sort.Sort(QuestionsByOrder(q.Questions))
 
 	return q
 }

@@ -2,6 +2,7 @@ package model
 
 import (
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -16,8 +17,10 @@ type QuizTemplate struct {
 
 type QuestionTemplate struct {
 	gorm.Model
-	Text                      string `sql:"type:longtext"`
-	Type                      uint
+	Text  string `sql:"type:longtext"`
+	Type  uint
+	Order int `sql:"default:1"`
+
 	QuizQuestions             []*QuizQuestionTemplate `gorm:"foreignkey:QuestionID"`
 	CheckboxAnswerTemplates   []*CheckboxAnswerTemplate
 	RadioAnswerTemplates      []*RadioAnswerTemplate
@@ -69,6 +72,7 @@ func (qt QuizTemplate) Start(u *User) *Quiz {
 		qq.Question.addToQuiz(q, qq.Weight)
 	}
 	log.Printf("created quiz: %v", q)
+	sort.Sort(QuestionsByOrder(q.Questions))
 
 	return q
 }
@@ -138,6 +142,7 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz, weight uint) {
 		Type:               qt.Type,
 		QuestionTemplateID: qt.ID,
 		Weight:             weight,
+		Order:              qt.Order,
 		Notes:              "",
 	}
 
