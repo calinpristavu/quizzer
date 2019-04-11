@@ -47,7 +47,7 @@
     {{range .Question.Feedback}}
         <div class="media comment-box">
             <div class="media-left">
-                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="me">
+                <img class="img-responsive user-photo" src="/resources/avatar_2x.png" alt="me">
             </div>
             <div class="media-body">
                 <h4 class="media-heading">{{$username}}</h4>
@@ -59,7 +59,7 @@
     <form action="/question/{{.Qidx}}/feedback" method="POST" id="feedback-form">
         <div class="media comment-box">
             <div class="media-left">
-                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="me">
+                <img class="img-responsive user-photo" src="/resources/avatar_2x.png" alt="me">
             </div>
             <div class="media-body">
                 <h4 class="media-heading"><span>{{$username}}</span> <button class="btn-success btn-sm" type="submit">Save</button></h4>

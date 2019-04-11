@@ -29,6 +29,8 @@ func main() {
 }
 
 func bootWs(r *mux.Router, port string) {
+	serveStaticResources(r)
+
 	// TODO: ADD PROPPER CORS HANDLING!!!!!
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
@@ -45,4 +47,12 @@ func bootWs(r *mux.Router, port string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func serveStaticResources(r *mux.Router) {
+	resources := http.FileServer(http.Dir("resources"))
+	r.PathPrefix("/resources/").Handler(http.StripPrefix("/resources/", resources))
+
+	fonts := http.FileServer(http.Dir("webfonts"))
+	r.PathPrefix("/webfonts/").Handler(http.StripPrefix("/webfonts/", fonts))
 }
