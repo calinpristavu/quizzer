@@ -270,6 +270,8 @@ func saveScores(w http.ResponseWriter, r *http.Request) {
 	}
 
 	quiz.UpdateScore()
+	quiz.MarkAsCorrected()
+
 	jsonResponse(w, "Scores updated.", http.StatusOK)
 }
 

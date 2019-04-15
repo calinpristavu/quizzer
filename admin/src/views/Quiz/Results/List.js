@@ -123,6 +123,18 @@ class List extends Component {
     </a>;
   }
 
+  static renderStatus(q) {
+    if (q.Active) {
+      return 'In Progress';
+    }
+
+    if (q.Corrected) {
+      return 'Corrected';
+    }
+
+    return 'Finished';
+  }
+
   renderQuizTemplateCell = (name) => {
     return name === 'Generated'
       ? name
@@ -171,7 +183,7 @@ class List extends Component {
                 <td>{List.computePercentCompleted(q.Questions).toFixed(0)}<small className="text-muted">%</small></td>
                 <td>{List.computeScore(q.Questions).toFixed(0)}<small>%</small></td>
                 <td>{List.renderRecruiteeLink(q)}</td>
-                <td>{q.Active ? 'In Progress' : 'Finished'}</td>
+                <td>{List.renderStatus(q)}</td>
                 <td>{q.Active
                   ? '-'
                   : <span>{List.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}</span>

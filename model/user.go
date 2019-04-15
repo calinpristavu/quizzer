@@ -199,7 +199,6 @@ func (r Role) FindChildWithId(id int) (Role, error) {
 
 func (u *User) FinishQuiz() {
 	u.CurrentQuiz.Active = false
-	u.CurrentQuiz.Corrected = false
 	u.CurrentQuiz.UpdateScore()
 
 	db.Save(&u.CurrentQuiz)

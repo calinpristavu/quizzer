@@ -296,8 +296,17 @@ func (q *Quiz) UpdateScore() {
 	db.Model(q).
 		Set("gorm:association_autoupdate", false).
 		UpdateColumns(Quiz{
-			Score:     q.Score,
-			Corrected: true,
+			Score: q.Score,
+		})
+}
+
+func (q *Quiz) MarkAsCorrected() {
+	q.Corrected = true
+
+	db.Model(q).
+		Set("gorm:association_autoupdate", false).
+		UpdateColumns(Quiz{
+			Corrected: q.Corrected,
 		})
 }
 
