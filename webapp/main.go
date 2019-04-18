@@ -83,7 +83,10 @@ func registerRoutes(public *mux.Router) {
 	api.Path("/new-api/users/{id}").Methods("PATCH").HandlerFunc(patchUser)
 
 	api.Path("/new-api/quizzes").Methods("GET").HandlerFunc(getQuizzes)
+
+	// todo: the next 2 routes should contain the quizID
 	api.Path("/new-api/quizzes/save-scores").Methods("POST").HandlerFunc(saveScores)
+	api.Path("/new-api/quizzes/start-correcting").Methods("POST").HandlerFunc(startCorrecting)
 
 	api.Path("/new-api/stats/quizzes-per-day").Methods("GET").HandlerFunc(statsTotalAttempts)
 	api.Path("/new-api/stats/avg-result").Methods("GET").HandlerFunc(statsAvgResult)

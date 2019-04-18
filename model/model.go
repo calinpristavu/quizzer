@@ -21,6 +21,8 @@ type Quiz struct {
 	QuizTemplateID uint
 	Duration       Duration `sql:"type:VARCHAR(50)"`
 	Corrected      bool     `sql:"DEFAULT:0"`
+	CorrectingByID uint
+	CorrectingBy   *User `gorm:"association_autoupdate:false;association_autocreate:false"`
 }
 
 type Question struct {
@@ -278,10 +280,20 @@ func (q *Question) SaveAnswer(r *http.Request) error {
 	return err
 }
 
-func (q *Question) SaveFields(fields Question) {
-	db.Model(&q).
+func (q *Question) UpdateScore(score uint) {
+	q.Score = score
+
+	db.Debug().Model(q).
 		Set("gorm:association_autoupdate", false).
-		UpdateColumns(fields)
+		Update("score", q.Score)
+}
+
+func (q *Question) UpdateNotes(notes string) {
+	q.Notes = notes
+
+	db.Debug().Model(q).
+		Set("gorm:association_autoupdate", false).
+		Update("notes", q.Notes)
 }
 
 func (q *Quiz) UpdateScore() {
@@ -295,19 +307,27 @@ func (q *Quiz) UpdateScore() {
 	q.Score = weightedScore / totalWeight
 	db.Model(q).
 		Set("gorm:association_autoupdate", false).
-		UpdateColumns(Quiz{
-			Score: q.Score,
-		})
+		Update("score", q.Score)
 }
 
 func (q *Quiz) MarkAsCorrected() {
 	q.Corrected = true
+	q.CorrectingBy = nil
+	q.CorrectingByID = 0
 
 	db.Model(q).
 		Set("gorm:association_autoupdate", false).
-		UpdateColumns(Quiz{
-			Corrected: q.Corrected,
-		})
+		Update("corrected", q.Corrected).
+		Update("correcting_by_id", q.CorrectingByID)
+}
+
+func (q *Quiz) StartCorrecting(u *User) {
+	q.CorrectingByID = u.ID
+	q.CorrectingBy = u
+
+	db.Model(q).
+		Set("gorm:association_autoupdate", false).
+		Update("correcting_by_id", q.CorrectingByID)
 }
 
 func FindStatsTotalAttempts() interface{} {

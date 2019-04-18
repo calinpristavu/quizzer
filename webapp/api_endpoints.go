@@ -263,16 +263,38 @@ func saveScores(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, q := range quiz.Questions {
-		q.SaveFields(model.Question{
-			Score: q.Score,
-			Notes: q.Notes,
-		})
+		q.UpdateScore(q.Score)
+		q.UpdateNotes(q.Notes)
 	}
 
 	quiz.UpdateScore()
 	quiz.MarkAsCorrected()
 
 	jsonResponse(w, "Scores updated.", http.StatusOK)
+}
+
+func startCorrecting(w http.ResponseWriter, r *http.Request) {
+	var payload struct {
+		QuizID int
+		UserID uint
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		jsonResponse(w, "Error in request", http.StatusBadRequest)
+		return
+	}
+
+	q := model.FindQuiz(payload.QuizID)
+
+	u, found := model.FindUser(payload.UserID)
+	if !found {
+		jsonResponse(w, "No user found for that id.", http.StatusNotFound)
+	}
+
+	q.StartCorrecting(&u)
+
+	jsonResponse(w, q, http.StatusOK)
 }
 
 func postToken(w http.ResponseWriter, r *http.Request) {
@@ -302,8 +324,9 @@ func postToken(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(
 		w,
 		struct {
-			T string `json:"token"`
-		}{tokenString},
+			T string      `json:"token"`
+			U *model.User `json:"user"`
+		}{tokenString, user},
 		http.StatusOK,
 	)
 }

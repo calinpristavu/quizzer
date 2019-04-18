@@ -20,7 +20,7 @@ import {
   SET_QUESTION_TEMPLATE_CREATE,
   SET_QUESTION_NOTE,
   UPDATE_USER,
-  SET_CANDIDATES, OPEN_QUESTION_TEMPLATE_EDIT, SET_QUIZ_TEMPLATE_CREATE, SET_QUIZ_TEMPLATE_EDIT
+  SET_CANDIDATES, OPEN_QUESTION_TEMPLATE_EDIT, SET_QUIZ_TEMPLATE_CREATE, SET_QUIZ_TEMPLATE_EDIT, SET_QUIZ_CORRECTING_BY
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -268,9 +268,10 @@ export function getToken(username, password) {
     })
       .then(r => {
         localStorage.setItem('token', r.token);
+        localStorage.setItem('user', JSON.stringify(r.user));
         dispatch({
           type: LOGIN,
-          payload: r.token
+          payload: r
         });
       })
   }
@@ -348,16 +349,36 @@ export function setQuestionNote(question, note) {
 }
 
 export function saveScores(quiz) {
-  return () => {
+  return dispatch => {
     fetch('/quizzes/save-scores', {
       method: "POST",
       body: JSON.stringify(quiz)
     })
       .then(r => {
+        dispatch({
+          type: SET_QUIZ_CORRECTING_BY,
+          payload: 0
+        });
         new Noty({
           text: r,
           type: 'success',
         }).show();
       })
+  }
+}
+
+export function startCorrecting(quizID, userID) {
+  return dispatch => {
+    fetch('/quizzes/start-correcting', {
+      method: "POST",
+      body: JSON.stringify({
+        QuizID: quizID,
+        UserID: userID,
+      })
+    })
+      .then(() => dispatch({
+        type: SET_QUIZ_CORRECTING_BY,
+        payload: userID
+      }))
   }
 }

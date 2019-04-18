@@ -17,7 +17,12 @@ class RadioQuestion extends Component {
         IsSelected: PropTypes.bool.isRequired,
       })).isRequired,
       Score: PropTypes.number.isRequired,
-    }).isRequired
+    }).isRequired,
+    disabled: PropTypes.bool.isRequired
+  };
+
+  static defaultProps = {
+    disabled: false
   };
 
   state = {
@@ -44,7 +49,7 @@ class RadioQuestion extends Component {
   };
 
   renderChoice = (a, i) => {
-    var color = "inherit";
+    let color = "inherit";
 
     if (a.IsCorrect && a.IsSelected) {
       color = "#4DBD74"
@@ -85,7 +90,8 @@ class RadioQuestion extends Component {
               label
               size={'lg'}
               dataOn={'\u2713'}
-              dataOff={'\u2715'} />
+              dataOff={'\u2715'}
+              disabled={this.props.disabled}/>
           </div>
           <div className="clearfix">
             <RadioTip id={this.props.question.ID}/>

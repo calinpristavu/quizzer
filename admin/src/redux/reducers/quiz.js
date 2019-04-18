@@ -1,4 +1,10 @@
-import {OPEN_QUIZ_VIEW, SET_QUESTION_NOTE, SET_QUESTION_SCORE, SET_QUIZZES} from "../actionTypes";
+import {
+  OPEN_QUIZ_VIEW,
+  SET_QUESTION_NOTE,
+  SET_QUESTION_SCORE,
+  SET_QUIZ_CORRECTING_BY,
+  SET_QUIZZES
+} from "../actionTypes";
 import {Map} from 'immutable';
 
 const initialState = {
@@ -23,6 +29,15 @@ export default function(state = initialState, action) {
       return {
         ...state,
         viewedItem: action.payload
+      }
+    }
+    case SET_QUIZ_CORRECTING_BY: {
+      return {
+        ...state,
+        list: state.list.setIn([
+          state.viewedItem,
+          "CorrectingByID"
+        ], action.payload),
       }
     }
     case SET_QUESTION_SCORE: {

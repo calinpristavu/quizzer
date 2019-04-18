@@ -14,7 +14,8 @@ const initialState = {
   candidates: Set(),
   viewUser: null,
   createUser: true,
-  token: localStorage.getItem('token')
+  token: localStorage.getItem('token'),
+  loggedInUser: JSON.parse(localStorage.getItem('user'))
 };
 
 export default function(state = initialState, action) {
@@ -22,13 +23,15 @@ export default function(state = initialState, action) {
     case LOGIN: {
       return {
         ...state,
-        token: action.payload
+        token: action.payload.token,
+        loggedInUser: action.payload.user,
       }
     }
     case LOGOUT: {
       return {
         ...state,
-        token: null
+        token: null,
+        loggedInUser: null
       }
     }
     case SET_VIEWED_USER: {

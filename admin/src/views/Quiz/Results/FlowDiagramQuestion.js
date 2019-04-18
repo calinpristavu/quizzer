@@ -15,7 +15,12 @@ class FlowDiagramQuestion extends Component {
         SVG: PropTypes.string.isRequired
       }).isRequired,
       Score: PropTypes.number.isRequired,
-    }).isRequired
+    }).isRequired,
+    disabled: PropTypes.bool.isRequired
+  };
+
+  static defaultProps = {
+    disabled: false
   };
 
   state = {
@@ -73,7 +78,8 @@ class FlowDiagramQuestion extends Component {
                       onChange={(e) => this.setState({Score: parseInt(e.target.value)})}
                       onBlur={() => this.props.setQuestionScore(this.props.question, this.state.Score)}
                       defaultValue={this.props.question.Score}
-                      type="number"/>
+                      type="number"
+                      disabled={this.props.disabled}/>
                   </InputGroup>
                 </Col>
               </FormGroup>

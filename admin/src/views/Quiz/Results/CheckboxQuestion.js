@@ -17,7 +17,12 @@ class CheckboxQuestion extends Component {
         IsSelected: PropTypes.bool.isRequired,
       })).isRequired,
       Score: PropTypes.number.isRequired,
-    }).isRequired
+    }).isRequired,
+    disabled: PropTypes.bool.isRequired
+  };
+
+  static defaultProps = {
+    disabled: false
   };
 
   state = {
@@ -85,7 +90,8 @@ class CheckboxQuestion extends Component {
               size={'lg'}
               label
               dataOn={'\u2713'}
-              dataOff={'\u2715'} />
+              dataOff={'\u2715'}
+              disabled={this.props.disabled}/>
           </div>
           <div className="clearfix">
             <CheckboxTip id={this.props.question.ID}/>
