@@ -11,7 +11,7 @@ class Results extends Component {
     return (
       <div className="animated fadeIn">
         <Row>
-          <Col xl={12}>
+          <Col xl={12} className="d-print-none">
             <List />
           </Col>
 
