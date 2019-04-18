@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -50,6 +51,10 @@ func FindByUsername(uname string) (*User, error) {
 		First(&u)
 	if res.RecordNotFound() {
 		return nil, fmt.Errorf("No user with username %s\n", uname)
+	}
+
+	if u.CurrentQuiz != nil {
+		sort.Sort(QuestionsByOrder(u.CurrentQuiz.Questions))
 	}
 
 	r, err := RoleRoot.FindChildWithId(u.RoleID)
