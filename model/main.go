@@ -17,8 +17,8 @@ func init() {
 	migrateDb()
 }
 
-func migrateDb() *gorm.DB {
-	return db.AutoMigrate(
+func migrateDb() {
+	db.AutoMigrate(
 		&User{},
 		&Quiz{},
 		&Question{},
@@ -34,6 +34,13 @@ func migrateDb() *gorm.DB {
 		&RadioAnswerTemplate{},
 		&FlowDiagramAnswerTemplate{},
 	)
+
+	db.Model(&Question{}).AddForeignKey("quiz_id", "quizzes(id)", "CASCADE", "NO ACTION")
+	db.Model(&QuestionFeedback{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Model(&CheckboxAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Model(&RadioAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Model(&TextAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Model(&FlowDiagramAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
 }
 
 func initDb() *gorm.DB {
