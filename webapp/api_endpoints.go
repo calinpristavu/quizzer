@@ -164,6 +164,12 @@ func deleteQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func getQuestionTemplateTags(w http.ResponseWriter, r *http.Request) {
+	qtts := model.FindQuestionTemplateTags()
+
+	jsonResponse(w, qtts, http.StatusOK)
+}
+
 func getUsers(w http.ResponseWriter, _ *http.Request) {
 	us := model.FindUsers()
 

@@ -17,8 +17,9 @@ import {Editor} from "react-draft-wysiwyg";
 import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import draftToHtml from "draftjs-to-html";
 import {connect} from "react-redux";
-import {updateQuestionTemplate} from "../../../redux/actions";
+import {getQuestionTags, updateQuestionTemplate} from "../../../redux/actions";
 import {editedQuestionTemplate} from "../../../redux/selectors";
+import CreatableSelect from "react-select/lib/Creatable";
 
 class EditQuestion extends Component {
   state = {};
@@ -28,6 +29,10 @@ class EditQuestion extends Component {
   static propTypes = {
     question: PropTypes.object,
   };
+
+  componentDidMount() {
+    this.props.getQuestionTags()
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.question !== this.state) {
@@ -107,6 +112,33 @@ class EditQuestion extends Component {
     })
   };
 
+  static tagsAsOptions = (tags) => {
+    const opts = [];
+
+    tags.forEach(t => {
+      opts.push({
+        value: t.Text,
+        label: t.Text
+      })
+    });
+
+    return opts;
+  };
+
+  storeTags = (opts) => {
+    this.setState({
+      Tags: opts.map(o => {
+        const existingTag = this.props.tags.find(t => t.Text === o.value);
+
+        if (existingTag !== undefined) {
+          return existingTag;
+        }
+
+        return {Text: o.value};
+      })
+    })
+  };
+
   render() {
     if (null === this.props.question) {
       return null;
@@ -122,6 +154,19 @@ class EditQuestion extends Component {
           </CardHeader>
           <CardBody>
             <CardBody>
+              <Row>
+                <Col xs={12}>
+                  <FormGroup>
+                    <Label>Tags</Label>
+                    <CreatableSelect
+                      isMulti
+                      isClearable
+                      onChange={this.storeTags}
+                      defaultValue={EditQuestion.tagsAsOptions(this.props.question.Tags || [])}
+                      options={EditQuestion.tagsAsOptions(this.props.tags)}/>
+                  </FormGroup>
+                </Col>
+              </Row>
               <Row>
                 <Col xs="12">
                   <FormGroup>
@@ -226,7 +271,8 @@ class EditQuestion extends Component {
 
 export default connect(
   state => ({
-    question: editedQuestionTemplate(state)
+    question: editedQuestionTemplate(state),
+    tags: state.tags.list
   }),
-  {updateQuestionTemplate}
+  {updateQuestionTemplate, getQuestionTags}
 )(EditQuestion);

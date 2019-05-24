@@ -29,6 +29,7 @@ func migrateDb() {
 		&FlowDiagramAnswer{},
 		&QuizTemplate{},
 		&QuestionTemplate{},
+		&QuestionTemplateTag{},
 		&QuizQuestionTemplate{},
 		&CheckboxAnswerTemplate{},
 		&RadioAnswerTemplate{},

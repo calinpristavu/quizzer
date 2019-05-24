@@ -26,6 +26,7 @@ type QuestionTemplate struct {
 	RadioAnswerTemplates      []*RadioAnswerTemplate
 	FlowDiagramAnswerTemplate *FlowDiagramAnswerTemplate
 	Usages                    []Question
+	Tags                      []QuestionTemplateTag `gorm:"many2many:question_templates_tags;"`
 }
 
 type QuizQuestionTemplate struct {
@@ -57,6 +58,12 @@ type FlowDiagramAnswerTemplate struct {
 	Text               string `sql:"type:longtext"`
 }
 
+type QuestionTemplateTag struct {
+	ID        uint `gorm:"primary_key"`
+	Text      string
+	Questions []QuestionTemplate
+}
+
 func (qt QuizTemplate) Start(u *User) *Quiz {
 	q := &Quiz{
 		UserID:         u.ID,
@@ -83,6 +90,7 @@ func FindQuizTemplate(id int) (QuizTemplate, bool) {
 		Model(&qt).
 		Preload("QuizQuestions").
 		Preload("QuizQuestions.Question").
+		Preload("QuizQuestions.Question.Tags").
 		Preload("QuizQuestions.Question.CheckboxAnswerTemplates").
 		Preload("QuizQuestions.Question.RadioAnswerTemplates").
 		Preload("QuizQuestions.Question.FlowDiagramAnswerTemplate").
@@ -97,6 +105,7 @@ func FindQuizTemplates() []QuizTemplate {
 		Model(&qts).
 		Preload("QuizQuestions").
 		Preload("QuizQuestions.Question").
+		Preload("QuizQuestions.Question.Tags").
 		Preload("QuizQuestions.Question.CheckboxAnswerTemplates").
 		Preload("QuizQuestions.Question.RadioAnswerTemplates").
 		Preload("QuizQuestions.Question.FlowDiagramAnswerTemplate").
@@ -113,6 +122,7 @@ func FindQuestionTemplate(id uint) (QuestionTemplate, bool) {
 		Preload("RadioAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
 		Preload("Usages").
+		Preload("Tags").
 		First(&qt, id)
 
 	return qt, !res.RecordNotFound()
@@ -122,6 +132,7 @@ func FindQuestionTemplates() []QuestionTemplate {
 	var qts []QuestionTemplate
 	db.
 		Preload("QuizQuestions").
+		Preload("Tags").
 		Preload("QuizQuestions.Quiz").
 		Preload("CheckboxAnswerTemplates").
 		Preload("RadioAnswerTemplates").
@@ -132,6 +143,13 @@ func FindQuestionTemplates() []QuestionTemplate {
 		Find(&qts)
 
 	return qts
+}
+
+func FindQuestionTemplateTags() []QuestionTemplateTag {
+	var qtts []QuestionTemplateTag
+	db.Find(&qtts)
+
+	return qtts
 }
 
 func (qt QuestionTemplate) addToQuiz(quiz *Quiz, weight uint) {

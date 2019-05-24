@@ -4,7 +4,9 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {questionTypes} from "./QuestionTemplates";
 import {Map} from 'immutable';
-var nestedProp = require('nested-property');
+import {getQuestionTags} from "../../../redux/actions";
+import {connect} from "react-redux";
+const nestedProp = require('nested-property');
 
 class Filters extends Component {
   static propTypes = {
@@ -13,8 +15,12 @@ class Filters extends Component {
     items: PropTypes.instanceOf(Map),
   };
 
-  static buildTypeOptions = (quizzes) => {
-    return quizzes.reduce((unique, q) => {
+  componentDidMount() {
+    this.props.getQuestionTags()
+  }
+
+  static buildTypeOptions = (questions) => {
+    return questions.reduce((unique, q) => {
       if (unique.find(u => u.value === q.Type) === undefined) {
         unique.push({
           value: q.Type,
@@ -26,6 +32,19 @@ class Filters extends Component {
     }, []);
   };
 
+  buildTagOptions = () => {
+    const opts = [];
+
+    this.props.tags.forEach(t => {
+      opts.push({
+        value: t.ID,
+        label: t.Text
+      })
+    });
+
+    return opts;
+  };
+
   addFilter = (options, filterName) => {
     if (options.length === 0) {
       return this.props.clearFilter(filterName)
@@ -35,10 +54,21 @@ class Filters extends Component {
 
   static apply = (list, filters) => {
     return list.filter(q => {
-      return filters.reduce(
-        (ok, f) => ok && f.values.includes(nestedProp.get(q, f.propertyPath)),
-        true
-      );
+      return filters.every(f => {
+        const candidateField = nestedProp.get(q, f.propertyPath);
+        // if is scalar
+        if ((/boolean|number|string/).test(typeof candidateField)) {
+          return f.values.includes(nestedProp.get(q, f.propertyPath))
+        }
+
+        if (Array.isArray(candidateField)) {
+          // intersects the 2 arrays, returns true if common item found
+          return candidateField.some(c => f.values.includes(c.ID))
+          // return f.values.some(v => candidateField.some(c => c.ID === v.ID))
+        }
+
+        return false
+      });
     });
   };
 
@@ -54,9 +84,23 @@ class Filters extends Component {
               options={Filters.buildTypeOptions(this.props.items)}/>
           </FormGroup>
         </Col>
+        <Col xs="4">
+          <FormGroup>
+            <Select
+              isMulti
+              placeholder="Filter by tags"
+              onChange={(opt) => this.addFilter(opt, 'Tags')}
+              options={this.buildTagOptions()}/>
+          </FormGroup>
+        </Col>
       </Row>
     )
   }
 }
 
-export default Filters;
+export default connect(
+  state => ({
+    tags: state.tags.list
+  }),
+  {getQuestionTags}
+)(Filters);

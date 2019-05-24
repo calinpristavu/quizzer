@@ -20,7 +20,12 @@ import {
   SET_QUESTION_TEMPLATE_CREATE,
   SET_QUESTION_NOTE,
   UPDATE_USER,
-  SET_CANDIDATES, OPEN_QUESTION_TEMPLATE_EDIT, SET_QUIZ_TEMPLATE_CREATE, SET_QUIZ_TEMPLATE_EDIT, SET_QUIZ_CORRECTING_BY
+  SET_CANDIDATES,
+  OPEN_QUESTION_TEMPLATE_EDIT,
+  SET_QUIZ_TEMPLATE_CREATE,
+  SET_QUIZ_TEMPLATE_EDIT,
+  SET_QUIZ_CORRECTING_BY,
+  SET_QUESTION_TAGS
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -177,6 +182,14 @@ export function updateQuestionTemplate(questionTemplate) {
 
 export function setQuestionTemplateCreate(val) {
   return dispatch => dispatch({type: SET_QUESTION_TEMPLATE_CREATE, payload: val})
+}
+
+export function getQuestionTags() {
+  return dispatch => fetch("/question-template-tags")
+    .then(r => dispatch({
+      type: SET_QUESTION_TAGS,
+      payload: r
+    }));
 }
 
 export function getQuizzes() {

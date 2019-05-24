@@ -17,11 +17,13 @@ import draftToHtml from 'draftjs-to-html';
 import {CheckboxAnswerTemplates, FlowDiagramAnswer, RadioAnswerTemplates} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {createQuestionTemplate, setQuestionTemplateCreate} from "../../../redux/actions";
+import {createQuestionTemplate, getQuestionTags, setQuestionTemplateCreate} from "../../../redux/actions";
 import {questionTypes} from "./QuestionTemplates";
+import CreatableSelect from 'react-select/lib/Creatable';
 
 class CreateQuestion extends Component {
   defaultState = {
+    Tags: [],
     Text: '<p>Here\'s where the question text goes...</p>',
     Type: null,
     CheckboxAnswerTemplates: [],
@@ -33,6 +35,10 @@ class CreateQuestion extends Component {
   state = this.defaultState;
 
   createFormRef = React.createRef();
+
+  componentDidMount() {
+    this.props.getQuestionTags()
+  }
 
   create = () => {
     const question = this.state;
@@ -98,6 +104,33 @@ class CreateQuestion extends Component {
     })
   };
 
+  static tagsAsOptions = (tags) => {
+    const opts = [];
+
+    tags.forEach(t => {
+      opts.push({
+        value: t.Text,
+        label: t.Text
+      })
+    });
+
+    return opts;
+  };
+
+  storeTags = (opts) => {
+    this.setState({
+      Tags: opts.map(o => {
+        const existingTag = this.props.tags.find(t => t.Text === o.value);
+
+        if (existingTag !== undefined) {
+          return existingTag;
+        }
+
+        return {Text: o.value};
+      })
+    })
+  };
+
   render() {
     if (!this.props.isOpen) {
       return null
@@ -118,6 +151,18 @@ class CreateQuestion extends Component {
             <small> Form</small>
           </CardHeader>
           <CardBody>
+            <Row>
+              <Col xs={12}>
+                <FormGroup>
+                  <Label>Tags</Label>
+                  <CreatableSelect
+                    isMulti
+                    isClearable
+                    onChange={this.storeTags}
+                    options={CreateQuestion.tagsAsOptions(this.props.tags)}/>
+                </FormGroup>
+              </Col>
+            </Row>
             <Row>
               <Col xs="12">
                 <FormGroup>
@@ -221,7 +266,8 @@ class CreateQuestion extends Component {
 
 export default connect(
   state => ({
-    isOpen: state.questionTemplate.createQuestionTemplate
+    isOpen: state.questionTemplate.createQuestionTemplate,
+    tags: state.tags.list
   }),
-  {createQuestionTemplate, setQuestionTemplateCreate}
+  {createQuestionTemplate, setQuestionTemplateCreate, getQuestionTags}
 )(CreateQuestion);
