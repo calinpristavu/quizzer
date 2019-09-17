@@ -138,28 +138,34 @@
         <div class="right">
             <form action="/complete-registration" method="POST" class="form-signin">
             <h1 class="h3 mb-3 font-weight-normal">Complete registration</h1>
-            <input
+            <label>
+                <input
                     type="text"
                     name="username"
                     id="complete-username"
                     class="form-control"
                     placeholder="Username received from HR"
                     required
-                    autofocus>
-            <input
+                    autofocus/>
+            </label>
+            <label>
+                <input
                     type="password"
                     id="complete-password"
                     name="password"
                     class="form-control"
                     placeholder="Password"
                     required>
-            <input
+            </label>
+            <label>
+                <input
                     type="password"
                     id="complete-repeated"
                     name="repeated"
                     class="form-control"
                     placeholder="Repeat password"
                     required>
+            </label>
             {{if index .Errors "registration"}}
                 <div class="alert alert-danger" role="alert">
                 {{index .Errors "registration"}}

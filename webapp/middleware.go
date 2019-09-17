@@ -4,8 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/calinpristavu/quizzer/model"
 	"github.com/sirupsen/logrus"
+
+	"github.com/calinpristavu/quizzer/model"
 )
 
 func UserSession(next http.Handler) http.Handler {

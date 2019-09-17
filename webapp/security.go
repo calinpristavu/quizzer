@@ -51,7 +51,7 @@ func newToken(user *model.User) (string, error) {
 	claims := TokenClaims{
 		user.ID,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Duration(24 * time.Hour)).Unix(),
+			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 			Issuer:    "webapp",
 		},
 	}
