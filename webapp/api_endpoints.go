@@ -2,11 +2,11 @@ package webapp
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 
 	"github.com/calinpristavu/quizzer/model"
 )
@@ -22,7 +22,7 @@ func postQuizTemplates(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&qt)
 
 	if err != nil {
-		log.Printf("could not decode QT: %v", err)
+		logrus.Printf("could not decode QT: %v", err)
 		w.WriteHeader(422)
 
 		return
@@ -164,7 +164,7 @@ func deleteQuestionTemplate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func getQuestionTemplateTags(w http.ResponseWriter, r *http.Request) {
+func getQuestionTemplateTags(w http.ResponseWriter, _ *http.Request) {
 	qtts := model.FindQuestionTemplateTags()
 
 	jsonResponse(w, qtts, http.StatusOK)

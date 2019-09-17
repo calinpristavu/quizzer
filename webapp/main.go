@@ -2,9 +2,9 @@ package webapp
 
 import (
 	"html/template"
-	"log"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 
 	"github.com/calinpristavu/quizzer/model"
 )
@@ -37,7 +37,7 @@ func registerTemplates() {
 		Funcs(customFunctions).
 		ParseGlob("./templates/*.gohtml")
 	if err != nil {
-		log.Fatalf("could not load templates: %v", err)
+		logrus.Fatalf("could not load templates: %v", err)
 	}
 }
 

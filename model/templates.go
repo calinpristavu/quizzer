@@ -1,11 +1,11 @@
 package model
 
 import (
-	"log"
 	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
+	"github.com/sirupsen/logrus"
 )
 
 type QuizTemplate struct {
@@ -78,7 +78,7 @@ func (qt QuizTemplate) Start(u *User) *Quiz {
 	for _, qq := range qt.QuizQuestions {
 		qq.Question.addToQuiz(q, qq.Weight)
 	}
-	log.Printf("created quiz: %v", q)
+	logrus.Printf("created quiz: %v", q)
 	sort.Sort(QuestionsByOrder(q.Questions))
 
 	return q

@@ -2,7 +2,6 @@ package model
 
 import (
 	"fmt"
-	"log"
 	"math/rand"
 	"sort"
 	"strconv"
@@ -10,6 +9,7 @@ import (
 	"time"
 
 	"github.com/jinzhu/gorm"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -212,7 +212,7 @@ func (u *User) FinishQuiz() {
 	u.CurrentQuizID = nil
 	db.Save(&u)
 
-	log.Printf("finished quiz: %v", u.CurrentQuiz)
+	logrus.Printf("finished quiz: %v", u.CurrentQuiz)
 }
 
 func (u *User) FindFinishedQuizzes() []Quiz {

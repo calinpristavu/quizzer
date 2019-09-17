@@ -3,13 +3,13 @@ package webapp
 import (
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"sort"
 	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 
 	"github.com/calinpristavu/quizzer/model"
 )
@@ -22,7 +22,7 @@ func startQuiz(w http.ResponseWriter, r *http.Request) {
 	if id, ok := mux.Vars(r)["id"]; ok {
 		intId, err := strconv.Atoi(id)
 		if err != nil {
-			log.Fatalf("cannot interpret %s as int: %v", id, err)
+			logrus.Fatalf("cannot interpret %s as int: %v", id, err)
 		}
 
 		qt, ok := model.FindQuizTemplate(intId)
@@ -47,7 +47,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*model.User)
 
 	if u.CurrentQuizID == nil {
-		log.Printf("no active quiz for user %s\n", u.Username)
+		logrus.Printf("no active quiz for user %s\n", u.Username)
 		http.Redirect(w, r, "/", http.StatusFound)
 
 		return
@@ -55,7 +55,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 
 	qIdx, err := strconv.Atoi(mux.Vars(r)["idx"])
 	if err != nil {
-		log.Printf("invalid question index\n")
+		logrus.Printf("invalid question index\n")
 		http.Error(w, "Invalid question index", http.StatusNotFound)
 
 		return
@@ -135,7 +135,7 @@ func getTemplateForQuestion(question *model.Question) *template.Template {
 	case 4:
 		return g.templating.Lookup("radio_question.gohtml")
 	default:
-		log.Fatalf("unhandled question type %v", question.Type)
+		logrus.Fatalf("unhandled question type %v", question.Type)
 	}
 
 	return nil
@@ -161,7 +161,7 @@ func finished(w http.ResponseWriter, r *http.Request) {
 		Referer string
 	}{Quiz: *quiz, User: u, Referer: referer})
 	if err != nil {
-		log.Fatalf("could not execute template: %v", err)
+		logrus.Fatalf("could not execute template: %v", err)
 	}
 }
 
@@ -176,7 +176,7 @@ func history(w http.ResponseWriter, r *http.Request) {
 		User    interface{}
 	}{Quizzes: qs, User: u, Current: nil})
 	if err != nil {
-		log.Fatalf("could not execute template: %v", err)
+		logrus.Fatalf("could not execute template: %v", err)
 	}
 }
 
@@ -198,7 +198,7 @@ func viewQuiz(w http.ResponseWriter, r *http.Request) {
 		User:    *u,
 	})
 	if err != nil {
-		log.Fatalf("could not execute template: %v", err)
+		logrus.Fatalf("could not execute template: %v", err)
 	}
 }
 
@@ -216,7 +216,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	if u.ShouldStartID != nil {
 		qt, ok := model.FindQuizTemplate(int(*u.ShouldStartID))
 		if !ok {
-			log.Fatalf("could not find quiz template: %d", *u.ShouldStartID)
+			logrus.Fatalf("could not find quiz template: %d", *u.ShouldStartID)
 		}
 		qts = []model.QuizTemplate{qt}
 	} else {
@@ -225,7 +225,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		// remove empty quizzes
 		for i, qt := range qts {
 			if len(qt.QuizQuestions) == 0 {
-				log.Printf("quiz template #%d doesn't have questions. skipping ...", qt.ID)
+				logrus.Printf("quiz template #%d doesn't have questions. skipping ...", qt.ID)
 				qts = append(qts[:i], qts[i+1:]...)
 			}
 		}
@@ -242,7 +242,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		log.Printf("could not render template: %v", err)
+		logrus.Printf("could not render template: %v", err)
 	}
 }
 
@@ -266,7 +266,7 @@ func myAccount(w http.ResponseWriter, r *http.Request) {
 		user.Password, hashingErr = HashPassword(password)
 		if hashingErr != nil {
 			http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
-			log.Printf("The password %s for user %s cannot be hashed", password, user.Username)
+			logrus.Printf("The password %s for user %s cannot be hashed", password, user.Username)
 
 			return
 		}
@@ -285,7 +285,7 @@ func myAccount(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		log.Printf("could not render template: %v", err)
+		logrus.Printf("could not render template: %v", err)
 	}
 }
 
@@ -389,7 +389,7 @@ func completeRegistration(w http.ResponseWriter, r *http.Request) {
 	u.Password, err = HashPassword(pass)
 	if err != nil {
 		http.Error(w, "Password cannot be hashed", http.StatusInternalServerError)
-		log.Printf("The password %s for user %s cannot be hashed", pass, uname)
+		logrus.Printf("The password %s for user %s cannot be hashed", pass, uname)
 
 		return
 	}
@@ -408,20 +408,20 @@ func addQuestionFeedback(w http.ResponseWriter, r *http.Request) {
 	u := r.Context().Value("user").(*model.User)
 
 	if u.CurrentQuiz == nil {
-		log.Printf("no active quiz for user %s\n", u.Username)
+		logrus.Printf("no active quiz for user %s\n", u.Username)
 
 		return
 	}
 
 	qIdx, err := strconv.Atoi(mux.Vars(r)["idx"])
 	if err != nil {
-		log.Printf("invalid question index: %v\n", err)
+		logrus.Printf("invalid question index: %v\n", err)
 
 		return
 	}
 
 	if qIdx > len(u.CurrentQuiz.Questions)-1 {
-		log.Printf("invalid question index: %d\n", qIdx)
+		logrus.Printf("invalid question index: %d\n", qIdx)
 		return
 	}
 
@@ -429,7 +429,7 @@ func addQuestionFeedback(w http.ResponseWriter, r *http.Request) {
 
 	err = question.AddFeedback(feedback)
 	if err != nil {
-		log.Printf("could not save feedback: %v\n", err)
+		logrus.Printf("could not save feedback: %v\n", err)
 		return
 	}
 
@@ -445,6 +445,6 @@ func renderLoginTemplate(w http.ResponseWriter, errors map[string]interface{}, u
 	}{Errors: errors, PrevData: struct{ Username string }{Username: username}})
 
 	if err != nil {
-		log.Fatalf("could not exec template login: %v", err)
+		logrus.Fatalf("could not exec template login: %v", err)
 	}
 }

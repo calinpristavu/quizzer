@@ -2,17 +2,17 @@ package webapp
 
 import (
 	"context"
-	"log"
 	"net/http"
 
 	"github.com/calinpristavu/quizzer/model"
+	"github.com/sirupsen/logrus"
 )
 
 func UserSession(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("user")
 		if err != nil {
-			log.Printf("error with user cookie: %v", err)
+			logrus.Printf("error with user cookie: %v", err)
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 
 			return
@@ -23,7 +23,7 @@ func UserSession(next http.Handler) http.Handler {
 		if _, ok := LoggedIn[username]; !ok {
 			LoggedIn[username], err = model.FindByUsername(username)
 			if err != nil {
-				log.Printf("could not find user for username %s", username)
+				logrus.Printf("could not find user for username %s", username)
 				http.Redirect(w, r, "/login", http.StatusSeeOther)
 
 				return

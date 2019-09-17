@@ -2,12 +2,12 @@ package model
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
 )
 
 var db *gorm.DB
@@ -47,7 +47,7 @@ func migrateDb() {
 func initDb() *gorm.DB {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		logrus.Fatal("Error loading .env file")
 	}
 
 	user := os.Getenv("DB_USER")
@@ -58,7 +58,7 @@ func initDb() *gorm.DB {
 	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/quizzer?charset=utf8&parseTime=True", user, pass, host))
 
 	if err != nil {
-		log.Fatalf("could not connect to db: %v", err)
+		logrus.Fatalf("could not connect to db: %v", err)
 	}
 
 	return db.LogMode(env == "dev")

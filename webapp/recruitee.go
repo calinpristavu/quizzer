@@ -2,9 +2,10 @@ package webapp
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"os"
+
+	"github.com/sirupsen/logrus"
 )
 
 const recruiteeApi = "https://api.recruitee.com/c/14378"
@@ -28,6 +29,9 @@ func findInRecruitee() []Candidate {
 
 	// Create a new request using http
 	req, err := http.NewRequest("GET", recruiteeApi+endpoint+filterString, nil)
+	if err != nil {
+		logrus.Printf("cannot create request: %v\n", err)
+	}
 
 	// add authorization header to the req
 	req.Header.Add("Authorization", bearer)
@@ -36,14 +40,14 @@ func findInRecruitee() []Candidate {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Println("Error on response.\n[ERRO] -", err)
+		logrus.Println("Error on response.\n[ERRO] -", err)
 	}
 
 	// parse the response
 	var cr CandidatesResponse
 	err = json.NewDecoder(resp.Body).Decode(&cr)
 	if err != nil {
-		log.Fatalf("could not decode body: %+v", err)
+		logrus.Fatalf("could not decode body: %+v", err)
 	}
 
 	return cr.Hits

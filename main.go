@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -12,10 +11,6 @@ import (
 
 	"github.com/calinpristavu/quizzer/webapp"
 )
-
-func init() {
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-}
 
 func main() {
 	appPort := flag.String("appPort", "8000", "app port")

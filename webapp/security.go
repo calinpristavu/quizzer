@@ -4,11 +4,11 @@ import (
 	"crypto/rsa"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/calinpristavu/quizzer/model"
@@ -27,7 +27,7 @@ var (
 func init() {
 	k, err := ioutil.ReadFile(privKeyPath)
 	if err != nil {
-		log.Fatal("Error reading private key. Generate it in folder ./jwt using `openssl genrsa -out webapp 1024`")
+		logrus.Fatal("Error reading private key. Generate it in folder ./jwt using `openssl genrsa -out webapp 1024`")
 		return
 	}
 
@@ -35,7 +35,7 @@ func init() {
 
 	v, err := ioutil.ReadFile(pubKeyPath)
 	if err != nil {
-		log.Fatal("Error reading public key. Generate it in folder ./jwt using `openssl rsa -in webapp -pubout > webapp.pub`")
+		logrus.Fatal("Error reading public key. Generate it in folder ./jwt using `openssl rsa -in webapp -pubout > webapp.pub`")
 		return
 	}
 
@@ -59,7 +59,7 @@ func newToken(user *model.User) (string, error) {
 	signer := jwt.NewWithClaims(jwt.GetSigningMethod("RS256"), claims)
 	tokenString, err := signer.SignedString(SignKey)
 	if err != nil {
-		log.Printf("Error signing token: %v\n", err)
+		logrus.Printf("Error signing token: %v\n", err)
 	}
 
 	return tokenString, err
