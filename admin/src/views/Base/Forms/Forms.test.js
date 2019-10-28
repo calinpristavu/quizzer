@@ -13,7 +13,7 @@ describe('toggle clicks', function() {
   it('dropdowns without crashing', () => {
     const wrapper = mount(<Forms />);
     for (let i = 0; i < 4; i++) {
-      let count = i === 0 ? 'first' : i === 1 ? 'second' : i === 2 ? 'third' : 'fourth'
+      let count = i === 0 ? 'first' : i === 1 ? 'second' : i === 2 ? 'third' : 'fourth';
       let Dropdown = wrapper.find('button.dropdown-toggle').at(i);
       Dropdown.simulate('click');
       expect(wrapper.state()[count]).toEqual(true);
@@ -36,4 +36,4 @@ describe('toggle clicks', function() {
     expect(wrapper.state().fadeIn).toEqual(false);
     wrapper.unmount()
   });
-})
+});

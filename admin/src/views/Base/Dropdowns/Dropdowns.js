@@ -27,7 +27,7 @@ class Dropdowns extends Component {
           <Col xs="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Dropdowns</strong>
+                <i className="fa fa-align-justify"/><strong>Dropdowns</strong>
                 <div className="card-header-actions">
                   <a href="https://reactstrap.github.io/components/dropdowns/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                     <small className="text-muted">docs</small>
@@ -53,7 +53,7 @@ class Dropdowns extends Component {
             </Card>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Dropdowns</strong>
+                <i className="fa fa-align-justify"/><strong>Dropdowns</strong>
                 <small> alignment</small>
               </CardHeader>
               <CardBody>
@@ -73,7 +73,7 @@ class Dropdowns extends Component {
             </Card>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Dropdowns</strong>
+                <i className="fa fa-align-justify"/><strong>Dropdowns</strong>
                 <small> sizing</small>
               </CardHeader>
               <CardBody>
@@ -117,7 +117,7 @@ class Dropdowns extends Component {
             </Card>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Custom Dropdowns</strong>
+                <i className="fa fa-align-justify"/><strong>Custom Dropdowns</strong>
               </CardHeader>
               <CardBody>
                 <Dropdown isOpen={this.state.dropdownOpen[5]} toggle={() => {this.toggle(5);}}>
@@ -141,7 +141,7 @@ class Dropdowns extends Component {
             </Card>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Uncontrolled Dropdown</strong>
+                <i className="fa fa-align-justify"/><strong>Uncontrolled Dropdown</strong>
               </CardHeader>
               <CardBody>
                 <UncontrolledDropdown>

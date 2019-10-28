@@ -9,6 +9,7 @@ import sygnet from '../../assets/img/brand/sygnet.svg'
 
 const propTypes = {
   children: PropTypes.node,
+  onLogout: PropTypes.func.isRequired
 };
 
 const defaultProps = {};

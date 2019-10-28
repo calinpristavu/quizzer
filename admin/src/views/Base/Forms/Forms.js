@@ -399,15 +399,15 @@ class Forms extends Component {
                     <Col xs="12" md="9">
                       <Label className="custom-file">
                         <Input className="custom-file" type="file" id="custom-file-input" name="file-input" />
-                        <span className="custom-file-control"></span>
+                        <span className="custom-file-control"/>
                       </Label>
                     </Col>
                   </FormGroup>
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"/> Submit</Button>
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"/> Reset</Button>
               </CardFooter>
             </Card>
             <Card>
@@ -427,8 +427,8 @@ class Forms extends Component {
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"/> Submit</Button>
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"/> Reset</Button>
               </CardFooter>
             </Card>
           </Col>
@@ -460,8 +460,8 @@ class Forms extends Component {
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"/> Submit</Button>
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"/> Reset</Button>
               </CardFooter>
             </Card>
             <Card>
@@ -483,8 +483,8 @@ class Forms extends Component {
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"/> Submit</Button>
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"/> Reset</Button>
               </CardFooter>
             </Card>
             <Card>
@@ -546,8 +546,8 @@ class Forms extends Component {
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="primary"><i className="fa fa-user"></i> Login</Button>
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="submit" size="sm" color="primary"><i className="fa fa-user"/> Login</Button>
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"/> Reset</Button>
               </CardFooter>
             </Card>
             <Card>
@@ -577,8 +577,8 @@ class Forms extends Component {
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"/> Submit</Button>
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"/> Reset</Button>
               </CardFooter>
             </Card>
           </Col>
@@ -639,7 +639,7 @@ class Forms extends Component {
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
-                            <i className="fa fa-user"></i>
+                            <i className="fa fa-user"/>
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="text" id="input1-group1" name="input1-group1" placeholder="Username" />
@@ -652,7 +652,7 @@ class Forms extends Component {
                         <Input type="email" id="input2-group1" name="input2-group1" placeholder="Email" />
                         <InputGroupAddon addonType="append">
                           <InputGroupText>
-                            <i className="fa fa-envelope-o"></i>
+                            <i className="fa fa-envelope-o"/>
                           </InputGroupText>
                         </InputGroupAddon>
                       </InputGroup>
@@ -663,7 +663,7 @@ class Forms extends Component {
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
-                            <i className="fa fa-euro"></i>
+                            <i className="fa fa-euro"/>
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="text" id="input3-group1" name="input3-group1" placeholder=".." />
@@ -676,8 +676,8 @@ class Forms extends Component {
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="success"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="submit" size="sm" color="success"><i className="fa fa-dot-circle-o"/> Submit</Button>
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"/> Reset</Button>
               </CardFooter>
             </Card>
           </Col>
@@ -692,7 +692,7 @@ class Forms extends Component {
                     <Col md="12">
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
-                          <Button type="button" color="primary"><i className="fa fa-search"></i> Search</Button>
+                          <Button type="button" color="primary"><i className="fa fa-search"/> Search</Button>
                         </InputGroupAddon>
                         <Input type="text" id="input1-group2" name="input1-group2" placeholder="Username" />
                       </InputGroup>
@@ -712,11 +712,11 @@ class Forms extends Component {
                     <Col md="12">
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
-                          <Button type="button" color="primary"><i className="fa fa-facebook"></i></Button>
+                          <Button type="button" color="primary"><i className="fa fa-facebook"/></Button>
                         </InputGroupAddon>
                         <Input type="text" id="input3-group2" name="input3-group2" placeholder="Search" />
                         <InputGroupAddon addonType="append">
-                          <Button type="button" color="primary"><i className="fa fa-twitter"></i></Button>
+                          <Button type="button" color="primary"><i className="fa fa-twitter"/></Button>
                         </InputGroupAddon>
                       </InputGroup>
                     </Col>
@@ -724,8 +724,8 @@ class Forms extends Component {
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="success"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="submit" size="sm" color="success"><i className="fa fa-dot-circle-o"/> Submit</Button>
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"/> Reset</Button>
               </CardFooter>
             </Card>
           </Col>
@@ -819,8 +819,8 @@ class Forms extends Component {
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="success"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="submit" size="sm" color="success"><i className="fa fa-dot-circle-o"/> Submit</Button>
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"/> Reset</Button>
               </CardFooter>
             </Card>
           </Col>
@@ -960,7 +960,7 @@ class Forms extends Component {
                       </InputGroupAddon>
                       <Input type="email" id="username3" name="username3" autoComplete="name"/>
                       <InputGroupAddon addonType="append">
-                        <InputGroupText><i className="fa fa-user"></i></InputGroupText>
+                        <InputGroupText><i className="fa fa-user"/></InputGroupText>
                       </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
@@ -971,7 +971,7 @@ class Forms extends Component {
                       </InputGroupAddon>
                       <Input type="email" id="email3" name="email3" autoComplete="username"/>
                       <InputGroupAddon addonType="append">
-                        <InputGroupText><i className="fa fa-envelope"></i></InputGroupText>
+                        <InputGroupText><i className="fa fa-envelope"/></InputGroupText>
                       </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
@@ -982,7 +982,7 @@ class Forms extends Component {
                       </InputGroupAddon>
                       <Input type="password" id="password3" name="password3" autoComplete="current-password"/>
                       <InputGroupAddon addonType="append">
-                        <InputGroupText><i className="fa fa-asterisk"></i></InputGroupText>
+                        <InputGroupText><i className="fa fa-asterisk"/></InputGroupText>
                       </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
@@ -1004,7 +1004,7 @@ class Forms extends Component {
                     <InputGroup>
                       <Input type="text" id="username2" name="username2" placeholder="Username" autoComplete="name"/>
                       <InputGroupAddon addonType="append">
-                        <InputGroupText><i className="fa fa-user"></i></InputGroupText>
+                        <InputGroupText><i className="fa fa-user"/></InputGroupText>
                       </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
@@ -1012,7 +1012,7 @@ class Forms extends Component {
                     <InputGroup>
                       <Input type="email" id="email2" name="email2" placeholder="Email" autoComplete="username"/>
                       <InputGroupAddon addonType="append">
-                        <InputGroupText><i className="fa fa-envelope"></i></InputGroupText>
+                        <InputGroupText><i className="fa fa-envelope"/></InputGroupText>
                       </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
@@ -1020,7 +1020,7 @@ class Forms extends Component {
                     <InputGroup>
                       <Input type="password" id="password2" name="password2" placeholder="Password" autoComplete="current-password"/>
                       <InputGroupAddon addonType="append">
-                        <InputGroupText><i className="fa fa-asterisk"></i></InputGroupText>
+                        <InputGroupText><i className="fa fa-asterisk"/></InputGroupText>
                       </InputGroupAddon>
                     </InputGroup>
                   </FormGroup>
@@ -1041,7 +1041,7 @@ class Forms extends Component {
                   <FormGroup>
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
-                        <InputGroupText><i className="fa fa-user"></i></InputGroupText>
+                        <InputGroupText><i className="fa fa-user"/></InputGroupText>
                       </InputGroupAddon>
                       <Input type="text" id="username1" name="username1" placeholder="Username" autoComplete="name"/>
                     </InputGroup>
@@ -1049,7 +1049,7 @@ class Forms extends Component {
                   <FormGroup>
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
-                        <InputGroupText><i className="fa fa-envelope"></i></InputGroupText>
+                        <InputGroupText><i className="fa fa-envelope"/></InputGroupText>
                       </InputGroupAddon>
                       <Input type="email" id="email1" name="email1" placeholder="Email" autoComplete="username"/>
                     </InputGroup>
@@ -1057,7 +1057,7 @@ class Forms extends Component {
                   <FormGroup>
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
-                        <InputGroupText><i className="fa fa-asterisk"></i></InputGroupText>
+                        <InputGroupText><i className="fa fa-asterisk"/></InputGroupText>
                       </InputGroupAddon>
                       <Input type="password" id="password1" name="password1" placeholder="Password" autoComplete="current-password"/>
                     </InputGroup>
@@ -1075,11 +1075,11 @@ class Forms extends Component {
             <Fade timeout={this.state.timeout} in={this.state.fadeIn}>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-edit"></i>Form Elements
+                  <i className="fa fa-edit"/>Form Elements
                   <div className="card-header-actions">
-                    <Button color="link" className="card-header-action btn-setting"><i className="icon-settings"></i></Button>
-                    <Button color="link" className="card-header-action btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className="icon-arrow-up"></i></Button>
-                    <Button color="link" className="card-header-action btn-close" onClick={this.toggleFade}><i className="icon-close"></i></Button>
+                    <Button color="link" className="card-header-action btn-setting"><i className="icon-settings"/></Button>
+                    <Button color="link" className="card-header-action btn-minimize" data-target="#collapseExample" onClick={this.toggle}><i className="icon-arrow-up"/></Button>
+                    <Button color="link" className="card-header-action btn-close" onClick={this.toggleFade}><i className="icon-close"/></Button>
                   </div>
                 </CardHeader>
                 <Collapse isOpen={this.state.collapse} id="collapseExample">

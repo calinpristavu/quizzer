@@ -72,7 +72,7 @@ class Popovers extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Popovers</strong>
+            <i className="fa fa-align-justify"/><strong>Popovers</strong>
             <div className="card-header-actions">
               <a href="https://reactstrap.github.io/components/popovers/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                 <small className="text-muted">docs</small>
@@ -91,7 +91,7 @@ class Popovers extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Popovers</strong>
+            <i className="fa fa-align-justify"/><strong>Popovers</strong>
             <small> list</small>
           </CardHeader>
           <CardBody>

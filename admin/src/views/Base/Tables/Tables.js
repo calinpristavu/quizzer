@@ -9,7 +9,7 @@ class Tables extends Component {
           <Col xs="12" lg="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Simple Table
+                <i className="fa fa-align-justify"/> Simple Table
               </CardHeader>
               <CardBody>
                 <Table responsive>
@@ -66,7 +66,7 @@ class Tables extends Component {
                 </Table>
                 <Pagination>
                   <PaginationItem>
-                    <PaginationLink previous tag="button"></PaginationLink>
+                    <PaginationLink previous tag="button"/>
                   </PaginationItem>
                   <PaginationItem active>
                     <PaginationLink tag="button">1</PaginationLink>
@@ -81,7 +81,7 @@ class Tables extends Component {
                     <PaginationLink tag="button">4</PaginationLink>
                   </PaginationItem>
                   <PaginationItem>
-                    <PaginationLink next tag="button"></PaginationLink>
+                    <PaginationLink next tag="button"/>
                   </PaginationItem>
                 </Pagination>
               </CardBody>
@@ -91,7 +91,7 @@ class Tables extends Component {
           <Col xs="12" lg="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Striped Table
+                <i className="fa fa-align-justify"/> Striped Table
               </CardHeader>
               <CardBody>
                 <Table responsive striped>
@@ -166,7 +166,7 @@ class Tables extends Component {
           <Col xs="12" lg="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Condensed Table
+                <i className="fa fa-align-justify"/> Condensed Table
               </CardHeader>
               <CardBody>
                 <Table responsive size="sm">
@@ -238,7 +238,7 @@ class Tables extends Component {
           <Col xs="12" lg="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Bordered Table
+                <i className="fa fa-align-justify"/> Bordered Table
               </CardHeader>
               <CardBody>
                 <Table responsive bordered>
@@ -313,7 +313,7 @@ class Tables extends Component {
           <Col>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Combined All Table
+                <i className="fa fa-align-justify"/> Combined All Table
               </CardHeader>
               <CardBody>
                 <Table hover bordered striped responsive size="sm">

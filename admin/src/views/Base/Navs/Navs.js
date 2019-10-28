@@ -26,7 +26,7 @@ class Navs extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Navs</strong>
+            <i className="fa fa-align-justify"/><strong>Navs</strong>
             <div className="card-header-actions">
               <a href="https://reactstrap.github.io/components/navs/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                 <small className="text-muted">docs</small>
@@ -59,7 +59,7 @@ class Navs extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Navs Tabs</strong>
+            <i className="fa fa-align-justify"/><strong>Navs Tabs</strong>
           </CardHeader>
           <CardBody>
             <Nav tabs>
@@ -92,7 +92,7 @@ class Navs extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Navs Pills</strong>
+            <i className="fa fa-align-justify"/><strong>Navs Pills</strong>
           </CardHeader>
           <CardBody>
             <Nav pills>
@@ -125,7 +125,7 @@ class Navs extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Navs Vertical</strong>
+            <i className="fa fa-align-justify"/><strong>Navs Vertical</strong>
           </CardHeader>
           <CardBody>
             <p>List Based</p>

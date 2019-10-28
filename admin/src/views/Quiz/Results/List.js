@@ -142,7 +142,7 @@ class List extends Component {
   };
 
   render() {
-    var sortClass = this.state.scoreSorting === -1
+    const sortClass = this.state.scoreSorting === -1
       ? 'fa-sort-down'
       : this.state.scoreSorting === 0 ? 'fa-sort' : 'fa-sort-up';
 

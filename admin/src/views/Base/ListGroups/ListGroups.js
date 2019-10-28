@@ -27,7 +27,7 @@ class ListGroups extends Component {
           <Col sm="12" xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>List Group</strong>
+                <i className="fa fa-align-justify"/><strong>List Group</strong>
                 <div className="card-header-actions">
                   <a href="https://reactstrap.github.io/components/listgroup/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                     <small className="text-muted">docs</small>
@@ -48,7 +48,7 @@ class ListGroups extends Component {
           <Col sm="12" xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>List Group</strong>
+                <i className="fa fa-align-justify"/><strong>List Group</strong>
                 <small> tags</small>
               </CardHeader>
               <CardBody>
@@ -66,7 +66,7 @@ class ListGroups extends Component {
           <Col sm="12" xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>List Group</strong>
+                <i className="fa fa-align-justify"/><strong>List Group</strong>
                 <small> disabled items</small>
               </CardHeader>
               <CardBody>
@@ -83,7 +83,7 @@ class ListGroups extends Component {
           <Col sm="12" xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>List Group</strong>
+                <i className="fa fa-align-justify"/><strong>List Group</strong>
                 <small> contextual classes</small>
               </CardHeader>
               <CardBody>
@@ -101,7 +101,7 @@ class ListGroups extends Component {
           <Col sm="12" xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>List Group</strong>
+                <i className="fa fa-align-justify"/><strong>List Group</strong>
                 <small> anchors</small>
               </CardHeader>
               <CardBody>
@@ -120,7 +120,7 @@ class ListGroups extends Component {
           <Col sm="12" xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>List Group</strong>
+                <i className="fa fa-align-justify"/><strong>List Group</strong>
                 <small> buttons</small>
               </CardHeader>
               <CardBody>
@@ -139,7 +139,7 @@ class ListGroups extends Component {
           <Col sm="12" xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>List Group</strong>
+                <i className="fa fa-align-justify"/><strong>List Group</strong>
                 <small> custom content</small>
               </CardHeader>
               <CardBody>
@@ -171,7 +171,7 @@ class ListGroups extends Component {
           <Col>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>List Group</strong> <small>with TabPanes</small>
+                <i className="fa fa-align-justify"/><strong>List Group</strong> <small>with TabPanes</small>
                 <div className="card-header-actions">
                   <Badge>NEW</Badge>
                 </div>

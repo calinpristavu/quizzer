@@ -18,8 +18,8 @@ class Tabs extends Component {
   }
 
   toggle(tabPane, tab) {
-    const newArray = this.state.activeTab.slice()
-    newArray[tabPane] = tab
+    const newArray = this.state.activeTab.slice();
+    newArray[tabPane] = tab;
     this.setState({
       activeTab: newArray,
     });
@@ -83,7 +83,7 @@ class Tabs extends Component {
                   active={this.state.activeTab[1] === '1'}
                   onClick={() => { this.toggle(1, '1'); }}
                 >
-                  <i className="icon-calculator"></i>
+                  <i className="icon-calculator"/>
                 </NavLink>
               </NavItem>
               <NavItem>
@@ -91,7 +91,7 @@ class Tabs extends Component {
                   active={this.state.activeTab[1] === '2'}
                   onClick={() => { this.toggle(1, '2'); }}
                 >
-                  <i className="icon-basket-loaded"></i>
+                  <i className="icon-basket-loaded"/>
                 </NavLink>
               </NavItem>
               <NavItem>
@@ -99,7 +99,7 @@ class Tabs extends Component {
                   active={this.state.activeTab[1] === '3'}
                   onClick={() => { this.toggle(1, '3'); }}
                 >
-                  <i className="icon-pie-chart"></i>
+                  <i className="icon-pie-chart"/>
                 </NavLink>
               </NavItem>
             </Nav>
@@ -114,7 +114,7 @@ class Tabs extends Component {
                   active={this.state.activeTab[2] === '1'}
                   onClick={() => { this.toggle(2, '1'); }}
                 >
-                  <i className="icon-calculator"></i> <span className={this.state.activeTab[2] === '1' ? '' : 'd-none'}> Calculator</span>
+                  <i className="icon-calculator"/> <span className={this.state.activeTab[2] === '1' ? '' : 'd-none'}> Calculator</span>
                 </NavLink>
               </NavItem>
               <NavItem>
@@ -122,7 +122,7 @@ class Tabs extends Component {
                   active={this.state.activeTab[2] === '2'}
                   onClick={() => { this.toggle(2, '2'); }}
                 >
-                  <i className="icon-basket-loaded"></i> <span
+                  <i className="icon-basket-loaded"/> <span
                   className={this.state.activeTab[2] === '2' ? '' : 'd-none'}> Shopping cart</span>
                 </NavLink>
               </NavItem>
@@ -131,7 +131,7 @@ class Tabs extends Component {
                   className={classnames({ active: this.state.activeTab[2] === '3' })}
                   onClick={() => { this.toggle(2,'3'); }}
                 >
-                  <i className="icon-pie-chart"></i> <span className={this.state.activeTab[2] === '3' ? '' : 'd-none'}> Charts</span>
+                  <i className="icon-pie-chart"/> <span className={this.state.activeTab[2] === '3' ? '' : 'd-none'}> Charts</span>
                 </NavLink>
               </NavItem>
             </Nav>
@@ -146,7 +146,7 @@ class Tabs extends Component {
                   active={this.state.activeTab[3] === '1'}
                   onClick={() => { this.toggle(3, '1'); }}
                 >
-                  <i className="icon-calculator"></i>
+                  <i className="icon-calculator"/>
                   <span className={this.state.activeTab[3] === '1' ? '' : 'd-none'}> Calc</span>
                   {'\u00A0'}<Badge color="success">New</Badge>
                 </NavLink>
@@ -156,7 +156,7 @@ class Tabs extends Component {
                   active={this.state.activeTab[3] === '2'}
                   onClick={() => { this.toggle(3, '2'); }}
                 >
-                  <i className="icon-basket-loaded"></i>
+                  <i className="icon-basket-loaded"/>
                   <span className={this.state.activeTab[3] === '2' ? '' : 'd-none'}> Cart</span>
                   {'\u00A0'}<Badge pill color="danger">29</Badge>
                 </NavLink>
@@ -165,7 +165,7 @@ class Tabs extends Component {
                 <NavLink
                   active={this.state.activeTab[3] === '3'}
                   onClick={() => { this.toggle(3, '3'); }} >
-                    <i className="icon-pie-chart"></i>
+                    <i className="icon-pie-chart"/>
                     <span className={this.state.activeTab[3] === '3' ? '' : 'd-none'}> Charts</span>
                 </NavLink>
               </NavItem>

@@ -46,7 +46,7 @@ class Navbars extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Navbar</strong>
+            <i className="fa fa-align-justify"/><strong>Navbar</strong>
             <div className="card-header-actions">
               <a href="https://reactstrap.github.io/components/navbar/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                 <small className="text-muted">docs</small>
@@ -91,7 +91,7 @@ class Navbars extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Navbar Toggler</strong>
+            <i className="fa fa-align-justify"/><strong>Navbar Toggler</strong>
           </CardHeader>
           <CardBody>
             <Navbar color="success" light>

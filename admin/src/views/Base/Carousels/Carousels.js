@@ -20,41 +20,34 @@ const items = [
 ];
 
 class Carousels extends Component {
+  state = {
+    activeIndex: 0
+  };
 
-  constructor(props) {
-    super(props);
-    this.state = { activeIndex: 0 };
-    this.next = this.next.bind(this);
-    this.previous = this.previous.bind(this);
-    this.goToIndex = this.goToIndex.bind(this);
-    this.onExiting = this.onExiting.bind(this);
-    this.onExited = this.onExited.bind(this);
-  }
-
-  onExiting() {
+  onExiting = () => {
     this.animating = true;
-  }
+  };
 
-  onExited() {
+  onExited = () => {
     this.animating = false;
-  }
+  };
 
-  next() {
+  next = () => {
     if (this.animating) return;
     const nextIndex = this.state.activeIndex === items.length - 1 ? 0 : this.state.activeIndex + 1;
     this.setState({ activeIndex: nextIndex });
-  }
+  };
 
-  previous() {
+  previous = () => {
     if (this.animating) return;
     const nextIndex = this.state.activeIndex === 0 ? items.length - 1 : this.state.activeIndex - 1;
     this.setState({ activeIndex: nextIndex });
-  }
+  };
 
-  goToIndex(newIndex) {
+  goToIndex = (newIndex) => {
     if (this.animating) return;
     this.setState({ activeIndex: newIndex });
-  }
+  };
 
   render() {
     const { activeIndex } = this.state;
@@ -86,7 +79,7 @@ class Carousels extends Component {
           <Col xs="12" xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Carousel</strong>
+                <i className="fa fa-align-justify"/><strong>Carousel</strong>
                 <div className="card-header-actions">
                   <a href="https://reactstrap.github.io/components/carousel/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                     <small className="text-muted">docs</small>
@@ -103,7 +96,7 @@ class Carousels extends Component {
           <Col xs="12" xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Carousel</strong>
+                <i className="fa fa-align-justify"/><strong>Carousel</strong>
               </CardHeader>
               <CardBody>
                 <Carousel activeIndex={activeIndex} next={this.next} previous={this.previous}>

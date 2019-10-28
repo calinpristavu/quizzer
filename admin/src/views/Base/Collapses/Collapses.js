@@ -2,48 +2,36 @@ import React, { Component } from 'react';
 import { Badge, Button, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Fade, Row } from 'reactstrap';
 
 class Collapses extends Component {
+  state = {
+    collapse: false,
+    accordion: [true, false, false],
+    custom: [true, false],
+    status: 'Closed',
+    fadeIn: true,
+    timeout: 300,
+  };
 
-  constructor(props) {
-    super(props);
-    this.onEntering = this.onEntering.bind(this);
-    this.onEntered = this.onEntered.bind(this);
-    this.onExiting = this.onExiting.bind(this);
-    this.onExited = this.onExited.bind(this);
-    this.toggle = this.toggle.bind(this);
-    this.toggleAccordion = this.toggleAccordion.bind(this);
-    this.toggleCustom = this.toggleCustom.bind(this);
-    this.toggleFade = this.toggleFade.bind(this);
-    this.state = {
-      collapse: false,
-      accordion: [true, false, false],
-      custom: [true, false],
-      status: 'Closed',
-      fadeIn: true,
-      timeout: 300,
-    };
-  }
-
-  onEntering() {
+  onEntering = () => {
     this.setState({ status: 'Opening...' });
-  }
+  };
 
-  onEntered() {
+  onEntered = () => {
     this.setState({ status: 'Opened' });
-  }
+  };
 
-  onExiting() {
+  onExiting = () => {
     this.setState({ status: 'Closing...' });
-  }
+  };
 
-  onExited() {
+  onExited = () => {
     this.setState({ status: 'Closed' });
-  }
+  };
 
-  toggle() {
+  toggle = () => {
     this.setState({ collapse: !this.state.collapse });
-  }
+  };
 
-  toggleAccordion(tab) {
+  toggleAccordion = (tab) => {
 
     const prevState = this.state.accordion;
     const state = prevState.map((x, index) => tab === index ? !x : false);
@@ -51,9 +39,9 @@ class Collapses extends Component {
     this.setState({
       accordion: state,
     });
-  }
+  };
 
-  toggleCustom(tab) {
+  toggleCustom = (tab) => {
 
     const prevState = this.state.custom;
     const state = prevState.map((x, index) => tab === index ? !x : false);
@@ -61,11 +49,11 @@ class Collapses extends Component {
     this.setState({
       custom: state,
     });
-  }
+  };
 
-  toggleFade() {
+  toggleFade = () => {
     this.setState({ fadeIn: !this.state.fadeIn });
-  }
+  };
 
   render() {
     return (
@@ -74,7 +62,7 @@ class Collapses extends Component {
           <Col xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Collapse</strong>
+                <i className="fa fa-align-justify"/><strong>Collapse</strong>
                 <div className="card-header-actions">
                   <a href="https://reactstrap.github.io/components/collapse/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                     <small className="text-muted">docs</small>
@@ -110,7 +98,7 @@ class Collapses extends Component {
             </Card>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Fade</strong>
+                <i className="fa fa-align-justify"/><strong>Fade</strong>
                 <div className="card-header-actions">
                   <a href="https://reactstrap.github.io/components/fade/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                     <small className="text-muted">docs</small>
@@ -130,7 +118,7 @@ class Collapses extends Component {
           <Col xl="6">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Collapse <small>accordion</small>
+                <i className="fa fa-align-justify"/> Collapse <small>accordion</small>
                 <div className="card-header-actions">
                   <Badge>NEW</Badge>
                 </div>
@@ -190,7 +178,7 @@ class Collapses extends Component {
             </Card>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Collapse <small>custom accordion</small>
+                <i className="fa fa-align-justify"/> Collapse <small>custom accordion</small>
                 <div className="card-header-actions">
                   <Badge>NEW</Badge>
                 </div>

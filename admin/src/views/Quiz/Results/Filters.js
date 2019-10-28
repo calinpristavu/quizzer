@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import {Map} from 'immutable';
 import {getQuizTemplates} from "../../../redux/actions";
 import {connect} from "react-redux";
-var nestedProp = require('nested-property');
+
+const nestedProp = require('nested-property');
 
 class Filters extends Component {
   static propTypes = {

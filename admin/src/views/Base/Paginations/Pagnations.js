@@ -8,7 +8,7 @@ class Paginations extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Pagination</strong>
+            <i className="fa fa-align-justify"/><strong>Pagination</strong>
             <div className="card-header-actions">
               <a href="https://reactstrap.github.io/components/pagination/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                 <small className="text-muted">docs</small>
@@ -53,7 +53,7 @@ class Paginations extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Pagination</strong>
+            <i className="fa fa-align-justify"/><strong>Pagination</strong>
             <small> disabled and active states</small>
           </CardHeader>
           <CardBody>
@@ -94,7 +94,7 @@ class Paginations extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Pagination</strong>
+            <i className="fa fa-align-justify"/><strong>Pagination</strong>
             <small> sizing</small>
           </CardHeader>
           <CardBody>

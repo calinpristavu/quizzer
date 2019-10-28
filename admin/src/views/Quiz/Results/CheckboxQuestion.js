@@ -49,7 +49,7 @@ class CheckboxQuestion extends Component {
   };
 
   renderChoice = (a, i) => {
-    var color = "inherit";
+    let color = "inherit";
 
     if (a.IsCorrect && a.IsSelected) {
       color = "#4DBD74"

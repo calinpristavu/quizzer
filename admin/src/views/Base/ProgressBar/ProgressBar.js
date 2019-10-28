@@ -8,7 +8,7 @@ class ProgressBar extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Progress</strong>
+            <i className="fa fa-align-justify"/><strong>Progress</strong>
             <div className="card-header-actions">
               <a href="https://reactstrap.github.io/components/progress/" rel="noreferrer noopener" target="_blank" className="card-header-action">
                 <small className="text-muted">docs</small>
@@ -38,7 +38,7 @@ class ProgressBar extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Progress</strong>
+            <i className="fa fa-align-justify"/><strong>Progress</strong>
             <small> color variants</small>
           </CardHeader>
           <CardBody>
@@ -51,7 +51,7 @@ class ProgressBar extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Progress</strong>
+            <i className="fa fa-align-justify"/><strong>Progress</strong>
             <small> labels</small>
           </CardHeader>
           <CardBody>
@@ -70,7 +70,7 @@ class ProgressBar extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Progress</strong>
+            <i className="fa fa-align-justify"/><strong>Progress</strong>
             <small> striped</small>
           </CardHeader>
           <CardBody>
@@ -89,7 +89,7 @@ class ProgressBar extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Progress</strong>
+            <i className="fa fa-align-justify"/><strong>Progress</strong>
             <small> animated</small>
           </CardHeader>
           <CardBody>
@@ -108,7 +108,7 @@ class ProgressBar extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Progress</strong>
+            <i className="fa fa-align-justify"/><strong>Progress</strong>
             <small> multiple bars / stacked</small>
           </CardHeader>
           <CardBody>
@@ -137,7 +137,7 @@ class ProgressBar extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Progress</strong>
+            <i className="fa fa-align-justify"/><strong>Progress</strong>
             <small> max value</small>
           </CardHeader>
           <CardBody>
