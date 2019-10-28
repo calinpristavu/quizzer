@@ -19,7 +19,7 @@ import draftToHtml from "draftjs-to-html";
 import {connect} from "react-redux";
 import {getQuestionTags, updateQuestionTemplate} from "../../../redux/actions";
 import {editedQuestionTemplate} from "../../../redux/selectors";
-import CreatableSelect from "react-select/lib/Creatable";
+import Creatable from "react-select/creatable";
 
 class EditQuestion extends Component {
   state = {};
@@ -158,7 +158,7 @@ class EditQuestion extends Component {
                 <Col xs={12}>
                   <FormGroup>
                     <Label>Tags</Label>
-                    <CreatableSelect
+                    <Creatable
                       isMulti
                       isClearable
                       onChange={this.storeTags}

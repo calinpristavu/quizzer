@@ -19,7 +19,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {createQuestionTemplate, getQuestionTags, setQuestionTemplateCreate} from "../../../redux/actions";
 import {questionTypes} from "./QuestionTemplates";
-import CreatableSelect from 'react-select/lib/Creatable';
+import Creatable from "react-select/creatable";
 
 class CreateQuestion extends Component {
   defaultState = {
@@ -155,7 +155,7 @@ class CreateQuestion extends Component {
               <Col xs={12}>
                 <FormGroup>
                   <Label>Tags</Label>
-                  <CreatableSelect
+                  <Creatable
                     isMulti
                     isClearable
                     onChange={this.storeTags}
