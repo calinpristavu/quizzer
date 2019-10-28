@@ -19,47 +19,27 @@ const brandSuccess = getStyle('--success');
 const brandWarning = getStyle('--warning');
 
 class OverallQuality extends Component {
-  state = {
-    radioSelected: 2,
-    datasets: {
-      avgResult: {
-        label: 'Average result',
-        backgroundColor: hexToRgba(brandWarning, 10),
-        borderColor: brandWarning,
-        pointHoverBackgroundColor: '#fff',
-        borderWidth: 2,
-        data: [],
-      },
-      bestResult: {
-        label: 'Best result',
-        backgroundColor: 'transparent',
-        borderColor: brandSuccess,
-        pointHoverBackgroundColor: '#fff',
-        borderWidth: 2,
-        data: [],
-      },
-    }
+  avgResultDataset = {
+    label: 'Average result',
+    backgroundColor: hexToRgba(brandWarning, 10),
+    borderColor: brandWarning,
+    pointHoverBackgroundColor: '#fff',
+    borderWidth: 2,
+    data: [],
+  };
+
+  bestResultDataset = {
+    label: 'Best result',
+    backgroundColor: 'transparent',
+    borderColor: brandSuccess,
+    pointHoverBackgroundColor: '#fff',
+    borderWidth: 2,
+    data: [],
   };
 
   componentDidMount() {
     this.props.getStatAvgResult();
     this.props.getStatBestResult();
-  }
-
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (null === nextProps.results) {
-      return null;
-    }
-
-    this.setState(oldState => {
-      const newDatasets = oldState.datasets;
-      newDatasets.avgResult.data = nextProps.avgResult;
-      newDatasets.bestResult.data = nextProps.bestResult;
-
-      return {
-        datasets: newDatasets
-      };
-    })
   }
 
   getData = () => {
@@ -69,11 +49,14 @@ class OverallQuality extends Component {
       labels.push(this.props.from.clone().add(i, 'days').format('D-M'))
     }
 
+    this.avgResultDataset.data = this.props.avgResult;
+    this.bestResultDataset.data = this.props.bestResult;
+
     return {
       labels: labels,
       datasets: [
-        this.state.datasets.avgResult,
-        this.state.datasets.bestResult,
+        this.avgResultDataset,
+        this.bestResultDataset,
       ],
     };
   };
