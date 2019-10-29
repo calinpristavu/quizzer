@@ -30,6 +30,7 @@ global.fetch = function(url, opts) {
     })
     .catch(err => {
       if (err.status === 403) {
+        // TODO: localStorage.clear() ?
         localStorage.removeItem('token');
 
         window.location = '/';
