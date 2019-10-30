@@ -11,6 +11,13 @@ import (
 	"github.com/calinpristavu/quizzer/model"
 )
 
+type hydraCollection struct {
+	Page    int
+	PerPage int
+	NoItems int
+	Items   interface{}
+}
+
 func getQuizTemplates(w http.ResponseWriter, _ *http.Request) {
 	qts := model.FindQuizTemplates()
 
@@ -187,8 +194,6 @@ func getUsersLoggedIn(w http.ResponseWriter, _ *http.Request) {
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
-	var u model.User
-
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		w.WriteHeader(404)
@@ -253,10 +258,49 @@ func patchUser(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, u, http.StatusOK)
 }
 
-func getQuizzes(w http.ResponseWriter, _ *http.Request) {
-	qs := model.FindQuizzes()
+func getQuiz(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		w.WriteHeader(404)
 
-	jsonResponse(w, qs, http.StatusOK)
+		return
+	}
+
+	q := model.FindQuiz(id)
+
+	jsonResponse(w, q, http.StatusOK)
+}
+
+func getQuizzes(w http.ResponseWriter, r *http.Request) {
+	page := r.URL.Query().Get("page")
+	if page == "" {
+		page = "1"
+	}
+	perPage := r.URL.Query().Get("perPage")
+	if perPage == "" {
+		perPage = "2"
+	}
+
+	p, err := strconv.Atoi(page)
+	if err != nil {
+		logrus.Errorf("could not convert page string('%s') to int", page)
+	}
+
+	pp, err := strconv.Atoi(perPage)
+	if err != nil {
+		logrus.Errorf("could not convert perPage string('%s') to int", perPage)
+	}
+
+	qs, totalQs := model.FindQuizzes(p, pp)
+
+	payload := hydraCollection{
+		Page:    p,
+		PerPage: pp,
+		NoItems: totalQs,
+		Items:   qs,
+	}
+
+	hydraCollectionResponse(w, payload, http.StatusOK)
 }
 
 func saveScores(w http.ResponseWriter, r *http.Request) {
@@ -363,6 +407,16 @@ func getCandidatesFromRecruitee(w http.ResponseWriter, _ *http.Request) {
 func jsonResponse(w http.ResponseWriter, payload interface{}, status int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
+	err := json.NewEncoder(w).Encode(payload)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func hydraCollectionResponse(w http.ResponseWriter, payload hydraCollection, status int) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+
 	err := json.NewEncoder(w).Encode(payload)
 	if err != nil {
 		panic(err)

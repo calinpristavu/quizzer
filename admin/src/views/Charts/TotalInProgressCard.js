@@ -9,6 +9,7 @@ import {selectInProgressQuizzes} from "../../redux/selectors";
 
 class TotalInProgressCard extends Component {
   componentDidMount() {
+    // TODO: this will only get the quizzes on the current page. It should get all.
     this.props.getQuizzes();
   }
 

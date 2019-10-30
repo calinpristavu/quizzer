@@ -192,14 +192,36 @@ export function getQuestionTags() {
     }));
 }
 
-export function getQuizzes() {
-  return dispatch => {
-    return fetch("/quizzes")
+export function getQuizzes(page = null, perPage = null) {
+  return (dispatch, getState) => {
+    if (null === page) {
+      page = getState().quiz.page;
+    }
+    if (null === perPage) {
+      perPage = getState().quiz.perPage;
+    }
+
+    return fetch(`/quizzes?page=${page}&perPage=${perPage}`)
       .then(r => dispatch({
         type: SET_QUIZZES,
         payload: r
       }))
   }
+}
+
+export function getQuiz(id) {
+  return (dispatch) => fetch(`/quizzes/${id}`)
+    .then(r => dispatch({
+      type: OPEN_QUIZ_VIEW,
+      payload: r
+    }))
+}
+
+export function openQuizView(q) {
+  return dispatch => dispatch({
+    type: OPEN_QUIZ_VIEW,
+    payload: q
+  })
 }
 
 export function getUsers() {
@@ -271,127 +293,104 @@ export function setUserCreate(val) {
 }
 
 export function getToken(username, password) {
-  return dispatch => {
-    return fetch('/token', {
-      method: "POST",
-      body: JSON.stringify({
-        Username: username,
-        Password: password
-      })
+  return dispatch => fetch('/token', {
+    method: "POST",
+    body: JSON.stringify({
+      Username: username,
+      Password: password
     })
-      .then(r => {
-        localStorage.setItem('token', r.token);
-        localStorage.setItem('user', JSON.stringify(r.user));
-        dispatch({
-          type: LOGIN,
-          payload: r
-        });
-      })
-  }
+  })
+    .then(r => {
+      localStorage.setItem('token', r.token);
+      localStorage.setItem('user', JSON.stringify(r.user));
+      dispatch({
+        type: LOGIN,
+        payload: r
+      });
+    })
 }
 
 export function getStatAvgResult() {
-  return dispatch => {
-    return fetch('/stats/avg-result')
-      .then(r => dispatch({
-        type: SET_STAT_AVG_RESULT,
-        payload: r
-      }))
-  }
+  return dispatch => fetch('/stats/avg-result')
+    .then(r => dispatch({
+      type: SET_STAT_AVG_RESULT,
+      payload: r
+    }))
 }
 
 export function getStatBestResult() {
-  return dispatch => {
-    return fetch('/stats/best-result')
-      .then(r => dispatch({
-        type: SET_STAT_BEST_RESULT,
-        payload: r
-      }))
-  }
+  return dispatch => fetch('/stats/best-result')
+    .then(r => dispatch({
+      type: SET_STAT_BEST_RESULT,
+      payload: r
+    }))
 }
 
 export function openQuestionTemplateView(qt) {
-  return dispatch => {
-    return dispatch({
-        type: OPEN_QUESTION_TEMPLATE_VIEW,
-        payload: qt
-      })
-  }
+  return dispatch => dispatch({
+    type: OPEN_QUESTION_TEMPLATE_VIEW,
+    payload: qt
+  })
 }
 
 export function openQuestionTemplateEdit(qt) {
-  return dispatch => {
-    return dispatch({
-        type: OPEN_QUESTION_TEMPLATE_EDIT,
-        payload: qt
-      })
-  }
-}
-
-export function openQuizView(q) {
-  return dispatch => {
-    return dispatch({
-        type: OPEN_QUIZ_VIEW,
-        payload: q
-      })
-  }
+  return dispatch => dispatch({
+    type: OPEN_QUESTION_TEMPLATE_EDIT,
+    payload: qt
+  })
 }
 
 export function setQuestionScore(question, score) {
-  return dispatch => {
-    return dispatch({
-      type: SET_QUESTION_SCORE,
-      payload: {
-        question: question,
-        score: score
-      }
-    })
-  }
+  return dispatch => dispatch({
+    type: SET_QUESTION_SCORE,
+    payload: {
+      question: question,
+      score: score
+    }
+  })
 }
 
 export function setQuestionNote(question, note) {
-  return dispatch => {
-    return dispatch({
-      type: SET_QUESTION_NOTE,
-      payload: {
-        question: question,
-        note: note
-      }
-    })
-  }
+  return dispatch => dispatch({
+    type: SET_QUESTION_NOTE,
+    payload: {
+      question: question,
+      note: note
+    }
+  })
 }
 
 export function saveScores(quiz) {
-  return dispatch => {
-    fetch('/quizzes/save-scores', {
-      method: "POST",
-      body: JSON.stringify(quiz)
+  return dispatch => fetch('/quizzes/save-scores', {
+    method: "POST",
+    body: JSON.stringify(quiz)
+  })
+    .then(r => {
+      dispatch({
+        type: SET_QUIZ_CORRECTING_BY,
+        payload: 0
+      });
+      dispatch({
+        type: OPEN_QUIZ_VIEW,
+        payload: null
+      });
+      new Noty({
+        text: r,
+        type: 'success',
+      }).show();
     })
-      .then(r => {
-        dispatch({
-          type: SET_QUIZ_CORRECTING_BY,
-          payload: 0
-        });
-        new Noty({
-          text: r,
-          type: 'success',
-        }).show();
-      })
-  }
 }
 
 export function startCorrecting(quizID, userID) {
-  return dispatch => {
-    fetch('/quizzes/start-correcting', {
-      method: "POST",
-      body: JSON.stringify({
-        QuizID: quizID,
-        UserID: userID,
-      })
+  return dispatch => fetch('/quizzes/start-correcting', {
+    method: "POST",
+    body: JSON.stringify({
+      QuizID: quizID,
+      UserID: userID,
     })
-      .then(() => dispatch({
-        type: SET_QUIZ_CORRECTING_BY,
-        payload: userID
-      }))
-  }
+  })
+    .then(() => dispatch({
+      type: SET_QUIZ_CORRECTING_BY,
+      payload: userID
+    }))
 }

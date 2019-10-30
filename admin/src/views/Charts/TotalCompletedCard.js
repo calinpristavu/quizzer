@@ -8,6 +8,7 @@ import {totalCompletedOptions} from "./chartConfigs";
 
 class TotalCompletedCard extends Component {
   componentDidMount() {
+    // TODO: this will only get the quizzes on the current page. It should get all.
     this.props.getQuizzes();
   }
 

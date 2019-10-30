@@ -142,14 +142,14 @@ func FindQuiz(id int) Quiz {
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("Questions.Feedback").
+		Preload("User").
 		First(&q, id)
 
 	return q
 }
 
-func FindQuizzes() []Quiz {
-	var qs []Quiz
-	db.
+func FindQuizzes(page, perPage int) ([]Quiz, int) {
+	queryBuilder := db.
 		Model(Quiz{}).
 		Preload("Questions").
 		Preload("Questions.CheckboxAnswers").
@@ -158,10 +158,19 @@ func FindQuizzes() []Quiz {
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("Questions.Feedback").
 		Preload("User").
-		Order("id desc").
+		Order("id desc")
+
+	var qs []Quiz
+	queryBuilder.
+		Offset((page - 1) * perPage).
+		Limit(perPage).
 		Find(&qs)
 
-	return qs
+	var totalQs int
+	queryBuilder.
+		Count(&totalQs)
+
+	return qs, totalQs
 }
 
 func (q *Question) markCheckboxesAsSelected(ids []string) error {

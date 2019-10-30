@@ -2,12 +2,11 @@ import {Button, Card, CardBody, CardFooter, CardHeader} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {openQuizView, saveScores, startCorrecting} from "../../../redux/actions";
+import {getQuizzes, openQuizView, saveScores, startCorrecting} from "../../../redux/actions";
 import TextQuestion from "./TextQuestion";
 import CheckboxQuestion from "./CheckboxQuestion";
 import FlowDiagramQuestion from "./FlowDiagramQuestion";
 import RadioQuestion from "./RadioQuestion";
-import {viewedQuizResult} from "../../../redux/selectors";
 
 class View extends Component {
   static propTypes = {
@@ -36,6 +35,9 @@ class View extends Component {
 
   saveScores = () => {
     this.props.saveScores(this.props.quiz)
+      .then(() => {
+        this.props.getQuizzes();
+      })
   };
 
   renderStartCorrecting = () => {
@@ -134,8 +136,8 @@ class View extends Component {
 
 export default connect(
   state => ({
-    quiz: viewedQuizResult(state),
+    quiz: state.quiz.viewedItem,
     user: state.user.loggedInUser
   }),
-  {openQuizView, saveScores, startCorrecting}
+  {openQuizView, saveScores, startCorrecting, getQuizzes}
 )(View);

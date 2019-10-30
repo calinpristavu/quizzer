@@ -36,14 +36,6 @@ export function editedQuestionTemplate(state) {
   return state.questionTemplate.list.get(state.questionTemplate.editItem)
 }
 
-export function viewedQuizResult(state) {
-  if (null === state.quiz.viewedItem) {
-    return null;
-  }
-
-  return state.quiz.list.get(state.quiz.viewedItem)
-}
-
 export function viewedUser(state) {
   if (null === state.user.viewUser) {
     return null;

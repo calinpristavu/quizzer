@@ -85,6 +85,7 @@ func registerRoutes(public *mux.Router) {
 	api.Path("/new-api/users/{id}").Methods("PATCH").HandlerFunc(patchUser)
 
 	api.Path("/new-api/quizzes").Methods("GET").HandlerFunc(getQuizzes)
+	api.Path("/new-api/quizzes/{id}").Methods("GET").HandlerFunc(getQuiz)
 
 	// todo: the next 2 routes should contain the quizID
 	api.Path("/new-api/quizzes/save-scores").Methods("POST").HandlerFunc(saveScores)

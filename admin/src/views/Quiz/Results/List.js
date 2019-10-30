@@ -3,28 +3,26 @@ import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import moment from 'moment';
 import {connect} from "react-redux";
-import {getQuizzes, openQuizView} from "../../../redux/actions";
+import {getQuiz, getQuizzes, openQuizView} from "../../../redux/actions";
 import Filters from "./Filters";
 import {Link} from "react-router-dom";
 
 class List extends Component {
   state = {
-    perPage: 5,
-    currentPage: 0,
     filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
     scoreSorting: 0
   };
 
   componentDidMount() {
-    this.props.getQuizzes();
+    this.props.getQuizzes(this.props.page, this.props.perPage);
   }
 
   getVisibleItems = () => {
-    const firstPosition = this.state.perPage * this.state.currentPage;
+    const firstPosition = this.props.perPage * this.props.page;
 
     const filtered = Filters.apply(this.props.list, this.state.filters);
     const sorted = this.applySorting(filtered);
-    const paginated = sorted.slice(firstPosition, firstPosition + this.state.perPage);
+    const paginated = sorted.slice(firstPosition, firstPosition + this.props.perPage);
 
     return paginated.valueSeq();
   };
@@ -175,7 +173,7 @@ class List extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.getVisibleItems().map((q, k) =>
+            {this.props.list.valueSeq().map((q, k) =>
               <tr key={k}>
                 <td>{q.ID}</td>
                 <td>{q.User ? q.User.Username : '-'}</td>
@@ -189,7 +187,7 @@ class List extends Component {
                   : <span>{List.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}</span>
                 }</td>
                 <td>
-                  {!q.Active && <i className="fa fa-eye" onClick={() => this.props.openQuizView(q.ID)}/>}
+                  {!q.Active && <i className="fa fa-eye" onClick={() => this.props.getQuiz(q.ID)}/>}
                 </td>
               </tr>
             )}
@@ -198,13 +196,12 @@ class List extends Component {
         </CardBody>
         <CardFooter>
           <Pager
-            noPages={Math.ceil(
-              Filters.apply(this.props.list, this.state.filters).size / this.state.perPage
-            )}
-            currentPage={this.state.currentPage}
-            perPage={this.state.perPage}
-            toPage={(pageNo) => this.setState({currentPage: pageNo})}
-            setPerPage={(v) => this.setState({perPage: v})}/>
+            noPages={Math.ceil(this.props.noItems / this.props.perPage)}
+            noItems={this.props.noItems}
+            currentPage={this.props.page - 1}
+            perPage={this.props.perPage}
+            toPage={(pageNo) => this.props.getQuizzes(pageNo + 1, this.props.perPage)}
+            setPerPage={(v) => this.props.getQuizzes(this.props.page, v)}/>
         </CardFooter>
       </Card>
     )
@@ -213,7 +210,10 @@ class List extends Component {
 
 export default connect(
   state => ({
-    list: state.quiz.list
+    list: state.quiz.list,
+    page: state.quiz.page,
+    perPage: state.quiz.perPage,
+    noItems: state.quiz.noItems,
   }),
-  {getQuizzes, openQuizView}
+  {getQuizzes, getQuiz}
 )(List);

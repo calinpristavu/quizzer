@@ -14,9 +14,14 @@ class Pager extends Component {
   static propTypes = {
     currentPage: PropTypes.number.isRequired,
     noPages: PropTypes.number.isRequired,
+    noItems: PropTypes.number.isRequired,
     perPage: PropTypes.number.isRequired,
     toPage: PropTypes.func.isRequired,
     setPerPage: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    noItems: 11 // TODO: remove this, it should be sent by parents
   };
 
   toPage = (pageNo) => {
@@ -83,14 +88,14 @@ class Pager extends Component {
               <Input
                 type="number"
                 min={1}
-                max={this.props.noPages * this.props.perPage}
+                max={this.props.noItems}
                 style={{width: 80}}
                 value={this.props.perPage}
                 onChange={(e) => this.props.setPerPage(parseInt(e.target.value) || 1)}
                 required />
               <InputGroupAddon addonType="append">
                 <InputGroupText>
-                  / {this.props.noPages * this.props.perPage}
+                  / {this.props.noItems}
                 </InputGroupText>
               </InputGroupAddon>
             </InputGroup>
