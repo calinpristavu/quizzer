@@ -2,7 +2,7 @@ import {
   OPEN_QUIZ_VIEW,
   SET_QUESTION_NOTE,
   SET_QUESTION_SCORE,
-  SET_QUIZ_CORRECTING_BY,
+  SET_QUIZ_CORRECTING_BY, SET_QUIZ_FILTER, SET_QUIZ_SORTING,
   SET_QUIZZES
 } from "../actionTypes";
 import {Map} from 'immutable';
@@ -13,6 +13,9 @@ const initialState = {
   page: 1,
   perPage: 2,
   noItems: 1,
+  sortBy: null,
+  sortDir: "asc",
+  filters: Map(),
 };
 
 export default function(state = initialState, action) {
@@ -63,7 +66,26 @@ export default function(state = initialState, action) {
         }
       }
     }
+    case SET_QUIZ_FILTER: {
+      if (action.payload.values.length < 1) {
+        return {
+          ...state,
+          filters: state.filters.delete(action.payload.field)
+        }
+      }
 
+      return {
+        ...state,
+        filters: state.filters.set(action.payload.field, action.payload.values)
+      }
+    }
+    case SET_QUIZ_SORTING: {
+      return {
+        ...state,
+        sortBy: action.payload.sortBy,
+        sortDir: action.payload.sortDir,
+      }
+    }
     default:
       return state;
   }

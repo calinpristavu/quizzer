@@ -148,7 +148,7 @@ func FindQuiz(id int) Quiz {
 	return q
 }
 
-func FindQuizzes(page, perPage int) ([]Quiz, int) {
+func FindQuizzes(page, perPage int, uIds, qtIds, active, corrected []int, sortBy, sortDir string) ([]Quiz, int) {
 	queryBuilder := db.
 		Model(Quiz{}).
 		Preload("Questions").
@@ -158,7 +158,27 @@ func FindQuizzes(page, perPage int) ([]Quiz, int) {
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("Questions.Feedback").
 		Preload("User").
-		Order("id desc")
+		Order(fmt.Sprintf("%s %s", sortBy, sortDir))
+
+	if len(uIds) > 0 {
+		queryBuilder = queryBuilder.
+			Where("user_id IN (?)", uIds)
+	}
+
+	if len(qtIds) > 0 {
+		queryBuilder = queryBuilder.
+			Where("quiz_template_id IN (?)", qtIds)
+	}
+
+	if len(active) > 0 {
+		queryBuilder = queryBuilder.
+			Where("active IN (?)", active)
+	}
+
+	if len(corrected) > 0 {
+		queryBuilder = queryBuilder.
+			Where("corrected IN (?)", corrected)
+	}
 
 	var qs []Quiz
 	queryBuilder.

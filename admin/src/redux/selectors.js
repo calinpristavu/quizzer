@@ -53,6 +53,20 @@ export function newCandidates(state) {
   )
 }
 
+export function usersAsSelect2Options(state) {
+  return state.user.all.valueSeq().map(u => ({
+    value: u.ID,
+    label: u.Username,
+  }));
+}
+
+export function quizTemplatesAsSelect2Options(state) {
+  return state.quizTemplate.list.valueSeq().map(qt => ({
+    label: qt.Name,
+    value: qt.ID,
+  }));
+}
+
 function findStatFrom(data, from) {
   const values = [];
 

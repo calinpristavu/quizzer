@@ -25,7 +25,7 @@ import {
   SET_QUIZ_TEMPLATE_CREATE,
   SET_QUIZ_TEMPLATE_EDIT,
   SET_QUIZ_CORRECTING_BY,
-  SET_QUESTION_TAGS
+  SET_QUESTION_TAGS, SET_QUIZ_FILTER, SET_QUIZ_SORTING
 } from "./actionTypes";
 import Noty from "noty";
 
@@ -194,14 +194,24 @@ export function getQuestionTags() {
 
 export function getQuizzes(page = null, perPage = null) {
   return (dispatch, getState) => {
-    if (null === page) {
-      page = getState().quiz.page;
-    }
-    if (null === perPage) {
-      perPage = getState().quiz.perPage;
+
+    const state = getState();
+    const query = {
+      page: page !== null ? page : state.quiz.page,
+      perPage: perPage !== null ? perPage : state.quiz.perPage,
+      ...state.quiz.filters.toJS(),
+    };
+
+    if (state.quiz.sortBy !== null) {
+      query.sortBy = state.quiz.sortBy;
+      query.sortDir = state.quiz.sortDir;
     }
 
-    return fetch(`/quizzes?page=${page}&perPage=${perPage}`)
+    const queryString = Object.keys(query)
+      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]))
+      .join('&');
+
+    return fetch(`/quizzes?${queryString}`)
       .then(r => dispatch({
         type: SET_QUIZZES,
         payload: r
@@ -393,4 +403,24 @@ export function startCorrecting(quizID, userID) {
       type: SET_QUIZ_CORRECTING_BY,
       payload: userID
     }))
+}
+
+export function setQuizFilter(field, values = []) {
+  return dispatch => dispatch({
+    type: SET_QUIZ_FILTER,
+    payload: {
+      field: field,
+      values: values
+    }
+  })
+}
+
+export function setQuizSorting(sortBy = null, sortDir = 'asc') {
+  return dispatch => dispatch({
+    type: SET_QUIZ_SORTING,
+    payload: {
+      sortBy: sortBy,
+      sortDir: sortDir,
+    }
+  });
 }

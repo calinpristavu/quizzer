@@ -3,42 +3,22 @@ import React, {Component} from "react";
 import Pager from "../../Base/Paginations/Pager";
 import moment from 'moment';
 import {connect} from "react-redux";
-import {getQuiz, getQuizzes, openQuizView} from "../../../redux/actions";
+import {getQuiz, getQuizzes, setQuizFilter, setQuizSorting} from "../../../redux/actions";
 import Filters from "./Filters";
 import {Link} from "react-router-dom";
 
 class List extends Component {
+  scoreSort = 1;
+
+  scoreSortMap = ["desc", null, "asc"];
+
   state = {
     filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
-    scoreSorting: 0
   };
 
   componentDidMount() {
     this.props.getQuizzes(this.props.page, this.props.perPage);
   }
-
-  getVisibleItems = () => {
-    const firstPosition = this.props.perPage * this.props.page;
-
-    const filtered = Filters.apply(this.props.list, this.state.filters);
-    const sorted = this.applySorting(filtered);
-    const paginated = sorted.slice(firstPosition, firstPosition + this.props.perPage);
-
-    return paginated.valueSeq();
-  };
-
-  applySorting = (elements) => {
-    return elements.sort((a, b) => {
-      const aScore = List.computeScore(a.Questions);
-      const bScore = List.computeScore(b.Questions);
-
-      if (aScore < bScore) { return this.state.scoreSorting }
-
-      if (aScore > bScore) { return -this.state.scoreSorting }
-
-      return 0
-    })
-  };
 
   static computePercentCompleted(questions) {
     return (questions.reduce(
@@ -48,54 +28,25 @@ class List extends Component {
   }
 
   addFilter = (propertyPath, val) => {
-    this.setState((oldState) => {
-      const filters = oldState.filters;
-      let filter = filters.find(f => f.propertyPath === propertyPath);
-      if (filter === undefined) {
-        filter = {
-          propertyPath: propertyPath
-        }
-      }
-
-      filter.values = val;
-
-      filters.push(filter);
-      return {
-        filters: filters,
-        currentPage: 0
-      }
-    })
-  };
-
-  clearFilter = (propertyPath) => {
-    this.setState((oldState) => {
-      const filters = oldState.filters;
-
-      return {
-        filters: filters.filter(f => f.propertyPath !== propertyPath),
-        currentPage: 0
-      }
-    })
+    this.props.setQuizFilter(propertyPath, val);
+    this.props.getQuizzes();
   };
 
   /**
-   * Cycle score from -1 to 1
+   * Cycle score from 0 to 2
+   * 0 - desc
+   * 1 - no sorting
+   * 2 - asc
    */
   sort = () => {
-    this.setState((oldState) => ({
-      scoreSorting: (oldState.scoreSorting + 2) % 3 - 1
-    }))
-  };
+    this.scoreSort = (this.scoreSort + 2) % 3;
 
-  /**
-   * Weighted arythmetic mean of question score with weight.
-   */
-  static computeScore(questions) {
-    return (questions.reduce((carry, q) => carry + (q.Score * q.Weight), 0)
-      /
-      questions.reduce((carry, q) => carry + q.Weight, 0)
-    ) || 0
-  }
+    const sortDir = this.scoreSortMap[this.scoreSort];
+    const sortField = sortDir !== null ? "Score" : null;
+
+    this.props.setQuizSorting(sortField, sortDir);
+    this.props.getQuizzes();
+  };
 
   static computeTimeSpent(start, end) {
     const mStart = moment(start);
@@ -121,18 +72,6 @@ class List extends Component {
     </a>;
   }
 
-  static renderStatus(q) {
-    if (q.Active) {
-      return 'In Progress';
-    }
-
-    if (q.Corrected) {
-      return 'Corrected';
-    }
-
-    return 'Finished';
-  }
-
   renderQuizTemplateCell = (name) => {
     return name === 'Generated'
       ? name
@@ -140,9 +79,9 @@ class List extends Component {
   };
 
   render() {
-    const sortClass = this.state.scoreSorting === -1
+    const sortClass = this.scoreSort === 0
       ? 'fa-sort-down'
-      : this.state.scoreSorting === 0 ? 'fa-sort' : 'fa-sort-up';
+      : this.scoreSort === 1 ? 'fa-sort' : 'fa-sort-up';
 
     return (
       <Card>
@@ -150,7 +89,6 @@ class List extends Component {
           <i className="fa fa-align-justify"/> Quiz Results <small className="text-muted">list</small>
           <Filters
             addFilter={this.addFilter}
-            clearFilter={this.clearFilter}
             items={this.props.list}/>
         </CardHeader>
         <CardBody>
@@ -167,7 +105,8 @@ class List extends Component {
                 {' '} Score
               </th>
               <th>Recruitee</th>
-              <th>Status</th>
+              <th>Active</th>
+              <th>Corrected</th>
               <th>Time spent</th>
               <th>Actions</th>
             </tr>
@@ -179,9 +118,10 @@ class List extends Component {
                 <td>{q.User ? q.User.Username : '-'}</td>
                 <td>{this.renderQuizTemplateCell(q.Name)}</td>
                 <td>{List.computePercentCompleted(q.Questions).toFixed(0)}<small className="text-muted">%</small></td>
-                <td>{List.computeScore(q.Questions).toFixed(0)}<small>%</small></td>
+                <td>{q.Score.toFixed(0)}<small>%</small></td>
                 <td>{List.renderRecruiteeLink(q)}</td>
-                <td>{List.renderStatus(q)}</td>
+                <td>{q.Active ? "In Progress" : "Finished"}</td>
+                <td>{q.Corrected ? "Corrected" : "Not Corrected"}</td>
                 <td>{q.Active
                   ? '-'
                   : <span>{List.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}</span>
@@ -215,5 +155,5 @@ export default connect(
     perPage: state.quiz.perPage,
     noItems: state.quiz.noItems,
   }),
-  {getQuizzes, getQuiz}
+  {getQuizzes, getQuiz, setQuizFilter, setQuizSorting}
 )(List);

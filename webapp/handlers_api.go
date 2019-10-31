@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
@@ -271,27 +272,89 @@ func getQuiz(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, q, http.StatusOK)
 }
 
+// TODO: this is a complete mess. Extract query string parsers separately
 func getQuizzes(w http.ResponseWriter, r *http.Request) {
 	page := r.URL.Query().Get("page")
 	if page == "" {
 		page = "1"
 	}
-	perPage := r.URL.Query().Get("perPage")
-	if perPage == "" {
-		perPage = "2"
-	}
-
 	p, err := strconv.Atoi(page)
 	if err != nil {
 		logrus.Errorf("could not convert page string('%s') to int", page)
 	}
 
+	perPage := r.URL.Query().Get("perPage")
+	if perPage == "" {
+		perPage = "2"
+	}
 	pp, err := strconv.Atoi(perPage)
 	if err != nil {
 		logrus.Errorf("could not convert perPage string('%s') to int", perPage)
 	}
 
-	qs, totalQs := model.FindQuizzes(p, pp)
+	sortBy := r.URL.Query().Get("sortBy")
+	sortDir := r.URL.Query().Get("sortDir")
+	if sortBy == "" {
+		sortBy = "id"
+		sortDir = "desc"
+	}
+
+	if sortDir == "" {
+		sortDir = "desc"
+	}
+
+	var uIds []int
+	idFiltersAsString := strings.Split(r.URL.Query().Get("uID"), ",")
+	for _, idAsString := range idFiltersAsString {
+		idAsInt, err := strconv.Atoi(idAsString)
+		if err != nil {
+			continue
+		}
+
+		uIds = append(uIds, idAsInt)
+	}
+
+	var qtIds []int
+	qtIdFiltersAsString := strings.Split(r.URL.Query().Get("QuizTemplateID"), ",")
+
+	for _, qtIdAsString := range qtIdFiltersAsString {
+		idAsInt, err := strconv.Atoi(qtIdAsString)
+		if err != nil {
+			continue
+		}
+
+		qtIds = append(qtIds, idAsInt)
+	}
+
+	var active []int
+	activeQuery := r.URL.Query().Get("Active")
+	if activeQuery != "" {
+		activesAsString := strings.Split(activeQuery, ",")
+
+		for _, s := range activesAsString {
+			activeInt := 0
+			if s == "true" {
+				activeInt = 1
+			}
+			active = append(active, activeInt)
+		}
+	}
+
+	var corrected []int
+	correctedQuery := r.URL.Query().Get("Corrected")
+	if correctedQuery != "" {
+		correctedAsString := strings.Split(correctedQuery, ",")
+
+		for _, correctedAsString := range correctedAsString {
+			correctedInt := 0
+			if correctedAsString == "true" {
+				correctedInt = 1
+			}
+			corrected = append(corrected, correctedInt)
+		}
+	}
+
+	qs, totalQs := model.FindQuizzes(p, pp, uIds, qtIds, active, corrected, sortBy, sortDir)
 
 	payload := hydraCollection{
 		Page:    p,
