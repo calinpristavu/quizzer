@@ -171,89 +171,57 @@ func FindQuizzes(pager Pager, qf QuizFilter, sorter Sorter) ([]Quiz, int) {
 	return qs, totalQs
 }
 
-func (q *Question) markCheckboxesAsSelected(ids []string) error {
-	for _, a := range q.CheckboxAnswers {
-		a.IsSelected = false
-		for _, aID := range ids {
-			id, err := strconv.Atoi(aID)
-			if err != nil {
-				return fmt.Errorf("invalid answer id given %v: %v", aID, err)
-			}
-
-			if a.ID == uint(id) {
-				a.IsSelected = true
-			}
-		}
+func FindStatsTotalAttempts() interface{} {
+	var stats []struct {
+		Date   time.Time
+		Number int
 	}
 
-	return nil
+	db.Raw(`
+SELECT 
+	COUNT(*) as number,
+	DATE(updated_at) as date
+FROM quizzes
+GROUP BY DATE(updated_at)
+`).Scan(&stats)
+
+	return stats
 }
 
-func (q *Question) saveCheckboxes(answerIds []string) error {
-	err := q.markCheckboxesAsSelected(answerIds)
-	if err != nil {
-		return fmt.Errorf("invalid answers: %v", err)
+func FindStatsAvgResult() interface{} {
+	var stats []struct {
+		Date   time.Time
+		Number float32
 	}
 
-	correct := true
-	for _, a := range q.CheckboxAnswers {
-		if a.IsCorrect != a.IsSelected {
-			correct = false
-		}
-	}
-	q.IsCorrect = correct
-	if q.IsCorrect {
-		q.Score = 100
-	}
-	q.IsAnswered = true
-	db.Save(q)
+	db.Raw(`
+SELECT 
+	AVG(score) as number,
+	DATE(updated_at) as date
+FROM quizzes
+WHERE score IS NOT NULL
+GROUP BY DATE(updated_at)
+`).Scan(&stats)
 
-	return nil
+	return stats
 }
 
-func (q *Question) saveRadios(answerId string) error {
-	id, err := strconv.Atoi(answerId)
-	if err != nil {
-		return fmt.Errorf("could not convert %s to int: %v", answerId, err)
+func FindStatsBestResult() interface{} {
+	var stats []struct {
+		Date   time.Time
+		Number float32
 	}
 
-	correct := true
-	for _, a := range q.RadioAnswers {
-		a.IsSelected = false
-		if a.ID == uint(id) {
-			a.IsSelected = true
-		}
-		db.Save(&a)
+	db.Raw(`
+SELECT 
+	MAX(score) as number,
+	DATE(updated_at) as date
+FROM quizzes
+WHERE score IS NOT NULL
+GROUP BY DATE(updated_at)
+`).Scan(&stats)
 
-		if a.IsCorrect != a.IsSelected {
-			correct = false
-		}
-	}
-	q.IsCorrect = correct
-	if q.IsCorrect {
-		q.Score = 100
-	}
-	q.IsAnswered = true
-	db.Save(q)
-
-	return nil
-}
-
-func (q *Question) saveText(text string) error {
-	q.TextAnswer.Text = text
-	q.IsAnswered = true
-	db.Save(q)
-
-	return nil
-}
-
-func (q *Question) saveFlowDiagram(json string, svg string) error {
-	q.FlowDiagramAnswer.Text = json
-	q.FlowDiagramAnswer.SVG = svg
-	q.IsAnswered = true
-	db.Save(q)
-
-	return nil
+	return stats
 }
 
 func (q *Question) AddFeedback(text string) error {
@@ -337,55 +305,87 @@ func (q *Quiz) StartCorrecting(u *User) {
 		Update("correcting_by_id", q.CorrectingByID)
 }
 
-func FindStatsTotalAttempts() interface{} {
-	var stats []struct {
-		Date   time.Time
-		Number int
+func (q *Question) markCheckboxesAsSelected(ids []string) error {
+	for _, a := range q.CheckboxAnswers {
+		a.IsSelected = false
+		for _, aID := range ids {
+			id, err := strconv.Atoi(aID)
+			if err != nil {
+				return fmt.Errorf("invalid answer id given %v: %v", aID, err)
+			}
+
+			if a.ID == uint(id) {
+				a.IsSelected = true
+			}
+		}
 	}
 
-	db.Raw(`
-SELECT 
-	COUNT(*) as number,
-	DATE(updated_at) as date
-FROM quizzes
-GROUP BY DATE(updated_at)
-`).Scan(&stats)
-
-	return stats
+	return nil
 }
 
-func FindStatsAvgResult() interface{} {
-	var stats []struct {
-		Date   time.Time
-		Number float32
+func (q *Question) saveCheckboxes(answerIds []string) error {
+	err := q.markCheckboxesAsSelected(answerIds)
+	if err != nil {
+		return fmt.Errorf("invalid answers: %v", err)
 	}
 
-	db.Raw(`
-SELECT 
-	AVG(score) as number,
-	DATE(updated_at) as date
-FROM quizzes
-WHERE score IS NOT NULL
-GROUP BY DATE(updated_at)
-`).Scan(&stats)
+	correct := true
+	for _, a := range q.CheckboxAnswers {
+		if a.IsCorrect != a.IsSelected {
+			correct = false
+		}
+	}
+	q.IsCorrect = correct
+	if q.IsCorrect {
+		q.Score = 100
+	}
+	q.IsAnswered = true
+	db.Save(q)
 
-	return stats
+	return nil
 }
 
-func FindStatsBestResult() interface{} {
-	var stats []struct {
-		Date   time.Time
-		Number float32
+func (q *Question) saveRadios(answerId string) error {
+	id, err := strconv.Atoi(answerId)
+	if err != nil {
+		return fmt.Errorf("could not convert %s to int: %v", answerId, err)
 	}
 
-	db.Raw(`
-SELECT 
-	MAX(score) as number,
-	DATE(updated_at) as date
-FROM quizzes
-WHERE score IS NOT NULL
-GROUP BY DATE(updated_at)
-`).Scan(&stats)
+	correct := true
+	for _, a := range q.RadioAnswers {
+		a.IsSelected = false
+		if a.ID == uint(id) {
+			a.IsSelected = true
+		}
+		db.Save(&a)
 
-	return stats
+		if a.IsCorrect != a.IsSelected {
+			correct = false
+		}
+	}
+	q.IsCorrect = correct
+	if q.IsCorrect {
+		q.Score = 100
+	}
+	q.IsAnswered = true
+	db.Save(q)
+
+	return nil
+}
+
+func (q *Question) saveText(text string) error {
+	q.TextAnswer.Text = text
+	q.IsAnswered = true
+	db.Save(q)
+
+	return nil
+}
+
+func (q *Question) saveFlowDiagram(json string, svg string) error {
+	q.FlowDiagramAnswer.Text = json
+	q.FlowDiagramAnswer.SVG = svg
+	q.IsAnswered = true
+	db.Save(q)
+
+	return nil
 }

@@ -28,6 +28,26 @@ type User struct {
 	RecruiteeID   *int
 }
 
+type Role struct {
+	ID       int
+	Name     string
+	Children []Role
+}
+
+var (
+	RoleRoot = Role{
+		ID:   0,
+		Name: "root",
+		Children: []Role{
+			RoleAdmin,
+		},
+	}
+	RoleAdmin       = Role{ID: 1, Name: "admin_only", Children: []Role{RoleContributor}}
+	RoleGuest       = Role{ID: 997, Name: "guest", Children: []Role{RoleContributor}}
+	RoleContributor = Role{ID: 998, Name: "contrib", Children: []Role{RoleUser}}
+	RoleUser        = Role{ID: 2, Name: "user", Children: []Role{}}
+)
+
 var animals = [20]string{
 	"Hamster", "Ape", "Bald", "Eagle Eye", "Starfish", "Ibex", "Cow", "Tapir", "Dog", "Addax",
 	"Impala", "Squirrel", "Shrew", "Sugar", "Jackal", "Armadillo", "Baboon", "Skunk", "Ox", "Rooster",
@@ -112,17 +132,6 @@ func FindUser(id uint) (User, bool) {
 	return u, !res.RecordNotFound()
 }
 
-func (u *User) Save() {
-	db.Save(u)
-}
-
-func (u *User) Create() error {
-	u.CreatedAt = time.Now()
-	res := db.Save(u)
-
-	return res.Error
-}
-
 func CreateGuest() (*User, error) {
 	rand.Seed(time.Now().UnixNano())
 	uname := strings.Join([]string{
@@ -142,26 +151,22 @@ func CreateGuest() (*User, error) {
 	return u, res.Error
 }
 
-type Role struct {
-	ID       int
-	Name     string
-	Children []Role
+func CheckPassword(expectedPasswordHashed, password string) bool {
+	check := bcrypt.CompareHashAndPassword([]byte((expectedPasswordHashed)), []byte(password))
+
+	return check == nil
 }
 
-// Roles
-var (
-	RoleRoot = Role{
-		ID:   0,
-		Name: "root",
-		Children: []Role{
-			RoleAdmin,
-		},
-	}
-	RoleAdmin       = Role{ID: 1, Name: "admin_only", Children: []Role{RoleContributor}}
-	RoleGuest       = Role{ID: 997, Name: "guest", Children: []Role{RoleContributor}}
-	RoleContributor = Role{ID: 998, Name: "contrib", Children: []Role{RoleUser}}
-	RoleUser        = Role{ID: 2, Name: "user", Children: []Role{}}
-)
+func (u *User) Save() {
+	db.Save(u)
+}
+
+func (u *User) Create() error {
+	u.CreatedAt = time.Now()
+	res := db.Save(u)
+
+	return res.Error
+}
 
 func (u User) IsAdmin() bool {
 	_, err := u.Role.FindChildWithId(RoleAdmin.ID)
@@ -185,21 +190,6 @@ func (u User) IsGranted(r Role) bool {
 	_, err := u.Role.FindChildWithId(r.ID)
 
 	return err == nil
-}
-
-func (r Role) FindChildWithId(id int) (Role, error) {
-	if r.ID == id {
-		return r, nil
-	}
-
-	for _, c := range r.Children {
-		found, err := c.FindChildWithId(id)
-		if err == nil {
-			return found, nil
-		}
-	}
-
-	return Role{}, fmt.Errorf("role %d not found", id)
 }
 
 func (u *User) FinishQuiz() {
@@ -237,8 +227,17 @@ func (u *User) FindQuiz(qID uint) Quiz {
 	return FindQuizByCriteria(qID, u.ID)
 }
 
-func CheckPassword(expectedPasswordHashed, password string) bool {
-	check := bcrypt.CompareHashAndPassword([]byte((expectedPasswordHashed)), []byte(password))
+func (r Role) FindChildWithId(id int) (Role, error) {
+	if r.ID == id {
+		return r, nil
+	}
 
-	return check == nil
+	for _, c := range r.Children {
+		found, err := c.FindChildWithId(id)
+		if err == nil {
+			return found, nil
+		}
+	}
+
+	return Role{}, fmt.Errorf("role %d not found", id)
 }

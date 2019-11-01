@@ -64,26 +64,6 @@ type QuestionTemplateTag struct {
 	Questions []QuestionTemplate
 }
 
-func (qt QuizTemplate) Start(u *User) *Quiz {
-	q := &Quiz{
-		UserID:         u.ID,
-		Name:           qt.Name,
-		Active:         true,
-		QuizTemplateID: qt.ID,
-		Duration:       qt.Duration,
-	}
-
-	db.Save(&q)
-
-	for _, qq := range qt.QuizQuestions {
-		qq.Question.addToQuiz(q, qq.Weight)
-	}
-	logrus.Printf("created quiz: %v", q)
-	sort.Sort(QuestionsByOrder(q.Questions))
-
-	return q
-}
-
 func FindQuizTemplate(id int) (QuizTemplate, bool) {
 	var qt QuizTemplate
 	res := db.
@@ -152,6 +132,83 @@ func FindQuestionTemplateTags() []QuestionTemplateTag {
 	return qtts
 }
 
+func (qt QuizTemplate) Start(u *User) *Quiz {
+	q := &Quiz{
+		UserID:         u.ID,
+		Name:           qt.Name,
+		Active:         true,
+		QuizTemplateID: qt.ID,
+		Duration:       qt.Duration,
+	}
+
+	db.Save(&q)
+
+	for _, qq := range qt.QuizQuestions {
+		qq.Question.addToQuiz(q, qq.Weight)
+	}
+	logrus.Printf("created quiz: %v", q)
+	sort.Sort(QuestionsByOrder(q.Questions))
+
+	return q
+}
+
+func (qt *QuizTemplate) Create() {
+	qt.CreatedAt = time.Now()
+	db.Create(qt)
+
+	db.Model(qt).
+		Preload("QuizQuestions").
+		Preload("QuizQuestions.Question").
+		Find(&qt)
+}
+
+func (qt *QuizTemplate) Delete() {
+	db.Delete(qt, qt.ID)
+}
+
+func (qt *QuizTemplate) Save() {
+	db.Set("gorm:association_autoupdate", false).Save(&qt)
+	db.Model(qt).Association("QuizQuestions").Replace(qt.QuizQuestions)
+
+	db.Model(qt).
+		Preload("QuizQuestions").
+		Preload("QuizQuestions.Question").
+		Find(&qt)
+}
+
+func (qt *QuestionTemplate) Create() {
+	qt.CreatedAt = time.Now()
+	db.Create(qt)
+}
+
+func (qt *QuestionTemplate) Delete() {
+	qt.PreloadQuizTemplates()
+
+	for _, qqt := range qt.QuizQuestions {
+		qqt.Delete()
+	}
+
+	db.Delete(qt, qt.ID)
+}
+
+func (qt *QuestionTemplate) Save() {
+	db.Set("gorm:association_autoupdate", false).Save(&qt)
+	db.Model(qt).Association("CheckboxAnswerTemplates").Replace(qt.CheckboxAnswerTemplates)
+	db.Model(qt).Association("RadioAnswerTemplates").Replace(qt.RadioAnswerTemplates)
+	db.Model(qt).Association("FlowDiagramAnswerTemplate").Replace(qt.FlowDiagramAnswerTemplate)
+}
+
+func (qt *QuestionTemplate) PreloadQuizTemplates() {
+	db.Model(qt.QuizQuestions).
+		Preload("Quiz").
+		Where("question_id = ?", qt.ID).
+		Find(&qt.QuizQuestions)
+}
+
+func (qqt *QuizQuestionTemplate) Delete() {
+	db.Delete(qqt)
+}
+
 func (qt QuestionTemplate) addToQuiz(quiz *Quiz, weight uint) {
 	q := &Question{
 		IsAnswered:         false,
@@ -190,61 +247,4 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz, weight uint) {
 	}
 
 	quiz.Questions = append(quiz.Questions, q)
-}
-
-func (qt *QuizTemplate) Create() {
-	qt.CreatedAt = time.Now()
-	db.Create(qt)
-
-	db.Model(qt).
-		Preload("QuizQuestions").
-		Preload("QuizQuestions.Question").
-		Find(&qt)
-}
-
-func (qt *QuizTemplate) Delete() {
-	db.Delete(qt, qt.ID)
-}
-
-func (qt *QuestionTemplate) Create() {
-	qt.CreatedAt = time.Now()
-	db.Create(qt)
-}
-
-func (qt *QuestionTemplate) Delete() {
-	qt.PreloadQuizTemplates()
-
-	for _, qqt := range qt.QuizQuestions {
-		qqt.Delete()
-	}
-
-	db.Delete(qt, qt.ID)
-}
-
-func (qt *QuizTemplate) Save() {
-	db.Set("gorm:association_autoupdate", false).Save(&qt)
-	db.Model(qt).Association("QuizQuestions").Replace(qt.QuizQuestions)
-
-	db.Model(qt).
-		Preload("QuizQuestions").
-		Preload("QuizQuestions.Question").
-		Find(&qt)
-}
-
-func (qt *QuestionTemplate) Save() {
-	db.Set("gorm:association_autoupdate", false).Save(&qt)
-	db.Model(qt).Association("CheckboxAnswerTemplates").Replace(qt.CheckboxAnswerTemplates)
-	db.Model(qt).Association("RadioAnswerTemplates").Replace(qt.RadioAnswerTemplates)
-	db.Model(qt).Association("FlowDiagramAnswerTemplate").Replace(qt.FlowDiagramAnswerTemplate)
-}
-
-func (qt *QuestionTemplate) PreloadQuizTemplates() {
-	db.Model(qt.QuizQuestions).
-		Preload("Quiz").
-		Where("question_id = ?", qt.ID).
-		Find(&qt.QuizQuestions)
-}
-
-func (qqt *QuizQuestionTemplate) Delete() {
-	db.Delete(qqt)
 }

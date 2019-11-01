@@ -10,6 +10,36 @@ type Validator struct {
 	err              error
 }
 
+func ChangeUsernameFormValidator(form url.Values) (map[string]interface{}, error) {
+	validator := Validator{err: usernameValidator(form.Get("username"))}
+	if validator.err != nil {
+		validator.setErrorMessage("username")
+
+		return validator.validationErrors, errors.New("username validation error")
+	}
+
+	return validator.validationErrors, nil
+}
+
+func ChangePasswordFormValidator(form url.Values) (map[string]interface{}, error) {
+	validator := Validator{}
+	validator.err = samePassword(form.Get("password"), form.Get("repeated"))
+	if validator.err != nil {
+		validator.setErrorMessage("password")
+
+		return validator.validationErrors, errors.New("password validation error")
+	}
+
+	validator.err = passwordValidator(form.Get("password"))
+	if validator.err != nil {
+		validator.setErrorMessage("password")
+
+		return validator.validationErrors, errors.New("password validation error")
+	}
+
+	return validator.validationErrors, nil
+}
+
 func (validator *Validator) setErrorMessage(key string) {
 	if validator.validationErrors == nil {
 		validator.validationErrors = make(map[string]interface{})
@@ -45,34 +75,4 @@ func samePassword(password, repeated string) error {
 		return errors.New("the passwords must be the same")
 	}
 	return nil
-}
-
-func ChangeUsernameFormValidator(form url.Values) (map[string]interface{}, error) {
-	validator := Validator{err: usernameValidator(form.Get("username"))}
-	if validator.err != nil {
-		validator.setErrorMessage("username")
-
-		return validator.validationErrors, errors.New("username validation error")
-	}
-
-	return validator.validationErrors, nil
-}
-
-func ChangePasswordFormValidator(form url.Values) (map[string]interface{}, error) {
-	validator := Validator{}
-	validator.err = samePassword(form.Get("password"), form.Get("repeated"))
-	if validator.err != nil {
-		validator.setErrorMessage("password")
-
-		return validator.validationErrors, errors.New("password validation error")
-	}
-
-	validator.err = passwordValidator(form.Get("password"))
-	if validator.err != nil {
-		validator.setErrorMessage("password")
-
-		return validator.validationErrors, errors.New("password validation error")
-	}
-
-	return validator.validationErrors, nil
 }
