@@ -19,8 +19,8 @@ class QuizCorrectedFilter extends Component {
           placeholder="Is corrected"
           onChange={(opt) => this.props.addFilter(opt, 'Corrected')}
           options={[
-            {value: true, label: "Corrected"},
-            {value: false, label: "Not corrected"},
+            {value: 1, label: "Corrected"},
+            {value: 0, label: "Not corrected"},
           ]}/>
       </FormGroup>
     );

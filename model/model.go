@@ -148,7 +148,7 @@ func FindQuiz(id int) Quiz {
 	return q
 }
 
-func FindQuizzes(page, perPage int, uIds, qtIds, active, corrected []int, sortBy, sortDir string) ([]Quiz, int) {
+func FindQuizzes(pager Pager, qf QuizFilter, sorter Sorter) ([]Quiz, int) {
 	queryBuilder := db.
 		Model(Quiz{}).
 		Preload("Questions").
@@ -157,38 +157,16 @@ func FindQuizzes(page, perPage int, uIds, qtIds, active, corrected []int, sortBy
 		Preload("Questions.TextAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("Questions.Feedback").
-		Preload("User").
-		Order(fmt.Sprintf("%s %s", sortBy, sortDir))
+		Preload("User")
 
-	if len(uIds) > 0 {
-		queryBuilder = queryBuilder.
-			Where("user_id IN (?)", uIds)
-	}
-
-	if len(qtIds) > 0 {
-		queryBuilder = queryBuilder.
-			Where("quiz_template_id IN (?)", qtIds)
-	}
-
-	if len(active) > 0 {
-		queryBuilder = queryBuilder.
-			Where("active IN (?)", active)
-	}
-
-	if len(corrected) > 0 {
-		queryBuilder = queryBuilder.
-			Where("corrected IN (?)", corrected)
-	}
+	queryBuilder = qf.AttachWhereClauses(queryBuilder)
+	queryBuilder = sorter.AttachSorterClauses(queryBuilder)
 
 	var qs []Quiz
-	queryBuilder.
-		Offset((page - 1) * perPage).
-		Limit(perPage).
-		Find(&qs)
+	pager.AttachPagerClauses(queryBuilder).Find(&qs)
 
 	var totalQs int
-	queryBuilder.
-		Count(&totalQs)
+	queryBuilder.Count(&totalQs)
 
 	return qs, totalQs
 }

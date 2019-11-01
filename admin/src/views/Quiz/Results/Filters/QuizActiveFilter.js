@@ -19,8 +19,8 @@ class QuizActiveFilter extends Component {
           placeholder="Is active"
           onChange={(opt) => this.props.addFilter(opt, 'Active')}
           options={[
-            {value: true, label: "In Progress"},
-            {value: false, label: "Finished"},
+            {value: 1, label: "In Progress"},
+            {value: 0, label: "Finished"},
           ]}/>
       </FormGroup>
     );
