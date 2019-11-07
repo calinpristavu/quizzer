@@ -30,11 +30,11 @@ class QuizTemplates extends Component {
     return (
       <div className="animated fadeIn">
         <Row>
-          <Col xs="12" lg="6">
+          <Col md={12}>
             <List/>
           </Col>
 
-          <Col xs="12" lg="6">
+          <Col md={12}>
             <Create />
             <Edit />
           </Col>

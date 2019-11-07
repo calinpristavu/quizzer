@@ -4,6 +4,8 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import {connect} from "react-redux";
 import {setQuizTemplateEdit, updateQuizTemplate} from "../../../redux/actions";
+import Row from "reactstrap/es/Row";
+import Col from "reactstrap/es/Col";
 
 class Edit extends Component {
   state = {
@@ -46,30 +48,34 @@ class Edit extends Component {
     }
 
     return (
-      <Card key={this.state.quiz.ID}>
-        <CardHeader>
-          <span className="float-right">
-            <i
-              onClick={() => this.props.setQuizTemplateEdit(null)}
-              className="fa fa-minus-circle"
-              style={{cursor: "pointer"}}/>
-          </span>
-          <i className="fa fa-edit text-warning" />
-          <strong>Editing quiz {this.state.quiz.ID}</strong>
-          <small> Form</small>
-        </CardHeader>
-        {this.state.step === 1 &&
-        <Step1
-          quiz={this.state.quiz}
-          advance={this.advanceToStep2}/>
-        }
-        {this.state.step === 2 &&
-        <Step2
-          quiz={this.state.quiz}
-          back={() => this.setState({step: 1})}
-          advance={this.stop}/>
-        }
-      </Card>
+      <Row>
+        <Col md={8}>
+          <Card key={this.state.quiz.ID}>
+            <CardHeader>
+              <span className="float-right">
+                <i
+                  onClick={() => this.props.setQuizTemplateEdit(null)}
+                  className="fa fa-minus-circle"
+                  style={{cursor: "pointer"}}/>
+              </span>
+              <i className="fa fa-edit text-warning" />
+              <strong>Editing quiz {this.state.quiz.ID}</strong>
+              <small> Form</small>
+            </CardHeader>
+            {this.state.step === 1 &&
+            <Step1
+              quiz={this.state.quiz}
+              advance={this.advanceToStep2}/>
+            }
+            {this.state.step === 2 &&
+            <Step2
+              quiz={this.state.quiz}
+              back={() => this.setState({step: 1})}
+              advance={this.stop}/>
+            }
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }

@@ -1,3 +1,4 @@
+import React, {Component} from "react";
 import {
   CardBody,
   CardFooter,
@@ -7,7 +8,6 @@ import {
   InputGroupText,
 } from "reactstrap";
 import Select from "react-select";
-import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {Map} from 'immutable';
 import {connect} from "react-redux";
@@ -121,7 +121,14 @@ class Step2 extends Component {
           </InputGroup>
         </div>
 
-        <div dangerouslySetInnerHTML={{__html: `#${questionTemplate.ID} ${questionTemplate.Text}`}}/>
+        <div>
+          <h3>
+            #{questionTemplate.ID} {questionTemplate.Tags.map((t, k) => (
+              <span key={k} className="badge badge-pill badge-info">{t.Text}</span>
+            ))}
+          </h3>
+        </div>
+        <div dangerouslySetInnerHTML={{__html: questionTemplate.Text}}/>
       </div>
     )
   };
