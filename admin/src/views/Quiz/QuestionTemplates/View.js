@@ -70,7 +70,7 @@ class View extends Component {
           <span className="float-right">
             <i
               onClick={() => this.props.openQuestionTemplateView(null)}
-              className="fa fa-close"
+              className="fa fa-minus-circle float-right"
               style={{cursor: "pointer"}}/>
           </span>
           <i className="fa fa-eye" />

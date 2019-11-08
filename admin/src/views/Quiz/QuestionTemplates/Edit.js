@@ -17,7 +17,7 @@ import {Editor} from "react-draft-wysiwyg";
 import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import draftToHtml from "draftjs-to-html";
 import {connect} from "react-redux";
-import {getQuestionTags, updateQuestionTemplate} from "../../../redux/actions";
+import {getQuestionTags, openQuestionTemplateEdit, updateQuestionTemplate} from "../../../redux/actions";
 import {editedQuestionTemplate} from "../../../redux/selectors";
 import Creatable from "react-select/creatable";
 
@@ -148,6 +148,12 @@ class EditQuestion extends Component {
       <Card>
         <Form innerRef={this.formRef} key={this.props.question.ID}>
           <CardHeader>
+            <span className="float-right">
+              <i
+                onClick={() => this.props.openQuestionTemplateEdit(null)}
+                className="fa fa-minus-circle"
+                style={{cursor: "pointer"}}/>
+            </span>
             <i className="fa fa-edit text-warning" />
             <strong>Editing question {this.props.question.ID}</strong>
             <small> Form</small>
@@ -274,5 +280,5 @@ export default connect(
     question: editedQuestionTemplate(state),
     tags: state.tags.list
   }),
-  {updateQuestionTemplate, getQuestionTags}
+  {updateQuestionTemplate, getQuestionTags, openQuestionTemplateEdit}
 )(EditQuestion);
