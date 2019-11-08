@@ -90,6 +90,18 @@ export class QuestionsList extends Component {
     })
   };
 
+  renderTextCell = (question) => {
+    return (
+      <div>
+        <h4>#{question.ID}</h4>
+        <h5>
+          {question.Tags.map((t, k) => <span className="badge badge-pill badge-primary">{t.Text}</span>)}
+        </h5>
+        <div dangerouslySetInnerHTML={{__html: question.Text}}/>
+      </div>
+    );
+  };
+
   render() {
     return (
       <Card>
@@ -119,7 +131,7 @@ export class QuestionsList extends Component {
             <tbody>
             {this.getVisibleItems().map((q, k) =>
               <tr key={k} onClick={() => {this.props.openQuestionTemplateView(q.ID)}}>
-                <td dangerouslySetInnerHTML={{__html: `#${q.ID} ${q.Text}`}}/>
+                <td>{this.renderTextCell(q)}</td>
                 <td>{questionTypes[q.Type]}</td>
                 <td title={`${q.usage.toFixed(2)} %`}>
                   <Progress
