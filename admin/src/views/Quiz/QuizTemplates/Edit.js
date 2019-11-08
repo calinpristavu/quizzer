@@ -36,7 +36,7 @@ class Edit extends Component {
     this.setState({quiz: this.props.quiz});
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.quiz !== this.state.quiz) {
       this.setState({quiz: nextProps.quiz});
     }

@@ -1,5 +1,4 @@
-import {Col, FormGroup, Row} from "reactstrap";
-import Select from "react-select";
+import {Col, Row} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {Map} from 'immutable';
