@@ -73,7 +73,7 @@ class List extends Component {
                     <i onClick={() => this.props.setQuizTemplateEdit(q)} className="fa fa-edit text-warning list-action"/>
                     <i
                       onClick={(e) => { if (window.confirm('Are you sure you wish to delete this Question?')) this.delete(e, q.ID) } }
-                      className="fa fa-minus-circle list-action"/>
+                      className="fa fa-trash list-action"/>
                   </td>
                 </tr>
               )}

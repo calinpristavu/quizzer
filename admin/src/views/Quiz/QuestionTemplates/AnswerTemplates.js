@@ -51,7 +51,7 @@ export class CheckboxAnswerTemplates extends Component {
               <td>{answer.Text}</td>
               <td>{answer.IsCorrect ? 'true' : 'false'}</td>
               <td>
-                <i className="fa fa-minus-circle text-danger" onClick={() => this.props.removeChoice(k)}/>
+                <i className="fa fa-trash text-danger" onClick={() => this.props.removeChoice(k)}/>
               </td>
             </tr>
           )}
@@ -150,7 +150,7 @@ export class RadioAnswerTemplates extends Component {
                 </FormGroup>
               </td>
               <td>
-                <i className="fa fa-minus-circle text-danger" onClick={() => this.props.removeChoice(k)}/>
+                <i className="fa fa-trash text-danger" onClick={() => this.props.removeChoice(k)}/>
               </td>
             </tr>
           )}
