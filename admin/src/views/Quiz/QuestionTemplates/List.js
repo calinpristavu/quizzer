@@ -95,7 +95,7 @@ export class QuestionsList extends Component {
       <div>
         <h4>#{question.ID}</h4>
         <h5>
-          {question.Tags.map((t, k) => <span className="badge badge-pill badge-primary">{t.Text}</span>)}
+          {question.Tags.map((t, k) => <span className="badge badge-pill badge-primary" key={k}>{t.Text}</span>)}
         </h5>
         <div dangerouslySetInnerHTML={{__html: question.Text}}/>
       </div>
