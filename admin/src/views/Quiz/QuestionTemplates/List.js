@@ -130,11 +130,11 @@ export class QuestionsList extends Component {
                     value={q.usage} />
                 </td>
                 <td>
-                  <i onClick={() => {this.props.openQuestionTemplateView(q.ID)}} className="fa fa-eye"/>
-                  <i onClick={() => {this.props.openQuestionTemplateEdit(q.ID)}} className="fa fa-edit text-warning"/>
+                  <i onClick={() => {this.props.openQuestionTemplateView(q.ID)}} className="list-action fa fa-eye"/>
+                  <i onClick={() => {this.props.openQuestionTemplateEdit(q.ID)}} className="list-action fa fa-edit text-warning"/>
                   <i
                     onClick={(e) => { if (window.confirm('Are you sure you wish to delete this Question?')) this.delete(e, q.ID) } }
-                    className="fa fa-minus-circle text-danger"/>
+                    className="fa fa-minus-circle text-danger list-action"/>
                 </td>
               </tr>
             )}

@@ -103,3 +103,10 @@ input[type="time"] {
 .fa-sort, .fa-sort-up, .fa-sort-down {
   cursor: pointer;
 }
+
+.list-action {
+  cursor: pointer;
+  min-width: 18px;
+  min-height: 18px;
+  margin: 0 5px;
+}

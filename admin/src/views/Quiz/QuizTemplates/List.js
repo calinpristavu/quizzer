@@ -69,11 +69,11 @@ class List extends Component {
                   <td>{q.QuizQuestions !== null ? q.QuizQuestions.length : 0}</td>
                   <td>{q.Duration}</td>
                   <td>
-                    <i onClick={() => this.props.cloneQuizTemplate(q)} className="fa fa-copy text-success"/>
-                    <i onClick={() => this.props.setQuizTemplateEdit(q)} className="fa fa-edit text-warning"/>
+                    <i onClick={() => this.props.cloneQuizTemplate(q)} className="fa fa-copy text-success list-action"/>
+                    <i onClick={() => this.props.setQuizTemplateEdit(q)} className="fa fa-edit text-warning list-action"/>
                     <i
                       onClick={(e) => { if (window.confirm('Are you sure you wish to delete this Question?')) this.delete(e, q.ID) } }
-                      className="fa fa-minus-circle"/>
+                      className="fa fa-minus-circle list-action"/>
                   </td>
                 </tr>
               )}
