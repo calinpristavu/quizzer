@@ -118,7 +118,7 @@ export class QuestionsList extends Component {
             </thead>
             <tbody>
             {this.getVisibleItems().map((q, k) =>
-              <tr key={k}>
+              <tr key={k} onClick={() => {this.props.openQuestionTemplateView(q.ID)}}>
                 <td dangerouslySetInnerHTML={{__html: `#${q.ID} ${q.Text}`}}/>
                 <td>{questionTypes[q.Type]}</td>
                 <td title={`${q.usage.toFixed(2)} %`}>
@@ -130,7 +130,7 @@ export class QuestionsList extends Component {
                     value={q.usage} />
                 </td>
                 <td>
-                  <i onClick={() => {this.props.openQuestionTemplateView(q.ID)}} className="list-action fa fa-eye"/>
+                  <i onClick={() => {this.props.openQuestionTemplateView(q.ID)}} className="list-action fa fa-chart-pie"/>
                   <i onClick={() => {this.props.openQuestionTemplateEdit(q.ID)}} className="list-action fa fa-edit text-warning"/>
                   <i
                     onClick={(e) => { if (window.confirm('Are you sure you wish to delete this Question?')) this.delete(e, q.ID) } }

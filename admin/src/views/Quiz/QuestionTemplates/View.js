@@ -74,7 +74,7 @@ class View extends Component {
               style={{cursor: "pointer"}}/>
           </span>
           <i className="fa fa-eye" />
-          <div dangerouslySetInnerHTML={{__html: this.props.question.Text}} />
+          #{this.props.question.ID}
           <small> Overview</small>
         </CardHeader>
         <CardBody>

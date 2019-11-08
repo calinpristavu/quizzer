@@ -9,7 +9,7 @@ const initialState = {
   list: Map(),
   viewedItem: null,
   editItem: null,
-  createQuestionTemplate: true,
+  createQuestionTemplate: null,
 };
 
 export default function(state = initialState, action) {
