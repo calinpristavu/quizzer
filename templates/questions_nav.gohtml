@@ -5,7 +5,7 @@
             {{range $i, $q := .AllQuestions}}
                 <li class="{{if eq $i $qIdx}}active{{else if $q.IsAnswered}}completed{{end}}">
                     <a href="/question/{{$i}}">
-                        Question {{$i}}
+                        Question {{increment $i}}
                     </a>
                 </li>
             {{end}}

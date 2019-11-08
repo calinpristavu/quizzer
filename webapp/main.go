@@ -29,6 +29,9 @@ func registerTemplates() {
 		"raw": func(s string) template.HTML {
 			return template.HTML(s)
 		},
+		"increment": func(i int) int {
+			return i + 1
+		},
 	}
 
 	var err error
