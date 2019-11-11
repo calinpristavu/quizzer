@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
+  Collapse,
 } from "reactstrap";
 import React, {Component} from "react";
 import {Pie} from "react-chartjs-2";
@@ -11,6 +13,10 @@ import {openQuestionTemplateView} from "../../../redux/actions";
 import {viewedQuestionTemplate} from "../../../redux/selectors";
 
 class View extends Component {
+  state = {
+    isQuestionTextOpen: false,
+  };
+
   static propTypes = {
     question: PropTypes.shape({
       ID: PropTypes.number.isRequired,
@@ -23,6 +29,12 @@ class View extends Component {
         })).isRequired,
       })),
     }),
+  };
+
+  openQuestionText = () => {
+    this.setState((prevState) => ({
+      isQuestionTextOpen: !prevState.isQuestionTextOpen
+    }))
   };
 
   getChartData = () => {
@@ -78,6 +90,14 @@ class View extends Component {
           <small> Overview</small>
         </CardHeader>
         <CardBody>
+          <Button color="primary" onClick={this.openQuestionText} style={{ marginBottom: '1rem' }}>
+            View question text
+          </Button>
+          <Collapse isOpen={this.state.isQuestionTextOpen}>
+            <Card>
+              <CardBody dangerouslySetInnerHTML={{__html: this.props.question.Text}}/>
+            </Card>
+          </Collapse>
           <h3>Total number of answers: {this.props.question.Usages.length}</h3>
           <h4>Out of which:</h4>
           <div className="chart-wrapper">

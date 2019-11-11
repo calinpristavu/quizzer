@@ -91,13 +91,18 @@ export class QuestionsList extends Component {
   };
 
   renderTextCell = (question) => {
+    let tagsStripped = new DOMParser().parseFromString(question.Text, 'text/html');
+    tagsStripped = tagsStripped.body.textContent || "";
+
     return (
       <div>
         <h4>#{question.ID}</h4>
         <h5>
           {question.Tags.map((t, k) => <span className="badge badge-pill badge-primary" key={k}>{t.Text}</span>)}
         </h5>
-        <div dangerouslySetInnerHTML={{__html: question.Text}}/>
+        <div>
+          {tagsStripped}
+        </div>
       </div>
     );
   };
