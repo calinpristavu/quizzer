@@ -194,14 +194,7 @@ func FindStatsAvgResult() interface{} {
 		Number float32
 	}
 
-	db.Raw(`
-SELECT 
-	AVG(score) as number,
-	DATE(updated_at) as date
-FROM quizzes
-WHERE score IS NOT NULL
-GROUP BY DATE(updated_at)
-`).Scan(&stats)
+	db.Raw("SELECT * FROM stats_avg_result").Scan(&stats)
 
 	return stats
 }
@@ -212,14 +205,7 @@ func FindStatsBestResult() interface{} {
 		Number float32
 	}
 
-	db.Raw(`
-SELECT 
-	MAX(score) as number,
-	DATE(updated_at) as date
-FROM quizzes
-WHERE score IS NOT NULL
-GROUP BY DATE(updated_at)
-`).Scan(&stats)
+	db.Raw("SELECT * FROM stats_best_result").Scan(&stats)
 
 	return stats
 }

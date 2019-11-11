@@ -42,6 +42,31 @@ func migrateDb() {
 	db.Model(&RadioAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
 	db.Model(&TextAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
 	db.Model(&FlowDiagramAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+
+	statsAvgResultQuery := `
+CREATE OR REPLACE VIEW stats_avg_result AS SELECT 
+	AVG(score) as number,
+	DATE(updated_at) as date
+FROM quizzes
+WHERE score IS NOT NULL
+GROUP BY DATE(updated_at)
+`
+	if r := db.Exec(statsAvgResultQuery); r.Error != nil {
+		logrus.Fatalf("create view stats_avg_result: %v", r.Error)
+	}
+
+	statsBestResultQuery := `
+CREATE OR REPLACE VIEW stats_best_result AS 
+SELECT 
+	MAX(score) as number,
+	DATE(updated_at) as date
+FROM quizzes
+WHERE score IS NOT NULL
+GROUP BY DATE(updated_at)
+`
+	if r := db.Exec(statsBestResultQuery); r.Error != nil {
+		logrus.Fatalf("create view stats_best_result: %v", r.Error)
+	}
 }
 
 func initDb() *gorm.DB {
