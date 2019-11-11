@@ -17,16 +17,19 @@ class Step1 extends Component {
   static propTypes = {
     advance: PropTypes.func.isRequired,
     quiz: PropTypes.shape({
+      Enabled: PropTypes.bool.isRequired,
       Name: PropTypes.string.isRequired,
       Duration: PropTypes.string,
     }).isRequired
   };
 
+  enabledRef = React.createRef();
   nameRef = React.createRef();
   durationRef = React.createRef();
 
   save = () => {
     this.props.advance({
+      Enabled: this.enabledRef.current.checked,
       Name: this.nameRef.current.value,
       Duration: Step1.stringToGoDuration(this.durationRef.current.value)
     })
@@ -70,6 +73,19 @@ class Step1 extends Component {
                       defaultValue={this.props.quiz.Name}
                       placeholder="Type in the quiz name"
                       required />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs="12">
+                  <FormGroup check>
+                    <Label check>
+                      <Input
+                        innerRef={this.enabledRef}
+                        type="checkbox"
+                        defaultChecked={this.props.quiz.Enabled}/>
+                      Enabled
+                    </Label>
                   </FormGroup>
                 </Col>
               </Row>

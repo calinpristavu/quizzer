@@ -10,6 +10,7 @@ import (
 
 type QuizTemplate struct {
 	gorm.Model
+	Enabled       bool `gorm:"type:boolean";sql:"DEFAULT:1"`
 	Name          string
 	QuizQuestions []*QuizQuestionTemplate `gorm:"foreignkey:QuizID"`
 	Duration      Duration                `sql:"type:VARCHAR(50)"`
@@ -94,6 +95,22 @@ func FindQuizTemplates() []QuizTemplate {
 	return qts
 }
 
+func FindEnabledQuizTemplates() []QuizTemplate {
+	var qts []QuizTemplate
+	db.
+		Model(&qts).
+		Preload("QuizQuestions").
+		Preload("QuizQuestions.Question").
+		Preload("QuizQuestions.Question.Tags").
+		Preload("QuizQuestions.Question.CheckboxAnswerTemplates").
+		Preload("QuizQuestions.Question.RadioAnswerTemplates").
+		Preload("QuizQuestions.Question.FlowDiagramAnswerTemplate").
+		Where("enabled = 1").
+		Find(&qts)
+
+	return qts
+}
+
 func FindQuestionTemplate(id uint) (QuestionTemplate, bool) {
 	var qt QuestionTemplate
 	res := db.
@@ -154,7 +171,7 @@ func (qt QuizTemplate) Start(u *User) *Quiz {
 
 func (qt *QuizTemplate) Create() {
 	qt.CreatedAt = time.Now()
-	db.Create(qt)
+	db.Debug().Create(qt)
 
 	db.Model(qt).
 		Preload("QuizQuestions").

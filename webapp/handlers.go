@@ -220,7 +220,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		}
 		qts = []model.QuizTemplate{qt}
 	} else {
-		qts = model.FindQuizTemplates()
+		qts = model.FindEnabledQuizTemplates()
 
 		// remove empty quizzes
 		for i, qt := range qts {

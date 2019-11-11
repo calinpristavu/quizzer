@@ -18,6 +18,7 @@ class Edit extends Component {
       step: 2,
       quiz: {
         ...oldState.quiz,
+        Enabled: state.Enabled,
         Name: state.Name,
         Duration: state.Duration,
       }

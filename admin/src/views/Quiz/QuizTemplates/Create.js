@@ -9,9 +9,10 @@ class Create extends Component {
   defaultState = {
     step: 1,
     quiz: {
+      Enabled: true,
       Name: '',
       Duration: '',
-      QuizQuestions: []
+      QuizQuestions: [],
     }
   };
 
@@ -21,6 +22,7 @@ class Create extends Component {
     this.setState({
       step: 2,
       quiz: {
+        Enabled: state.Enabled,
         Name: state.Name,
         Duration: state.Duration,
         QuizQuestions: []
