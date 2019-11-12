@@ -14,7 +14,7 @@ import {viewedQuestionTemplate} from "../../../redux/selectors";
 
 class View extends Component {
   state = {
-    isQuestionTextOpen: false,
+    isQuestionTextOpen: true,
   };
 
   static propTypes = {

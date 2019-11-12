@@ -94,6 +94,11 @@ export class QuestionsList extends Component {
     let tagsStripped = new DOMParser().parseFromString(question.Text, 'text/html');
     tagsStripped = tagsStripped.body.textContent || "";
 
+    let lengthTrimmed = tagsStripped;
+    if (lengthTrimmed.length > 200) {
+      lengthTrimmed = lengthTrimmed.substr(0, 200) + ' ...(click to view more)';
+    }
+
     return (
       <div>
         <h4>#{question.ID}</h4>
@@ -101,7 +106,7 @@ export class QuestionsList extends Component {
           {question.Tags.map((t, k) => <span className="badge badge-pill badge-primary" key={k}>{t.Text}</span>)}
         </h5>
         <div>
-          {tagsStripped}
+          {lengthTrimmed}
         </div>
       </div>
     );
