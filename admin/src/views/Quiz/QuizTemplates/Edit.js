@@ -50,7 +50,7 @@ class Edit extends Component {
 
     return (
       <Row>
-        <Col md={8}>
+        <Col>
           <Card key={this.state.quiz.ID}>
             <CardHeader>
               <span className="float-right">
