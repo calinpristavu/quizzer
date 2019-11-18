@@ -182,11 +182,13 @@ export function totalInProgressOptions() {
     legend: {
       display: false,
     },
+    dataset: {
+      barPercentage: 0.6,
+    },
     scales: {
       xAxes: [
         {
           display: false,
-          barPercentage: 0.6,
         }],
       yAxes: [
         {
