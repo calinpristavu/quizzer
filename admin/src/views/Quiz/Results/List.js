@@ -127,7 +127,12 @@ class List extends Component {
                   : <span>{List.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}</span>
                 }</td>
                 <td>
-                  {!q.Active && <i className="fa fa-eye list-action" onClick={() => this.props.getQuiz(q.ID)}/>}
+                  {!q.Active &&
+                  <i
+                    className="fa fa-eye list-action"
+                    onClick={() => this.props.getQuiz(q.ID)}
+                    title="View quiz"/>
+                  }
                 </td>
               </tr>
             )}
