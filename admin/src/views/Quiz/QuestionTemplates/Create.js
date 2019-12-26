@@ -14,12 +14,15 @@ import {
 import {Editor} from 'react-draft-wysiwyg';
 import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import {CheckboxAnswerTemplates, CodeAnswerTemplate, FlowDiagramAnswer, RadioAnswerTemplates} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {createQuestionTemplate, getQuestionTags, setQuestionTemplateCreate} from "../../../redux/actions";
 import {questionTypes} from "./QuestionTemplates";
 import Creatable from "react-select/creatable";
+import CheckboxAnswerTemplate from "../AnswerTemplates/CheckboxAnswerTemplate";
+import CodeAnswerTemplate from "../AnswerTemplates/CodeAnswerTemplate";
+import FlowDiagramAnswerTemplate from "../AnswerTemplates/FlowDiagramAnswerTemplate";
+import RadioAnswerTemplate from "../AnswerTemplates/RadioAnswerTemplate";
 
 class CreateQuestion extends Component {
   defaultState = {
@@ -235,7 +238,7 @@ class CreateQuestion extends Component {
               </Col>
             </FormGroup>
             {this.state.Type === 1 &&
-              <CheckboxAnswerTemplates
+              <CheckboxAnswerTemplate
                 removeChoice={this.removeCheckboxChoice}
                 addChoice={this.addCheckboxChoice}
                 answers={this.state.CheckboxAnswerTemplates}/>
@@ -246,10 +249,10 @@ class CreateQuestion extends Component {
               answers={this.state.TextAnswerTemplate}/>
             }
             {this.state.Type === 3 &&
-              <FlowDiagramAnswer />
+              <FlowDiagramAnswerTemplate />
             }
             {this.state.Type === 4 &&
-            <RadioAnswerTemplates
+            <RadioAnswerTemplate
               removeChoice={this.removeRadioChoice}
               addChoice={this.addRadioChoice}
               answers={this.state.RadioAnswerTemplates}/>

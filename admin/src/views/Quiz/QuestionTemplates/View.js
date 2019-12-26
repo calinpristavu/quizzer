@@ -31,6 +31,10 @@ class View extends Component {
     }),
   };
 
+  static defaultProps = {
+    question: null,
+  };
+
   openQuestionText = () => {
     this.setState((prevState) => ({
       isQuestionTextOpen: !prevState.isQuestionTextOpen
