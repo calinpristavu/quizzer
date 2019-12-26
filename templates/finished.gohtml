@@ -1,5 +1,8 @@
 {{ template "header" .User }}
 
+<link rel="stylesheet" href="/resources/js/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="/resources/js/codemirror/addon/lint/lint.css">
+
 <style>
     ul {
         list-style: none;
@@ -74,7 +77,7 @@
                                         {{end}}
                                     </ul>
                                 {{else if eq .Type 2}}
-                                    <div><pre><code>{{raw .TextAnswer.Text}}</code></pre></div>
+                                    <div class="code-view" data-answer="{{raw .TextAnswer.Text}}"></div>
                                 {{else if eq .Type 3}}
                                     <div class="flow-diagram">
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#diag-{{.FlowDiagramAnswer.ID}}">
@@ -119,5 +122,33 @@
         </div>
     </div>
 </div>
+
+<script src="/resources/js/codemirror/lib/codemirror.js"></script>
+
+<script src="/resources/js/codemirror/addon/lint/lint.js"></script>
+
+<script src="/resources/js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="/resources/js/codemirror/mode/xml/xml.js"></script>
+<script src="/resources/js/codemirror/mode/clike/clike.js"></script>
+<script src="/resources/js/codemirror/mode/css/css.js"></script>
+<script src="/resources/js/codemirror/mode/php/php.js"></script>
+<script>
+    const elements = document.getElementsByClassName('code-view');
+
+    for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        const code = element.dataset.answer;
+
+        CodeMirror(element, {
+            mode: "php",
+            lineWrapping: true,
+            lineNumbers: true,
+            readOnly: true,
+            styleActiveLine: true,
+            matchBrackets: true,
+            value: code,
+        });
+    }
+</script>
 
 {{ template "footer" }}

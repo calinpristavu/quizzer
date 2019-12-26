@@ -14,7 +14,7 @@ import {
 import {Editor} from 'react-draft-wysiwyg';
 import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import {CheckboxAnswerTemplates, FlowDiagramAnswer, RadioAnswerTemplates} from "./AnswerTemplates";
+import {CheckboxAnswerTemplates, CodeAnswerTemplate, FlowDiagramAnswer, RadioAnswerTemplates} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {createQuestionTemplate, getQuestionTags, setQuestionTemplateCreate} from "../../../redux/actions";
@@ -29,6 +29,7 @@ class CreateQuestion extends Component {
     CheckboxAnswerTemplates: [],
     RadioAnswerTemplates: [],
     FlowDiagramAnswerTemplate: null,
+    TextAnswerTemplate: null,
     uniqueIdx: new Date().getTime(),
   };
 
@@ -238,6 +239,11 @@ class CreateQuestion extends Component {
                 removeChoice={this.removeCheckboxChoice}
                 addChoice={this.addCheckboxChoice}
                 answers={this.state.CheckboxAnswerTemplates}/>
+            }
+            {this.state.Type === 2 &&
+            <CodeAnswerTemplate
+              save={(val) => {this.setState({TextAnswerTemplate: {Text: val}})}}
+              answers={this.state.TextAnswerTemplate}/>
             }
             {this.state.Type === 3 &&
               <FlowDiagramAnswer />

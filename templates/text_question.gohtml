@@ -3,30 +3,9 @@
 {{else}}
     {{ template "header" .User }}
 {{end}}
-<style>
-    .form-check-label {
-        width: 100%;
-    }
 
-    pre, code {
-        font-family: monospace, monospace;
-    }
-    pre {
-        overflow: auto;
-    }
-    pre > code {
-        display: block;
-        word-wrap: normal;
-        background-color: #f6f8fa;
-        border-radius: 3px;
-        border: 1px solid rgb(169, 169, 169);
-        font-size: 85%;
-        line-height: 1.45;
-        overflow: auto;
-        padding: 1rem;
-    }
-</style>
-<!--suppress ALL -->
+<link rel="stylesheet" href="/resources/js/codemirror/lib/codemirror.css">
+
 <div class="page-wrapper">
     {{template "questions_nav" .}}
     <div class="container">
@@ -35,14 +14,9 @@
                 <div>{{raw .Question.Text}}</div>
                 <form action="/question/{{.Qidx}}" method="POST">
                     <div class="form-group">
-                        <pre>
-                            <code
-                                    onkeydown="handleKeydown(event)"
-                                    onblur="document.getElementById('answer').value = event.target.innerHTML;"
-                                    contentEditable="true"
-                                    spellcheck="false">{{raw .Question.TextAnswer.Text}}</code>
-                        </pre>
-                        <input type="hidden" id="answer" class="form-input" name="answer">
+                        <label>
+                            <textarea id="code" name="answer">{{raw .Question.TextAnswer.Text}}</textarea>
+                        </label>
                     </div>
                     {{if ge .PrevIdx 0 }}
                         <a href="/question/{{.PrevIdx}}" class="btn">< Back</a>
@@ -56,30 +30,25 @@
         {{template "question_feedback_form" .}}
     </div>
 </div>
+<script src="/resources/js/codemirror/lib/codemirror.js"></script>
 
+<script src="/resources/js/codemirror/addon/edit/matchbrackets.js"></script>
+<script src="/resources/js/codemirror/addon/selection/active-line.js"></script>
+
+<script src="/resources/js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="/resources/js/codemirror/mode/xml/xml.js"></script>
+<script src="/resources/js/codemirror/mode/clike/clike.js"></script>
+<script src="/resources/js/codemirror/mode/css/css.js"></script>
+<script src="/resources/js/codemirror/mode/php/php.js"></script>
 <script>
-    function handleKeydown(event) {
-        if (event.keyCode === 9) {
-            return handleTab(event);
-        }
-    }
-
-    function handleTab(event) {
-        event.preventDefault();
-
-        var editor = event.target;
-        var doc = editor.ownerDocument.defaultView;
-        var sel = doc.getSelection();
-        var range = sel.getRangeAt(0);
-
-        var tabNode = document.createTextNode('\u00a0\u00a0\u00a0\u00a0');
-        range.insertNode(tabNode);
-
-        range.setStartAfter(tabNode);
-        range.setEndAfter(tabNode);
-        sel.removeAllRanges();
-        sel.addRange(range);
-    }
+    CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: "php",
+        lineWrapping: true,
+        lineNumbers: true,
+        autofocus: true,
+        styleActiveLine: true,
+        matchBrackets: true,
+    });
 </script>
 
 {{ template "footer" }}

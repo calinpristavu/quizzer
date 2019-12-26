@@ -4,6 +4,17 @@ import {Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row}
 import {connect} from "react-redux";
 import {setQuestionNote, setQuestionScore} from "../../../redux/actions";
 import {TextTip} from "../../Base/Tooltips/ResultTooltips";
+import {UnControlled as CodeMirror} from 'react-codemirror2';
+
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/idea.css';
+
+import 'codemirror/addon/lint/lint.js';
+import 'codemirror/mode/htmlmixed/htmlmixed.js';
+import 'codemirror/mode/xml/xml.js';
+import 'codemirror/mode/clike/clike.js';
+import 'codemirror/mode/css/css.js';
+import 'codemirror/mode/php/php.js';
 
 class TextQuestion extends Component {
   static propTypes = {
@@ -92,9 +103,17 @@ class TextQuestion extends Component {
         </Row>
         <Row>
           <Col>
-            <pre>
-              <code dangerouslySetInnerHTML={{__html: this.props.question.TextAnswer.Text}} />
-            </pre>
+            <CodeMirror
+              value={this.props.question.TextAnswer.Text}
+              options={{
+                mode: "php",
+                lineWrapping: true,
+                lineNumbers: true,
+                readOnly: true,
+                styleActiveLine: true,
+                matchBrackets: true,
+              }}
+            />
           </Col>
         </Row>
         <FormGroup row>

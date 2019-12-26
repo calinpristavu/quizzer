@@ -10,7 +10,7 @@ import {
   Label,
   Row
 } from "reactstrap";
-import {CheckboxAnswerTemplates, FlowDiagramAnswer, RadioAnswerTemplates} from "./AnswerTemplates";
+import {CheckboxAnswerTemplates, CodeAnswerTemplate, FlowDiagramAnswer, RadioAnswerTemplates} from "./AnswerTemplates";
 import React, {Component} from "react";
 import {questionTypes} from "./QuestionTemplates";
 import {Editor} from "react-draft-wysiwyg";
@@ -248,6 +248,11 @@ class EditQuestion extends Component {
                 removeChoice={this.removeCheckboxChoice}
                 addChoice={this.addCheckboxChoice}
                 answers={this.state.CheckboxAnswerTemplates}/>
+              }
+              {this.state.Type === 2 &&
+              <CodeAnswerTemplate
+                save={(val) => {this.setState({TextAnswerTemplate: {Text: val}})}}
+                value={this.state.TextAnswerTemplate ? this.state.TextAnswerTemplate.Text : undefined}/>
               }
               {this.state.Type === 3 &&
               <FlowDiagramAnswer />

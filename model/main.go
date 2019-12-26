@@ -34,6 +34,7 @@ func migrateDb() {
 		&CheckboxAnswerTemplate{},
 		&RadioAnswerTemplate{},
 		&FlowDiagramAnswerTemplate{},
+		&TextAnswerTemplate{},
 	)
 
 	db.Model(&Question{}).AddForeignKey("quiz_id", "quizzes(id)", "CASCADE", "NO ACTION")
