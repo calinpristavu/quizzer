@@ -10,7 +10,7 @@ import View from "./View";
 
 export const questionTypes = {
   1: "Multiple choice",
-  2: "Free text",
+  2: "Code answer",
   3: "Flow Diagram",
   4: "Single choice",
 };

@@ -129,7 +129,7 @@ func getTemplateForQuestion(question *model.Question) *template.Template {
 	case 1:
 		return g.templating.Lookup("checkbox_question.gohtml")
 	case 2:
-		return g.templating.Lookup("text_question.gohtml")
+		return g.templating.Lookup("code_question.gohtml")
 	case 3:
 		return g.templating.Lookup("flow_diagram_question.gohtml")
 	case 4:

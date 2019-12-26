@@ -65,7 +65,7 @@ func FindByUsername(uname string) (*User, error) {
 		Preload("CurrentQuiz.Questions").
 		Preload("CurrentQuiz.Questions.CheckboxAnswers").
 		Preload("CurrentQuiz.Questions.RadioAnswers").
-		Preload("CurrentQuiz.Questions.TextAnswer").
+		Preload("CurrentQuiz.Questions.CodeAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
 		Preload("CurrentQuiz.Questions.Feedback").
 		First(&u)
@@ -94,7 +94,7 @@ func FindByUsernameAndPassword(uname, pass string) (*User, error) {
 		Preload("CurrentQuiz.Questions").
 		Preload("CurrentQuiz.Questions.CheckboxAnswers").
 		Preload("CurrentQuiz.Questions.RadioAnswers").
-		Preload("CurrentQuiz.Questions.TextAnswer").
+		Preload("CurrentQuiz.Questions.CodeAnswer").
 		Preload("CurrentQuiz.Questions.FlowDiagramAnswer").
 		Preload("CurrentQuiz.Questions.Feedback").
 		Where("Username = ?", uname).
@@ -212,7 +212,7 @@ func (u *User) FindFinishedQuizzes() []Quiz {
 		Preload("Questions").
 		Preload("Questions.CheckboxAnswers").
 		Preload("Questions.RadioAnswers").
-		Preload("Questions.TextAnswer").
+		Preload("Questions.CodeAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("Questions.Feedback").
 		Where("user_id = ?", u.ID).

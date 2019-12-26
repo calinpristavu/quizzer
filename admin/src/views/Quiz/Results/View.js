@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {getQuizzes, openQuizView, saveScores, startCorrecting} from "../../../redux/actions";
-import TextQuestion from "./TextQuestion";
+import CodeQuestion from "./CodeQuestion";
 import CheckboxQuestion from "./CheckboxQuestion";
 import FlowDiagramQuestion from "./FlowDiagramQuestion";
 import RadioQuestion from "./RadioQuestion";
@@ -21,7 +21,7 @@ class View extends Component {
       case 1:
         return <CheckboxQuestion question={q} disabled={disabled}/>;
       case 2:
-        return <TextQuestion question={q} disabled={disabled}/>;
+        return <CodeQuestion question={q} disabled={disabled}/>;
       case 3:
         return <FlowDiagramQuestion question={q} disabled={disabled}/>;
       case 4:
@@ -42,24 +42,21 @@ class View extends Component {
 
   renderStartCorrecting = () => {
     if (this.props.quiz.CorrectingByID !== 0) {
-      if (this.props.quiz.CorrectingByID === this.props.user.ID) {
-        return (
-          <div>
-            <h3 className="text-center text-primary">Don't forget to press "Save scores" when finished</h3>
-            <br/>
-          </div>
-        )
-      }
+      const message = this.props.quiz.CorrectingByID === this.props.user.ID
+        ? 'Don\'t forget to press "Save scores" when finished'
+        : 'Someone else is already correcting this quiz';
 
       return (
         <div>
-          <h3 className="text-center text-danger">Someone else is already correcting this quiz</h3>
+          <h3 className="text-center text-warning">{message}</h3>
           <br/>
         </div>
       )
     }
 
-    const buttonText = this.props.quiz.Corrected ? 'Already corrected. Improve?' : 'Start correcting';
+    const buttonText = this.props.quiz.Corrected
+      ? 'Already corrected. Improve?'
+      : 'Start correcting';
 
     return (
       <div>

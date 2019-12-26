@@ -16,13 +16,13 @@ import 'codemirror/mode/clike/clike.js';
 import 'codemirror/mode/css/css.js';
 import 'codemirror/mode/php/php.js';
 
-class TextQuestion extends Component {
+class CodeQuestion extends Component {
   static propTypes = {
     question: PropTypes.shape({
       ID: PropTypes.number.isRequired,
       Text: PropTypes.string.isRequired,
       Notes: PropTypes.string.isRequired,
-      TextAnswer: PropTypes.shape({
+      CodeAnswer: PropTypes.shape({
         Text: PropTypes.string.isRequired
       }).isRequired,
       Score: PropTypes.number.isRequired,
@@ -104,7 +104,7 @@ class TextQuestion extends Component {
         <Row>
           <Col>
             <CodeMirror
-              value={this.props.question.TextAnswer.Text}
+              value={this.props.question.CodeAnswer.Text}
               options={{
                 mode: "php",
                 lineWrapping: true,
@@ -134,4 +134,4 @@ class TextQuestion extends Component {
 export default connect(
   null,
   {setQuestionScore, setQuestionNote}
-)(TextQuestion);
+)(CodeQuestion);

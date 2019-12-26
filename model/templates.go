@@ -26,7 +26,7 @@ type QuestionTemplate struct {
 	CheckboxAnswerTemplates   []*CheckboxAnswerTemplate
 	RadioAnswerTemplates      []*RadioAnswerTemplate
 	FlowDiagramAnswerTemplate *FlowDiagramAnswerTemplate
-	TextAnswerTemplate        *TextAnswerTemplate
+	CodeAnswerTemplate        *CodeAnswerTemplate
 	Usages                    []Question
 	Tags                      []QuestionTemplateTag `gorm:"many2many:question_templates_tags;"`
 }
@@ -60,7 +60,7 @@ type FlowDiagramAnswerTemplate struct {
 	Text               string `sql:"type:longtext"`
 }
 
-type TextAnswerTemplate struct {
+type CodeAnswerTemplate struct {
 	gorm.Model
 	QuestionTemplateID uint
 	Text               string `sql:"type:longtext"`
@@ -82,7 +82,7 @@ func FindQuizTemplate(id int) (QuizTemplate, bool) {
 		Preload("QuizQuestions.Question.CheckboxAnswerTemplates").
 		Preload("QuizQuestions.Question.RadioAnswerTemplates").
 		Preload("QuizQuestions.Question.FlowDiagramAnswerTemplate").
-		Preload("QuizQuestions.Question.TextAnswerTemplate").
+		Preload("QuizQuestions.Question.CodeAnswerTemplate").
 		First(&qt, id)
 
 	return qt, !res.RecordNotFound()
@@ -98,7 +98,7 @@ func FindQuizTemplates() []QuizTemplate {
 		Preload("QuizQuestions.Question.CheckboxAnswerTemplates").
 		Preload("QuizQuestions.Question.RadioAnswerTemplates").
 		Preload("QuizQuestions.Question.FlowDiagramAnswerTemplate").
-		Preload("QuizQuestions.Question.TextAnswerTemplate").
+		Preload("QuizQuestions.Question.CodeAnswerTemplate").
 		Find(&qts)
 
 	return qts
@@ -114,7 +114,7 @@ func FindEnabledQuizTemplates() []QuizTemplate {
 		Preload("QuizQuestions.Question.CheckboxAnswerTemplates").
 		Preload("QuizQuestions.Question.RadioAnswerTemplates").
 		Preload("QuizQuestions.Question.FlowDiagramAnswerTemplate").
-		Preload("QuizQuestions.Question.TextAnswerTemplate").
+		Preload("QuizQuestions.Question.CodeAnswerTemplate").
 		Where("enabled = 1").
 		Find(&qts)
 
@@ -128,7 +128,7 @@ func FindQuestionTemplate(id uint) (QuestionTemplate, bool) {
 		Preload("CheckboxAnswerTemplates").
 		Preload("RadioAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
-		Preload("TextAnswerTemplate").
+		Preload("CodeAnswerTemplate").
 		Preload("Usages").
 		Preload("Tags").
 		First(&qt, id)
@@ -145,7 +145,7 @@ func FindQuestionTemplates() []QuestionTemplate {
 		Preload("CheckboxAnswerTemplates").
 		Preload("RadioAnswerTemplates").
 		Preload("FlowDiagramAnswerTemplate").
-		Preload("TextAnswerTemplate").
+		Preload("CodeAnswerTemplate").
 		Preload("Usages").
 		Preload("Usages.Feedback").
 		Order("id desc").
@@ -225,7 +225,7 @@ func (qt *QuestionTemplate) Save() {
 	db.Model(qt).Association("CheckboxAnswerTemplates").Replace(qt.CheckboxAnswerTemplates)
 	db.Model(qt).Association("RadioAnswerTemplates").Replace(qt.RadioAnswerTemplates)
 	db.Model(qt).Association("FlowDiagramAnswerTemplate").Replace(qt.FlowDiagramAnswerTemplate)
-	db.Model(qt).Association("TextAnswerTemplate").Replace(qt.TextAnswerTemplate)
+	db.Model(qt).Association("CodeAnswerTemplate").Replace(qt.CodeAnswerTemplate)
 }
 
 func (qt *QuestionTemplate) PreloadQuizTemplates() {
@@ -253,9 +253,9 @@ func (qt QuestionTemplate) addToQuiz(quiz *Quiz, weight uint) {
 
 	db.Save(&q)
 
-	q.TextAnswer = &TextAnswer{Text: "", QuestionID: q.ID}
-	if qt.TextAnswerTemplate != nil {
-		q.TextAnswer.Text = qt.TextAnswerTemplate.Text
+	q.CodeAnswer = &CodeAnswer{Text: "", QuestionID: q.ID}
+	if qt.CodeAnswerTemplate != nil {
+		q.CodeAnswer.Text = qt.CodeAnswerTemplate.Text
 	}
 	q.FlowDiagramAnswer = &FlowDiagramAnswer{Text: "", SVG: "", QuestionID: q.ID}
 	for _, cat := range qt.CheckboxAnswerTemplates {

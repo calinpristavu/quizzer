@@ -40,7 +40,7 @@ type Question struct {
 	Feedback           []*QuestionFeedback
 	CheckboxAnswers    []*CheckboxAnswer
 	RadioAnswers       []*RadioAnswer
-	TextAnswer         *TextAnswer
+	CodeAnswer         *CodeAnswer
 	FlowDiagramAnswer  *FlowDiagramAnswer
 	QuestionTemplateID uint
 }
@@ -68,7 +68,7 @@ type RadioAnswer struct {
 	IsSelected bool
 }
 
-type TextAnswer struct {
+type CodeAnswer struct {
 	gorm.Model
 	QuestionID uint
 	Text       string `sql:"type:longtext"`
@@ -122,7 +122,7 @@ func FindQuizByCriteria(qID, userID uint) Quiz {
 		Preload("Questions").
 		Preload("Questions.CheckboxAnswers").
 		Preload("Questions.RadioAnswers").
-		Preload("Questions.TextAnswer").
+		Preload("Questions.CodeAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("Questions.Feedback").
 		Where("id = ?", qID).
@@ -139,7 +139,7 @@ func FindQuiz(id int) Quiz {
 		Preload("Questions").
 		Preload("Questions.CheckboxAnswers").
 		Preload("Questions.RadioAnswers").
-		Preload("Questions.TextAnswer").
+		Preload("Questions.CodeAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("Questions.Feedback").
 		Preload("User").
@@ -154,7 +154,7 @@ func FindQuizzes(pager Pager, qf QuizFilter, sorter Sorter) ([]Quiz, int) {
 		Preload("Questions").
 		Preload("Questions.CheckboxAnswers").
 		Preload("Questions.RadioAnswers").
-		Preload("Questions.TextAnswer").
+		Preload("Questions.CodeAnswer").
 		Preload("Questions.FlowDiagramAnswer").
 		Preload("Questions.Feedback").
 		Preload("User")
@@ -229,7 +229,7 @@ func (q *Question) SaveAnswer(r *http.Request) error {
 	case 1:
 		err = q.saveCheckboxes(r.Form["answer[]"])
 	case 2:
-		err = q.saveText(r.FormValue("answer"))
+		err = q.saveCode(r.FormValue("answer"))
 	case 3:
 		err = q.saveFlowDiagram(r.FormValue("flow_diagram_json"), r.FormValue("flow_diagram_svg"))
 	case 4:
@@ -359,8 +359,8 @@ func (q *Question) saveRadios(answerId string) error {
 	return nil
 }
 
-func (q *Question) saveText(text string) error {
-	q.TextAnswer.Text = text
+func (q *Question) saveCode(text string) error {
+	q.CodeAnswer.Text = text
 	q.IsAnswered = true
 	db.Save(q)
 

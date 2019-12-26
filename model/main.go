@@ -25,7 +25,7 @@ func migrateDb() {
 		&QuestionFeedback{},
 		&CheckboxAnswer{},
 		&RadioAnswer{},
-		&TextAnswer{},
+		&CodeAnswer{},
 		&FlowDiagramAnswer{},
 		&QuizTemplate{},
 		&QuestionTemplate{},
@@ -34,14 +34,14 @@ func migrateDb() {
 		&CheckboxAnswerTemplate{},
 		&RadioAnswerTemplate{},
 		&FlowDiagramAnswerTemplate{},
-		&TextAnswerTemplate{},
+		&CodeAnswerTemplate{},
 	)
 
 	db.Model(&Question{}).AddForeignKey("quiz_id", "quizzes(id)", "CASCADE", "NO ACTION")
 	db.Model(&QuestionFeedback{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
 	db.Model(&CheckboxAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
 	db.Model(&RadioAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
-	db.Model(&TextAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Model(&CodeAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
 	db.Model(&FlowDiagramAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
 
 	statsAvgResultQuery := `
