@@ -80,12 +80,10 @@ class EditQuestion extends Component {
   };
 
   removeCheckboxChoice = (choiceIndex) => {
-    this.setState((oldState) => {
-      const choices = oldState.CheckboxAnswerTemplates;
-      choices.splice(choiceIndex, 1);
-
-      return {CheckboxAnswerTemplates: [...choices]}
-    })
+    this.setState((oldState) => ({
+      CheckboxAnswerTemplates: oldState.CheckboxAnswerTemplates
+        .filter((e, index) => index !== choiceIndex)
+    }))
   };
 
   addRadioChoice = (choice) => {
@@ -98,12 +96,10 @@ class EditQuestion extends Component {
   };
 
   removeRadioChoice = (choiceIndex) => {
-    this.setState((oldState) => {
-      const choices = oldState.RadioAnswerTemplates;
-      choices.splice(choiceIndex, 1);
-
-      return {RadioAnswerTemplates: [...choices]}
-    })
+    this.setState((oldState) => ({
+      RadioAnswerTemplates: oldState.RadioAnswerTemplates
+        .filter((e, index) => index !== choiceIndex)
+    }))
   };
 
   uploadCallback = (file) => {

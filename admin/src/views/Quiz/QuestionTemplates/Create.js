@@ -73,12 +73,10 @@ class CreateQuestion extends Component {
   };
 
   removeCheckboxChoice = (choiceIndex) => {
-    this.setState((oldState) => {
-      const choices = oldState.CheckboxAnswerTemplates;
-      delete choices[choiceIndex];
-
-      return {CheckboxAnswerTemplates: choices}
-    })
+    this.setState((oldState) => ({
+      CheckboxAnswerTemplates: oldState.CheckboxAnswerTemplates
+        .filter((e, index) => index !== choiceIndex)
+    }))
   };
 
   addRadioChoice = (choice) => {
@@ -91,12 +89,10 @@ class CreateQuestion extends Component {
   };
 
   removeRadioChoice = (choiceIndex) => {
-    this.setState((oldState) => {
-      const choices = oldState.RadioAnswerTemplates;
-      delete choices[choiceIndex];
-
-      return {RadioAnswerTemplates: choices}
-    })
+    this.setState((oldState) => ({
+      RadioAnswerTemplates: oldState.RadioAnswerTemplates
+        .filter((e, index) => index !== choiceIndex)
+    }))
   };
 
   uploadCallback = (file) => {
