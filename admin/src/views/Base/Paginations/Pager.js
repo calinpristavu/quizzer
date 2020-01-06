@@ -10,7 +10,6 @@ import {
 import PropTypes from 'prop-types';
 
 class Pager extends Component {
-
   static propTypes = {
     currentPage: PropTypes.number.isRequired,
     noPages: PropTypes.number.isRequired,
@@ -18,10 +17,6 @@ class Pager extends Component {
     perPage: PropTypes.number.isRequired,
     toPage: PropTypes.func.isRequired,
     setPerPage: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    noItems: 11 // TODO: remove this, it should be sent by parents
   };
 
   toPage = (pageNo) => {

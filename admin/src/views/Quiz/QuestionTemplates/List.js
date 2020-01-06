@@ -19,7 +19,7 @@ export class QuestionsList extends Component {
     perPage: 5,
     currentPage: 0,
     visibleItems: [],
-    filters: [], // [{properyPath: "Nested.Object.Property", values: [1,2,3,'whatever']}, ...]
+    filters: {}, // {prop1: [value1, value2, ...], ...}
   };
 
   static propTypes = {
@@ -35,8 +35,7 @@ export class QuestionsList extends Component {
   getVisibleItems = () => {
     const firstPosition = this.state.perPage * this.state.currentPage;
 
-    return Filters
-      .apply(this.props.list, this.state.filters)
+    return this.props.list
       .slice(firstPosition, firstPosition + this.state.perPage)
       .valueSeq();
   };
@@ -62,31 +61,28 @@ export class QuestionsList extends Component {
   addFilter = (propertyPath, val) => {
     this.setState((oldState) => {
       const filters = oldState.filters;
-      let filter = filters.find(f => f.propertyPath === propertyPath);
-      if (filter === undefined) {
-        filter = {
-          propertyPath: propertyPath
-        }
-      }
+      filters[propertyPath] = val;
 
-      filter.values = val;
-
-      filters.push(filter);
       return {
         filters: filters,
         currentPage: 0
       }
+    }, () => {
+      this.props.getQuestionTemplates(this.state.filters);
     })
   };
 
   clearFilter = (propertyPath) => {
     this.setState((oldState) => {
       const filters = oldState.filters;
+      delete filters[propertyPath];
 
       return {
-        filters: filters.filter(f => f.propertyPath !== propertyPath),
+        filters: filters,
         currentPage: 0
       }
+    }, () => {
+      this.props.getQuestionTemplates(this.state.filters);
     })
   };
 
@@ -172,9 +168,8 @@ export class QuestionsList extends Component {
         </CardBody>
         <CardFooter>
           <Pager
-            noPages={Math.ceil(
-              Filters.apply(this.props.list, this.state.filters).size / this.state.perPage
-            )}
+            noItems={this.props.list.size}
+            noPages={Math.ceil(this.props.list.size / this.state.perPage)}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}
             toPage={(pageNo) => this.setState({currentPage: pageNo})}

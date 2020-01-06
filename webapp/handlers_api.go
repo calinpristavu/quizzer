@@ -92,8 +92,8 @@ func deleteQuizTemplate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func getQuestionTemplates(w http.ResponseWriter, _ *http.Request) {
-	qts := model.FindQuestionTemplates()
+func getQuestionTemplates(w http.ResponseWriter, r *http.Request) {
+	qts := model.FindQuestionTemplates(r.URL.Query())
 
 	jsonResponse(w, qts, http.StatusOK)
 }

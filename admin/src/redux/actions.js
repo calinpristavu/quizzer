@@ -123,13 +123,15 @@ export function cloneQuizTemplate(qt) {
   })
 }
 
-export function getQuestionTemplates() {
-  return (dispatch, getState) => {
-    if (getState().questionTemplate.list.size > 0) {
-      return Promise.resolve();
-    }
+/**
+ * @param filters object like {prop1: [value1, ...], ...}
+ * @returns {function(*): Promise<Response>}
+ */
+export function getQuestionTemplates(filters = {}) {
+  return (dispatch) => {
+    const qs = new URLSearchParams(filters).toString();
 
-    return fetch("/question-templates")
+    return fetch(`/question-templates?${qs}`)
       .then(r => dispatch({
         type: SET_QUESTION_TEMPLATES,
         payload: r

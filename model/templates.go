@@ -1,6 +1,7 @@
 package model
 
 import (
+	"net/url"
 	"sort"
 	"time"
 
@@ -136,9 +137,9 @@ func FindQuestionTemplate(id uint) (QuestionTemplate, bool) {
 	return qt, !res.RecordNotFound()
 }
 
-func FindQuestionTemplates() []QuestionTemplate {
+func FindQuestionTemplates(values url.Values) []QuestionTemplate {
 	var qts []QuestionTemplate
-	db.
+	query := db.
 		Preload("QuizQuestions").
 		Preload("Tags").
 		Preload("QuizQuestions.Quiz").
@@ -147,7 +148,28 @@ func FindQuestionTemplates() []QuestionTemplate {
 		Preload("FlowDiagramAnswerTemplate").
 		Preload("CodeAnswerTemplate").
 		Preload("Usages").
-		Preload("Usages.Feedback").
+		Preload("Usages.Feedback")
+
+	tagIds := values["Tags.ID"]
+	if len(tagIds) > 0 {
+		query = query.
+			Joins("JOIN question_templates_tags on question_templates_tags.question_template_id = question_templates.id").
+			Where("question_templates_tags.question_template_tag_id IN (?)", tagIds)
+	}
+
+	types := values["Type"]
+	if len(types) > 0 {
+		query = query.Where("`type` IN (?)", types)
+	}
+
+	quizTemplateIds := values["QuizTemplate.ID"]
+	if len(quizTemplateIds) > 0 {
+		query = query.
+			Joins("JOIN quiz_question_templates on quiz_question_templates.question_id = question_templates.id").
+			Where("quiz_question_templates.quiz_id IN (?)", quizTemplateIds)
+	}
+
+	query.
 		Order("id desc").
 		Find(&qts)
 

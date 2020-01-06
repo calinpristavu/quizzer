@@ -89,6 +89,7 @@ class List extends Component {
         </CardBody>
         <CardFooter>
           <Pager
+            noItems={this.props.list.size}
             noPages={Math.ceil(this.props.list.size / this.state.perPage)}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}

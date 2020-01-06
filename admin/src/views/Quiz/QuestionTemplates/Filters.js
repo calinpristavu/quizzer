@@ -4,9 +4,8 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {questionTypes} from "./QuestionTemplates";
 import {Map} from 'immutable';
-import {getQuestionTags} from "../../../redux/actions";
+import {getQuestionTags, getQuizTemplates} from "../../../redux/actions";
 import {connect} from "react-redux";
-const nestedProp = require('nested-property');
 
 class Filters extends Component {
   static propTypes = {
@@ -16,7 +15,8 @@ class Filters extends Component {
   };
 
   componentDidMount() {
-    this.props.getQuestionTags()
+    this.props.getQuestionTags();
+    this.props.getQuizTemplates();
   }
 
   static buildTypeOptions = (questions) => {
@@ -45,31 +45,24 @@ class Filters extends Component {
     return opts;
   };
 
+  buildQuizTemplateOptions = () => {
+    const opts = [];
+
+    this.props.quizTemplates.forEach(t => {
+      opts.push({
+        value: t.ID,
+        label: t.Name
+      })
+    });
+
+    return opts;
+  };
+
   addFilter = (options, filterName) => {
-    if (options.length === 0) {
+    if (null === options || options.length === 0) {
       return this.props.clearFilter(filterName)
     }
     this.props.addFilter(filterName, options.map(o => o.value))
-  };
-
-  static apply = (list, filters) => {
-    return list.filter(q => {
-      return filters.every(f => {
-        const candidateField = nestedProp.get(q, f.propertyPath);
-        // if is scalar
-        if ((/boolean|number|string/).test(typeof candidateField)) {
-          return f.values.includes(nestedProp.get(q, f.propertyPath))
-        }
-
-        if (Array.isArray(candidateField)) {
-          // intersects the 2 arrays, returns true if common item found
-          return candidateField.some(c => f.values.includes(c.ID))
-          // return f.values.some(v => candidateField.some(c => c.ID === v.ID))
-        }
-
-        return false
-      });
-    });
   };
 
   render() {
@@ -89,8 +82,17 @@ class Filters extends Component {
             <Select
               isMulti
               placeholder="Filter by tags"
-              onChange={(opt) => this.addFilter(opt, 'Tags')}
+              onChange={(opt) => this.addFilter(opt, 'Tags.ID')}
               options={this.buildTagOptions()}/>
+          </FormGroup>
+        </Col>
+        <Col xs="4">
+          <FormGroup>
+            <Select
+              isMulti
+              placeholder="Filter by Quiz Template"
+              onChange={(opt) => this.addFilter(opt, 'QuizTemplate.ID')}
+              options={this.buildQuizTemplateOptions()}/>
           </FormGroup>
         </Col>
       </Row>
@@ -100,7 +102,8 @@ class Filters extends Component {
 
 export default connect(
   state => ({
-    tags: state.tags.list
+    tags: state.tags.list,
+    quizTemplates: state.quizTemplate.list,
   }),
-  {getQuestionTags}
+  {getQuestionTags, getQuizTemplates}
 )(Filters);
