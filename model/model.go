@@ -265,6 +265,10 @@ func (q *Quiz) UpdateScore() {
 		totalWeight += q.Weight
 	}
 
+	if totalWeight == 0 {
+		totalWeight = 1
+	}
+
 	q.Score = weightedScore / totalWeight
 	db.Model(q).
 		Set("gorm:association_autoupdate", false).
