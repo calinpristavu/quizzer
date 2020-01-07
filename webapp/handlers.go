@@ -102,6 +102,7 @@ func question(w http.ResponseWriter, r *http.Request) {
 			Deadline:     deadline,
 		})
 		if err != nil {
+			logrus.Error(err)
 			http.Error(w, "could not render template for question", http.StatusInternalServerError)
 		}
 

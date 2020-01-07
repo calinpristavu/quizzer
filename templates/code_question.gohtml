@@ -15,7 +15,7 @@
                 <form action="/question/{{.Qidx}}" method="POST">
                     <div class="form-group">
                         <label>
-                            <textarea id="code" name="answer">{{raw .Question.TextAnswer.Text}}</textarea>
+                            <textarea id="code" name="answer">{{raw .Question.CodeAnswer.Text}}</textarea>
                         </label>
                     </div>
                     {{if ge .PrevIdx 0 }}

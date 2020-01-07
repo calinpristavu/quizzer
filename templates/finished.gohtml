@@ -77,7 +77,7 @@
                                         {{end}}
                                     </ul>
                                 {{else if eq .Type 2}}
-                                    <div class="code-view" data-answer="{{raw .TextAnswer.Text}}"></div>
+                                    <div class="code-view" data-answer="{{raw .CodeAnswer.Text}}"></div>
                                 {{else if eq .Type 3}}
                                     <div class="flow-diagram">
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#diag-{{.FlowDiagramAnswer.ID}}">
