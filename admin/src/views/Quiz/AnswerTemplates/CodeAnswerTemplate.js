@@ -32,10 +32,10 @@ class CodeAnswerTemplate extends Component {
         value={this.props.value}
         onChange={this.save}
         options={{
-          mode: "php",
+          mode: "application/x-httpd-php",
           lineWrapping: true,
           lineNumbers: true,
-          styleActiveLine: true,
+          indentUnit: 4,
           matchBrackets: true,
         }}
       />

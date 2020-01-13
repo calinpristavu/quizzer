@@ -13,7 +13,7 @@
             <div class="section-content">
                 <div>{{raw .Question.Text}}</div>
                 <form action="/question/{{.Qidx}}" method="POST">
-                    <div class="form-group">
+                    <div id="code-container" class="form-group">
                         <label>
                             <textarea id="code" name="answer">{{raw .Question.CodeAnswer.Text}}</textarea>
                         </label>
@@ -42,13 +42,17 @@
 <script src="/resources/js/codemirror/mode/php/php.js"></script>
 <script>
     CodeMirror.fromTextArea(document.getElementById("code"), {
-        mode: "php",
+        mode: "application/x-httpd-php",
         lineWrapping: true,
         lineNumbers: true,
         autofocus: true,
-        styleActiveLine: true,
+        indentUnit: 4,
         matchBrackets: true,
     });
+
+    document.querySelector('#code-container').addEventListener('click', function () {
+        this.querySelector('#code').focus();
+    })
 </script>
 
 {{ template "footer" }}
