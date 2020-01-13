@@ -16,9 +16,9 @@ import {
   Tables,
   Tabs,
   Tooltips,
-} from './Base';
+} from 'views/Base';
 
-import { Login, Page404, Page500, Register } from './Pages';
+import { Login, Page404, Page500, Register } from 'views/Pages';
 
 export {
   Page404,

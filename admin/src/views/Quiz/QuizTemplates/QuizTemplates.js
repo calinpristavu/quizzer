@@ -3,11 +3,11 @@ import {
   Row,
   Col,
 } from "reactstrap";
-import List from "./List";
-import Create from "./Create";
-import Edit from "./Edit";
 import {connect} from "react-redux";
-import {getQuizTemplates} from "../../../redux/actions";
+import {getQuizTemplates} from "redux/actions";
+import List from "views/Quiz/QuizTemplates/List";
+import Create from "views/Quiz/QuizTemplates/Create";
+import Edit from "views/Quiz/QuizTemplates/Edit";
 
 const views = {
   create: 1,

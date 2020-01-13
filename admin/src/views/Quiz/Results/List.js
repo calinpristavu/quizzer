@@ -1,11 +1,11 @@
 import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
-import Pager from "../../Base/Paginations/Pager";
 import moment from 'moment';
 import {connect} from "react-redux";
-import {getQuiz, getQuizzes, setQuizFilter, setQuizSorting} from "../../../redux/actions";
-import Filters from "./Filters";
+import {getQuiz, getQuizzes, setQuizFilter, setQuizSorting} from "redux/actions";
 import {Link} from "react-router-dom";
+import Filters from "views/Quiz/Results/Filters";
+import Pager from "views/Base/Paginations/Pager";
 
 class List extends Component {
   scoreSort = 1;

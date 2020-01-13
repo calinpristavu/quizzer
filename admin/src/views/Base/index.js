@@ -1,20 +1,20 @@
-import Breadcrumbs from './Breadcrumbs';
-import Cards from './Cards';
-import Carousels from './Carousels';
-import Collapses from './Collapses';
-import Dropdowns from './Dropdowns';
-import Forms from './Forms';
-import Jumbotrons from './Jumbotrons';
-import ListGroups from './ListGroups';
-import Navbars from './Navbars';
-import Navs from './Navs';
-import Popovers from './Popovers';
-import Paginations from './Paginations';
-import ProgressBar from './ProgressBar';
-import Switches from './Switches';
-import Tables from './Tables';
-import Tabs from './Tabs';
-import Tooltips from './Tooltips';
+import Breadcrumbs from 'views/Base/Breadcrumbs/Breadcrumbs';
+import Cards from 'views/Base/Cards/Cards';
+import Carousels from 'views/Base/Carousels/Carousels';
+import Collapses from 'views/Base/Collapses/Collapses';
+import Dropdowns from 'views/Base/Dropdowns/Dropdowns';
+import Forms from 'views/Base/Forms/Forms';
+import Jumbotrons from 'views/Base/Jumbotrons/Jumbotrons';
+import ListGroups from 'views/Base/ListGroups/ListGroups';
+import Navbars from 'views/Base/Navbars/Navbars';
+import Navs from 'views/Base/Navs/Navs';
+import Popovers from 'views/Base/Popovers/Popovers';
+import Paginations from 'views/Base/Paginations/Pagnations';
+import ProgressBar from 'views/Base/ProgressBar/ProgressBar';
+import Switches from 'views/Base/Switches/Switches';
+import Tables from 'views/Base/Tables/Tables';
+import Tabs from 'views/Base/Tabs/Tabs';
+import Tooltips from 'views/Base/Tooltips/Tooltips';
 
 export {
   Breadcrumbs, Cards, Carousels, Collapses, Dropdowns, Forms, Jumbotrons, ListGroups, Navbars, Navs, Popovers, ProgressBar, Switches, Tables, Tabs, Tooltips, Paginations

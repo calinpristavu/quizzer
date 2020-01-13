@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Page500 from './Page500';
+import Page500 from "views/Pages/Page500/Page500";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

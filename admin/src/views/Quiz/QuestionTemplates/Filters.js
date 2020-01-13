@@ -2,10 +2,10 @@ import {Col, FormGroup, Row} from "reactstrap";
 import Select from "react-select";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import {questionTypes} from "./QuestionTemplates";
 import {Map} from 'immutable';
-import {getQuestionTags, getQuizTemplates} from "../../../redux/actions";
 import {connect} from "react-redux";
+import {getQuestionTags, getQuizTemplates} from "redux/actions";
+import {questionTypes} from "views/Quiz/QuestionTemplates/QuestionTemplates";
 
 class Filters extends Component {
   static propTypes = {

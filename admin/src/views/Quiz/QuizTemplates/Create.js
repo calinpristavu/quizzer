@@ -1,9 +1,9 @@
 import {Card, CardHeader} from "reactstrap";
 import React, {Component} from "react";
-import Step1 from "./Step1";
-import Step2 from "./Step2";
 import {connect} from "react-redux";
-import {createQuizTemplate, setQuizTemplateCreate} from "../../../redux/actions";
+import {createQuizTemplate, setQuizTemplateCreate} from "redux/actions";
+import Step1 from "views/Quiz/QuizTemplates/Step1";
+import Step2 from "views/Quiz/QuizTemplates/Step2";
 
 class Create extends Component {
   defaultState = {

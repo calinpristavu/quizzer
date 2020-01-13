@@ -25,8 +25,10 @@ import {
   SET_QUIZ_TEMPLATE_CREATE,
   SET_QUIZ_TEMPLATE_EDIT,
   SET_QUIZ_CORRECTING_BY,
-  SET_QUESTION_TAGS, SET_QUIZ_FILTER, SET_QUIZ_SORTING
-} from "./actionTypes";
+  SET_QUESTION_TAGS,
+  SET_QUIZ_FILTER,
+  SET_QUIZ_SORTING,
+} from "redux/actionTypes";
 import Noty from "noty";
 
 export const logout = () => {

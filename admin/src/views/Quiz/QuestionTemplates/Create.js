@@ -16,13 +16,13 @@ import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {createQuestionTemplate, getQuestionTags, setQuestionTemplateCreate} from "../../../redux/actions";
-import {questionTypes} from "./QuestionTemplates";
 import Creatable from "react-select/creatable";
-import CheckboxAnswerTemplate from "../AnswerTemplates/CheckboxAnswerTemplate";
-import CodeAnswerTemplate from "../AnswerTemplates/CodeAnswerTemplate";
-import FlowDiagramAnswerTemplate from "../AnswerTemplates/FlowDiagramAnswerTemplate";
-import RadioAnswerTemplate from "../AnswerTemplates/RadioAnswerTemplate";
+import {createQuestionTemplate, getQuestionTags, setQuestionTemplateCreate} from "redux/actions";
+import {questionTypes} from "views/Quiz/QuestionTemplates/QuestionTemplates";
+import CheckboxAnswerTemplate from "views/Quiz/AnswerTemplates/CheckboxAnswerTemplate";
+import CodeAnswerTemplate from "views/Quiz/AnswerTemplates/CodeAnswerTemplate";
+import FlowDiagramAnswerTemplate from "views/Quiz/AnswerTemplates/FlowDiagramAnswerTemplate";
+import RadioAnswerTemplate from "views/Quiz/AnswerTemplates/RadioAnswerTemplate";
 
 class CreateQuestion extends Component {
   defaultState = {

@@ -4,8 +4,9 @@ import {
   LOGOUT, SET_CANDIDATES, SET_USER_CREATE,
   SET_USERS,
   SET_USERS_ONLINE,
-  SET_VIEWED_USER, UPDATE_USER
-} from "../actionTypes";
+  SET_VIEWED_USER,
+  UPDATE_USER,
+} from "redux/actionTypes";
 import {Set, Map} from 'immutable';
 
 const initialState = {

@@ -11,9 +11,9 @@ import {
 import {Line} from "react-chartjs-2";
 import {getStyle, hexToRgba} from "@coreui/coreui/dist/js/coreui-utilities";
 import {connect} from "react-redux";
-import {getStatAvgResult, getStatBestResult} from "../../redux/actions";
-import {noGraphEntries, selectStatAvgResult, selectStatBestResult} from "../../redux/selectors";
-import {overallQualityOptions} from "./chartConfigs";
+import {getStatAvgResult, getStatBestResult} from "redux/actions";
+import {noGraphEntries, selectStatAvgResult, selectStatBestResult} from "redux/selectors";
+import {overallQualityOptions} from "views/Charts/chartConfigs";
 
 const brandSuccess = getStyle('--success');
 const brandWarning = getStyle('--warning');

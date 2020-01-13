@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Tabs from './Tabs';
 import {mount} from 'enzyme/build';
+import Tabs from "views/Base/Tabs/Tabs";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

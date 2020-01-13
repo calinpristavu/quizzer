@@ -1,37 +1,11 @@
 import React, { Component } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
-// import { renderRoutes } from 'react-router-config';
-import Loadable from 'react-loadable';
-import './App.scss';
-
-const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
-
-// Containers
-const DefaultLayout = Loadable({
-  loader: () => import('./containers/DefaultLayout'),
-  loading
-});
-
-// Pages
-const Login = Loadable({
-  loader: () => import('./views/Pages/Login'),
-  loading
-});
-
-const Register = Loadable({
-  loader: () => import('./views/Pages/Register'),
-  loading
-});
-
-const Page404 = Loadable({
-  loader: () => import('./views/Pages/Page404'),
-  loading
-});
-
-const Page500 = Loadable({
-  loader: () => import('./views/Pages/Page500'),
-  loading
-});
+import 'App.scss';
+import Login from "views/Pages/Login/Login";
+import Register from "views/Pages/Register/Register";
+import Page404 from "views/Pages/Page404/Page404";
+import Page500 from "views/Pages/Page500/Page500";
+import DefaultLayout from "containers/DefaultLayout/DefaultLayout";
 
 class App extends Component {
 

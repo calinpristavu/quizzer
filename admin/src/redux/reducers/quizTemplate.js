@@ -2,8 +2,9 @@ import {
   APPEND_QUIZ_TEMPLATE,
   SET_QUIZ_TEMPLATE_CREATE,
   REMOVE_QUIZ_TEMPLATE,
-  SET_QUIZ_TEMPLATES, SET_QUIZ_TEMPLATE_EDIT
-} from "../actionTypes";
+  SET_QUIZ_TEMPLATES,
+  SET_QUIZ_TEMPLATE_EDIT,
+} from "redux/actionTypes";
 import {Map} from 'immutable';
 
 const initialState = {

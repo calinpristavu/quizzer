@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Col, Row} from 'reactstrap';
-import UserList from "./List";
-import Create from "./Create";
-import Recruitee from "./Recruitee";
+import UserList from "views/Users/List";
+import Create from "views/Users/Create";
+import Recruitee from "views/Users/Recruitee";
 
 export const roles = {
   0: "Root",

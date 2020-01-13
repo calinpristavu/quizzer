@@ -3,10 +3,10 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {Map} from 'immutable';
 import {connect} from "react-redux";
-import UserFilter from "./Filters/UserFilter";
-import QuizTemplateFilter from "./Filters/QuizTemplateFilter";
-import QuizActiveFilter from "./Filters/QuizActiveFilter";
-import QuizCorrectedFilter from "./Filters/QuizCorrectedFilter";
+import UserFilter from "views/Quiz/Results/Filters/UserFilter";
+import QuizActiveFilter from "views/Quiz/Results/Filters/QuizActiveFilter";
+import QuizCorrectedFilter from "views/Quiz/Results/Filters/QuizCorrectedFilter";
+import QuizTemplateFilter from "views/Quiz/Results/Filters/QuizTemplateFilter";
 
 class Filters extends Component {
   static propTypes = {

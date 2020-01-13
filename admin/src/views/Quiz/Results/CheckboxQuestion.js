@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import {AppSwitch} from "@coreui/react";
 import {ListGroup, ListGroupItem} from "reactstrap";
 import {connect} from "react-redux";
-import {setQuestionScore} from "../../../redux/actions";
-import {CheckboxTip} from "../../Base/Tooltips/ResultTooltips";
+import {setQuestionScore} from "redux/actions";
+import {CheckboxTip} from "views/Base/Tooltips/ResultTooltips";
 
 class CheckboxQuestion extends Component {
   static propTypes = {

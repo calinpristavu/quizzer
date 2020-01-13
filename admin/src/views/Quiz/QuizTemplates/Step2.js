@@ -11,7 +11,7 @@ import Select from "react-select";
 import PropTypes from 'prop-types';
 import {Map} from 'immutable';
 import {connect} from "react-redux";
-import {getQuestionTemplates} from "../../../redux/actions";
+import {getQuestionTemplates} from "redux/actions";
 
 const defaultWeight = 10;
 

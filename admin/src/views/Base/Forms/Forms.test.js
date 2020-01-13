@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Forms from './Forms';
 import {mount} from 'enzyme/build';
+import Forms from "views/Base/Forms/Forms";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

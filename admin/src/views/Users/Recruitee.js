@@ -2,8 +2,14 @@ import React, {Component} from 'react';
 import Select from "react-select";
 import {Button, Card, CardBody, CardHeader, Col, FormGroup, Row} from "reactstrap";
 import {connect} from "react-redux";
-import {createUser, getCandidates, getQuizTemplates, getUsers, updateUser} from "../../redux/actions";
-import {newCandidates} from "../../redux/selectors";
+import {
+  createUser,
+  getCandidates,
+  getQuizTemplates,
+  getUsers,
+  updateUser
+} from "redux/actions";
+import {newCandidates} from "redux/selectors";
 import {Set, Map} from "immutable";
 import PropTypes from 'prop-types';
 

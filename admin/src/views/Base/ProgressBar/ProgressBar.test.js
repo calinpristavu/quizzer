@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ProgressBar from './ProgressBar';
+import ProgressBar from "views/Base/ProgressBar/ProgressBar";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

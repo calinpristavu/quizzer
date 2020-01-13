@@ -2,11 +2,11 @@ import {Button, Card, CardBody, CardFooter, CardHeader} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {getQuizzes, openQuizView, saveScores, startCorrecting} from "../../../redux/actions";
-import CodeQuestion from "./CodeQuestion";
-import CheckboxQuestion from "./CheckboxQuestion";
-import FlowDiagramQuestion from "./FlowDiagramQuestion";
-import RadioQuestion from "./RadioQuestion";
+import {getQuizzes, openQuizView, saveScores, startCorrecting} from "redux/actions";
+import CheckboxQuestion from "views/Quiz/Results/CheckboxQuestion";
+import CodeQuestion from "views/Quiz/Results/CodeQuestion";
+import FlowDiagramQuestion from "views/Quiz/Results/FlowDiagramQuestion";
+import RadioQuestion from "views/Quiz/Results/RadioQuestion";
 
 class View extends Component {
   static propTypes = {

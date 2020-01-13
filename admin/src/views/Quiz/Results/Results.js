@@ -3,8 +3,8 @@ import {
   Row,
   Col,
 } from 'reactstrap';
-import View from "./View";
-import List from "./List";
+import List from "views/Quiz/Results/List";
+import View from "views/Quiz/Results/View";
 
 class Results extends Component {
   render() {

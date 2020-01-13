@@ -9,8 +9,8 @@ import {
 import React, {Component} from "react";
 import {Pie} from "react-chartjs-2";
 import {connect} from "react-redux";
-import {openQuestionTemplateView} from "../../../redux/actions";
-import {viewedQuestionTemplate} from "../../../redux/selectors";
+import {openQuestionTemplateView} from "redux/actions";
+import {viewedQuestionTemplate} from "redux/selectors";
 
 class View extends Component {
   state = {

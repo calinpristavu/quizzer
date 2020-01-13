@@ -1,30 +1,25 @@
-import PropTypes from "prop-types";
-import {Card, CardBody, CardFooter, CardHeader, Progress, Table} from "reactstrap";
 import React, {Component} from "react";
-import Pager from "../../Base/Paginations/Pager";
 import {connect} from "react-redux";
+import {Card, CardBody, CardFooter, CardHeader, Progress, Table} from "reactstrap";
 import {
   deleteQuestionTemplate,
   getQuestionTemplates,
-  getQuizzes, openQuestionTemplateEdit,
+  getQuizzes,
+  openQuestionTemplateEdit,
   openQuestionTemplateView,
   setQuestionTemplateCreate,
-} from "../../../redux/actions";
-import {selectQuestionTemplatesWithUsage} from "../../../redux/selectors";
-import Filters from "./Filters";
-import {questionTypes} from "./QuestionTemplates";
+} from "redux/actions";
+import {selectQuestionTemplatesWithUsage} from "redux/selectors";
+import Pager from "views/Base/Paginations/Pager";
+import {questionTypes} from "views/Quiz/QuestionTemplates/QuestionTemplates";
+import Filters from "views/Quiz/QuestionTemplates/Filters";
 
-export class QuestionsList extends Component {
+class QuestionsList extends Component {
   state = {
     perPage: 5,
     currentPage: 0,
     visibleItems: [],
     filters: {}, // {prop1: [value1, value2, ...], ...}
-  };
-
-  static propTypes = {
-    openQuestionTemplateView: PropTypes.func.isRequired,
-    openQuestionTemplateEdit: PropTypes.func.isRequired,
   };
 
   componentDidMount() {

@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
-import Pager from "../../Base/Paginations/Pager";
 import {connect} from "react-redux";
 import {
   cloneQuizTemplate,
@@ -9,8 +8,9 @@ import {
   getQuizTemplates,
   setQuizTemplateCreate,
   setQuizTemplateEdit
-} from "../../../redux/actions";
+} from "redux/actions";
 import {Map} from 'immutable';
+import Pager from "views/Base/Paginations/Pager";
 
 class List extends Component {
   state = {

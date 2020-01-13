@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {Card, CardBody} from "reactstrap";
 import {Bar} from "react-chartjs-2";
 import {connect} from "react-redux";
-import {getQuizzes} from "../../redux/actions";
+import {getQuizzes} from "redux/actions";
 import moment from "moment";
-import {totalInProgressOptions} from "./chartConfigs";
-import {selectInProgressQuizzes} from "../../redux/selectors";
+import {totalInProgressOptions} from "views/Charts/chartConfigs";
+import {selectInProgressQuizzes} from "redux/selectors";
 
 class TotalInProgressCard extends Component {
   componentDidMount() {

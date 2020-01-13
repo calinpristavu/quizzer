@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Tables from './Tables';
+import Tables from "views/Base/Tables/Tables";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

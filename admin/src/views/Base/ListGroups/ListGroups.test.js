@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ListGroups from './ListGroups';
 import {mount} from 'enzyme/build';
+import ListGroups from "views/Base/ListGroups/ListGroups";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

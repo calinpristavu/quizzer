@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row} from "reactstrap";
 import {connect} from "react-redux";
-import {setQuestionNote, setQuestionScore} from "../../../redux/actions";
-import {TextTip} from "../../Base/Tooltips/ResultTooltips";
+import {setQuestionNote, setQuestionScore} from "redux/actions";
 import {UnControlled as CodeMirror} from 'react-codemirror2';
+import {TextTip} from "views/Base/Tooltips/ResultTooltips";
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/idea.css';

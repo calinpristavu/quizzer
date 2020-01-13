@@ -3,10 +3,10 @@ import {
   Row,
   Col,
 } from 'reactstrap';
-import QuestionsList from "./List";
-import CreateQuestion from "./Create";
-import EditQuestion from "./Edit";
-import View from "./View";
+import QuestionsList from "views/Quiz/QuestionTemplates/List";
+import CreateQuestion from "views/Quiz/QuestionTemplates/Create";
+import EditQuestion from "views/Quiz/QuestionTemplates/Edit";
+import View from "views/Quiz/QuestionTemplates/View";
 
 export const questionTypes = {
   1: "Multiple choice",

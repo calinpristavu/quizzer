@@ -1,5 +1,5 @@
 import {Set} from 'immutable';
-import {SET_QUESTION_TAGS} from "../actionTypes";
+import {SET_QUESTION_TAGS} from "redux/actionTypes";
 
 const initialState = {
   list: Set()

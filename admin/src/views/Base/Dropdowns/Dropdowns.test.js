@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { mount } from 'enzyme'
-import Dropdowns from './Dropdowns';
+import Dropdowns from "views/Base/Dropdowns/Dropdowns";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

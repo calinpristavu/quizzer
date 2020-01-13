@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Navs from './Navs';
 import {mount} from 'enzyme/build';
+import Navs from "views/Base/Navs/Navs";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

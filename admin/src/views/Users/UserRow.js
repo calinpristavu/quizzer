@@ -3,7 +3,7 @@ import moment from "moment";
 import {Badge} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import {attitudes, roles} from "./Users";
+import {attitudes, roles} from "views/Users/Users";
 
 class UserRow extends Component {
   static propTypes = {

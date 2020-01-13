@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Collapses from './Collapses';
 import {mount} from 'enzyme/build';
+import Collapses from "views/Base/Collapses/Collapses";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

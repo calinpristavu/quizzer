@@ -11,18 +11,18 @@ import {
   Row
 } from "reactstrap";
 import React, {Component} from "react";
-import {questionTypes} from "./QuestionTemplates";
 import {Editor} from "react-draft-wysiwyg";
 import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import draftToHtml from "draftjs-to-html";
 import {connect} from "react-redux";
-import {getQuestionTags, openQuestionTemplateEdit, updateQuestionTemplate} from "../../../redux/actions";
-import {editedQuestionTemplate} from "../../../redux/selectors";
 import Creatable from "react-select/creatable";
-import CheckboxAnswerTemplate from "../AnswerTemplates/CheckboxAnswerTemplate";
-import CodeAnswerTemplate from "../AnswerTemplates/CodeAnswerTemplate";
-import FlowDiagramAnswerTemplate from "../AnswerTemplates/FlowDiagramAnswerTemplate";
-import RadioAnswerTemplate from "../AnswerTemplates/RadioAnswerTemplate";
+import {getQuestionTags, openQuestionTemplateEdit, updateQuestionTemplate} from "redux/actions";
+import {editedQuestionTemplate} from "redux/selectors";
+import CheckboxAnswerTemplate from "views/Quiz/AnswerTemplates/CheckboxAnswerTemplate";
+import CodeAnswerTemplate from "views/Quiz/AnswerTemplates/CodeAnswerTemplate";
+import FlowDiagramAnswerTemplate from "views/Quiz/AnswerTemplates/FlowDiagramAnswerTemplate";
+import RadioAnswerTemplate from "views/Quiz/AnswerTemplates/RadioAnswerTemplate";
+import {questionTypes} from "views/Quiz/QuestionTemplates/QuestionTemplates";
 
 class EditQuestion extends Component {
   state = {};

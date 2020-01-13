@@ -10,9 +10,9 @@ import {
   Table
 } from 'reactstrap';
 import {connect} from "react-redux";
-import {getUser, getUsers, updateUser} from "../../redux/actions";
 import PropTypes from 'prop-types';
-import {viewedUser} from "../../redux/selectors";
+import {getUser, getUsers, updateUser} from "redux/actions";
+import {viewedUser} from "redux/selectors";
 
 class User extends Component {
   static propTypes = {

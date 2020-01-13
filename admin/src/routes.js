@@ -1,30 +1,30 @@
 import React from 'react';
-import DefaultLayout from './containers/DefaultLayout';
+import DefaultLayout from 'containers/DefaultLayout';
 
-const Breadcrumbs = React.lazy(() => import('./views/Base/Breadcrumbs'));
-const QuestionTemplates = React.lazy(() => import('./views/Quiz/QuestionTemplates/QuestionTemplates'));
-const QuizTemplates = React.lazy(() => import('./views/Quiz/QuizTemplates/QuizTemplates'));
-const Cards = React.lazy(() => import('./views/Base/Cards'));
-const Carousels = React.lazy(() => import('./views/Base/Carousels'));
-const Collapses = React.lazy(() => import('./views/Base/Collapses'));
-const Dropdowns = React.lazy(() => import('./views/Base/Dropdowns'));
-const Forms = React.lazy(() => import('./views/Base/Forms'));
-const Jumbotrons = React.lazy(() => import('./views/Base/Jumbotrons'));
-const ListGroups = React.lazy(() => import('./views/Base/ListGroups'));
-const Navbars = React.lazy(() => import('./views/Base/Navbars'));
-const Navs = React.lazy(() => import('./views/Base/Navs'));
-const Paginations = React.lazy(() => import('./views/Base/Paginations'));
-const Popovers = React.lazy(() => import('./views/Base/Popovers'));
-const ProgressBar = React.lazy(() => import('./views/Base/ProgressBar'));
-const Switches = React.lazy(() => import('./views/Base/Switches'));
-const Tables = React.lazy(() => import('./views/Base/Tables'));
-const Tabs = React.lazy(() => import('./views/Base/Tabs'));
-const Tooltips = React.lazy(() => import('./views/Base/Tooltips'));
-const Charts = React.lazy(() => import('./views/Charts/Charts'));
-const Dashboard = React.lazy(() => import('./views/Dashboard'));
-const Users = React.lazy(() => import('./views/Users/Users'));
-const User = React.lazy(() => import('./views/Users/User'));
-const Results = React.lazy(() => import('./views/Quiz/Results/Results'));
+const Breadcrumbs = React.lazy(() => import('views/Base/Breadcrumbs/Breadcrumbs'));
+const QuestionTemplates = React.lazy(() => import('views/Quiz/QuestionTemplates/QuestionTemplates'));
+const QuizTemplates = React.lazy(() => import('views/Quiz/QuizTemplates/QuizTemplates'));
+const Cards = React.lazy(() => import('views/Base/Cards/Cards'));
+const Carousels = React.lazy(() => import('views/Base/Carousels/Carousels'));
+const Collapses = React.lazy(() => import('views/Base/Collapses/Collapses'));
+const Dropdowns = React.lazy(() => import('views/Base/Dropdowns/Dropdowns'));
+const Forms = React.lazy(() => import('views/Base/Forms/Forms'));
+const Jumbotrons = React.lazy(() => import('views/Base/Jumbotrons/Jumbotrons'));
+const ListGroups = React.lazy(() => import('views/Base/ListGroups/ListGroups'));
+const Navbars = React.lazy(() => import('views/Base/Navbars/Navbars'));
+const Navs = React.lazy(() => import('views/Base/Navs/Navs'));
+const Paginations = React.lazy(() => import('views/Base/Paginations/Pagnations'));
+const Popovers = React.lazy(() => import('views/Base/Popovers/Popovers'));
+const ProgressBar = React.lazy(() => import('views/Base/ProgressBar/ProgressBar'));
+const Switches = React.lazy(() => import('views/Base/Switches/Switches'));
+const Tables = React.lazy(() => import('views/Base/Tables/Tables'));
+const Tabs = React.lazy(() => import('views/Base/Tabs/Tabs'));
+const Tooltips = React.lazy(() => import('views/Base/Tooltips/Tooltips'));
+const Charts = React.lazy(() => import('views/Charts/Charts'));
+const Dashboard = React.lazy(() => import('views/Dashboard/Dashboard'));
+const Users = React.lazy(() => import('views/Users/Users'));
+const User = React.lazy(() => import('views/Users/User'));
+const Results = React.lazy(() => import('views/Quiz/Results/Results'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [

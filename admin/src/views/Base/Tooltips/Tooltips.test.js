@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Tooltips from './Tooltips';
+import Tooltips from "views/Base/Tooltips/Tooltips";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
