@@ -2,10 +2,7 @@ package model
 
 import (
 	"fmt"
-	"math/rand"
 	"sort"
-	"strconv"
-	"strings"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -47,15 +44,6 @@ var (
 	RoleContributor = Role{ID: 998, Name: "contrib", Children: []Role{RoleUser}}
 	RoleUser        = Role{ID: 2, Name: "user", Children: []Role{}}
 )
-
-var animals = [20]string{
-	"Hamster", "Ape", "Bald", "Eagle Eye", "Starfish", "Ibex", "Cow", "Tapir", "Dog", "Addax",
-	"Impala", "Squirrel", "Shrew", "Sugar", "Jackal", "Armadillo", "Baboon", "Skunk", "Ox", "Rooster",
-}
-var programmingJargon = [20]string{
-	"Algorithm", "State Machine", "Cobol", "Loop", "Elixir", "TeX", "IDE", "CamelCase", "Mongoose", "DB",
-	"Groovy", "Prolog", "Hex", "Erlang", "Ruby", "The Pascal", "Kotlin", "Basic", "Assembly", "Visual",
-}
 
 func FindByUsername(uname string) (*User, error) {
 	u := &User{Username: uname}
@@ -132,27 +120,8 @@ func FindUser(id uint) (User, bool) {
 	return u, !res.RecordNotFound()
 }
 
-func CreateGuest() (*User, error) {
-	rand.Seed(time.Now().UnixNano())
-	uname := strings.Join([]string{
-		animals[rand.Intn(len(animals)-1)],
-		programmingJargon[rand.Intn(len(programmingJargon)-1)],
-		strconv.Itoa(rand.Intn(999)),
-	}, " ")
-
-	r, err := RoleGuest.FindChildWithId(RoleGuest.ID)
-	if err != nil {
-		return nil, fmt.Errorf("could not assign role to user %d: %v", RoleGuest.ID, err)
-	}
-
-	u := &User{Username: uname, RoleID: RoleGuest.ID, Role: r}
-	res := db.Save(u)
-
-	return u, res.Error
-}
-
 func CheckPassword(expectedPasswordHashed, password string) bool {
-	check := bcrypt.CompareHashAndPassword([]byte((expectedPasswordHashed)), []byte(password))
+	check := bcrypt.CompareHashAndPassword([]byte(expectedPasswordHashed), []byte(password))
 
 	return check == nil
 }
