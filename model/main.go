@@ -18,7 +18,7 @@ func init() {
 }
 
 func migrateDb() {
-	db.AutoMigrate(
+	db.Debug().AutoMigrate(
 		&User{},
 		&Quiz{},
 		&Question{},
@@ -37,12 +37,12 @@ func migrateDb() {
 		&CodeAnswerTemplate{},
 	)
 
-	db.Model(&Question{}).AddForeignKey("quiz_id", "quizzes(id)", "CASCADE", "NO ACTION")
-	db.Model(&QuestionFeedback{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
-	db.Model(&CheckboxAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
-	db.Model(&RadioAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
-	db.Model(&CodeAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
-	db.Model(&FlowDiagramAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Debug().Model(&Question{}).AddForeignKey("quiz_id", "quizzes(id)", "CASCADE", "NO ACTION")
+	db.Debug().Model(&QuestionFeedback{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Debug().Model(&CheckboxAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Debug().Model(&RadioAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Debug().Model(&CodeAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
+	db.Debug().Model(&FlowDiagramAnswer{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "NO ACTION")
 
 	statsAvgResultQuery := `
 CREATE OR REPLACE VIEW stats_avg_result AS SELECT 
@@ -52,7 +52,7 @@ FROM quizzes
 WHERE score IS NOT NULL
 GROUP BY DATE(updated_at)
 `
-	if r := db.Exec(statsAvgResultQuery); r.Error != nil {
+	if r := db.Debug().Exec(statsAvgResultQuery); r.Error != nil {
 		logrus.Fatalf("create view stats_avg_result: %v", r.Error)
 	}
 
@@ -65,8 +65,36 @@ FROM quizzes
 WHERE score IS NOT NULL
 GROUP BY DATE(updated_at)
 `
-	if r := db.Exec(statsBestResultQuery); r.Error != nil {
+	if r := db.Debug().Exec(statsBestResultQuery); r.Error != nil {
 		logrus.Fatalf("create view stats_best_result: %v", r.Error)
+	}
+
+	triggerCascadeDeleteQuizDrop := "DROP TRIGGER IF EXISTS cascade_deleted_at_to_quiz"
+	if r := db.Debug().Exec(triggerCascadeDeleteQuizDrop); r.Error != nil {
+		logrus.Fatalf("triggerCascadeDeleteQuizDrop: %v", r.Error)
+	}
+
+	triggerCascadeDeleteQuiz := `
+CREATE TRIGGER cascade_deleted_at_to_quiz AFTER UPDATE ON users
+FOR EACH ROW BEGIN
+    UPDATE quizzes SET deleted_at = NEW.deleted_at where quizzes.user_id = NEW.id;
+end`
+	if r := db.Debug().Exec(triggerCascadeDeleteQuiz); r.Error != nil {
+		logrus.Fatalf("triggerCascadeDeleteQuiz: %v", r.Error)
+	}
+
+	triggerCascadeDeleteQuestionDrop := "DROP TRIGGER IF EXISTS cascade_deleted_at_to_question"
+	if r := db.Debug().Exec(triggerCascadeDeleteQuestionDrop); r.Error != nil {
+		logrus.Fatalf("triggerCascadeDeleteQuestionDrop: %v", r.Error)
+	}
+
+	triggerCascadeDeleteQuestion := `
+CREATE TRIGGER cascade_deleted_at_to_question AFTER UPDATE ON quizzes
+    FOR EACH ROW BEGIN
+    UPDATE questions SET deleted_at = NEW.deleted_at where questions.quiz_id = NEW.id;
+end`
+	if r := db.Debug().Exec(triggerCascadeDeleteQuestion); r.Error != nil {
+		logrus.Fatalf("triggerCascadeDeleteQuestion: %v", r.Error)
 	}
 }
 
