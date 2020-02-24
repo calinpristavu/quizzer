@@ -4,7 +4,7 @@ import {
   REMOVE_QUIZ_TEMPLATE,
   SET_QUIZ_TEMPLATES,
   SET_QUIZ_TEMPLATE_EDIT,
-} from "redux/actionTypes";
+} from "store/actionTypes";
 import {Map} from 'immutable';
 
 const initialState = {

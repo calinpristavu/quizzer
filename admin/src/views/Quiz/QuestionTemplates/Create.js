@@ -17,7 +17,7 @@ import draftToHtml from 'draftjs-to-html';
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import Creatable from "react-select/creatable";
-import {createQuestionTemplate, getQuestionTags, setQuestionTemplateCreate} from "redux/actions";
+import {createQuestionTemplate, getQuestionTags, setQuestionTemplateCreate} from "store/actions";
 import {questionTypes} from "views/Quiz/QuestionTemplates/QuestionTemplates";
 import CheckboxAnswerTemplate from "views/Quiz/AnswerTemplates/CheckboxAnswerTemplate";
 import CodeAnswerTemplate from "views/Quiz/AnswerTemplates/CodeAnswerTemplate";

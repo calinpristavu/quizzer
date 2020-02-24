@@ -8,8 +8,8 @@ import {
   openQuestionTemplateEdit,
   openQuestionTemplateView,
   setQuestionTemplateCreate,
-} from "redux/actions";
-import {selectQuestionTemplatesWithUsage} from "redux/selectors";
+} from "store/actions";
+import {selectQuestionTemplatesWithUsage} from "store/selectors";
 import Pager from "views/Base/Paginations/Pager";
 import {questionTypes} from "views/Quiz/QuestionTemplates/QuestionTemplates";
 import Filters from "views/Quiz/QuestionTemplates/Filters";

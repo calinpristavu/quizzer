@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Card, CardBody} from "reactstrap";
 import {Line} from "react-chartjs-2";
 import {connect} from "react-redux";
-import {getQuizTemplates} from "redux/actions";
+import {getQuizTemplates} from "store/actions";
 import moment from "moment";
 import {quizCountOptions} from "views/Charts/chartConfigs";
 

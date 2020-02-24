@@ -19,7 +19,7 @@ import navigation from '_nav';
 // routes config
 import routes from 'routes';
 import {connect} from "react-redux";
-import {logout} from "redux/actions";
+import {logout} from "store/actions";
 
 const DefaultAside = React.lazy(() => import('containers/DefaultLayout/DefaultAside'));
 const DefaultFooter = React.lazy(() => import('containers/DefaultLayout/DefaultFooter'));

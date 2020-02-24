@@ -11,8 +11,8 @@ import {
 } from 'reactstrap';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import {getUser, getUsers, updateUser} from "redux/actions";
-import {viewedUser} from "redux/selectors";
+import {getUser, getUsers, updateUser} from "store/actions";
+import {viewedUser} from "store/selectors";
 
 class User extends Component {
   static propTypes = {

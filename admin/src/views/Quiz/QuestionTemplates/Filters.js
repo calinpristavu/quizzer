@@ -4,7 +4,7 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {Map} from 'immutable';
 import {connect} from "react-redux";
-import {getQuestionTags, getQuizTemplates} from "redux/actions";
+import {getQuestionTags, getQuizTemplates} from "store/actions";
 import {questionTypes} from "views/Quiz/QuestionTemplates/QuestionTemplates";
 
 class Filters extends Component {

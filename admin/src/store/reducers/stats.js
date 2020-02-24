@@ -4,7 +4,7 @@ import {
   SET_STAT_BEST_RESULT,
   SET_STAT_TOTAL_ATTEMPTS,
   SET_STAT_TOTAL_INCOMPLETE
-} from "redux/actionTypes";
+} from "store/actionTypes";
 import moment from "moment";
 
 // TODO: Find a way to sync BE and FE dates .. Good Luck with that one.

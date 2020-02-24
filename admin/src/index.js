@@ -6,7 +6,7 @@ import 'fetch_config';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import store from 'redux/store';
+import store from 'store/store';
 import 'index.css';
 import App from 'App';
 import * as serviceWorker from 'serviceWorker';

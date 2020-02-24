@@ -5,7 +5,7 @@ import {
   REMOVE_QUESTION_TEMPLATE,
   SET_QUESTION_TEMPLATE_CREATE,
   SET_QUESTION_TEMPLATES,
-} from "redux/actionTypes";
+} from "store/actionTypes";
 import {Map} from 'immutable';
 
 const initialState = {

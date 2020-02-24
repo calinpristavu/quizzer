@@ -4,7 +4,7 @@ import {
   Col,
 } from "reactstrap";
 import {connect} from "react-redux";
-import {getQuizTemplates} from "redux/actions";
+import {getQuizTemplates} from "store/actions";
 import List from "views/Quiz/QuizTemplates/List";
 import Create from "views/Quiz/QuizTemplates/Create";
 import Edit from "views/Quiz/QuizTemplates/Edit";

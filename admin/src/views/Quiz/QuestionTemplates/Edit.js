@@ -16,8 +16,8 @@ import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-
 import draftToHtml from "draftjs-to-html";
 import {connect} from "react-redux";
 import Creatable from "react-select/creatable";
-import {getQuestionTags, openQuestionTemplateEdit, updateQuestionTemplate} from "redux/actions";
-import {editedQuestionTemplate} from "redux/selectors";
+import {getQuestionTags, openQuestionTemplateEdit, updateQuestionTemplate} from "store/actions";
+import {editedQuestionTemplate} from "store/selectors";
 import CheckboxAnswerTemplate from "views/Quiz/AnswerTemplates/CheckboxAnswerTemplate";
 import CodeAnswerTemplate from "views/Quiz/AnswerTemplates/CodeAnswerTemplate";
 import FlowDiagramAnswerTemplate from "views/Quiz/AnswerTemplates/FlowDiagramAnswerTemplate";

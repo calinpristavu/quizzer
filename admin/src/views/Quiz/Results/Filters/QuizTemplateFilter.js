@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Select from "react-select";
 import {FormGroup} from "reactstrap";
 import {connect} from "react-redux";
-import {getQuizTemplates} from "redux/actions";
-import {quizTemplatesAsSelect2Options} from "redux/selectors";
+import {getQuizTemplates} from "store/actions";
+import {quizTemplatesAsSelect2Options} from "store/selectors";
 
 class QuizTemplateFilter extends Component {
   static propTypes = {

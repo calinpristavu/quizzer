@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Card, CardBody} from "reactstrap";
 import {Line} from "react-chartjs-2";
 import {connect} from "react-redux";
-import {getQuestionTemplates} from "redux/actions";
+import {getQuestionTemplates} from "store/actions";
 import moment from "moment";
 import {questionCountOptions} from "views/Charts/chartConfigs";
 

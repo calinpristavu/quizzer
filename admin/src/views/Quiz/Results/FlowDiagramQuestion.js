@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row} from "reactstrap";
 import {connect} from "react-redux";
-import {setQuestionNote, setQuestionScore} from "redux/actions";
+import {setQuestionNote, setQuestionScore} from "store/actions";
 import {FlowDiagramTip} from "views/Base/Tooltips/ResultTooltips";
 
 class FlowDiagramQuestion extends Component {

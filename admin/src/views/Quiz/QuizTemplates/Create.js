@@ -1,7 +1,7 @@
 import {Card, CardHeader} from "reactstrap";
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {createQuizTemplate, setQuizTemplateCreate} from "redux/actions";
+import {createQuizTemplate, setQuizTemplateCreate} from "store/actions";
 import Step1 from "views/Quiz/QuizTemplates/Step1";
 import Step2 from "views/Quiz/QuizTemplates/Step2";
 

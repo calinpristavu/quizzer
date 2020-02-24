@@ -6,7 +6,7 @@ import {
   SET_USERS_ONLINE,
   SET_VIEWED_USER,
   UPDATE_USER,
-} from "redux/actionTypes";
+} from "store/actionTypes";
 import {Set, Map} from 'immutable';
 
 const initialState = {

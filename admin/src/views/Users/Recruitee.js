@@ -8,8 +8,8 @@ import {
   getQuizTemplates,
   getUsers,
   updateUser
-} from "redux/actions";
-import {newCandidates} from "redux/selectors";
+} from "store/actions";
+import {newCandidates} from "store/selectors";
 import {Set, Map} from "immutable";
 import PropTypes from 'prop-types';
 

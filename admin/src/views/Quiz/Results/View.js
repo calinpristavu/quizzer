@@ -2,7 +2,7 @@ import {Button, Card, CardBody, CardFooter, CardHeader} from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {getQuizzes, openQuizView, saveScores, startCorrecting} from "redux/actions";
+import {getQuizzes, openQuizView, saveScores, startCorrecting} from "store/actions";
 import CheckboxQuestion from "views/Quiz/Results/CheckboxQuestion";
 import CodeQuestion from "views/Quiz/Results/CodeQuestion";
 import FlowDiagramQuestion from "views/Quiz/Results/FlowDiagramQuestion";

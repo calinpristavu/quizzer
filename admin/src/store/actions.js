@@ -28,7 +28,7 @@ import {
   SET_QUESTION_TAGS,
   SET_QUIZ_FILTER,
   SET_QUIZ_SORTING,
-} from "redux/actionTypes";
+} from "store/actionTypes";
 import Noty from "noty";
 
 export const logout = () => {

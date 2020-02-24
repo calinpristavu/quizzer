@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Card, CardBody} from "reactstrap";
 import {Line} from "react-chartjs-2";
 import {connect} from "react-redux";
-import {getQuizzes} from "redux/actions";
+import {getQuizzes} from "store/actions";
 import moment from "moment";
 import {totalCompletedOptions} from "views/Charts/chartConfigs";
 

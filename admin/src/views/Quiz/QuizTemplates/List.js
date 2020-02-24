@@ -8,7 +8,7 @@ import {
   getQuizTemplates,
   setQuizTemplateCreate,
   setQuizTemplateEdit
-} from "redux/actions";
+} from "store/actions";
 import {Map} from 'immutable';
 import Pager from "views/Base/Paginations/Pager";
 

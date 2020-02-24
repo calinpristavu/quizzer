@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Card, CardBody, CardFooter, CardHeader, Col, Form, FormGroup, Input, Label} from "reactstrap";
 import {connect} from "react-redux";
-import {createUser, setUserCreate} from "redux/actions";
+import {createUser, setUserCreate} from "store/actions";
 import {roles} from "views/Users/Users";
 
 class Create extends Component {

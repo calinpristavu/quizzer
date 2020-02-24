@@ -2,7 +2,7 @@ import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
 import moment from 'moment';
 import {connect} from "react-redux";
-import {getQuiz, getQuizzes, setQuizFilter, setQuizSorting} from "redux/actions";
+import {getQuiz, getQuizzes, setQuizFilter, setQuizSorting} from "store/actions";
 import {Link} from "react-router-dom";
 import Filters from "views/Quiz/Results/Filters";
 import Pager from "views/Base/Paginations/Pager";

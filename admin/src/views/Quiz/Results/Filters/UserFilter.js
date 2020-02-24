@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Select from "react-select";
 import {FormGroup} from "reactstrap";
 import {connect} from "react-redux";
-import {getUsers} from "redux/actions";
-import {usersAsSelect2Options} from "redux/selectors";
+import {getUsers} from "store/actions";
+import {usersAsSelect2Options} from "store/selectors";
 
 class UserFilter extends Component {
   static propTypes = {

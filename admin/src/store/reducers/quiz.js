@@ -4,7 +4,7 @@ import {
   SET_QUESTION_SCORE,
   SET_QUIZ_CORRECTING_BY, SET_QUIZ_FILTER, SET_QUIZ_SORTING,
   SET_QUIZZES
-} from "redux/actionTypes";
+} from "store/actionTypes";
 import {Map} from 'immutable';
 
 const initialState = {
