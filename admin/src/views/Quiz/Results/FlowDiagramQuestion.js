@@ -27,7 +27,7 @@ class FlowDiagramQuestion extends Component {
     Score: 0
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.question !== undefined) {
       this.setState({
         Score: this.props.question.Score

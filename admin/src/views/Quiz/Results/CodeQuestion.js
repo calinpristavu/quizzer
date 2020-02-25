@@ -38,7 +38,7 @@ class CodeQuestion extends Component {
     Score: 0
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.question !== undefined) {
       this.setState({
         Score: nextProps.question.Score

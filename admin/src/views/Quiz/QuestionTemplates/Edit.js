@@ -37,7 +37,7 @@ class EditQuestion extends Component {
     this.props.getQuestionTags()
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.question !== this.state) {
       this.setState(nextProps.question)
     }
