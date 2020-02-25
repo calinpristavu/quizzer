@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Button, Card, CardBody, CardFooter, CardHeader, Col, Form, FormGroup, Input, Label} from "reactstrap";
 import {connect} from "react-redux";
 import {createUser, setUserCreate} from "store/actions";
-import {roles} from "views/Users/Users";
+import User from 'entities/User';
 
 class Create extends Component {
   defaultState = {
@@ -62,7 +62,7 @@ class Create extends Component {
                     className="form-check-label"
                     check
                     htmlFor="user-role-1">
-                    {roles[2]}
+                    {User.roles[2]}
                   </Label>
                 </FormGroup>
                 <FormGroup check inline>
@@ -76,7 +76,7 @@ class Create extends Component {
                     className="form-check-label"
                     check
                     htmlFor="user-role-2">
-                    {roles[1]}
+                    {User.roles[1]}
                   </Label>
                 </FormGroup>
                 <FormGroup check inline>
@@ -90,7 +90,7 @@ class Create extends Component {
                     className="form-check-label"
                     check
                     htmlFor="user-role-3">
-                    {roles[0]}
+                    {User.roles[0]}
                   </Label>
                 </FormGroup>
               </Col>

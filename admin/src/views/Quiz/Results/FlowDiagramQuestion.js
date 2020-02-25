@@ -4,18 +4,11 @@ import {Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row}
 import {connect} from "react-redux";
 import {setQuestionNote, setQuestionScore} from "store/actions";
 import {FlowDiagramTip} from "views/Base/Tooltips/ResultTooltips";
+import Question from "entities/Question";
 
 class FlowDiagramQuestion extends Component {
   static propTypes = {
-    question: PropTypes.shape({
-      ID: PropTypes.number.isRequired,
-      Text: PropTypes.string.isRequired,
-      Notes: PropTypes.string.isRequired,
-      FlowDiagramAnswer: PropTypes.shape({
-        SVG: PropTypes.string.isRequired
-      }).isRequired,
-      Score: PropTypes.number.isRequired,
-    }).isRequired,
+    question: PropTypes.instanceOf(Question).isRequired,
     disabled: PropTypes.bool.isRequired
   };
 

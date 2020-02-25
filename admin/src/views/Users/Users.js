@@ -4,20 +4,6 @@ import UserList from "views/Users/List";
 import Create from "views/Users/Create";
 import Recruitee from "views/Users/Recruitee";
 
-export const roles = {
-  0: "Root",
-  1: "Admin",
-  2: "Candidate",
-};
-
-export const attitudes = {
-  1: "fa fa-frown-open",
-  2: "fa fa-frown",
-  3: "fa fa-meh",
-  4: "fa fa-smile",
-  5: "fa fa-grin-beam",
-};
-
 class Users extends Component {
   render() {
     return (

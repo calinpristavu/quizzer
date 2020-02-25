@@ -8,6 +8,7 @@ import {
   UPDATE_USER,
 } from "store/actionTypes";
 import {Set, Map} from 'immutable';
+import User from "entities/User";
 
 const initialState = {
   all: Map(),
@@ -16,7 +17,7 @@ const initialState = {
   viewUser: null,
   createUser: true,
   token: localStorage.getItem('token'),
-  loggedInUser: JSON.parse(localStorage.getItem('user'))
+  loggedInUser: User.load()
 };
 
 export default function(state = initialState, action) {
@@ -25,7 +26,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         token: action.payload.token,
-        loggedInUser: action.payload.user,
+        loggedInUser: new User(action.payload.user),
       }
     }
     case LOGOUT: {
@@ -44,7 +45,7 @@ export default function(state = initialState, action) {
     case SET_USERS: {
       return {
         ...state,
-        all: Map(action.payload.map(u => [u.ID, u])).sort((a, b) =>
+        all: Map(action.payload.map(u => [u.ID, new User(u)])).sort((a, b) =>
           // sort DESC
           a.ID > b.ID ? -1
             : a.ID === b.ID ? 0
@@ -65,14 +66,15 @@ export default function(state = initialState, action) {
     case SET_USERS_ONLINE: {
       return {
         ...state,
-        online: Map(action.payload.map(u => [u.ID, u])),
+        online: Map(action.payload.map(u => [u.ID, new User(u)])),
       }
     }
     case APPEND_USER: {
+      const user = new User(action.payload);
       return {
         ...state,
         all: state.all.asMutable()
-          .set(action.payload.ID, action.payload)
+          .set(user.ID, user)
           .sort((a, b) =>
             // sort DESC
             a.ID > b.ID ? -1
@@ -83,9 +85,10 @@ export default function(state = initialState, action) {
       }
     }
     case UPDATE_USER: {
+      const user = new User(action.payload);
       return {
         ...state,
-        all: state.all.set(action.payload.ID, action.payload)
+        all: state.all.set(user.ID, user)
       }
     }
     case SET_USER_CREATE: {

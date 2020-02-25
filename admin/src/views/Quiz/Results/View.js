@@ -7,11 +7,13 @@ import CheckboxQuestion from "views/Quiz/Results/CheckboxQuestion";
 import CodeQuestion from "views/Quiz/Results/CodeQuestion";
 import FlowDiagramQuestion from "views/Quiz/Results/FlowDiagramQuestion";
 import RadioQuestion from "views/Quiz/Results/RadioQuestion";
+import Quiz from "entities/Quiz";
+import User from "entities/User";
 
 class View extends Component {
   static propTypes = {
-    quiz: PropTypes.object,
-    user: PropTypes.object,
+    quiz: PropTypes.instanceOf(Quiz),
+    user: PropTypes.instanceOf(User),
   };
 
   renderQuestion = q => {

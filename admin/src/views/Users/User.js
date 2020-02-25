@@ -13,22 +13,15 @@ import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import {getUser, getUsers, updateUser} from "store/actions";
 import {viewedUser} from "store/selectors";
+import UserEntity from 'entities/User';
 
 class User extends Component {
   static propTypes = {
-    user: PropTypes.shape({
-      ID: PropTypes.number.isRequired,
-      Username: PropTypes.string.isRequired,
-      Role: PropTypes.shape({
-        Name: PropTypes.string.isRequired
-      }).isRequired,
-      CreatedAt: PropTypes.string.isRequired,
-      UpdatedAt: PropTypes.string,
-      DeletedAt: PropTypes.string,
-      CurrentQuizID: PropTypes.number,
-      Comments: PropTypes.string.isRequired,
-      Attitude: PropTypes.number.isRequired,
-    })
+    user: PropTypes.instanceOf(UserEntity)
+  };
+
+  static defaultProps = {
+    user: null,
   };
 
   state = {

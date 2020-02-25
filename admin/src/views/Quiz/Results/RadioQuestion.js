@@ -5,19 +5,11 @@ import {ListGroup, ListGroupItem} from "reactstrap";
 import {connect} from "react-redux";
 import {setQuestionScore} from "store/actions";
 import {RadioTip} from "views/Base/Tooltips/ResultTooltips";
+import Question from "entities/Question";
 
 class RadioQuestion extends Component {
   static propTypes = {
-    question: PropTypes.shape({
-      ID: PropTypes.number.isRequired,
-      Text: PropTypes.string.isRequired,
-      RadioAnswers: PropTypes.arrayOf(PropTypes.shape({
-        Text: PropTypes.string.isRequired,
-        IsCorrect: PropTypes.bool.isRequired,
-        IsSelected: PropTypes.bool.isRequired,
-      })).isRequired,
-      Score: PropTypes.number.isRequired,
-    }).isRequired,
+    question: PropTypes.instanceOf(Question).isRequired,
     disabled: PropTypes.bool.isRequired
   };
 

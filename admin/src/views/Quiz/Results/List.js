@@ -1,6 +1,5 @@
 import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
-import moment from 'moment';
 import {connect} from "react-redux";
 import {getQuiz, getQuizzes, setQuizFilter, setQuizSorting} from "store/actions";
 import {Link} from "react-router-dom";
@@ -18,13 +17,6 @@ class List extends Component {
 
   componentDidMount() {
     this.props.getQuizzes(this.props.page, this.props.perPage);
-  }
-
-  static computePercentCompleted(questions) {
-    return (questions.reduce(
-      (carry, q) => carry + (q.IsAnswered ? 1 : 0),
-      0
-    ) * 100 / questions.length) || 0
   }
 
   addFilter = (propertyPath, val) => {
@@ -47,13 +39,6 @@ class List extends Component {
     this.props.setQuizSorting(sortField, sortDir);
     this.props.getQuizzes();
   };
-
-  static computeTimeSpent(start, end) {
-    const mStart = moment(start);
-    const mEnd = moment(end);
-
-    return moment.duration(mEnd.diff(mStart)).humanize()
-  }
 
   static renderRecruiteeLink(q) {
     if (!q.Corrected) {
@@ -117,15 +102,16 @@ class List extends Component {
                 <td>{q.ID}</td>
                 <td>{q.User ? q.User.Username : '-'}</td>
                 <td>{this.renderQuizTemplateCell(q.Name)}</td>
-                <td>{List.computePercentCompleted(q.Questions).toFixed(0)}<small className="text-muted">%</small></td>
+                <td>
+                  {q.getPercentCompleted().toFixed(0)} <small className="text-muted">%</small>
+                </td>
                 <td>{q.Score.toFixed(0)}<small>%</small></td>
                 <td>{List.renderRecruiteeLink(q)}</td>
                 <td>{q.Active ? "In Progress" : "Finished"}</td>
                 <td>{q.Corrected ? "Corrected" : "Not Corrected"}</td>
-                <td>{q.Active
-                  ? '-'
-                  : <span>{List.computeTimeSpent(q.CreatedAt, q.UpdatedAt)}</span>
-                }</td>
+                <td>
+                  {q.Active ? '-' : <span>{q.getTimeSpent().humanize()}</span>}
+                </td>
                 <td>
                   {!q.Active &&
                   <i

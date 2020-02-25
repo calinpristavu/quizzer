@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {setQuestionNote, setQuestionScore} from "store/actions";
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import {TextTip} from "views/Base/Tooltips/ResultTooltips";
+import Question from "entities/Question";
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/idea.css';
@@ -18,15 +19,7 @@ import 'codemirror/mode/php/php.js';
 
 class CodeQuestion extends Component {
   static propTypes = {
-    question: PropTypes.shape({
-      ID: PropTypes.number.isRequired,
-      Text: PropTypes.string.isRequired,
-      Notes: PropTypes.string.isRequired,
-      CodeAnswer: PropTypes.shape({
-        Text: PropTypes.string.isRequired
-      }).isRequired,
-      Score: PropTypes.number.isRequired,
-    }).isRequired,
+    question: PropTypes.instanceOf(Question).isRequired,
     disabled: PropTypes.bool.isRequired
   };
 

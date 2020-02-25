@@ -6,6 +6,7 @@ import {
   SET_QUIZZES
 } from "store/actionTypes";
 import {Map} from 'immutable';
+import Quiz from "entities/Quiz";
 
 const initialState = {
   list: Map(),
@@ -23,7 +24,7 @@ export default function(state = initialState, action) {
     case SET_QUIZZES: {
       return {
         ...state,
-        list: Map(action.payload.Items.map(e => [e.ID, e])),
+        list: Map(action.payload.Items.map(e => [e.ID, new Quiz(e)])),
         page: action.payload.Page,
         perPage: action.payload.PerPage,
         noItems: action.payload.NoItems,
@@ -32,16 +33,13 @@ export default function(state = initialState, action) {
     case OPEN_QUIZ_VIEW: {
       return {
         ...state,
-        viewedItem: action.payload
+        viewedItem: new Quiz(action.payload),
       }
     }
     case SET_QUIZ_CORRECTING_BY: {
       return {
         ...state,
-        viewedItem: {
-          ...state.viewedItem,
-          CorrectingByID: action.payload
-        }
+        viewedItem: state.viewedItem.set('CorrectingByID', action.payload),
       }
     }
     case SET_QUESTION_SCORE: {

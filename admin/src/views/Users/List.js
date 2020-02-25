@@ -1,11 +1,17 @@
 import {Card, CardBody, CardFooter, CardHeader, Table} from "reactstrap";
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {getUsers, setUserCreate} from "store/actions";
 import UserRow from "views/Users/UserRow";
 import Pager from "views/Base/Paginations/Pager";
+import {Map} from 'immutable';
 
 class UserList extends Component {
+  static propTypes = {
+    list: PropTypes.instanceOf(Map).isRequired
+  };
+
   state = {
     perPage: 5,
     currentPage: 0,
