@@ -6,6 +6,7 @@ import {
   SET_QUIZ_TEMPLATE_EDIT,
 } from "store/actionTypes";
 import {Map} from 'immutable';
+import QuizTemplate from "entities/QuizTemplate";
 
 const initialState = {
   list: Map(),
@@ -18,7 +19,7 @@ export default function(state = initialState, action) {
     case SET_QUIZ_TEMPLATES: {
       return {
         ...state,
-        list: Map(action.payload.map(q => [q.ID, q])).sort((a, b) =>
+        list: Map(action.payload.map(q => [q.ID, new QuizTemplate(q)])).sort((a, b) =>
           // sort DESC
           a.ID > b.ID ? -1
             : a.ID === b.ID ? 0
@@ -37,7 +38,7 @@ export default function(state = initialState, action) {
         ...state,
         list: state.list
           .asMutable()
-          .set(action.payload.ID, action.payload).sort((a, b) =>
+          .set(action.payload.ID, new QuizTemplate(action.payload)).sort((a, b) =>
             // sort DESC
             a.ID > b.ID ? -1
               : a.ID === b.ID ? 0

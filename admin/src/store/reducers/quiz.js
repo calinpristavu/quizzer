@@ -33,7 +33,7 @@ export default function(state = initialState, action) {
     case OPEN_QUIZ_VIEW: {
       return {
         ...state,
-        viewedItem: new Quiz(action.payload),
+        viewedItem: action.payload !== null ? new Quiz(action.payload) : null,
       }
     }
     case SET_QUIZ_CORRECTING_BY: {

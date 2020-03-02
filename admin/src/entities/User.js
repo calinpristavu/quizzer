@@ -15,8 +15,8 @@ export default class User extends Record({
   Attitude: null,
   Comments: null,
 }) {
-  constructor(data) {
-    data.CreatedAt = moment(data.CreatedAt);
+  constructor(data = {}) {
+    data.CreatedAt = data.CreatedAt !== null ? moment(data.CreatedAt) : null;
     data.UpdatedAt = data.UpdatedAt !== null ? moment(data.UpdatedAt) : null;
     data.DeletedAt = data.DeletedAt !== null ? moment(data.DeletedAt) : null;
 
@@ -38,6 +38,10 @@ export default class User extends Record({
   };
 
   static load() {
-    return new this(JSON.parse(localStorage.getItem('user')));
+    const storedUser = localStorage.getItem('user');
+    if (null === storedUser) {
+      return null;
+    }
+    return new this(JSON.parse(storedUser));
   }
 }

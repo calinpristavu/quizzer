@@ -1,4 +1,4 @@
-import {List, Map, Record} from 'immutable';
+import {Record} from 'immutable';
 import User from "entities/User";
 import Question from "entities/Question";
 import moment from "moment";
@@ -14,11 +14,11 @@ export default class Quiz extends Record({
   Name: null,
   CorrectingByID: null,
   User: null,
-  Questions: Map(),
+  Questions: [],
 }){
-  constructor(data) {
+  constructor(data = {}) {
     data.User = new User(data.User);
-    data.Questions = List(data.Questions.map(q => new Question(q)));
+    data.Questions = data.Questions.map(q => new Question(q));
     data.CreatedAt = moment(data.CreatedAt);
     data.UpdatedAt = moment(data.UpdatedAt);
 
@@ -29,8 +29,8 @@ export default class Quiz extends Record({
     return (this.Questions.reduce(
       (carry, q) => carry + (q.IsAnswered ? 1 : 0),
       0
-    ) * 100 / this.Questions.count()) || 0
+    ) * 100 / this.Questions.length) || 0
   };
 
-  getTimeSpent = () => moment.duration(this.UpdatedAt.diff(this.CreatedAt));
+  getTimeSpent = () => moment.duration(moment(this.UpdatedAt).diff(moment(this.CreatedAt)));
 }
