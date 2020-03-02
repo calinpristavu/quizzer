@@ -11,6 +11,7 @@ import {
 } from "store/actions";
 import {Map} from 'immutable';
 import Pager from "views/Base/Paginations/Pager";
+import QuizTemplate from "entities/QuizTemplate";
 
 class List extends Component {
   state = {
@@ -47,7 +48,7 @@ class List extends Component {
           <i className="fa fa-align-justify" /> Quizzes
           <span className="float-right">
             <i
-              onClick={() => this.props.setQuizTemplateCreate({})}
+              onClick={() => this.props.setQuizTemplateCreate(new QuizTemplate())}
               className="fa fa-plus-circle text-success"
               style={{cursor: "pointer"}}/>
           </span>
@@ -66,7 +67,7 @@ class List extends Component {
               {this.getVisibleItems().map(q =>
                 <tr key={q.ID}>
                   <td>{q.Name}</td>
-                  <td>{q.QuizQuestions !== null ? q.QuizQuestions.length : 0}</td>
+                  <td>{q.QuizQuestions.length}</td>
                   <td>{q.Duration}</td>
                   <td>
                     <i

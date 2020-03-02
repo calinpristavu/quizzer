@@ -10,32 +10,28 @@ import Step2 from "views/Quiz/QuizTemplates/Step2";
 class Edit extends Component {
   state = {
     step: 1,
-    quiz: null
+    quiz: this.props.quiz
   };
 
   advanceToStep2 = (state) => {
     this.setState(oldState => ({
       step: 2,
-      quiz: {
-        ...oldState.quiz,
+      quiz: oldState.quiz.merge({
         Enabled: state.Enabled,
         Name: state.Name,
         Duration: state.Duration,
-      }
+      }),
     }))
   };
 
   stop = (quizQuestions) => {
-    const quiz = this.state.quiz;
-    quiz.QuizQuestions = quizQuestions;
+    const quiz = this.state.quiz.merge({
+      QuizQuestions: quizQuestions,
+    });
 
     this.props.updateQuizTemplate(quiz)
       .then(() => this.setState({step: 1}))
   };
-
-  componentDidMount() {
-    this.setState({quiz: this.props.quiz});
-  }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.quiz !== this.state.quiz) {

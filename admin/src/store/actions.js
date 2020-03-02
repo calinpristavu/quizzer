@@ -65,7 +65,6 @@ export function deleteQuizTemplate(id) {
 }
 
 export function createQuizTemplate(quizTemplate) {
-  console.log(quizTemplate);
   return dispatch => {
     return fetch("/quiz-templates", {
       method: "POST",

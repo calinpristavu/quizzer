@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import {Map} from 'immutable';
 import {connect} from "react-redux";
 import {getQuestionTemplates} from "store/actions";
+import QuizTemplate from "entities/QuizTemplate";
 
 const defaultWeight = 10;
 
@@ -19,16 +20,7 @@ class Step2 extends Component {
   static propTypes = {
     questionTemplates: PropTypes.instanceOf(Map).isRequired,
     getQuestionTemplates: PropTypes.func.isRequired,
-    quiz: PropTypes.shape({
-      QuizQuestions: PropTypes.arrayOf(PropTypes.shape({
-        QuestionID: PropTypes.number.isRequired,
-        Question: PropTypes.shape({
-          ID: PropTypes.number.isRequired,
-          Text: PropTypes.string.isRequired,
-        }),
-        Weight: PropTypes.number.isRequired,
-      })).isRequired
-    }).isRequired
+    quiz: PropTypes.instanceOf(QuizTemplate).isRequired
   };
 
   state = {

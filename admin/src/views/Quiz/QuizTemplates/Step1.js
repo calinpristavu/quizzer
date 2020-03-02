@@ -12,15 +12,12 @@ import {
 } from "reactstrap";
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
+import QuizTemplate from "entities/QuizTemplate";
 
 class Step1 extends Component {
   static propTypes = {
     advance: PropTypes.func.isRequired,
-    quiz: PropTypes.shape({
-      Enabled: PropTypes.bool.isRequired,
-      Name: PropTypes.string.isRequired,
-      Duration: PropTypes.string,
-    }).isRequired
+    quiz: PropTypes.instanceOf(QuizTemplate).isRequired
   };
 
   enabledRef = React.createRef();

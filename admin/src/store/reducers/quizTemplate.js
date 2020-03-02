@@ -58,7 +58,7 @@ export default function(state = initialState, action) {
     case SET_QUIZ_TEMPLATE_EDIT: {
       return {
         ...state,
-        editItem: action.payload
+        editItem: action.payload !== null ? new QuizTemplate(action.payload) : null
       }
     }
 

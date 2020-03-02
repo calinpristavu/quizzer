@@ -4,16 +4,12 @@ import {connect} from "react-redux";
 import {createQuizTemplate, setQuizTemplateCreate} from "store/actions";
 import Step1 from "views/Quiz/QuizTemplates/Step1";
 import Step2 from "views/Quiz/QuizTemplates/Step2";
+import QuizTemplate from "entities/QuizTemplate";
 
 class Create extends Component {
   defaultState = {
     step: 1,
-    quiz: {
-      Enabled: true,
-      Name: '',
-      Duration: '',
-      QuizQuestions: [],
-    }
+    quiz: new QuizTemplate()
   };
 
   state = this.defaultState;
@@ -21,18 +17,17 @@ class Create extends Component {
   advanceToStep2 = (state) => {
     this.setState({
       step: 2,
-      quiz: {
+      quiz: new QuizTemplate({
         Enabled: state.Enabled,
         Name: state.Name,
         Duration: state.Duration,
         QuizQuestions: []
-      }
+      }),
     })
   };
 
   stop = (quizQuestions) => {
-    const quiz = this.state.quiz;
-    quiz.QuizQuestions = quizQuestions;
+    const quiz = this.state.quiz.set('QuizQuestions', quizQuestions);
 
     this.props.createQuizTemplate(quiz)
       .then(() => this.setState(this.defaultState))
