@@ -14,7 +14,7 @@ export default class User extends Record({
   Role: null,
   Attitude: null,
   Comments: null,
-}) {
+}, 'User') {
   constructor(data = {}) {
     super(data);
     this.set('CreatedAt', moment(data.CreatedAt));

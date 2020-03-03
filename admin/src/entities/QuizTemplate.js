@@ -11,7 +11,7 @@ export default class QuizTemplate extends Record({
   Name: null,
   QuizQuestions: [],
   Duration: null,
-}) {
+}, 'QuizTemplate') {
   constructor(data = {}) {
     super(data);
     this.set('CreatedAt', this.CreatedAt !== null ? moment(this.CreatedAt) : null);

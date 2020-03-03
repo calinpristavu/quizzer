@@ -12,5 +12,5 @@ export default class Question extends Record({
   CodeAnswer: null,
   FlowDiagramAnswer: null,
   Notes: null,
-}) {
+}, 'Question') {
 }

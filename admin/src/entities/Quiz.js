@@ -15,7 +15,7 @@ export default class Quiz extends Record({
   CorrectingByID: null,
   User: null,
   Questions: [],
-}){
+}, 'Quiz') {
   constructor(data = {}) {
     super(data);
 

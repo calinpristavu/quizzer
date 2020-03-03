@@ -7,7 +7,7 @@ export default class QuizQuestionTemplate extends Record({
   Question: null,
   QuestionID: null,
   Weight: 10,
-}) {
+}, 'QuizQuestionTemplate') {
   constructor(data = {}) {
     super(data);
   }

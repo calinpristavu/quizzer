@@ -17,7 +17,7 @@ export default class QuestionTemplate extends Record({
   Tags: null,
   usage: 0,
   QuizQuestions: [],
-}) {
+}, 'QuestionTemplate') {
   constructor(data) {
     super(data);
     this.set('QuizQuestions', this.QuizQuestions === null
