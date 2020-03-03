@@ -23,9 +23,14 @@ import CodeAnswerTemplate from "views/Quiz/AnswerTemplates/CodeAnswerTemplate";
 import FlowDiagramAnswerTemplate from "views/Quiz/AnswerTemplates/FlowDiagramAnswerTemplate";
 import RadioAnswerTemplate from "views/Quiz/AnswerTemplates/RadioAnswerTemplate";
 import {questionTypes} from "views/Quiz/QuestionTemplates/QuestionTemplates";
+import QuestionTemplate from "entities/QuestionTemplate";
 
 class EditQuestion extends Component {
-  state = {};
+  defaultState = new QuestionTemplate();
+
+  state = {
+    question: this.props.question
+  };
 
   formRef = React.createRef();
 
@@ -33,15 +38,29 @@ class EditQuestion extends Component {
     question: PropTypes.object,
   };
 
+  static defaultProps = {
+    question: null,
+  };
+
   componentDidMount() {
     this.props.getQuestionTags()
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.question !== this.state) {
-      this.setState(nextProps.question)
+  static getDerivedStateFromProps(props, state) {
+    if (state.question === null) {
+      return {
+        question: props.question
+      }
     }
-  };
+
+    if (props.question === null || props.question.ID === state.question.ID) {
+      return null;
+    }
+
+    return {
+      question: props.question
+    };
+  }
 
   static convertInitialContent = (text) => {
     const blocksFromHTML = convertFromHTML(text);
@@ -53,9 +72,9 @@ class EditQuestion extends Component {
   };
 
   create = () => {
-    const question = this.state;
+    const question = this.state.question;
 
-    if (this.state.Type === 4) {
+    if (question.Type === 4) {
       const correctQIndex = parseInt(this.formRef.current['Answer'].value);
       question.RadioAnswerTemplates.forEach((a, k) => {
         question.RadioAnswerTemplates[k].IsCorrect = k === correctQIndex
@@ -64,41 +83,47 @@ class EditQuestion extends Component {
 
     this.props.updateQuestionTemplate(question)
       .then(() => this.setState({
-        ...this.defaultState,
-        CheckboxAnswerTemplates: [],
-        RadioAnswerTemplates: [],
+        question: this.defaultState
       }))
   };
 
   addCheckboxChoice = (choice) => {
     this.setState((oldState) => {
-      const choices = oldState.CheckboxAnswerTemplates;
+      const choices = oldState.question.CheckboxAnswerTemplates;
       choices.push(choice);
 
-      return {CheckboxAnswerTemplates: choices}
+      return oldState.question.merge({
+        CheckboxAnswerTemplates: choices,
+      })
     })
   };
 
   removeCheckboxChoice = (choiceIndex) => {
     this.setState((oldState) => ({
-      CheckboxAnswerTemplates: oldState.CheckboxAnswerTemplates
-        .filter((e, index) => index !== choiceIndex)
+      question: oldState.question.merge({
+        CheckboxAnswerTemplates: oldState.CheckboxAnswerTemplates
+          .filter((e, index) => index !== choiceIndex)
+      })
     }))
   };
 
   addRadioChoice = (choice) => {
     this.setState((oldState) => {
-      const choices = oldState.RadioAnswerTemplates;
+      const choices = oldState.question.RadioAnswerTemplates;
       choices.push(choice);
 
-      return {RadioAnswerTemplates: choices}
+      return {
+          question: oldState.question.merge({RadioAnswerTemplates: choices})
+      }
     })
   };
 
   removeRadioChoice = (choiceIndex) => {
     this.setState((oldState) => ({
-      RadioAnswerTemplates: oldState.RadioAnswerTemplates
-        .filter((e, index) => index !== choiceIndex)
+      question: oldState.question.merge({
+        RadioAnswerTemplates: oldState.RadioAnswerTemplates
+          .filter((e, index) => index !== choiceIndex)
+      })
     }))
   };
 
@@ -125,17 +150,35 @@ class EditQuestion extends Component {
   };
 
   storeTags = (opts) => {
-    this.setState({
-      Tags: opts.map(o => {
-        const existingTag = this.props.tags.find(t => t.Text === o.value);
+    this.setState(oldState => ({
+      question: oldState.question.merge({
+        Tags: opts.map(o => {
+          const existingTag = this.props.tags.find(t => t.Text === o.value);
 
-        if (existingTag !== undefined) {
-          return existingTag;
-        }
+          if (existingTag !== undefined) {
+            return existingTag;
+          }
 
-        return {Text: o.value};
+          return {Text: o.value};
+        })
       })
-    })
+    }))
+  };
+
+  setText = (e, editorState) => {
+    this.setState(oldState => ({
+      question: oldState.question.merge({
+        Text: draftToHtml(convertToRaw(editorState.getCurrentContent()))
+      })
+    }));
+  };
+
+  setType = (typeId) => {
+    this.setState(oldState => ({
+      question: oldState.question.merge({
+        Type: typeId
+      })
+    }))
   };
 
   render() {
@@ -183,9 +226,7 @@ class EditQuestion extends Component {
                         options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
                         image: { uploadCallback: this.uploadCallback, previewImage: true }
                       }}
-                      onBlur={(e, editorState) => this.setState({
-                        Text: draftToHtml(convertToRaw(editorState.getCurrentContent()))
-                      })}
+                      onBlur={this.setText}
                       defaultEditorState={EditQuestion.convertInitialContent(this.props.question.Text)}
                     />
                   </FormGroup>
@@ -201,8 +242,8 @@ class EditQuestion extends Component {
                       <Input
                         className="form-check-input"
                         type="radio"
-                        checked={this.state.Type === 1}
-                        onChange={() => this.setState({Type: 1})}
+                        checked={this.state.question.Type === 1}
+                        onChange={() => this.setType(1)}
                         name="Type"/>
                       {questionTypes[1]}
                     </Label>
@@ -212,8 +253,8 @@ class EditQuestion extends Component {
                       <Input
                         className="form-check-input"
                         type="radio"
-                        checked={this.state.Type === 4}
-                        onChange={() => this.setState({Type: 4})}
+                        checked={this.state.question.Type === 4}
+                        onChange={() => this.setType(4)}
                         name="Type"/>
                       {questionTypes[4]}
                     </Label>
@@ -223,8 +264,8 @@ class EditQuestion extends Component {
                       <Input
                         className="form-check-input"
                         type="radio"
-                        checked={this.state.Type === 2}
-                        onChange={() => this.setState({Type: 2})}
+                        checked={this.state.question.Type === 2}
+                        onChange={() => this.setType(2)}
                         name="Type" />
                       {questionTypes[2]}
                     </Label>
@@ -234,33 +275,33 @@ class EditQuestion extends Component {
                       <Input
                         className="form-check-input"
                         type="radio"
-                        checked={this.state.Type === 3}
-                        onChange={() => this.setState({Type: 3})}
+                        checked={this.state.question.Type === 3}
+                        onChange={() => this.setType(3)}
                         name="Type" />
                       {questionTypes[3]}
                     </Label>
                   </FormGroup>
                 </Col>
               </FormGroup>
-              {this.state.Type === 1 &&
+              {this.state.question.Type === 1 &&
               <CheckboxAnswerTemplate
                 removeChoice={this.removeCheckboxChoice}
                 addChoice={this.addCheckboxChoice}
-                answers={this.state.CheckboxAnswerTemplates}/>
+                answers={this.state.question.CheckboxAnswerTemplates}/>
               }
-              {this.state.Type === 2 &&
+              {this.state.question.Type === 2 &&
               <CodeAnswerTemplate
                 save={(val) => {this.setState({TextAnswerTemplate: {Text: val}})}}
-                value={this.state.TextAnswerTemplate ? this.state.TextAnswerTemplate.Text : undefined}/>
+                value={this.state.question.TextAnswerTemplate ? this.state.question.TextAnswerTemplate.Text : undefined}/>
               }
-              {this.state.Type === 3 &&
+              {this.state.question.Type === 3 &&
               <FlowDiagramAnswerTemplate />
               }
-              {this.state.Type === 4 &&
+              {this.state.question.Type === 4 &&
               <RadioAnswerTemplate
                 removeChoice={this.removeRadioChoice}
                 addChoice={this.addRadioChoice}
-                answers={this.state.RadioAnswerTemplates}/>
+                answers={this.state.question.RadioAnswerTemplates}/>
               }
             </CardBody>
           </CardBody>

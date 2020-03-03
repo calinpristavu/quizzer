@@ -109,7 +109,7 @@ class QuestionsList extends Component {
         <CardHeader>
           <span className="float-right">
             <i
-              onClick={this.props.setQuestionTemplateCreate}
+              onClick={() => this.props.setQuestionTemplateCreate(true)}
               className="fa fa-plus-circle text-success"
               style={{cursor: "pointer"}}/>
           </span>

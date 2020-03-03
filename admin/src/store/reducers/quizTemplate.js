@@ -30,7 +30,9 @@ export default function(state = initialState, action) {
     case REMOVE_QUIZ_TEMPLATE: {
       return {
         ...state,
-        list: state.list.delete(action.payload)
+        list: state.list.delete(action.payload),
+        // also close editItem if item was deleted
+        editItem: state.editItem.ID !== action.payload ? state.editItem : null,
       }
     }
     case APPEND_QUIZ_TEMPLATE: {

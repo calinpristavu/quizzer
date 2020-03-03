@@ -17,12 +17,13 @@ export default class Quiz extends Record({
   Questions: [],
 }){
   constructor(data = {}) {
-    data.User = new User(data.User);
-    data.Questions = data.Questions.map(q => new Question(q));
-    data.CreatedAt = moment(data.CreatedAt);
-    data.UpdatedAt = moment(data.UpdatedAt);
-
     super(data);
+
+    this.set('User', new User(data.User));
+    this.set('Questions', data.Questions.map(q => new Question(q)));
+    this.set('CreatedAt', moment(data.CreatedAt));
+    this.set('UpdatedAt', moment(data.UpdatedAt));
+
   }
 
   getPercentCompleted = () => {

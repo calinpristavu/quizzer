@@ -16,11 +16,10 @@ export default class User extends Record({
   Comments: null,
 }) {
   constructor(data = {}) {
-    data.CreatedAt = data.CreatedAt !== null ? moment(data.CreatedAt) : null;
-    data.UpdatedAt = data.UpdatedAt !== null ? moment(data.UpdatedAt) : null;
-    data.DeletedAt = data.DeletedAt !== null ? moment(data.DeletedAt) : null;
-
     super(data);
+    this.set('CreatedAt', moment(data.CreatedAt));
+    this.set('UpdatedAt', moment(data.UpdatedAt));
+    this.set('DeletedAt', moment(data.DeletedAt));
   }
 
   static roles = {

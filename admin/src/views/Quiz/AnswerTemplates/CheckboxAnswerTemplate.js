@@ -16,6 +16,10 @@ class CheckboxAnswerTemplate extends Component {
     answers: PropTypes.arrayOf(PropTypes.object),
   };
 
+  static defaultProps = {
+    answers: [],
+  };
+
   addAndNext = () => {
     this.props.addChoice(this.state);
 

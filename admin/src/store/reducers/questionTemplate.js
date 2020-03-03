@@ -7,6 +7,7 @@ import {
   SET_QUESTION_TEMPLATES,
 } from "store/actionTypes";
 import {Map} from 'immutable';
+import QuestionTemplate from "entities/QuestionTemplate";
 
 const initialState = {
   list: Map(),
@@ -20,7 +21,7 @@ export default function(state = initialState, action) {
     case SET_QUESTION_TEMPLATES: {
       return {
         ...state,
-        list: Map(action.payload.map(e => [e.ID, e])).sort((a, b) =>
+        list: Map(action.payload.map(e => [e.ID, new QuestionTemplate(e)])).sort((a, b) =>
           // sort DESC
           a.ID > b.ID ? -1
             : a.ID === b.ID ? 0
@@ -35,11 +36,15 @@ export default function(state = initialState, action) {
       }
     }
     case APPEND_QUESTION_TEMPLATE: {
+      const qt = state.list
+        .get(action.payload.ID, new QuestionTemplate())
+        .merge(action.payload);
+
       return {
         ...state,
         list: state.list
           .asMutable()
-          .set(action.payload.ID, action.payload)
+          .set(qt.ID, qt)
           .sort((a, b) =>
             // sort DESC
             a.ID > b.ID ? -1

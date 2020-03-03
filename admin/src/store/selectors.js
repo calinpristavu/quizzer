@@ -10,9 +10,7 @@ export function selectStatBestResult(state) {
 
 export function selectQuestionTemplatesWithUsage (state) {
   return state.questionTemplate.list.map(qt => {
-    qt.usage = qt.Usages.length * 100 / state.quiz.list.size;
-
-    return qt;
+    return qt.set('usage', qt.Usages.length * 100 / state.quiz.list.size);
   })
 }
 
