@@ -38,9 +38,9 @@ export default class User extends Record({
 
   static load() {
     const storedUser = localStorage.getItem('user');
-    if (null === storedUser) {
-      return null;
-    }
-    return new this(JSON.parse(storedUser));
+
+    return null === storedUser
+      ? null
+      : new this(JSON.parse(storedUser));
   }
 }
